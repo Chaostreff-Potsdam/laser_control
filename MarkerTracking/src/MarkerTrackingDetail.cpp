@@ -106,7 +106,7 @@ void MarkerTrackingDetail::loop()
 
 		if (timer.elapsed().wall > 1000.0 * 1000.0 * 1000.0)
 		{
-            std::cout << frame << std::endl;
+			//std::cout << frame << std::endl;
 			frame = 0;
 			timer.start();
 		}

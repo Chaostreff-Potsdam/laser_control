@@ -38,6 +38,8 @@ install_manifest.txt
 .LSOverride
 Icon
 
+# Qt Creator generated files
+*.user
 
 # Thumbnails
 ._*

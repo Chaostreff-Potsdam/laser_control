@@ -16,6 +16,7 @@ FIND_PATH(ALVAR_INCLUDE_DIR Alvar.h
         /opt/local
     PATH_SUFFIXES
         /include
+        /include/alvar
 )
 
 MACRO(FIND_ALVAR_LIBRARY_RELEASE MYLIBRARY MYLIBRARYNAME)
