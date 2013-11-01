@@ -1,16 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-struct Point2d 
-{
-	public double x;
-	public double y;
-	
-	public Point2d(double _x, double _y)
-	{
-		x = _x; y = _y;
-	}
-}
+using System.Collections;
+using System.Drawing;
+using Emgu.CV;
 
 public class TrackingCalibration
 {
@@ -26,15 +18,15 @@ public class TrackingCalibration
 	//	14----------15
 	//
 	
-	private Point2d[] corners = new Point2d[4]; // [12,13,14,15]
+	private PointF[] corners = new Point2d[4]; // [12,13,14,15]
 	private bool[] cornersCalibrated = new bool[4]{false, false, false, false};
-
+	
 	public void setCalibrationMarkerCoordinate(byte markerID, double x, double y)
 	{
 		int index = markerID - referenceMarkerID;
 		if (index < 0 || 3 < index) return;
 		
-		corners[index] = new Point2d(x, y);
+		corners[index] = new PointF(x, y);
 		cornersCalibrated[index] = true;
 		if (allCornersSet()) 
 		{
@@ -57,6 +49,15 @@ public class TrackingCalibration
 	
 	private void computeCalibration()
 	{
-		
+		GameObject playground = GameObject.Find("Playground");
+		Vector3 scale = playground.renderer.bounds.size;
+		Debug.Log("Scale: " + scale);
+//		computeHomography(corners, playfieldCorners);
+	}
+	
+	private void computeHomography(PointF[] src, PointF[] dst)
+	{
+		HomographyMatrix H = CameraCalibration.FindHomography(src, dst, 0, 1);
+		return H;
 	}
 }
