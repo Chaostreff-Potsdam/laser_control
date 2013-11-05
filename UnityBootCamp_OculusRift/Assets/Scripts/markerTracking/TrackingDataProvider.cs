@@ -38,6 +38,7 @@ public class TrackingDataProvider
 	
 	private void setupZeroconfSocket()
 	{
+		/*
 		// connect to MarkerTracking service
 		ServiceBrowser browser = new ServiceBrowser ();
  
@@ -72,6 +73,21 @@ public class TrackingDataProvider
 		//
 		UnityEngine.Debug.Log("Looking for toptracking service...");
 		browser.Browse ("_quantum-toptracking._tcp", "local");
+		*/
+		
+		
+		// conntect socket
+		IPEndPoint endPoint = new IPEndPoint(new IPAddress(new byte[]{172, 16, 19, 188}), 3100);
+		trackingServer = new Socket(System.Net.Sockets.AddressFamily.InterNetwork, 
+			System.Net.Sockets.SocketType.Stream, 
+			System.Net.Sockets.ProtocolType.Tcp);
+		trackingServer.Connect(endPoint);
+		if (trackingServer.Connected) 
+		{
+			ready = true;
+			UnityEngine.Debug.Log("MarkerTracking connected!");
+		}
+		
 	}
 
 	private void updateTrackingData()
