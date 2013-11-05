@@ -98,7 +98,7 @@ public class TrackingDataProvider
 		if (!trackingServer.Connected)
 			return;
 		
-		lock (currentTrackingData)
+		//lock (currentTrackingData)
 		{
 			trackingServer.Receive(currentTrackingData);
 		}

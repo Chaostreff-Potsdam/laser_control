@@ -37,6 +37,7 @@ public class MarkerTracking
 	public void update()
 	{
 		byte[] data = trackingDataProvider.latestData();
+		// byte[] data = new byte[34];
 		byte id = data[9];
 		
 		//

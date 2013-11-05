@@ -23,7 +23,7 @@ public class Movement : MonoBehaviour
 	void Update ()
 	{
 		markerTracking.update();
-		// transform.position = markerTracking.playerPosition();
+		Debug.Log(markerTracking.playerPosition());
 	}
 	
 //	// this will return the new player position in the end
