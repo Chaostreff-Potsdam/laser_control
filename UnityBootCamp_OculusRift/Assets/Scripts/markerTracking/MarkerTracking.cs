@@ -3,6 +3,7 @@
 using System;
 using System.Threading;
 using System.Collections;
+using System.Drawing;
 
 public class MarkerTracking
 {
@@ -31,7 +32,8 @@ public class MarkerTracking
 	
 	public Vector3 playerPosition()
 	{
-		return trackingCalibration.mapToUnity(playerMarkerPosition);
+		PointF newPosition = trackingDataProvider.markerPositionById(1);
+		return trackingCalibration.mapToUnity(new Vector3(newPosition.X, 0, newPosition.Y));
 	}
 	
 	public void update()
@@ -50,19 +52,21 @@ public class MarkerTracking
 				trackingCalibration.setCalibrationMarkerCoordinate(	id,
 																	BitConverter.ToDouble(data, 10),
 																	BitConverter.ToDouble(data, 18));
+			
 			return;
 		}
+		
 		
 		//
 		// update player position
 		//
-		UnityEngine.Debug.Log("ID:"+id);
-		if (id == playerMarkerID)
-		{
-			UnityEngine.Debug.Log("Updating player position");
-			playerMarkerPosition.x = (float)BitConverter.ToDouble(data, 10);
-			playerMarkerPosition.z = (float)BitConverter.ToDouble(data, 18);
-		}
+//		UnityEngine.Debug.Log("ID:"+id);
+//		if (id == playerMarkerID)
+//		{
+//			UnityEngine.Debug.Log("Updating player position");
+//			playerMarkerPosition.x = (float)BitConverter.ToDouble(data, 10);
+//			playerMarkerPosition.z = (float)BitConverter.ToDouble(data, 18);
+//		}
 	}
 }
 			

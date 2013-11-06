@@ -2,25 +2,34 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Drawing;
 
 using Mono.Zeroconf;
 
 public class TrackingDataProvider
 {
-	private System.Net.Sockets.Socket trackingServer;
-	private byte[] currentTrackingData;
-	private bool ready = false;
+	private System.Net.Sockets.Socket m_trackingServer;
+	private byte[] m_currentTrackingData;
+	private bool m_ready = false;
+	private IDictionary<byte, PointF> m_markerPositions;
+	
+	public TrackingDataProvider()
+	{
+		m_markerPositions = new Dictionary<byte, PointF>();
+		m_markerPositions[1] = new PointF(0f, 0f);
+	}
 	
 	~TrackingDataProvider()
 	{
-		trackingServer.Close();
+		m_trackingServer.Close();
 	}
 	
 	public void run()
 	{
-		currentTrackingData = new byte[34];
+		m_currentTrackingData = new byte[34];
 		setupZeroconfSocket();
 		
 		while (true) updateTrackingData();
@@ -28,12 +37,24 @@ public class TrackingDataProvider
 	
 	public byte[] latestData()
 	{
-		if (ready) lock (currentTrackingData)
+		if (m_ready) lock (m_currentTrackingData)
 		{ 
-			return currentTrackingData;
+			return m_currentTrackingData;
 		}
 		
 		return new byte[34];
+	}
+	
+	public PointF markerPositionById(byte id)
+	{
+		if (!m_markerPositions.ContainsKey(1))
+			UnityEngine.Debug.Log("Error: key not found");
+			// make this safe...
+		
+		PointF position = new PointF();
+		m_markerPositions.TryGetValue(id, out position);
+		
+		return position;
 	}
 	
 	private void setupZeroconfSocket()
@@ -78,13 +99,13 @@ public class TrackingDataProvider
 		
 		// conntect socket
 		IPEndPoint endPoint = new IPEndPoint(new IPAddress(new byte[]{172, 16, 19, 188}), 3100);
-		trackingServer = new Socket(System.Net.Sockets.AddressFamily.InterNetwork, 
+		m_trackingServer = new Socket(System.Net.Sockets.AddressFamily.InterNetwork, 
 			System.Net.Sockets.SocketType.Stream, 
 			System.Net.Sockets.ProtocolType.Tcp);
-		trackingServer.Connect(endPoint);
-		if (trackingServer.Connected) 
+		m_trackingServer.Connect(endPoint);
+		if (m_trackingServer.Connected) 
 		{
-			ready = true;
+			m_ready = true;
 			UnityEngine.Debug.Log("MarkerTracking connected!");
 		}
 		
@@ -92,15 +113,32 @@ public class TrackingDataProvider
 
 	private void updateTrackingData()
 	{
-		if (trackingServer == null)
+		if (m_trackingServer == null)
 			return;
 		
-		if (!trackingServer.Connected)
+		if (!m_trackingServer.Connected)
 			return;
 		
-		//lock (currentTrackingData)
-		{
-			trackingServer.Receive(currentTrackingData);
-		}
+		// should we really not lock here?
+		//
+		byte[] newData = new byte[34];
+		m_trackingServer.Receive(newData);
+		updatePositions(newData);
+		
 	}
-}
+	
+	private void updatePositions(byte[] data)
+	{
+		if (data.Length != 34)
+		{
+			UnityEngine.Debug.Log("TrackingDataProvider: Wrong data format");
+			return;
+		}
+		
+		byte id = data[9];
+		float x = (float)BitConverter.ToDouble(data, 10);
+		float z = (float)BitConverter.ToDouble(data, 18);
+		m_markerPositions[id] = new PointF(x, z);
+	}
+		
+}	
