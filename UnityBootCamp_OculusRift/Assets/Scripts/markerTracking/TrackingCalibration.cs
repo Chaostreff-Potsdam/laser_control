@@ -20,34 +20,44 @@ public class TrackingCalibration
 	//	14----------15
 	//
 	
-	private PointF[] corners = new PointF[4]; // [12,13,14,15]
-	private bool[] cornersCalibrated = new bool[4]{false, false, false, false};
-	private HomographyMatrix homography;
+	private PointF[] m_corners = new PointF[4]; // [12,13,14,15]
+	private bool[] m_cornersCalibrated = new bool[4]{false, false, false, false};
+	private HomographyMatrix m_homography;
+	
+	
+	// HACK
+	private Vector3 topLeftCorner;
 	
 	public void setCalibrationMarkerCoordinate(byte markerID, double x, double y)
 	{
 		int index = markerID - referenceMarkerID;
+		UnityEngine.Debug.Log("Got calibration for corner " + index);
 		if (index < 0 || 3 < index) return;
 		
-		corners[index] = new PointF((float)x, (float)y);
-		cornersCalibrated[index] = true;
+		m_corners[index] = new PointF((float)x, (float)y);
+		m_cornersCalibrated[index] = true;
 		if (allCornersSet()) 
 		{
 			UnityEngine.Debug.Log("Calibration done!");
-			computeCalibration();
+			calibrated = true;
+			// computeCalibration();
+			
+			// HACK
+			topLeftCorner = new Vector3(m_corners[1].X, 0, m_corners[1].Y);
 		}
 	}
 	
 	public Vector3 mapToUnity(Vector3 trackingCoordinates)
 	{
 		// TODO - this should do something!
-		return trackingCoordinates;
+		// HACK
+		return trackingCoordinates - topLeftCorner;
 	}
 		
 	private bool allCornersSet()
 	{
-		return 	cornersCalibrated[0] && cornersCalibrated[1] && 
-				cornersCalibrated[2] && cornersCalibrated[3];
+		return 	m_cornersCalibrated[0] && m_cornersCalibrated[1] && 
+				m_cornersCalibrated[2] && m_cornersCalibrated[3];
 	}
 	
 	private void computeCalibration()
@@ -60,8 +70,8 @@ public class TrackingCalibration
 			new PointF(playgroundBounds.center.x - playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z),
 			new PointF(playgroundBounds.center.x + playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z)};
 		
-		homography = computeHomography(corners, playgroundCorners);
-		Debug.Log("Homography: " + homography.Data);
+		m_homography = computeHomography(m_corners, playgroundCorners);
+		Debug.Log("Homography: " + m_homography.Data);
 	}
 	
 	private HomographyMatrix computeHomography(PointF[] src, PointF[] dst)

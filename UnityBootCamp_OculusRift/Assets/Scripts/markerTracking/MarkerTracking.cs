@@ -56,10 +56,12 @@ public class MarkerTracking
 		//
 		// update player position
 		//
+		UnityEngine.Debug.Log("ID:"+id);
 		if (id == playerMarkerID)
 		{
+			UnityEngine.Debug.Log("Updating player position");
 			playerMarkerPosition.x = (float)BitConverter.ToDouble(data, 10);
-			playerMarkerPosition.y = (float)BitConverter.ToDouble(data, 18);
+			playerMarkerPosition.z = (float)BitConverter.ToDouble(data, 18);
 		}
 	}
 }
