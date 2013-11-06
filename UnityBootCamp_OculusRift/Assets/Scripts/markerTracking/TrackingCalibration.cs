@@ -3,7 +3,7 @@
 using System.Collections;
 using System.Drawing;
 
-using Emgu.CV;
+// using Emgu.CV;
 //using Emgu.Util;
 
 public class TrackingCalibration
@@ -22,7 +22,7 @@ public class TrackingCalibration
 	
 	private PointF[] m_corners = new PointF[4]; // [12,13,14,15]
 	private bool[] m_cornersCalibrated = new bool[4]{false, false, false, false};
-	private HomographyMatrix m_homography;
+	// private HomographyMatrix m_homography;
 	
 	
 	// HACK
@@ -60,23 +60,23 @@ public class TrackingCalibration
 				m_cornersCalibrated[2] && m_cornersCalibrated[3];
 	}
 	
-	private void computeCalibration()
-	{
-		GameObject playground = GameObject.Find("Playground");	
-		Bounds playgroundBounds = playground.renderer.bounds;
-		PointF[] playgroundCorners = new PointF[]{
-			new PointF(playgroundBounds.center.x + playgroundBounds.extents.x, playgroundBounds.center.z + playgroundBounds.extents.z),
-			new PointF(playgroundBounds.center.x - playgroundBounds.extents.x, playgroundBounds.center.z + playgroundBounds.extents.z),
-			new PointF(playgroundBounds.center.x - playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z),
-			new PointF(playgroundBounds.center.x + playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z)};
+	// private void computeCalibration()
+	// {
+	// 	GameObject playground = GameObject.Find("Playground");	
+	// 	Bounds playgroundBounds = playground.renderer.bounds;
+	// 	PointF[] playgroundCorners = new PointF[]{
+	// 		new PointF(playgroundBounds.center.x + playgroundBounds.extents.x, playgroundBounds.center.z + playgroundBounds.extents.z),
+	// 		new PointF(playgroundBounds.center.x - playgroundBounds.extents.x, playgroundBounds.center.z + playgroundBounds.extents.z),
+	// 		new PointF(playgroundBounds.center.x - playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z),
+	// 		new PointF(playgroundBounds.center.x + playgroundBounds.extents.x, playgroundBounds.center.z - playgroundBounds.extents.z)};
 		
-		m_homography = computeHomography(m_corners, playgroundCorners);
-		Debug.Log("Homography: " + m_homography.Data);
-	}
+	// 	m_homography = computeHomography(m_corners, playgroundCorners);
+	// 	Debug.Log("Homography: " + m_homography.Data);
+	// }
 	
-	private HomographyMatrix computeHomography(PointF[] src, PointF[] dst)
-	{
-		HomographyMatrix H = CameraCalibration.FindHomography(src, dst, 0, 1);
-		return H;
-	}
+	// private HomographyMatrix computeHomography(PointF[] src, PointF[] dst)
+	// {
+	// 	HomographyMatrix H = CameraCalibration.FindHomography(src, dst, 0, 1);
+	// 	return H;
+	// }
 }

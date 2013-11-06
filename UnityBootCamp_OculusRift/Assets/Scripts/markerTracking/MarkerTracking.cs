@@ -15,6 +15,7 @@ public class MarkerTracking
 	
 	private Vector3 playerMarkerPosition;
 	
+	private float lastReceivedTime = 0;
 	
 	public MarkerTracking()
 	{
