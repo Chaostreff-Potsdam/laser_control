@@ -7,7 +7,10 @@ public class Movement : MonoBehaviour
 {
 	private MarkerTracking markerTracking;
 	
-	
+	//Hack: smooth by interplation
+	private float lastReceivedTime;
+	private float animationTime = 0.5f;
+
 	public Movement()
 	{
 		markerTracking = new MarkerTracking();
@@ -24,7 +27,19 @@ public class Movement : MonoBehaviour
 	{
 		markerTracking.update();
 		Debug.Log(markerTracking.playerPosition());
-		transform.position = markerTracking.playerPosition();
+
+		//Hack: smooth by interpolation
+		Vector3 dest = markerTracking.playerPosition();
+		dest.y = transform.position.y;
+
+		if(dest!= transform.position){
+			animationTime = 0.5f;
+		}
+		if(animationTime>0){
+			float frac = Time.deltaTime/0.5f;
+			transform.position = Vector3.Lerp(transform.position, dest, frac);
+			animationTime -= Time.deltaTime;
+		}
 	}
 	
 //	// this will return the new player position in the end
