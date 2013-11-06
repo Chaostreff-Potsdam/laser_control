@@ -20,26 +20,29 @@ public class Movement : MonoBehaviour
 	void Start()
 	{
 		markerTracking.initialize();
+		transform.localPosition = new Vector3(-15.20321f, 2.028201f, -185.2529f);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 		markerTracking.update();
-		Debug.Log(markerTracking.playerPosition());
+		//Debug.Log(markerTracking.playerPosition());
 
 		//Hack: smooth by interpolation
-		Vector3 dest = markerTracking.playerPosition();
-		dest.y = transform.position.y;
-
-		if(dest!= transform.position){
-			animationTime = 0.5f;
-		}
-		if(animationTime>0){
-			float frac = Time.deltaTime/0.5f;
-			transform.position = Vector3.Lerp(transform.position, dest, frac);
-			animationTime -= Time.deltaTime;
-		}
+		Vector3 dest = markerTracking.playerPosition()+ new Vector3(-15.20321f, 2.028201f, -185.2529f);;
+		transform.localPosition=dest;
+//		dest.y = transform.localPosition.y;
+//		Debug.Log(dest);
+//
+//		if(dest!= transform.localPosition){
+//			animationTime = 0.5f;
+//		}
+//		if(animationTime>0){
+//			float frac = Time.deltaTime/0.5f;
+//			transform.localPosition = Vector3.Lerp(transform.position, dest, frac);
+//			animationTime -= Time.deltaTime;
+//		}
 	}
 	
 //	// this will return the new player position in the end
