@@ -20,7 +20,8 @@ public class Movement : MonoBehaviour
 	void Start()
 	{
 		markerTracking.initialize();
-		transform.localPosition = new Vector3(-15.20321f, 2.028201f, -185.2529f);
+		transform.localPosition = new Vector3(-15.20321f, 2.028201f, -250.2529f);
+		// new Vector3(-8.902905f, -3.270549f, 209.7809f);// new Vector3(-15.20321f, 2.028201f, -185.2529f);
 	}
 	
 	// Update is called once per frame
@@ -30,7 +31,7 @@ public class Movement : MonoBehaviour
 		//Debug.Log(markerTracking.playerPosition());
 
 		//Hack: smooth by interpolation
-		Vector3 dest = markerTracking.playerPosition()+ new Vector3(-15.20321f, 2.028201f, -185.2529f);;
+		Vector3 dest = 5*markerTracking.playerPosition() + new Vector3(-15.20321f, 5f, -250.2529f);;
 		transform.localPosition=dest;
 //		dest.y = transform.localPosition.y;
 //		Debug.Log(dest);
