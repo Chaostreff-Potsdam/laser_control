@@ -67,3 +67,6 @@ Session.vim
 .netrwhist
 *~
 
+# Unity temp files
+Build/
+Library/
