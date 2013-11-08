@@ -73,6 +73,9 @@ void NetworkServerDetail::sendMarkerInformation(const markerTracking::MarkerPtr 
 	outputStream.write((char*)&y, sizeof(y));
 	outputStream.write((char*)&angle, sizeof(angle));
 
+	if (id == 1)
+		std::cout << x << ", " << y << std::endl;
+
 	sendMessageToAllConnections(streamBuffer);
 #endif
 }

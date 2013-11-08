@@ -63,16 +63,16 @@ AlvarTracking::AlvarTracking()
 	pose.Reset();
 
 	pose.SetTranslation(0, 0, 0);
-	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 0, definitions::referenceMarkerSize, pose);
-
-	pose.SetTranslation(definitions::courtWidth, 0, 0);
-	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 1, definitions::referenceMarkerSize, pose);
-
-	pose.SetTranslation(definitions::courtWidth, definitions::courtHeight, 0);
 	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 2, definitions::referenceMarkerSize, pose);
 
-	pose.SetTranslation(0, definitions::courtHeight, 0);
+	pose.SetTranslation(definitions::courtWidth, 0, 0);
 	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 3, definitions::referenceMarkerSize, pose);
+
+	pose.SetTranslation(definitions::courtWidth, definitions::courtHeight, 0);
+	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 0, definitions::referenceMarkerSize, pose);
+
+	pose.SetTranslation(0, definitions::courtHeight, 0);
+	m_cornerMarkers.PointCloudAdd(definitions::referenceMarkerID + 1, definitions::referenceMarkerSize, pose);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -85,7 +85,12 @@ void AlvarTracking::process(const cv::Mat &frame)
 	cv::cvtColor(frame, debug, CV_GRAY2BGR);
 
 	boost::timer::cpu_timer test;
-	m_detector.Detect(&image, &m_camera, false, false, 0.16, 0.2, alvar::CVSEQ, false);
+	//
+	// 4th parameter of Detect is max_new_marker_error;
+	// this is 0.08  by default and the reason, why we get so many markers that are not actually there
+	// consider decreasing it
+	//
+	m_detector.Detect(&image, &m_camera, false, false, 0.1, 0.2, alvar::CVSEQ, false);
 	//std::cout << "[1] " << test.elapsed().wall / 1000000.0 << std::endl;
 
 	test.start();

@@ -57,6 +57,11 @@ public class TrackingDataProvider
 		return position;
 	}
 	
+	public bool hasDataFor(byte id)
+	{
+		return m_markerPositions.ContainsKey(id);
+	}
+	
 	private void setupZeroconfSocket()
 	{
 		/*
@@ -95,7 +100,6 @@ public class TrackingDataProvider
 		UnityEngine.Debug.Log("Looking for toptracking service...");
 		browser.Browse ("_quantum-toptracking._tcp", "local");
 		*/
-		
 		
 		// conntect socket
 		IPEndPoint endPoint = new IPEndPoint(new IPAddress(new byte[]{172, 16, 19, 188}), 3100);

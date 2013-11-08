@@ -89,7 +89,7 @@ void MarkerTrackingDetail::loop()
         //std::cout << "[C] " << test.elapsed().wall / 1000000.0 << std::endl;
 
 		// Handle keyboard input
-        key = cv::waitKey(1);
+		key = cv::waitKey(1);
 		handleKey(key);
 
         test.start();
@@ -167,8 +167,8 @@ void MarkerTrackingDetail::sendNetworkUpdates()
 	// Send out marker positions
 	for (const auto marker : markers)
 	{
-		if (marker.second->id() >= definitions::referenceMarkerID && marker.second->id() < definitions::referenceMarkerID + 4)
-			continue;
+//		if (marker.second->id() >= definitions::referenceMarkerID && marker.second->id() < definitions::referenceMarkerID + 4)
+//			continue;
 
 		m_networkServer->sendMarkerInformation(marker.second);
 	}
