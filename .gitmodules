@@ -1,3 +1,6 @@
 [submodule "alvar"]
 	path = alvar
 	url = https://github.com/tzwenn/alvar.git
+[submodule "laser_control/etherdream"]
+	path = laser_control/etherdream
+	url = https://github.com/j4cbo/j4cDAC.git
