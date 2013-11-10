@@ -5,7 +5,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "etherdream.h"
+extern "C"
+{
+	#include "etherdream.h"
+}
+
 
 #define CIRCLE_POINTS	600
 
