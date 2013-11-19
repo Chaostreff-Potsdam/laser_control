@@ -14,11 +14,16 @@ EtherdreamWrapper::EtherdreamWrapper()
 	m_thread = std::thread(&EtherdreamWrapper::connect, this);
 }
 
+void EtherdreamWrapper::clear()
+{
+	m_points.clear();
+}
+
 void EtherdreamWrapper::connect()
 {
 	try
 	{
-		// start listing for etherdreams
+		// start listening for etherdreams
 		etherdream_lib_start();
 
 		std::cout << "Starting lib, will wait 1.2 s" << std::endl;
@@ -77,7 +82,7 @@ void EtherdreamWrapper::setPoints(std::vector<struct etherdream_point> p)
 	m_points = p;
 }
 
-void EtherdreamWrapper::addPoints(std::vector<struct etherdream_point> const& p)
+void EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 

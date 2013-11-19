@@ -14,8 +14,9 @@ public:
 	EtherdreamWrapper();
 
 
-	void setPoints(std::vector<struct etherdream_point> p);
-	void addPoints(std::vector<struct etherdream_point> const& p);
+	void clear();
+	void setPoints(std::vector<etherdream_point> p);
+	void addPoints(std::vector<struct etherdream_point> const&p);
 
 
 private:
