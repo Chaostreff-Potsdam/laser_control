@@ -2,15 +2,9 @@
 
 #include "etherdream.h"
 
-#ifdef HAVE_BOOST_CHRONO
-#include <boost/chrono.hpp>
-#endif
+#include <chrono>
 
-#ifndef HAVE_BOOST_CHRONO
-#include <boost/date_time/posix_time/posix_time_types.hpp>
-#endif
-
-#include <boost/thread/thread.hpp>
+#include <thread>
 
 #include <vector>
 
@@ -33,17 +27,7 @@ int main(int argc, char **argv)
 
 	EtherdreamWrapper e;
 
-	boost::thread loop(boost::bind(&EtherdreamWrapper::connect, &e));
-
 	e.setPoints(points);
 
-#ifdef HAVE_BOOST_CHRONO
-	boost::this_thread::sleep_for(boost::chrono::milliseconds(5000));
-#endif
-#ifndef HAVE_BOOST_CHRONO
-	boost::this_thread::sleep(boost::posix_time::milliseconds(5000));
-#endif
-
-	loop.interrupt();
-	loop.join();
+	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
 }

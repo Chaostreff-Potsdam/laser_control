@@ -3,7 +3,8 @@
 
 #include <vector>
 
-#include <boost/thread/thread.hpp>
+#include <thread>
+#include <mutex>
 
 #include "etherdream.h"
 
@@ -13,17 +14,18 @@ public:
 	EtherdreamWrapper();
 
 
-	void connect();
-
 	void setPoints(std::vector<struct etherdream_point> p);
-	void addPoints(std::vector<struct etherdream_point> p);
+	void addPoints(std::vector<struct etherdream_point> const& p);
 
 
 private:
 	void writePoints();
+	void connect();
 
 
-	boost::mutex m_pointsMutex;
+	std::thread m_thread;
+
+	std::mutex m_pointsMutex;
 
 	std::vector<struct etherdream_point> m_points;
 

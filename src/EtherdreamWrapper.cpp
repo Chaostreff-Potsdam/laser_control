@@ -1,20 +1,17 @@
 #include "EtherdreamWrapper.h"
 
-#include <boost/thread/thread.hpp>
-
-#ifdef HAVE_BOOST_CHRONO
-#include <boost/chrono.hpp>
-#endif
-
-#ifndef HAVE_BOOST_CHRONO
-#include <boost/date_time/posix_time/posix_time_types.hpp>
-#endif
+#include <thread>
+#include <mutex>
+#include <chrono>
 
 #include <iostream>
+
+#include "etherdream.h"
 
 EtherdreamWrapper::EtherdreamWrapper()
 {
 	std::cout << "Eior" << std::endl;
+	m_thread = std::thread(&EtherdreamWrapper::connect, this);
 }
 
 void EtherdreamWrapper::connect()
@@ -28,12 +25,7 @@ void EtherdreamWrapper::connect()
 
 		// this will take atleast a second
 
-#ifdef HAVE_BOOST_CHRONO
-		boost::this_thread::sleep_for(boost::chrono::milliseconds(1200));
-#endif
-#ifndef HAVE_BOOST_CHRONO
-		boost::this_thread::sleep(boost::posix_time::milliseconds(1200));
-#endif
+		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
 		// how many have we seen
 		int etherdream_count = etherdream_dac_count();
@@ -61,7 +53,7 @@ void EtherdreamWrapper::connect()
 			etherdream_wait_for_ready(m_etherdream);
 		}
 	}
-	catch (boost::thread_interrupted e) // if the program wants us to stop
+	catch (...) // if the program wants us to stop
 	{
 		etherdream_disconnect(m_etherdream);
 		return;
@@ -70,7 +62,7 @@ void EtherdreamWrapper::connect()
 
 void EtherdreamWrapper::writePoints()
 {
-	boost::lock_guard<boost::mutex> guard(m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	if (!m_points.empty())
 	{
@@ -80,14 +72,14 @@ void EtherdreamWrapper::writePoints()
 
 void EtherdreamWrapper::setPoints(std::vector<struct etherdream_point> p)
 {
-	boost::lock_guard<boost::mutex> guard(m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points = p;
 }
 
-void EtherdreamWrapper::addPoints(std::vector<struct etherdream_point> p)
+void EtherdreamWrapper::addPoints(std::vector<struct etherdream_point> const& p)
 {
-	boost::lock_guard<boost::mutex> guard(m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points.insert(m_points.end(), p.begin(), p.end());
 }
