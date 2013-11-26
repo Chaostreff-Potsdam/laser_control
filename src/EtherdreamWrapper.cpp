@@ -10,12 +10,27 @@
 
 EtherdreamWrapper::EtherdreamWrapper()
 {
-	std::cout << "Eior" << std::endl;
+	m_newPoints = false;
 	m_thread = std::thread(&EtherdreamWrapper::connect, this);
+}
+
+EtherdreamWrapper::~EtherdreamWrapper()
+{
+	if(m_etherdream)
+		etherdream_disconnect(m_etherdream);
+}
+
+bool EtherdreamWrapper::empty()
+{
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
+
+	return m_points.empty();
 }
 
 void EtherdreamWrapper::clear()
 {
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
+
 	m_points.clear();
 }
 
@@ -26,16 +41,12 @@ void EtherdreamWrapper::connect()
 		// start listening for etherdreams
 		etherdream_lib_start();
 
-		std::cout << "Starting lib, will wait 1.2 s" << std::endl;
-
 		// this will take atleast a second
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
 
 		// how many have we seen
 		int etherdream_count = etherdream_dac_count();
-
-		std::cout << "Saw " << etherdream_count << " DACs" << std::endl;
 
 		// if none, stop
 		if (!etherdream_count)
@@ -52,15 +63,12 @@ void EtherdreamWrapper::connect()
 		while (true)
 		{
 			writePoints();
-
-			// this waits till we can write more points
-			// it provides us with time to change the points
-			etherdream_wait_for_ready(m_etherdream);
 		}
 	}
 	catch (...) // if the program wants us to stop
 	{
-		etherdream_disconnect(m_etherdream);
+		if(m_etherdream)
+			etherdream_disconnect(m_etherdream);
 		return;
 	}
 }
@@ -69,22 +77,32 @@ void EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
-	if (!m_points.empty())
+	if (m_newPoints)
 	{
-		etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, 1);
+		std::cout << "a" << std::endl;
+		etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
+		m_newPoints = false;
+	}
+	else
+	{
+		std::this_thread::yield();
 	}
 }
 
-void EtherdreamWrapper::setPoints(std::vector<struct etherdream_point> p)
+void EtherdreamWrapper::setPoints(std::vector<etherdream_point> p)
 {
+	std::cout << "setPoints" << std::endl;
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points = p;
+	m_newPoints = true;
 }
 
 void EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
 {
+	std::cout << "addPoints" << std::endl;
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points.insert(m_points.end(), p.begin(), p.end());
+	m_newPoints = true;
 }

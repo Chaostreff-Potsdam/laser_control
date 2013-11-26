@@ -8,7 +8,9 @@ class LaserCircle : public LaserObject
 public:
 	LaserCircle(int x, int y, int radius);
 
-	std::vector<struct etherdream_point> points();
+	std::vector<etherdream_point> points() const;
+	etherdream_point startPoint() const;
+	etherdream_point endPoint() const;
 
 private:
 	int m_y;

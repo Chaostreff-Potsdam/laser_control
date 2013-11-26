@@ -9,6 +9,8 @@ add_executable(laser_wrapper
 			${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
 			${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
 			${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
+			${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
+			${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
 			${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
 
 IF(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

@@ -1,6 +1,9 @@
 #include "EtherdreamWrapper.h"
 
-#include "etherdream.h"
+#include "LaserPainter.h"
+#include "LaserRectangle.h"
+#include "LaserCircle.h"
+#include "LaserLine.h"
 
 #include <chrono>
 
@@ -8,26 +11,22 @@
 
 #include <vector>
 
-int main(int argc, char **argv)
+int main(void)
 {
-	std::vector<struct etherdream_point> points;
-
-	for (int i = -50; i < 50; ++i)
-	{
-		struct etherdream_point p;
-
-		p.x = i*100;
-		p.y = -i*100;
-		p.r = (i+50)*1000;
-		p.g = (-i+50)*1000;
-		p.b = 0;
-
-		points.push_back(p);
-	}
+	LaserPainter p;
 
 	EtherdreamWrapper e;
 
-	e.setPoints(points);
+	p.paintOn(&e);
 
-	std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+	LaserObjectPtr c(new LaserLine(0, -2500, 10000, 5000));
+	//LaserObjectPtr d(new LaserCircle(2500, 2500, 10000));
+	LaserObjectPtr f(new LaserLine(-10000, 10000, 10000, -10000));
+	p.add(c);
+	//p.add(d);
+	//p.add(f);
+
+	std::this_thread::sleep_for(std::chrono::seconds(20));
+
+	return 0;
 }

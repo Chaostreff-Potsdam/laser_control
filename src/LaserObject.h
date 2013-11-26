@@ -3,13 +3,20 @@
 
 #include "etherdream.h"
 #include <vector>
+#include <memory>
+
 
 class LaserObject
 {
 public:
 	LaserObject();
 
-	virtual std::vector<struct etherdream_point> points() = 0;
+	virtual std::vector<etherdream_point> points() const = 0;
+	virtual etherdream_point startPoint() const = 0;
+	virtual etherdream_point endPoint() const = 0;
+
 };
+
+typedef std::shared_ptr<LaserObject> LaserObjectPtr;
 
 #endif // LASEROBJECT_H
