@@ -11,6 +11,7 @@ class LaserPainter
 {
 	typedef std::pair<int, LaserObjectPtr> LaserObjectPtrPair;
 	typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;
+
 public:
 	LaserPainter();
 

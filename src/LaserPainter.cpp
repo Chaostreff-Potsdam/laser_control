@@ -56,9 +56,10 @@ void LaserPainter::updatePoints()
 void LaserPainter::deleteObject(int id)
 {
 	m_objects.erase(id);
+	updatePoints();
 }
 
 void LaserPainter::drawWall(int id, int Ax, int Ay, int Bx, int By, int Px, int Py)
 {
-
+	updatePoints();
 }
