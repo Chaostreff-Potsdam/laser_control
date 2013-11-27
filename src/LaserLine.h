@@ -7,11 +7,12 @@ class LaserLine : public LaserObject
 {
 public:
 	LaserLine(int xa, int ya, int xb, int yb, bool visible = true);
-	LaserLine(LaserObjectPtr start, LaserObjectPtr end, bool visible = false);
 
 	std::vector<etherdream_point> points() const;
-	etherdream_point startPoint() const;
-	etherdream_point endPoint() const;
+	std::vector<etherdream_point> startPoints() const;
+	std::vector<etherdream_point> endPoints() const;
+	void rotate(double rad);
+	void move(int x, int y);
 
 private:
 	int m_xa;

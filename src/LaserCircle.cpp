@@ -18,7 +18,7 @@ std::vector<etherdream_point> LaserCircle::points() const
 {
 	std::vector<etherdream_point> ps;
 
-	for (int i = 0; i < LASERWRAPPER_CIRCLE_POINTS + 5; i++)
+	for (int i = 0; i < LASERWRAPPER_CIRCLE_POINTS + 1; i++)
 	{
 		etherdream_point p;
 
@@ -33,29 +33,51 @@ std::vector<etherdream_point> LaserCircle::points() const
 	return ps;
 }
 
-etherdream_point LaserCircle::startPoint() const
+std::vector<etherdream_point> LaserCircle::startPoints() const
 {
-	etherdream_point p;
+	std::vector<etherdream_point> ps;
 
-	p.x = m_x + m_radius;
-	p.y = m_y;
-	p.r = 0;
-	p.g = 65535;
-	p.b = 0;
+	for (int i = -10; i < 0; i++)
+	{
+		etherdream_point p;
 
-	return p;
+		p.x = m_x + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.y = m_y + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.r = 0;
+		p.g = 0;
+		p.b = 0;
+		ps.push_back(p);
+	}
+
+	return ps;
 }
 
-etherdream_point LaserCircle::endPoint() const
+std::vector<etherdream_point> LaserCircle::endPoints() const
 {
-	etherdream_point p;
+	std::vector<etherdream_point> ps;
 
-	p.x = m_x + m_radius;
-	p.y = m_y;
-	p.r = 0;
-	p.g = 65535;
-	p.b = 0;
+	for (int i = LASERWRAPPER_CIRCLE_POINTS; i < LASERWRAPPER_CIRCLE_POINTS + 10; i++)
+	{
+		etherdream_point p;
 
-	return p;
+		p.x = m_x + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.y = m_y + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.r = 0;
+		p.g = 0;
+		p.b = 0;
+		ps.push_back(p);
+	}
+
+	return ps;
+}
+
+void LaserCircle::rotate(double rad)
+{
+}
+
+void LaserCircle::move(int x, int y)
+{
+	m_x += x;
+	m_y += y;
 }
 

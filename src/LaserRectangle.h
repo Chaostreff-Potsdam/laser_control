@@ -2,21 +2,22 @@
 #define LASERRECTANGLE_H
 
 #include "LaserObject.h"
+#include <vector>
+#include <utility>
 
 class LaserRectangle : public LaserObject
 {
 public:
-	LaserRectangle(int x, int y, int height, int width);
+	LaserRectangle(int x, int y, int width, int height);
 
-	etherdream_point startPoint() const;
-	etherdream_point endPoint() const;
-	std::vector<struct etherdream_point> points() const;
+	std::vector<etherdream_point> points() const;
+	std::vector<etherdream_point> startPoints() const;
+	std::vector<etherdream_point> endPoints() const;
+	void rotate(double rad);
+	void move(int x, int y);
 
 private:
-	int m_x;
-	int m_y;
-	int m_height;
-	int m_width;
+	std::vector<std::pair<int, int>> m_corners;
 };
 
 #endif // LASERRECTANGLE_H

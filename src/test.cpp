@@ -8,6 +8,7 @@
 #include <chrono>
 
 #include <thread>
+#include <cmath>
 
 #include <vector>
 
@@ -15,18 +16,21 @@ int main(void)
 {
 	LaserPainter p;
 
-	EtherdreamWrapper e;
+	p.aquireEtherdreamWrapper();
 
-	p.paintOn(&e);
-
-	LaserObjectPtr c(new LaserLine(0, -2500, 10000, 5000));
-	//LaserObjectPtr d(new LaserCircle(2500, 2500, 10000));
+	LaserObjectPtr c(new LaserRectangle(-5000, -2500, 10000, 5000));
+	LaserObjectPtr d(new LaserCircle(0, 0, 10000));
 	LaserObjectPtr f(new LaserLine(-10000, 10000, 10000, -10000));
 	p.add(c);
-	//p.add(d);
+	p.add(d);
 	//p.add(f);
 
-	std::this_thread::sleep_for(std::chrono::seconds(20));
+	while (true)
+	{
+		c->rotate(M_PI/100);
+		p.updatePoints();
+		std::this_thread::sleep_for(std::chrono::milliseconds(5));
+	}
 
 	return 0;
 }

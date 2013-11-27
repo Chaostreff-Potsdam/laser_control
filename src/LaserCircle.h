@@ -9,8 +9,10 @@ public:
 	LaserCircle(int x, int y, int radius);
 
 	std::vector<etherdream_point> points() const;
-	etherdream_point startPoint() const;
-	etherdream_point endPoint() const;
+	std::vector<etherdream_point> startPoints() const;
+	std::vector<etherdream_point> endPoints() const;
+	void rotate(double rad);
+	void move(int x, int y);
 
 private:
 	int m_y;
