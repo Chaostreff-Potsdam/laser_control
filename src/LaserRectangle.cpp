@@ -64,8 +64,8 @@ void LaserRectangle::rotate(double rad)
 		int oldX = it->first;
 		int oldY = it->second;
 
-		it->first = cos(rad) * oldX - sin(rad) * oldY;
-		it->second = sin(rad) * oldX + cos(rad) * oldY;
+		it->first = round(cos(rad) * oldX - sin(rad) * oldY);
+		it->second = round(sin(rad) * oldX + cos(rad) * oldY);
 	}
 }
 

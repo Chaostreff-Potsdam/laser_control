@@ -93,11 +93,11 @@ void LaserLine::rotate(double rad)
 	int oldXb = m_xb;
 	int oldYb = m_yb;
 
-	m_xa = oldXa * cos(rad) - oldYa * sin(rad);
-	m_ya = oldXa * sin(rad) + oldYa * cos(rad);
+	m_xa = round(oldXa * cos(rad) - oldYa * sin(rad));
+	m_ya = round(oldXa * sin(rad) + oldYa * cos(rad));
 
-	m_xb = oldXb * cos(rad) - oldYb * sin(rad);
-	m_yb = oldXb * sin(rad) + oldYb * cos(rad);
+	m_xb = round(oldXb * cos(rad) - oldYb * sin(rad));
+	m_yb = round(oldXb * sin(rad) + oldYb * cos(rad));
 }
 
 void LaserLine::move(int x, int y)
