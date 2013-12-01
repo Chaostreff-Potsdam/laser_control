@@ -91,7 +91,7 @@ void EtherdreamWrapper::writePoints()
 	}
 }
 
-void EtherdreamWrapper::setPoints(std::vector<etherdream_point> p)
+void EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
 {
 	std::cout << "setPoints" << std::endl;
 	std::lock_guard<std::mutex> guard(m_pointsMutex);

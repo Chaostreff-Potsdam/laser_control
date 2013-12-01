@@ -17,7 +17,9 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
-	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
+	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c
+	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
+	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h)
 
 add_library(laserwrapper SHARED
 			${MYSOURCES})

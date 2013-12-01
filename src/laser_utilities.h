@@ -4,12 +4,27 @@
 #include <cstdint>
 
 namespace laser {
-	inline int clamp(int a, int bottom, int top)
+	/*!
+	 * \brief ensures that \f$ l \leq a \leq u \f$
+	 * \param a value to be clamped
+	 * \param l lower limit
+	 * \param u upper limit
+	 */
+	inline int clamp(int a, int l, int u)
 	{
-		a = a > top ? top : a;
-		return a < bottom ? bottom : a;
+		a = a > u ? u : a;
+		return a < l ? l : a;
 	}
 
+	/*!
+	 * \brief a 2D point with valid laser coordinates
+	 *
+	 * This class ensures that the coordinates are valid for the laser.
+	 * Any "overflow" will be \link clamp() clamped\endlink to the nearest
+	 * valid value.
+	 *
+	 * Valid values are between INT16_MIN and INT16_MAX.
+	 */
 	class Point
 	{
 	public:
