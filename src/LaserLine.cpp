@@ -3,17 +3,26 @@
 #include <vector>
 #include <cmath>
 
+#include "laser_utilities.h"
+
 #ifndef LASERWRAPPER_LINE_POINTS
 #define LASERWRAPPER_LINE_POINTS (50)
 #endif
 
+using namespace laser;
+
 LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible) : LaserObject()
 {
-	m_xa = xa;
-	m_ya = ya;
+	m_a = Point(xa, ya);
+	m_b = Point(xb, yb);
 
-	m_xb = xb;
-	m_yb = yb;
+	m_visible = visible;
+}
+
+LaserLine::LaserLine(Point a, Point b, bool visible)
+{
+	m_a = a;
+	m_b = b;
 
 	m_visible = visible;
 }
@@ -21,18 +30,16 @@ LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible) : LaserObject
 std::vector<etherdream_point> LaserLine::points() const
 {
 	std::vector<etherdream_point> ps;
-	void rotate(double rad);
-	void move(int x, int y);
 	if (m_visible)
 	{
 		for (int i = 0; i < LASERWRAPPER_LINE_POINTS; i++)
 		{
 			etherdream_point p;
 
-			p.x = m_xa + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_xb - m_xa);
-			p.y = m_ya + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_yb - m_ya);
+			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
+			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
 			p.r = 0;
-			p.g = 65535;
+			p.g = UINT16_MAX;
 			p.b = 0;
 			ps.push_back(p);
 		}
@@ -51,8 +58,8 @@ std::vector<etherdream_point> LaserLine::startPoints() const
 		{
 			etherdream_point p;
 
-			p.x = m_xa + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_xb - m_xa);
-			p.y = m_ya + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_yb - m_ya);
+			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
+			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
 			p.r = 0;
 			p.g = 0;
 			p.b = 0;
@@ -74,8 +81,8 @@ std::vector<etherdream_point> LaserLine::endPoints() const
 		{
 			etherdream_point p;
 
-			p.x = m_xa + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_xb - m_xa);
-			p.y = m_ya + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_yb - m_ya);
+			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
+			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
 			p.r = 0;
 			p.g = 0;
 			p.b = 0;
@@ -88,23 +95,23 @@ std::vector<etherdream_point> LaserLine::endPoints() const
 
 void LaserLine::rotate(double rad)
 {
-	int oldXa = m_xa;
-	int oldYa = m_ya;
-	int oldXb = m_xb;
-	int oldYb = m_yb;
+	int oldXa = m_a.x();
+	int oldYa = m_a.y();
+	int oldXb = m_b.x();
+	int oldYb = m_b.y();
 
-	m_xa = round(oldXa * cos(rad) - oldYa * sin(rad));
-	m_ya = round(oldXa * sin(rad) + oldYa * cos(rad));
+	m_a.setX(round(oldXa * cos(rad) - oldYa * sin(rad)));
+	m_a.setY(round(oldXa * sin(rad) + oldYa * cos(rad)));
 
-	m_xb = round(oldXb * cos(rad) - oldYb * sin(rad));
-	m_yb = round(oldXb * sin(rad) + oldYb * cos(rad));
+	m_b.setX(round(oldXb * cos(rad) - oldYb * sin(rad)));
+	m_b.setY(round(oldXb * sin(rad) + oldYb * cos(rad)));
 }
 
 void LaserLine::move(int x, int y)
 {
-	m_xa += x;
-	m_xb += x;
+	m_a.setX(m_a.x() + x);
+	m_a.setY(m_a.y() + y);
 
-	m_ya += y;
-	m_yb += y;
+	m_b.setX(m_b.x() + x);
+	m_b.setY(m_b.y() + y);
 }

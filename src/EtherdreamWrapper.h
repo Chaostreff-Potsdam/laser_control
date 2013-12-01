@@ -8,34 +8,35 @@
 
 #include "etherdream.h"
 
-class EtherdreamWrapper
-{
-public:
-	EtherdreamWrapper();
-	~EtherdreamWrapper();
+namespace laser {
+	class EtherdreamWrapper
+	{
+	public:
+		EtherdreamWrapper();
+		~EtherdreamWrapper();
 
 
-	void clear();
-	bool empty();
-	void setPoints(std::vector<etherdream_point> p);
-	void addPoints(std::vector<etherdream_point> const&p);
+		void clear();
+		bool empty();
+		void setPoints(std::vector<etherdream_point> p);
+		void addPoints(std::vector<etherdream_point> const&p);
 
 
-private:
-	void writePoints();
-	void connect();
+	protected:
+		void writePoints();
+		void connect();
 
 
-	std::thread m_thread;
+		std::thread m_thread;
 
-	std::mutex m_pointsMutex;
+		std::mutex m_pointsMutex;
 
-	std::vector<etherdream_point> m_points;
-	std::atomic_bool m_newPoints;
+		std::vector<etherdream_point> m_points;
+		std::atomic_bool m_newPoints;
 
-	struct etherdream *m_etherdream;
-	/* data */
-};
-
+		struct etherdream *m_etherdream;
+		/* data */
+	};
+}
 #endif
 		// ETHERDREAMWRAPPER_H

@@ -3,38 +3,36 @@ include_directories(${LASERWRAPPER_SOURCE_DIR}/src
 					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common)
 link_directories(${LASERWRAPPER_BINARY_DIR}/src)
 
-add_executable(laser_wrapper
-			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
+set(MYSOURCES
+	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
+	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
 
-add_library(laserwrapper
-			${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
+add_library(laserwrapper SHARED
+			${MYSOURCES})
+
+add_executable(laser_wrapper_test
+			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
 if(SWIG_FOUND)
 	include(${SWIG_USE_FILE})
 	set(CMAKE_SWIG_FLAGS "")
 	set_source_files_properties(laserwrapper.i PROPERTIES CPLUSPLUS ON)
-	swig_add_module(laserwrappercs csharp laserwrapper.i
-			${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
-			${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c)
+	set_property(SOURCE laserwrapper.i PROPERTY SWIG_FLAGS "-namespace" "laser")
+	swig_add_module(laserwrappercs csharp laserwrapper.i)
 	swig_link_libraries(laserwrappercs
+					laserwrapper
 					m
 					pthread
 					${THREAD_LIBRARY})
@@ -47,7 +45,8 @@ if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(THREAD_LIBRARY rt)
 ENDIF(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 
-TARGET_LINK_LIBRARIES(laser_wrapper
+TARGET_LINK_LIBRARIES(laser_wrapper_test
+					laserwrapper
 					m
 					pthread
 					${THREAD_LIBRARY})

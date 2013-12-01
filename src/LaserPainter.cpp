@@ -1,8 +1,11 @@
 #include "LaserPainter.h"
 
 #include "LaserLine.h"
+#include "LaserRectangle.h"
 #include <utility>
 #include <memory>
+
+using namespace laser;
 
 LaserPainter::LaserPainter() : m_smallestFreeId(0)
 {
@@ -62,7 +65,15 @@ void LaserPainter::deleteObject(int id)
 void LaserPainter::drawWall(int id, int Ax, int Ay, int Bx, int By, int Px, int Py)
 {
 	LaserObjectPtr wall = std::make_shared<LaserLine>(Ax, Ay, Bx, By);
-	LaserObjectPtrPair pair = make_pair<int, LaserObjectPtr>(id, wall);
+	LaserObjectPtrPair pair = make_pair(id, wall);
+	m_objects.insert(pair);
+	updatePoints();
+}
+
+void LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
+{
+	LaserObjectPtr wall = std::make_shared<LaserRectangle>(p1, p2, p3, p4);
+	LaserObjectPtrPair pair = make_pair(id, wall);
 	m_objects.insert(pair);
 	updatePoints();
 }

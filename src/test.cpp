@@ -12,6 +12,8 @@
 
 #include <vector>
 
+using namespace laser;
+
 int main(void)
 {
 	LaserPainter p;

@@ -8,6 +8,8 @@
 
 #include "etherdream.h"
 
+using namespace laser;
+
 EtherdreamWrapper::EtherdreamWrapper()
 {
 	m_newPoints = false;
