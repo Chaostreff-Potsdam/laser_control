@@ -33,12 +33,31 @@ namespace laser {
 		 * destroyed. This hasn't been tested yet, though.
 		 */
 		void aquireEtherdreamWrapper();
+		/*!
+		 * \brief set a new EtherdreamWrapper
+		 *
+		 * This overrides the old #m_canvas.
+		 */
 		void paintOn(std::shared_ptr<EtherdreamWrapper> e);
+		/*!
+		 * \brief overrides #m_objects with \a objects and calls updatePoints()
+		 */
 		void paint(LaserObjectPtrMap objects);
+		/*!
+		 * \brief adds \a object to #m_objects and calls updatePoints()
+		 */
 		void add(LaserObjectPtr object);
+		/*!
+		 * \brief send a new array to #m_canvas
+		 *
+		 * This constructs a new array out of #m_objects. This takes
+		 * LaserObject::points() as well as LaserObject::startPoints()
+		 * and LaserObject::endPoints() into account. The later ones provide
+		 * certain margins for the laser. If they are empty objects will be
+		 * connected with ugly lines.
+		 */
 		void updatePoints();
 		void deleteObject(int id);
-		void drawWall(int id, int Ax, int Ay, int Bx, int By, int Px, int Py);
 		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
 
 	private:

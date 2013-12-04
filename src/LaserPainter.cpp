@@ -62,14 +62,6 @@ void LaserPainter::deleteObject(int id)
 	updatePoints();
 }
 
-void LaserPainter::drawWall(int id, int Ax, int Ay, int Bx, int By, int Px, int Py)
-{
-	LaserObjectPtr wall = std::make_shared<LaserLine>(Ax, Ay, Bx, By);
-	LaserObjectPtrPair pair = make_pair(id, wall);
-	m_objects.insert(pair);
-	updatePoints();
-}
-
 void LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
 {
 	LaserObjectPtr wall = std::make_shared<LaserRectangle>(p1, p2, p3, p4);
