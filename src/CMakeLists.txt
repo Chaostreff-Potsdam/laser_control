@@ -1,6 +1,7 @@
 include_directories(${LASERWRAPPER_SOURCE_DIR}/src
 					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver
-					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common)
+					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common
+					${Boost_INCLUDE_DIRS})
 link_directories(${LASERWRAPPER_BINARY_DIR}/src)
 
 set(MYSOURCES
@@ -16,6 +17,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
@@ -27,22 +30,6 @@ add_library(laserwrapper SHARED
 add_executable(laser_wrapper_test
 			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
-if(SWIG_FOUND)
-	include(${SWIG_USE_FILE})
-	set(CMAKE_SWIG_FLAGS "")
-	set_source_files_properties(laserwrapper.i PROPERTIES CPLUSPLUS ON)
-	set_property(SOURCE laserwrapper.i PROPERTY SWIG_FLAGS "-namespace" "laser")
-	swig_add_module(laserwrappercs csharp laserwrapper.i)
-	swig_link_libraries(laserwrappercs
-					laserwrapper
-					m
-					pthread
-					${THREAD_LIBRARY})
-else(SWIG_FOUND)
-	message(WARNING
-			"SWIG was not found. You will not be able to compile for C#.")
-endif(SWIG_FOUND)
-
 if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 	SET(THREAD_LIBRARY rt)
 ENDIF(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -51,9 +38,11 @@ TARGET_LINK_LIBRARIES(laser_wrapper_test
 					laserwrapper
 					m
 					pthread
-					${THREAD_LIBRARY})
+					${THREAD_LIBRARY}
+					${Boost_LIBRARIES})
 
 TARGET_LINK_LIBRARIES(laserwrapper
 					m
 					pthread
-					${THREAD_LIBRARY})
+					${THREAD_LIBRARY}
+					${Boost_LIBRARIES})
