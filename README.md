@@ -30,6 +30,13 @@ This should be pretty straightforward:
 
 Use cmake to generate a VS project. Compile it.
 
+### Unity (Mac and Linux)
+    --- build on Mac ---
+    --- build on Linux ---
+    cp build/lib/laserwrappercs.so [path-to-Unity-project]/Assets/Plugin/
+    cp build/lib/laserwrappercs.bundle [path-to-Unity-project]/Assets/Plugin/
+    cp build/lib/LaserWrapperCS/ [path-to-Unity-project]/Assets/Plugin/
+
 
 [swig]: http://swig.org/
 [ed]: http://www.ether-dream.com/

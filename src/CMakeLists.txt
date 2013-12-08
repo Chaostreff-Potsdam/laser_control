@@ -21,23 +21,25 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h)
 
+# Making stand-alone C++ Library
 add_library(laserwrapper SHARED
 			${MYSOURCES})
 
+# Making test application
 add_executable(laser_wrapper_test
 			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
+# Making SWIG-C# Library
 if(SWIG_FOUND)
 	include(${SWIG_USE_FILE})
 	set(CMAKE_SWIG_FLAGS "")
+	set(CMAKE_SWIG_OUTDIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/LaserWrapperCS)
 	set_source_files_properties(laserwrapper.i PROPERTIES CPLUSPLUS ON)
 	set_property(SOURCE laserwrapper.i PROPERTY SWIG_FLAGS "-namespace" "laser")
-	swig_add_module(laserwrappercs csharp laserwrapper.i)
-	swig_link_libraries(laserwrappercs
-					laserwrapper
-					m
-					pthread
-					${THREAD_LIBRARY})
+	swig_add_module(laserwrappercs csharp laserwrapper.i ${MYSOURCES})
+	if(APPLE)
+		set_target_properties(laserwrappercs PROPERTIES BUNDLE TRUE)
+	endif(APPLE)
 else(SWIG_FOUND)
 	message(WARNING
 			"SWIG was not found. You will not be able to compile for C#.")
