@@ -57,12 +57,27 @@ namespace laser {
 		 * connected with ugly lines.
 		 */
 		void updatePoints();
+		/*!
+		 * \brief deletes an object from #m_objects with ID \a id
+		 */
 		void deleteObject(int id);
+		/*!
+		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
+		 */
 		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
 
 	private:
+		/*!
+		 * \brief the EtherdreamWrapper the objects will be painted on
+		 */
 		std::shared_ptr<EtherdreamWrapper> m_canvas;
+		/*!
+		 * \brief multiple LaserObjects that are uniquely idetified by an id
+		 */
 		LaserObjectPtrMap m_objects;
+		/*!
+		 * \brief the smallest number that is free no matter what
+		 */
 		int m_smallestFreeId;
 	};
 }
