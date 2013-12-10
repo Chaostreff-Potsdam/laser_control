@@ -13,7 +13,7 @@ using namespace laser;
 EtherdreamWrapper::EtherdreamWrapper()
 {
 	m_newPoints = false;
-	m_thread = std::thread(&EtherdreamWrapper::connect, this);
+	connect();
 }
 
 EtherdreamWrapper::~EtherdreamWrapper()
@@ -62,10 +62,7 @@ void EtherdreamWrapper::connect()
 		// establish TCP connection
 		etherdream_connect(m_etherdream);
 
-		while (true)
-		{
-			writePoints();
-		}
+		return;
 	}
 	catch (...) // if the program wants us to stop
 	{
@@ -79,16 +76,9 @@ void EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
-	if (m_newPoints)
-	{
-		std::cout << "a" << std::endl;
-		etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
-		m_newPoints = false;
-	}
-	else
-	{
-		std::this_thread::yield();
-	}
+	std::cout << "a" << std::endl;
+	etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
+	m_newPoints = false;
 }
 
 void EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)

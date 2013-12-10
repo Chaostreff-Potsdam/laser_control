@@ -54,6 +54,7 @@ void LaserPainter::updatePoints()
 	}
 
 	m_canvas->setPoints(ps);
+	m_canvas->writePoints();
 }
 
 void LaserPainter::deleteObject(int id)
