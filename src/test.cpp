@@ -20,19 +20,17 @@ int main(void)
 
 	p.aquireEtherdreamWrapper();
 
-	LaserObjectPtr c(new LaserRectangle(-5000, -2500, 10000, 5000));
-	LaserObjectPtr d(new LaserCircle(0, 0, 10000));
-	LaserObjectPtr f(new LaserLine(-10000, 10000, 10000, -10000));
-	p.add(c);
-	p.add(d);
-	//p.add(f);
+	p.drawWall(1, Point(-20000, -20000), Point(20000, -20000), Point(20000, 20000), Point(-20000, 20000));
 
-	while (true)
-	{
-		c->rotate(M_PI/100);
-		p.updatePoints();
-		std::this_thread::sleep_for(std::chrono::milliseconds(5));
-	}
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+
+	p.deleteObject(1);
+
+	std::this_thread::sleep_for(std::chrono::seconds(3));
+
+	p.drawWall(1, Point(-20000, -20000), Point(20000, -20000), Point(20000, 20000), Point(-20000, 20000));
+
+	std::this_thread::sleep_for(std::chrono::seconds(3));
 
 	return 0;
 }

@@ -100,5 +100,4 @@ namespace laser {
 		struct etherdream *m_etherdream;
 	};
 }
-#endif
-		// ETHERDREAMWRAPPER_H
+#endif // ETHERDREAMWRAPPER_H
