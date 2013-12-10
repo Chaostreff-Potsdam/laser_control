@@ -53,9 +53,6 @@ namespace laser {
 		 * \brief appends the contents of \a p to #m_points
 		 */
 		void addPoints(std::vector<etherdream_point> const&p);
-
-
-	protected:
 		/*!
 		 * \brief sends new points to the DAC if needed
 		 *
@@ -64,6 +61,10 @@ namespace laser {
 		 * time slice.
 		 */
 		void writePoints();
+
+
+	protected:
+
 		/*!
 		 * \brief establishes connection to the DAC
 		 *
@@ -100,5 +101,4 @@ namespace laser {
 		struct etherdream *m_etherdream;
 	};
 }
-#endif
-		// ETHERDREAMWRAPPER_H
+#endif // ETHERDREAMWRAPPER_H

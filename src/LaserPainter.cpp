@@ -54,6 +54,7 @@ void LaserPainter::updatePoints()
 	}
 
 	m_canvas->setPoints(ps);
+	m_canvas->writePoints();
 }
 
 void LaserPainter::deleteObject(int id)
@@ -68,4 +69,6 @@ void LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
 	LaserObjectPtrPair pair = make_pair(id, wall);
 	m_objects.insert(pair);
 	updatePoints();
+
+	m_smallestFreeId = id + 1;
 }
