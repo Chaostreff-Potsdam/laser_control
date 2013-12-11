@@ -5,7 +5,7 @@
 #include <cstdint>
 
 #ifndef LASERWRAPPER_CIRCLE_POINTS
-#define LASERWRAPPER_CIRCLE_POINTS (50)
+#define LASERWRAPPER_CIRCLE_POINTS (200)
 #endif
 
 using namespace laser;

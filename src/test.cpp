@@ -22,11 +22,12 @@ int main(void)
 
 	p.aquireEtherdreamWrapper();
 
-	LaserServer s(p);
+	LaserObjectPtr c = std::make_shared<LaserCircle>(0, 0, 20000/*, M_PI_4, M_PI_2*/);
+	p.add(c);
 
-	s.poll();
+	while (true) {
 
-	std::cout << "juhu" << std::endl;
+	}
 
 	return 0;
 }

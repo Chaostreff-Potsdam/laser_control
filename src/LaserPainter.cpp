@@ -43,14 +43,20 @@ void LaserPainter::updatePoints()
 
 	for (LaserObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
-		std::vector<etherdream_point> s = (it->second)->startPoints();
-		ps.insert(ps.end(), s.begin(), s.end());
+		if (m_objects.size() != 1)
+		{
+			std::vector<etherdream_point> s = (it->second)->startPoints();
+			ps.insert(ps.end(), s.begin(), s.end());
+		}
 
 		std::vector<etherdream_point> p = (it->second)->points();
 		ps.insert(ps.end(), p.begin(), p.end());
 
-		std::vector<etherdream_point> e = (it->second)->endPoints();
-		ps.insert(ps.end(), e.begin(), e.end());
+		if (m_objects.size() != 1)
+		{
+			std::vector<etherdream_point> e = (it->second)->endPoints();
+			ps.insert(ps.end(), e.begin(), e.end());
+		}
 	}
 
 	m_canvas->setPoints(ps);
