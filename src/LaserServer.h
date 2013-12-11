@@ -19,7 +19,8 @@ namespace laser {
 
 		enum CommandType
 		{
-			DELETE = 0,
+			INVALID = 0,
+			DELETE,
 			WALL,
 			DOOR,
 			TABLE

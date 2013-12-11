@@ -53,6 +53,7 @@ void laser::LaserServer::handleAccept(boost::asio::ip::tcp::socket *socket, cons
 
 void laser::LaserServer::handleRead()
 {
+	std::cout << "got " << (int)m_buf[0] << std::endl;
 	switch (m_buf[0]) {
 	case CommandType::DELETE:
 		handleDelete();
@@ -69,6 +70,8 @@ void laser::LaserServer::handleDelete()
 {
 	int id = parseToInt(m_buf, 1);
 
+	std::cout << "delete " << id << std::endl;
+
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.deleteObject(id);
@@ -78,11 +81,13 @@ void laser::LaserServer::handleWall()
 {
 	int id = parseToInt(m_buf, 1);
 
+	std::cout << "build " << id << std::endl;
+
 	std::vector<Point> ps;
 
 	for (int i = 0; i < 4; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5)-INT16_MAX,
-						   parseToInt(m_buf, 8*i+9)-INT16_MAX));
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   parseToInt(m_buf, 8*i+9)));
 	}
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
