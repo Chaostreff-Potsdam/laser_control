@@ -16,6 +16,11 @@ namespace laser {
 		return a < l ? l : a;
 	}
 
+	inline int sqr(int a)
+	{
+		return a*a;
+	}
+
 	/*!
 	 * \brief a 2D point with valid laser coordinates
 	 *

@@ -20,6 +20,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h)

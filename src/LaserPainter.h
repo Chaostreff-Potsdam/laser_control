@@ -66,6 +66,8 @@ namespace laser {
 		 */
 		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
 
+		void drawDoor(int id, Point p1, Point p2);
+
 	private:
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on
