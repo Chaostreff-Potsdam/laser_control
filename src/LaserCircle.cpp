@@ -10,7 +10,7 @@
 
 using namespace laser;
 
-LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRatio)
+LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRatio) : LaserObject()
 {
 	m_p = Point(x, y);
 	m_radius = radius;

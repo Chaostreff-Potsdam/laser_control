@@ -5,6 +5,8 @@
 #include <vector>
 #include <memory>
 
+#include "boost/date_time/posix_time/posix_time_types.hpp"
+
 namespace laser {
 
 	/*!
@@ -35,6 +37,11 @@ namespace laser {
 		 * \brief move this object by x and y
 		 */
 		virtual void move(int x, int y) = 0;
+
+		boost::posix_time::ptime started();
+
+	protected:
+		boost::posix_time::ptime m_started;
 	};
 
 	typedef std::shared_ptr<LaserObject> LaserObjectPtr;

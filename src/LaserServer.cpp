@@ -87,11 +87,10 @@ void laser::LaserServer::handleWall()
 
 	for (int i = 0; i < 4; ++i) {
 		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   parseToInt(m_buf, 8*i+9)));
+						   -parseToInt(m_buf, 8*i+9)));
 	}
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.drawWall(id, ps[0], ps[1], ps[2], ps[3]);
 }
-
