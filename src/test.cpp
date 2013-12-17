@@ -18,7 +18,7 @@ using namespace laser;
 
 int main(void)
 {
-	LaserPainter p(true);
+	LaserPainter p(false);
 
 	p.aquireEtherdreamWrapper();
 

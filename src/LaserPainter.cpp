@@ -70,7 +70,6 @@ void LaserPainter::updatePoints()
 		}
 		//if (m_objects.size() != 1)
 		{
-			std::cout << "starting" << std::endl;
 			std::vector<etherdream_point> s = (it->second)->startPoints();
 			ps.insert(ps.end(), s.begin(), s.end());
 		}

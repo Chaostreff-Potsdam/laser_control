@@ -31,40 +31,61 @@ std::vector<etherdream_point> LaserRectangle::points() const
 
 	// TODO refine this
 
-	std::vector<etherdream_point> bottom = LaserLine(m_corners[0], m_corners[1]).points();
-	ps.insert(ps.end(), bottom.begin(), bottom.end());
-	std::vector<etherdream_point> right = LaserLine(m_corners[1], m_corners[2]).points();
-	ps.insert(ps.end(), right.begin(), right.end());
-	std::vector<etherdream_point> top = LaserLine(m_corners[2], m_corners[3]).points();
-	ps.insert(ps.end(), top.begin(), top.end());
-	std::vector<etherdream_point> left = LaserLine(m_corners[3], m_corners[0]).points();
-	ps.insert(ps.end(), left.begin(), left.end());
+	LaserLine bottom = LaserLine(m_corners[0], m_corners[1]);
+	std::vector<etherdream_point> points = bottom.points();
+	std::vector<etherdream_point> endPoints = bottom.endPoints();
+	std::vector<etherdream_point> startPoints = bottom.startPoints();
+	ps.insert(ps.end(), points.begin(), points.end());
+	ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+
+	LaserLine right = LaserLine(m_corners[1], m_corners[2]);
+	points = right.points();
+	endPoints = right.endPoints();
+	startPoints = right.startPoints();
+	ps.insert(ps.end(), startPoints.begin(), startPoints.end());
+	ps.insert(ps.end(), points.begin(), points.end());
+	ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+
+	LaserLine top = LaserLine(m_corners[2], m_corners[3]);
+	points = top.points();
+	endPoints = top.endPoints();
+	startPoints = top.startPoints();
+	ps.insert(ps.end(), startPoints.begin(), startPoints.end());
+	ps.insert(ps.end(), points.begin(), points.end());
+	ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+
+	LaserLine left = LaserLine(m_corners[3], m_corners[0]);
+	points = left.points();
+	endPoints = left.endPoints();
+	startPoints = left.startPoints();
+	ps.insert(ps.end(), startPoints.begin(), startPoints.end());
+	ps.insert(ps.end(), points.begin(), points.end());
 
 	return ps;
 }
 
 std::vector<etherdream_point> LaserRectangle::startPoints() const
 {
-	std::vector<etherdream_point> ps = LaserLine(m_corners[3], m_corners[0]).points();
+	return LaserLine(m_corners[0], m_corners[1]).startPoints();
 
-	for (auto it = ps.begin(); it < ps.end(); it++)
-	{
-		it->g = 0;
-	}
+//	for (auto it = ps.begin(); it < ps.end(); it++)
+//	{
+//		it->g = 0;
+//	}
 
-	return ps;
+//	return ps;
 }
 
 std::vector<etherdream_point> LaserRectangle::endPoints() const
 {
-	std::vector<etherdream_point> ps = LaserLine(m_corners[0], m_corners[1]).points();
+	return LaserLine(m_corners[3], m_corners[0]).endPoints();
 
-	for (auto it = ps.begin(); it < ps.end(); it++)
-	{
-		it->g = 0;
-	}
+//	for (auto it = ps.begin(); it < ps.end(); it++)
+//	{
+//		it->g = 0;
+//	}
 
-	return ps;
+//	return ps;
 }
 
 void LaserRectangle::rotate(double rad)
