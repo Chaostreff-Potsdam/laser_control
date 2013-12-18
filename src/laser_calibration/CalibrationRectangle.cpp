@@ -3,6 +3,8 @@
 #include <iostream>
 #include <cstdint>
 
+using namespace laser;
+
 CalibrationRectangle::CalibrationRectangle(cv::Point2f topLeft, cv::Point2f bottomLeft, cv::Point2f bottomRight, cv::Point2f topRight)
     : m_topLeft(topLeft), m_bottomLeft(bottomLeft), m_bottomRight(bottomRight), m_topRight(topRight)
 {

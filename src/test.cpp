@@ -5,6 +5,7 @@
 #include "LaserCircle.h"
 #include "LaserLine.h"
 #include "LaserServer.h"
+#include "Calibration.h"
 
 #include <chrono>
 
@@ -18,6 +19,8 @@ using namespace laser;
 
 int main(void)
 {
+    Calibration();
+
 	LaserPainter p(false);
 
 	p.aquireEtherdreamWrapper();

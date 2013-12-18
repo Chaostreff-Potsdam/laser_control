@@ -1,10 +1,12 @@
-#ifndef LASERRECTANGLE_H
-#define LASERRECTANGLE_H
+#ifndef CALIBRATIONRECTANGLE_H
+#define CALIBRATIONRECTANGLE_H
 
 #include <vector>
 #include <opencv/cv.h>
 
 #include "etherdream.h"
+
+namespace laser {
 
 class CalibrationRectangle
 {
@@ -25,4 +27,6 @@ private:
     cv::Point2f m_topRight;
 };
 
-#endif // LASERRECTANGLE_H
+}
+
+#endif // CALIBRATIONRECTANGLE_H

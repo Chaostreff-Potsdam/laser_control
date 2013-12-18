@@ -3,8 +3,10 @@
 
 #include <opencv/cv.h>
 
-#include "EtherdreamWrapper.h"
 #include "CalibrationRectangle.h"
+#include "EtherdreamWrapper.h"
+
+namespace laser {
 
 class Calibration
 {
@@ -26,7 +28,10 @@ private:
     int m_topEdge;
 
     CalibrationRectangle m_rect;
-    laser::EtherdreamWrapper m_etherdream;
+    EtherdreamWrapper m_etherdream;
 };
+
+
+}
 
 #endif

@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <iostream>
 
+using namespace laser;
+
 Calibration::Calibration()
     : m_scale(100), m_topEdge(100),
       m_rect(CalibrationRectangle(cv::Point2f(INT16_MAX, INT16_MAX),
