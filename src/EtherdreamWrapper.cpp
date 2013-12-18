@@ -8,35 +8,33 @@
 
 #include "etherdream.h"
 
-using namespace laser;
-
-EtherdreamWrapper::EtherdreamWrapper()
+laser::EtherdreamWrapper::EtherdreamWrapper()
 {
 	m_newPoints = false;
 	connect();
 }
 
-EtherdreamWrapper::~EtherdreamWrapper()
+laser::EtherdreamWrapper::~EtherdreamWrapper()
 {
 	if(m_etherdream)
 		etherdream_disconnect(m_etherdream);
 }
 
-bool EtherdreamWrapper::empty()
+bool laser::EtherdreamWrapper::empty()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	return m_points.empty();
 }
 
-void EtherdreamWrapper::clear()
+void laser::EtherdreamWrapper::clear()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points.clear();
 }
 
-void EtherdreamWrapper::connect()
+void laser::EtherdreamWrapper::connect()
 {
 	try
 	{
@@ -72,7 +70,7 @@ void EtherdreamWrapper::connect()
 	}
 }
 
-void EtherdreamWrapper::writePoints()
+void laser::EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
@@ -81,7 +79,7 @@ void EtherdreamWrapper::writePoints()
 	m_newPoints = false;
 }
 
-void EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
+void laser::EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
 {
 	std::cout << "setPoints" << std::endl;
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
@@ -90,7 +88,7 @@ void EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
 	m_newPoints = true;
 }
 
-void EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
+void laser::EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
 {
 	std::cout << "addPoints" << std::endl;
 	std::lock_guard<std::mutex> guard(m_pointsMutex);

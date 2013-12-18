@@ -12,10 +12,9 @@
 
 #include <boost/date_time.hpp>
 
-using namespace laser;
-
-LaserPainter::LaserPainter(bool expireObjects) : m_smallestFreeId(0),
-												 m_expireObjects(expireObjects)
+laser::LaserPainter::LaserPainter(bool expireObjects)
+:	m_smallestFreeId(0),
+	m_expireObjects(expireObjects)
 {
 	if (expireObjects)
 	{
@@ -26,24 +25,24 @@ LaserPainter::LaserPainter(bool expireObjects) : m_smallestFreeId(0),
 
 }
 
-void LaserPainter::aquireEtherdreamWrapper()
+void laser::LaserPainter::aquireEtherdreamWrapper()
 {
 	m_canvas = std::make_shared<EtherdreamWrapper>();
 }
 
-void LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)
+void laser::LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)
 {
 	m_canvas = e;
 }
 
-void LaserPainter::paint(LaserObjectPtrMap objects)
+void laser::LaserPainter::paint(LaserObjectPtrMap objects)
 {
 	m_objects = objects;
 
 	updatePoints();
 }
 
-void LaserPainter::add(LaserObjectPtr object)
+void laser::LaserPainter::add(LaserObjectPtr object)
 {
 	LaserObjectPtrPair pair = make_pair(m_smallestFreeId++, object);
 
@@ -52,7 +51,7 @@ void LaserPainter::add(LaserObjectPtr object)
 	updatePoints();
 }
 
-void LaserPainter::updatePoints()
+void laser::LaserPainter::updatePoints()
 {
 	std::vector<etherdream_point> ps;
 
@@ -88,13 +87,13 @@ void LaserPainter::updatePoints()
 	m_canvas->writePoints();
 }
 
-void LaserPainter::deleteObject(int id)
+void laser::LaserPainter::deleteObject(int id)
 {
 	m_objects.erase(id);
 	updatePoints();
 }
 
-void LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
+void laser::LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
 {
 	LaserObjectPtr wall = std::make_shared<LaserRectangle>(p1, p2, p3, p4);
 	LaserObjectPtrPair pair = make_pair(id, wall);
@@ -104,7 +103,7 @@ void LaserPainter::drawWall(int id, Point p1, Point p2, Point p3, Point p4)
 	m_smallestFreeId = id + 1;
 }
 
-void LaserPainter::drawDoor(int id, Point p1, Point p2)
+void laser::LaserPainter::drawDoor(int id, Point p1, Point p2)
 {
 	std::vector<LaserObjectPtr> objs;
 
@@ -126,7 +125,7 @@ void LaserPainter::drawDoor(int id, Point p1, Point p2)
 	m_smallestFreeId = id + 1;
 }
 
-void LaserPainter::updateLoop()
+void laser::LaserPainter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 	while (true)

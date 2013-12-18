@@ -27,7 +27,7 @@ namespace laser {
 			TABLE
 		};
 
-		unsigned int parseToInt(unsigned char *array, int at);
+		static unsigned int parseToInt(unsigned char *array, int at);
 		void startAccept();
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();

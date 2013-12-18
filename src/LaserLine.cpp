@@ -9,9 +9,8 @@
 #define LASERWRAPPER_LINE_POINTS (300)
 #endif
 
-using namespace laser;
-
-LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible) : LaserObject()
+laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)
+:	LaserObject()
 {
 	m_a = Point(xa, ya);
 	m_b = Point(xb, yb);
@@ -19,7 +18,8 @@ LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible) : LaserObject
 	m_visible = visible;
 }
 
-LaserLine::LaserLine(Point a, Point b, bool visible)
+laser::LaserLine::LaserLine(Point a, Point b, bool visible)
+:	LaserObject()
 {
 	m_a = a;
 	m_b = b;
@@ -27,7 +27,7 @@ LaserLine::LaserLine(Point a, Point b, bool visible)
 	m_visible = visible;
 }
 
-std::vector<etherdream_point> LaserLine::points() const
+std::vector<etherdream_point> laser::LaserLine::points() const
 {
 	std::vector<etherdream_point> ps;
 	if (m_visible)
@@ -52,7 +52,7 @@ std::vector<etherdream_point> LaserLine::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> LaserLine::startPoints() const
+std::vector<etherdream_point> laser::LaserLine::startPoints() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -75,7 +75,7 @@ std::vector<etherdream_point> LaserLine::startPoints() const
 }
 
 
-std::vector<etherdream_point> LaserLine::endPoints() const
+std::vector<etherdream_point> laser::LaserLine::endPoints() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -97,7 +97,7 @@ std::vector<etherdream_point> LaserLine::endPoints() const
 	return ps;
 }
 
-void LaserLine::rotate(double rad)
+void laser::LaserLine::rotate(double rad)
 {
 	int oldXa = m_a.x();
 	int oldYa = m_a.y();
@@ -111,7 +111,7 @@ void LaserLine::rotate(double rad)
 	m_b.setY(round(oldXb * sin(rad) + oldYb * cos(rad)));
 }
 
-void LaserLine::move(int x, int y)
+void laser::LaserLine::move(int x, int y)
 {
 	m_a.setX(m_a.x() + x);
 	m_a.setY(m_a.y() + y);

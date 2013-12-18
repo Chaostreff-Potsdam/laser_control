@@ -1,13 +1,12 @@
 #include "LaserCompositeObject.h"
 
-using namespace laser;
-
-LaserCompositeObject::LaserCompositeObject(std::vector<LaserObjectPtr> objects)
+laser::LaserCompositeObject::LaserCompositeObject(std::vector<LaserObjectPtr> objects)
+:	LaserObject()
 {
 	m_objects = objects;
 }
 
-std::vector<etherdream_point> LaserCompositeObject::points() const
+std::vector<etherdream_point> laser::LaserCompositeObject::points() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -32,12 +31,12 @@ std::vector<etherdream_point> LaserCompositeObject::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> LaserCompositeObject::startPoints() const
+std::vector<etherdream_point> laser::LaserCompositeObject::startPoints() const
 {
 	return std::vector<etherdream_point>();
 }
 
-std::vector<etherdream_point> LaserCompositeObject::endPoints() const
+std::vector<etherdream_point> laser::LaserCompositeObject::endPoints() const
 {
 	return std::vector<etherdream_point>();
 }

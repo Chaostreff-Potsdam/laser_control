@@ -8,9 +8,8 @@
 #define LASERWRAPPER_CIRCLE_POINTS (50)
 #endif
 
-using namespace laser;
-
-LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRatio) : LaserObject()
+laser::LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRatio)
+:	LaserObject()
 {
 	m_p = Point(x, y);
 	m_radius = radius;
@@ -18,7 +17,7 @@ LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRa
 	m_endRatio = endRatio;
 }
 
-LaserCircle::LaserCircle(Point p, int radius, float startRatio, float endRatio)
+laser::LaserCircle::LaserCircle(Point p, int radius, float startRatio, float endRatio)
 {
 	m_p = p;
 	m_radius = radius;
@@ -26,7 +25,7 @@ LaserCircle::LaserCircle(Point p, int radius, float startRatio, float endRatio)
 	m_endRatio = endRatio;
 }
 
-std::vector<etherdream_point> LaserCircle::points() const
+std::vector<etherdream_point> laser::LaserCircle::points() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -45,7 +44,7 @@ std::vector<etherdream_point> LaserCircle::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> LaserCircle::startPoints() const
+std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -64,7 +63,7 @@ std::vector<etherdream_point> LaserCircle::startPoints() const
 	return ps;
 }
 
-std::vector<etherdream_point> LaserCircle::endPoints() const
+std::vector<etherdream_point> laser::LaserCircle::endPoints() const
 {
 	std::vector<etherdream_point> ps;
 
@@ -83,13 +82,13 @@ std::vector<etherdream_point> LaserCircle::endPoints() const
 	return ps;
 }
 
-void LaserCircle::rotate(double rad)
+void laser::LaserCircle::rotate(double rad)
 {
 	m_startRatio += rad;
 	m_endRatio += rad;
 }
 
-void LaserCircle::move(int x, int y)
+void laser::LaserCircle::move(int x, int y)
 {
 	m_p.setX(m_p.x() + x);
 	m_p.setY(m_p.y() + y);
