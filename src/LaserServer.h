@@ -5,6 +5,7 @@
 
 #include <boost/asio.hpp>
 #include <mutex>
+#include <memory>
 
 namespace laser {
 

@@ -7,6 +7,8 @@
 
 #include <utility>
 #include <memory>
+#include <thread>
+#include <mutex>
 #include <map>
 
 namespace laser {
@@ -22,7 +24,9 @@ namespace laser {
 		typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;
 
 	public:
-		LaserPainter();
+		LaserPainter(bool expireObjects = false);
+
+		//LaserPainter& operator=(const LaserPainter&) = delete;
 
 		/*!
 		 * \brief gets a new EtherdreamWrapper
@@ -68,7 +72,11 @@ namespace laser {
 
 		void drawDoor(int id, Point p1, Point p2);
 
-	private:
+	protected:
+		std::shared_ptr<std::thread> m_updateLoop;
+		void updateLoop();
+
+		std::shared_ptr<std::mutex> m_updateMutex;
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on
 		 */
@@ -81,6 +89,8 @@ namespace laser {
 		 * \brief the smallest number that is free no matter what
 		 */
 		int m_smallestFreeId;
+		bool m_expireObjects;
+
 	};
 }
 
