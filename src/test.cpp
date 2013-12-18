@@ -15,15 +15,24 @@
 #include <vector>
 #include <iostream>
 
+#include <opencv/cv.h>
+
 using namespace laser;
 
 int main(void)
 {
-    Calibration();
+    std::shared_ptr<EtherdreamWrapper> wrapper = std::make_shared<EtherdreamWrapper>();
 
-	LaserPainter p(false);
+    Calibration calibration(wrapper);
+    // calibration waits until key is pressed (and user hopefully calibrated the laser)
 
-	p.aquireEtherdreamWrapper();
+    std::cout << "Calibration done!" << std::endl;
+
+    cv::Mat homography = calibration.homography();
+    wrapper->setCalibration(homography);
+
+    LaserPainter p(false);
+    p.paintOn(wrapper);
 
 	//p.drawWall(1, Point(INT16_MIN, INT16_MIN), Point(INT16_MAX, INT16_MIN), Point(INT16_MAX, INT16_MAX), Point(INT16_MIN, INT16_MAX));
 	p.drawWall(1, Point(-20000, -5000), Point(0, -5000), Point(0, 0), Point(-20000, 0));

@@ -1,6 +1,7 @@
 #ifndef CALIBRATION_H
 #define CALIBRATION_H
 
+#include <memory>
 #include <opencv/cv.h>
 
 #include "CalibrationRectangle.h"
@@ -11,7 +12,7 @@ namespace laser {
 class Calibration
 {
 public:
-    Calibration();
+    Calibration(std::shared_ptr<EtherdreamWrapper> wrapper);
 
     cv::Mat homography();
 
@@ -28,7 +29,7 @@ private:
     int m_topEdge;
 
     CalibrationRectangle m_rect;
-    EtherdreamWrapper m_etherdream;
+    std::shared_ptr<EtherdreamWrapper> m_etherdream;
 };
 
 

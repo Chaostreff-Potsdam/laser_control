@@ -15,7 +15,7 @@
 using namespace laser;
 
 LaserPainter::LaserPainter(bool expireObjects) : m_smallestFreeId(0),
-												 m_expireObjects(expireObjects)
+                                                 m_expireObjects(expireObjects)
 {
 	if (expireObjects)
 	{
@@ -28,7 +28,7 @@ LaserPainter::LaserPainter(bool expireObjects) : m_smallestFreeId(0),
 
 void LaserPainter::aquireEtherdreamWrapper()
 {
-	m_canvas = std::make_shared<EtherdreamWrapper>();
+    m_canvas = std::make_shared<EtherdreamWrapper>();
 }
 
 void LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)

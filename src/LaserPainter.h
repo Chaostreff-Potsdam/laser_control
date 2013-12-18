@@ -10,6 +10,7 @@
 #include <thread>
 #include <mutex>
 #include <map>
+#include <opencv/cv.h>
 
 namespace laser {
 
@@ -24,7 +25,7 @@ namespace laser {
 		typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;
 
 	public:
-		LaserPainter(bool expireObjects = false);
+        LaserPainter(bool expireObjects = false);
 
 		//LaserPainter& operator=(const LaserPainter&) = delete;
 
@@ -89,7 +90,7 @@ namespace laser {
 		 * \brief the smallest number that is free no matter what
 		 */
 		int m_smallestFreeId;
-		bool m_expireObjects;
+        bool m_expireObjects;
 
 	};
 }

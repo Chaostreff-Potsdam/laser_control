@@ -8,16 +8,17 @@
 
 using namespace laser;
 
-Calibration::Calibration()
+Calibration::Calibration(std::shared_ptr<EtherdreamWrapper> wrapper)
     : m_scale(100), m_topEdge(100),
       m_rect(CalibrationRectangle(cv::Point2f(INT16_MAX, INT16_MAX),
                            cv::Point2f(INT16_MAX, -INT16_MAX),
                            cv::Point2f(-INT16_MAX, -INT16_MAX),
-                           cv::Point2f(-INT16_MAX, INT16_MAX)))
+                           cv::Point2f(-INT16_MAX, INT16_MAX))),
+      m_etherdream(wrapper)
 {
     std::vector<etherdream_point> points = m_rect.points();
-    m_etherdream.setPoints(points);
-    m_etherdream.writePoints();
+    m_etherdream->setPoints(points);
+    m_etherdream->writePoints();
 
     calibrate();
 }
@@ -80,10 +81,10 @@ void Calibration::updateRectangle()
                 cv::Point2f(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor)
                 );
 
-    m_etherdream.clear();
+    m_etherdream->clear();
     std::vector<etherdream_point> points = m_rect.points();
-    m_etherdream.setPoints(points);
-    m_etherdream.writePoints();
+    m_etherdream->setPoints(points);
+    m_etherdream->writePoints();
 }
 
 cv::Mat Calibration::homography()
