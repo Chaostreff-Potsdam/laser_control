@@ -4,32 +4,34 @@
 #include <mutex>
 #include <chrono>
 
+#include <opencv/cv.h>
+
 #include <iostream>
 
 #include "etherdream.h"
 
 laser::EtherdreamWrapper::EtherdreamWrapper()
 {
-	m_newPoints = false;
-	connect();
+    m_pointsMutex = std::make_shared<std::mutex>();
+    connect();
 }
 
 laser::EtherdreamWrapper::~EtherdreamWrapper()
 {
 	if(m_etherdream)
-		etherdream_disconnect(m_etherdream);
+        etherdream_disconnect(m_etherdream);
 }
 
 bool laser::EtherdreamWrapper::empty()
 {
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
+    std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
 	return m_points.empty();
 }
 
 void laser::EtherdreamWrapper::clear()
 {
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
+    std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
 	m_points.clear();
 }
@@ -72,27 +74,22 @@ void laser::EtherdreamWrapper::connect()
 
 void laser::EtherdreamWrapper::writePoints()
 {
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
+    std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
-	std::cout << "a" << std::endl;
-	etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
-	m_newPoints = false;
+    etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
 }
 
 void laser::EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
 {
-	std::cout << "setPoints" << std::endl;
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
+    std::cout << "setPoints" << std::endl;
+    std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
-	m_points = p;
-	m_newPoints = true;
+    m_points = p;
 }
 
 void laser::EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
 {
-	std::cout << "addPoints" << std::endl;
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
+    std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
-	m_points.insert(m_points.end(), p.begin(), p.end());
-	m_newPoints = true;
+    m_points.insert(m_points.end(), p.begin(), p.end());
 }

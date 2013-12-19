@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6)
 project(LASERWRAPPER)
 
 find_package(SWIG)
+find_package(OpenCV REQUIRED)
 find_package(Boost 1.40
 			REQUIRED
 			COMPONENTS system regex date_time)

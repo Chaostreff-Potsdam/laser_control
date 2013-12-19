@@ -15,8 +15,8 @@ namespace laser {
 		std::vector<etherdream_point> points() const;
 		std::vector<etherdream_point> startPoints() const;
 		std::vector<etherdream_point> endPoints() const;
-		void rotate(double rad) {}
-		void move(int x, int y) {}
+        void rotate(double) {}
+        void move(int, int) {}
 
 	protected:
 		std::vector<LaserObjectPtr> m_objects;

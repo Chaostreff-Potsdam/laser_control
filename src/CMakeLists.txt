@@ -24,6 +24,10 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
+        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
+        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
+        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h)
@@ -62,10 +66,12 @@ TARGET_LINK_LIBRARIES(laser_wrapper_test
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
+					${Boost_LIBRARIES}
+					${OpenCV_LIBS})
 
 TARGET_LINK_LIBRARIES(laserwrapper
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
+					${Boost_LIBRARIES}
+					${OpenCV_LIBS})

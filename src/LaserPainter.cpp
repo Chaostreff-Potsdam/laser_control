@@ -27,7 +27,17 @@ laser::LaserPainter::LaserPainter(bool expireObjects)
 
 void laser::LaserPainter::aquireEtherdreamWrapper()
 {
-	m_canvas = std::make_shared<EtherdreamWrapper>();
+    m_canvas = std::make_shared<EtherdreamWrapper>();
+}
+
+void laser::LaserPainter::calibrate()
+{
+    if (m_canvas == nullptr) aquireEtherdreamWrapper();
+
+    Calibration calibration(m_canvas);
+    calibration.start();
+
+    m_calibration = calibration.homography();
 }
 
 void laser::LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)
@@ -82,6 +92,8 @@ void laser::LaserPainter::updatePoints()
 			ps.insert(ps.end(), e.begin(), e.end());
 		}
 	}
+
+    applyCalibration(&ps);
 
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
