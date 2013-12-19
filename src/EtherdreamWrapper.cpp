@@ -15,26 +15,13 @@ using namespace laser;
 EtherdreamWrapper::EtherdreamWrapper()
 {
     m_pointsMutex = std::make_shared<std::mutex>();
-    m_calibration = cv::Mat::eye(3, 3, CV_32FC1);
     connect();
-}
-
-EtherdreamWrapper::EtherdreamWrapper(cv::Mat calibration)
-    : m_calibration(calibration)
-{
-    m_pointsMutex = std::make_shared<std::mutex>();
-	connect();
 }
 
 EtherdreamWrapper::~EtherdreamWrapper()
 {
 	if(m_etherdream)
         etherdream_disconnect(m_etherdream);
-}
-
-void EtherdreamWrapper::setCalibration(cv::Mat calibration)
-{
-    m_calibration = calibration;
 }
 
 bool EtherdreamWrapper::empty()
@@ -96,25 +83,10 @@ void EtherdreamWrapper::writePoints()
 
 void EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
 {
+    std::cout << "setPoints" << std::endl;
     std::lock_guard<std::mutex> guard(*m_pointsMutex);
 
-    std::vector<cv::Point2f> aux_in;
-    std::vector<cv::Point2f> aux_out;
-
-    m_points.clear();
-
-    for (auto i : p)
-    {
-        aux_in.push_back(cv::Point2f(i.x, i.y));
-    }
-
-    cv::perspectiveTransform(aux_in, aux_out, m_calibration);
-
-    // argh, that hurts...
-    for (int i = 0; i < p.size(); i++)
-    {
-        m_points.push_back(etherdream_point { aux_out[i].x, aux_out[i].y, p[i].r, p[i].g, p[i].b } );
-    }
+    m_points = p;
 }
 
 void EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)

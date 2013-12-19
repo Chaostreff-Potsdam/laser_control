@@ -1,9 +1,5 @@
 #include "LaserPainter.h"
 
-#include "LaserLine.h"
-#include "LaserRectangle.h"
-#include "LaserCircle.h"
-#include "LaserCompositeObject.h"
 #include <utility>
 #include <memory>
 #include <cmath>
@@ -11,6 +7,12 @@
 #include <iostream>
 
 #include <boost/date_time.hpp>
+
+#include "LaserLine.h"
+#include "LaserRectangle.h"
+#include "LaserCircle.h"
+#include "LaserCompositeObject.h"
+#include "Calibration.h"
 
 using namespace laser;
 
@@ -24,11 +26,22 @@ LaserPainter::LaserPainter(bool expireObjects) : m_smallestFreeId(0),
 
 	m_updateMutex = std::make_shared<std::mutex>();
 
+    m_calibration = cv::Mat::eye(3, 3, CV_32FC1);
 }
 
 void LaserPainter::aquireEtherdreamWrapper()
 {
     m_canvas = std::make_shared<EtherdreamWrapper>();
+}
+
+void LaserPainter::calibrate()
+{
+    if (m_canvas == nullptr) aquireEtherdreamWrapper();
+
+    Calibration calibration(m_canvas);
+    calibration.start();
+
+    m_calibration = calibration.homography();
 }
 
 void LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)
@@ -84,6 +97,8 @@ void LaserPainter::updatePoints()
 		}
 	}
 
+    applyCalibration(&ps);
+
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
 }
@@ -134,5 +149,23 @@ void LaserPainter::updateLoop()
 		std::cout << "update" << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updatePoints();
-	}
+    }
+}
+
+void LaserPainter::applyCalibration(std::vector<etherdream_point> *p)
+{
+    std::vector<cv::Point2f> aux_in, aux_out;
+
+    for (auto i : *p)
+    {
+        aux_in.push_back(cv::Point2f(i.x, i.y));
+    }
+
+    cv::perspectiveTransform(aux_in, aux_out, m_calibration);
+
+    // argh, that hurts... my kingdom for a better idea
+    for (int i = 0; i < p->size(); i++)
+    {
+        p->at(i) = etherdream_point { aux_out[i].x, aux_out[i].y, p->at(i).r, p->at(i).g, p->at(i).b };
+    }
 }

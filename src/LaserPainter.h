@@ -38,20 +38,29 @@ namespace laser {
 		 * destroyed. This hasn't been tested yet, though.
 		 */
 		void aquireEtherdreamWrapper();
+
+        /*!
+         * \brief calibrates the LaserPainter to scale and anti-keystone the image
+         */
+        void calibrate();
+
 		/*!
 		 * \brief set a new EtherdreamWrapper
 		 *
 		 * This overrides the old #m_canvas.
 		 */
 		void paintOn(std::shared_ptr<EtherdreamWrapper> e);
+
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
 		 */
 		void paint(LaserObjectPtrMap objects);
+
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
 		void add(LaserObjectPtr object);
+
 		/*!
 		 * \brief send a new array to #m_canvas
 		 *
@@ -62,10 +71,12 @@ namespace laser {
 		 * connected with ugly lines.
 		 */
 		void updatePoints();
+
 		/*!
 		 * \brief deletes an object from #m_objects with ID \a id
 		 */
 		void deleteObject(int id);
+
 		/*!
 		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
 		 */
@@ -78,19 +89,28 @@ namespace laser {
 		void updateLoop();
 
 		std::shared_ptr<std::mutex> m_updateMutex;
+
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on
 		 */
 		std::shared_ptr<EtherdreamWrapper> m_canvas;
+
 		/*!
 		 * \brief multiple LaserObjects that are uniquely idetified by an id
 		 */
 		LaserObjectPtrMap m_objects;
+
 		/*!
 		 * \brief the smallest number that is free no matter what
 		 */
 		int m_smallestFreeId;
         bool m_expireObjects;
+
+        cv::Mat m_calibration;
+        /*!
+         * \brief apply the perspective transform from m_calibration to the given vector of etherdream_points
+         */
+        void applyCalibration(std::vector<etherdream_point>*);
 
 	};
 }

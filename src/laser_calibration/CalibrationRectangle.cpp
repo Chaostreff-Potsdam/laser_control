@@ -10,7 +10,7 @@ CalibrationRectangle::CalibrationRectangle(cv::Point2f topLeft, cv::Point2f bott
 {
 }
 
-std::vector<etherdream_point> CalibrationRectangle::points()
+std::vector<etherdream_point> CalibrationRectangle::points() const
 {
     std::vector<etherdream_point> points;
 

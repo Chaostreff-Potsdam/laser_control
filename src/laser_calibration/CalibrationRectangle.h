@@ -14,7 +14,7 @@ public:
 
     CalibrationRectangle(cv::Point2f topLeft, cv::Point2f bottomLeft, cv::Point2f bottomRight, cv::Point2f topRight);
 
-    std::vector<etherdream_point> points();
+    std::vector<etherdream_point> points() const;
     std::vector<cv::Point2f> corners();
 
     void print();

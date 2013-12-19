@@ -21,18 +21,9 @@ using namespace laser;
 
 int main(void)
 {
-    std::shared_ptr<EtherdreamWrapper> wrapper = std::make_shared<EtherdreamWrapper>();
-
-    Calibration calibration(wrapper);
-    // calibration waits until key is pressed (and user hopefully calibrated the laser)
-
-    std::cout << "Calibration done!" << std::endl;
-
-    cv::Mat homography = calibration.homography();
-    wrapper->setCalibration(homography);
-
     LaserPainter p(false);
-    p.paintOn(wrapper);
+    p.aquireEtherdreamWrapper();
+    p.calibrate();
 
 	//p.drawWall(1, Point(INT16_MIN, INT16_MIN), Point(INT16_MAX, INT16_MIN), Point(INT16_MAX, INT16_MAX), Point(INT16_MIN, INT16_MAX));
 	p.drawWall(1, Point(-20000, -5000), Point(0, -5000), Point(0, 0), Point(-20000, 0));

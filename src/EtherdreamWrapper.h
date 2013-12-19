@@ -37,11 +37,6 @@ namespace laser {
         EtherdreamWrapper(cv::Mat calibration);
 		~EtherdreamWrapper();
 
-        /*!
-         * \brief sets the homography to be applied to all painted points
-         */
-        void setCalibration(cv::Mat calibration);
-
 		/*!
 		 * \brief clears #m_points
 		 */
@@ -58,10 +53,6 @@ namespace laser {
 		void setPoints(std::vector<etherdream_point> &p);
 		/*!
 		 * \brief appends the contents of \a p to #m_points
-         *
-         * This function also applies the perspective transform (using m_calibration)
-         * to each given point.
-         * During this  the i, u1 and u2 value of the etherdream_point are omitted.
 		 */
 		void addPoints(std::vector<etherdream_point> const&p);
 		/*!
@@ -99,12 +90,7 @@ namespace laser {
 		/*!
 		 * \brief handle for the DAC
 		 */
-		struct etherdream *m_etherdream;
-
-        /*!
-         * \brief transformation matrix to eliminate keystone and scale the image
-         */
-        cv::Mat m_calibration;
+        struct etherdream *m_etherdream;
 	};
 }
 #endif // ETHERDREAMWRAPPER_H
