@@ -4,7 +4,6 @@
 #include "LaserRectangle.h"
 #include "LaserCircle.h"
 #include "LaserLine.h"
-#include "LaserServer.h"
 #include "laser_calibration/Calibration.h"
 
 #include <chrono>
@@ -41,9 +40,7 @@ int main(void)
 
 //	}
 
-	LaserServer s(p);
-
-	s.poll();
+	std::this_thread::sleep_for(std::chrono::seconds(10));
 
 	return 0;
 }

@@ -17,17 +17,15 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.c
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver/etherdream.h
 	${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h)
