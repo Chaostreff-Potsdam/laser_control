@@ -4,6 +4,7 @@
 #include "LaserRectangle.h"
 #include "LaserCircle.h"
 #include "LaserCompositeObject.h"
+#include "laser_calibration/Calibration.h"
 #include <utility>
 #include <memory>
 #include <cmath>
@@ -145,5 +146,23 @@ void laser::LaserPainter::updateLoop()
 		std::cout << "update" << std::endl;
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updatePoints();
+	}
+}
+
+void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> *p)
+{
+	std::vector<cv::Point2f> aux_in, aux_out;
+
+	for (auto i : *p)
+	{
+		aux_in.push_back(cv::Point2f(i.x, i.y));
+	}
+
+	cv::perspectiveTransform(aux_in, aux_out, m_calibration);
+
+	// argh, that hurts... my kingdom for a better idea
+	for (unsigned int i = 0; i < p->size(); i++)
+	{
+		p->at(i) = etherdream_point { aux_out[i].x, aux_out[i].y, p->at(i).r, p->at(i).g, p->at(i).b };
 	}
 }
