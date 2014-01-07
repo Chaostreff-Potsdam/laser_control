@@ -47,7 +47,8 @@ if(SWIG_FOUND)
 					laserwrapper
 					m
 					pthread
-					${THREAD_LIBRARY})
+					${THREAD_LIBRARY}
+					${OpenCV_LIBS})
 else(SWIG_FOUND)
 	message(WARNING
 			"SWIG was not found. You will not be able to compile for C#.")
@@ -62,10 +63,10 @@ TARGET_LINK_LIBRARIES(laser_wrapper_test
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
+					${OpenCV_LIBS})
 
 TARGET_LINK_LIBRARIES(laserwrapper
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
+					${OpenCV_LIBS})
