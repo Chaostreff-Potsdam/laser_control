@@ -1,7 +1,6 @@
 include_directories(${LASERWRAPPER_SOURCE_DIR}/src
 					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/driver
-					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common
-					${Boost_INCLUDE_DIRS})
+					${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common)
 link_directories(${LASERWRAPPER_BINARY_DIR}/src)
 
 set(MYSOURCES
@@ -48,8 +47,7 @@ if(SWIG_FOUND)
 					laserwrapper
 					m
 					pthread
-					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
+					${THREAD_LIBRARY})
 else(SWIG_FOUND)
 	message(WARNING
 			"SWIG was not found. You will not be able to compile for C#.")
@@ -64,12 +62,10 @@ TARGET_LINK_LIBRARIES(laser_wrapper_test
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES}
-					${OpenCV_LIBS})
+					${Boost_LIBRARIES})
 
 TARGET_LINK_LIBRARIES(laserwrapper
 					m
 					pthread
 					${THREAD_LIBRARY}
-					${Boost_LIBRARIES}
-					${OpenCV_LIBS})
+					${Boost_LIBRARIES})

@@ -3,9 +3,6 @@ project(LASERWRAPPER)
 
 find_package(SWIG)
 find_package(OpenCV REQUIRED)
-find_package(Boost 1.40
-			REQUIRED
-			COMPONENTS system regex date_time)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
