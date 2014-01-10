@@ -1,6 +1,7 @@
 #include "Calibration.h"
 
 #include <opencv/highgui.h>
+#include <opencv2/core/core.hpp>
 
 #include <vector>
 #include <cstdint>
@@ -17,6 +18,18 @@ Calibration::Calibration(std::shared_ptr<EtherdreamWrapper> wrapper)
 
 void Calibration::start()
 {
+	cv::FileStorage fs("calibration.yml", cv::FileStorage::READ);
+
+	if (fs.isOpened())
+	{
+		fs["homography"] >> m_homography;
+
+		fs.release();
+		return;
+	}
+
+	fs.release();
+
     std::vector<etherdream_point> points = m_rect.points();
     m_etherdream->setPoints(points);
     m_etherdream->writePoints();
@@ -34,6 +47,12 @@ void Calibration::start()
     cv::waitKey();
 
     computeHomography();
+
+	cv::FileStorage fs1("calibration.yml", cv::FileStorage::WRITE);
+
+	fs1 << "homography" << m_homography;
+
+	fs1.release();
 
     cv::destroyWindow("Calibration");
 }
