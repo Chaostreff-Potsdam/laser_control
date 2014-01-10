@@ -50,6 +50,8 @@ void Calibration::start()
 
 	fs1 << "homography" << m_homography;
 
+	fs1.release();
+
     cv::destroyWindow("Calibration");
 }
 
