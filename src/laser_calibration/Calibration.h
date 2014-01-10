@@ -24,12 +24,14 @@ private:
     void computeHomography();
 
     static void scaleChanged(int scale, void* instance);
+    static void yScaleChanged(int scale, void* instance);
     static void topEdgeChanged(int length, void* instance);
     static void printHomography(int, void* instance);
 
     static CalibrationRectangle maxRect();
 
     int m_scale;
+    int m_yScale;
     int m_topEdge;
 
     CalibrationRectangle m_rect;
