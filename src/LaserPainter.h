@@ -110,7 +110,7 @@ namespace laser {
         /*!
          * \brief apply the perspective transform from m_calibration to the given vector of etherdream_points
          */
-        void applyCalibration(std::vector<etherdream_point>*);
+		void applyCalibration(std::vector<etherdream_point> &);
 
 	};
 }

@@ -94,7 +94,7 @@ void laser::LaserPainter::updatePoints()
 		}
 	}
 
-    applyCalibration(&ps);
+	applyCalibration(ps);
 
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
@@ -149,11 +149,11 @@ void laser::LaserPainter::updateLoop()
 	}
 }
 
-void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> *p)
+void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> & p)
 {
 	std::vector<cv::Point2f> aux_in, aux_out;
 
-	for (auto i : *p)
+	for (auto i : p)
 	{
 		aux_in.push_back(cv::Point2f(i.x, i.y));
 	}
@@ -161,8 +161,8 @@ void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> *p)
 	cv::perspectiveTransform(aux_in, aux_out, m_calibration);
 
 	// argh, that hurts... my kingdom for a better idea
-	for (unsigned int i = 0; i < p->size(); i++)
+	for (unsigned int i = 0; i < p.size(); i++)
 	{
-		p->at(i) = etherdream_point { aux_out[i].x, aux_out[i].y, p->at(i).r, p->at(i).g, p->at(i).b };
+		p[i] = etherdream_point { (int16_t) aux_out[i].x, (int16_t) aux_out[i].y, p.at(i).r, p.at(i).g, p.at(i).b };
 	}
 }

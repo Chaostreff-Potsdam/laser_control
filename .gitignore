@@ -1,3 +1,6 @@
 build/
 *.bundle
 *.DS_Store
+*.user
+.*.swp
+.*.swo
