@@ -38,6 +38,8 @@ void Calibration::start()
 
     cv::createTrackbar("Scale", "Calibration", &m_scale, 100,
                        &Calibration::scaleChanged, (void*)this);
+    cv::createTrackbar("y-Scale", "Calibration", &m_yScale, 100,
+                       &Calibration::yScaleChanged, (void*)this);
     cv::createTrackbar("Keystone", "Calibration", &m_topEdge, 100,
                        &Calibration::topEdgeChanged, (void*)this);
     cv::createButton("Print homography", &Calibration::printHomography, (void*)this);
@@ -50,6 +52,8 @@ void Calibration::start()
 
 	fs1 << "homography" << m_homography;
 
+	fs1.release();
+
     cv::destroyWindow("Calibration");
 }
 
@@ -58,7 +62,13 @@ void Calibration::scaleChanged(int scale, void * inst)
     Calibration *instance = (Calibration*)inst;
     instance->m_scale = scale;
     instance->updateRectangle();
+}
 
+void Calibration::yScaleChanged(int scale, void * inst)
+{
+    Calibration *instance = (Calibration*)inst;
+    instance->m_yScale = scale;
+    instance->updateRectangle();
 }
 
 void Calibration::topEdgeChanged(int length, void * inst)
@@ -78,6 +88,7 @@ void Calibration::printHomography(int /*unused*/, void *inst)
 void Calibration::updateRectangle()
 {
     float scaleFactor = m_scale / 100.0;
+    float yScaleFactor = m_yScale / 100.0;
     float keystoneFactor = m_topEdge / 100.0;
 
     m_rect = CalibrationRectangle(
@@ -85,16 +96,16 @@ void Calibration::updateRectangle()
                 // bottom edges scaled and moved in x direction
 
                 // top left
-                cv::Point2f(INT16_MAX * scaleFactor, INT16_MAX * scaleFactor),
+                cv::Point2f(INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor),
 
                 // bottom left
-                cv::Point2f(INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor),
+                cv::Point2f(INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
 
                 // bottom right
-                cv::Point2f(-INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor),
+                cv::Point2f(-INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
 
                 // top right
-                cv::Point2f(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor)
+                cv::Point2f(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor)
                 );
 
     m_etherdream->clear();
