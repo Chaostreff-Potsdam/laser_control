@@ -92,5 +92,5 @@ void laser::LaserServer::handleWall()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
-	m_painter.drawWall(id, ps[0], ps[1], ps[2], ps[3]);
+    m_painter.drawWall(id, ps[0], ps[1]);
 }

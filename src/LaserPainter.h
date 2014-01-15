@@ -80,7 +80,7 @@ namespace laser {
 		/*!
 		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
 		 */
-		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
+        void drawWall(int id, Point p1, Point p2);
 
 		void drawDoor(int id, Point p1, Point p2);
 

@@ -41,6 +41,9 @@ int main(void)
 
 //	}
 
+    p.drawWall(1, Point(-30000, 0), Point(30000, 0));
+    p.drawWall(2, Point(0, -30000), Point(0, 30000));
+
 	LaserServer s(p);
 
 	s.poll();

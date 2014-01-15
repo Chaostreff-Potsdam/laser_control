@@ -23,8 +23,9 @@ void Calibration::start()
 	if (fs.isOpened())
 	{
 		fs["homography"] >> m_homography;
-
 		fs.release();
+
+        std::cout << "Found calibration.yml file. Skipping calibration." << std::endl;
 		return;
 	}
 
