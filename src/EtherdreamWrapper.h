@@ -50,11 +50,11 @@ namespace laser {
 		 * \brief overwrites the old #m_points and sets it anew
 		 * \param p new #m_points
 		 */
-		void setPoints(std::vector<etherdream_point> &p);
+		void setPoints(const std::vector<etherdream_point> &p);
 		/*!
 		 * \brief appends the contents of \a p to #m_points
 		 */
-		void addPoints(std::vector<etherdream_point> const&p);
+		void addPoints(const std::vector<etherdream_point> &p);
 		/*!
 		 * \brief sends new points to the DAC if needed
 		 *
@@ -80,7 +80,7 @@ namespace laser {
 		/*!
 		 * \brief protects #m_points
 		 */
-        std::shared_ptr<std::mutex> m_pointsMutex;
+		std::mutex m_pointsMutex;
 
 		/*!
 		 * \brief all points that should be drawn by the laser

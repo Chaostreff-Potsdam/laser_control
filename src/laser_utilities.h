@@ -16,9 +16,9 @@ namespace laser {
 		return a < l ? l : a;
 	}
 
-	inline int sqr(int a)
+	inline int_least64_t sqr(int a)
 	{
-		return a*a;
+		return ((int_least64_t)a)*a;
 	}
 
 	/*!

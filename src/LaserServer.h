@@ -34,7 +34,7 @@ namespace laser {
 		void handleDelete();
 		void handleWall();
 
-		LaserPainter m_painter;
+		LaserPainter& m_painter;
 
 		boost::asio::io_service m_ioService;
 		boost::asio::ip::tcp::acceptor m_acceptor;

@@ -27,6 +27,6 @@ namespace laser
 		void aquireEtherdreamWrapper();
 		void updatePoints();
 		void deleteObject(int id);
-		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
+		void drawWall(int id, Point p1, Point p2);
 	};
 }

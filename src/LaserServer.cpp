@@ -9,10 +9,10 @@
 #include <boost/bind.hpp>
 
 laser::LaserServer::LaserServer(LaserPainter &painter)
-:	m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000))
+:	m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
+	m_painter(painter)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter = painter;
 	startAccept();
 }
 
@@ -85,10 +85,13 @@ void laser::LaserServer::handleWall()
 
 	std::vector<Point> ps;
 
-	for (int i = 0; i < 4; ++i) {
+	for (int i = 0; i < 2; ++i) {
 		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
 						   -parseToInt(m_buf, 8*i+9)));
 	}
+
+	std::cout << "(" << ps[0].x() << "; " << ps[0].y() << ")" << std::endl;
+	std::cout << "(" << ps[1].x() << "; " << ps[1].y() << ")" << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 

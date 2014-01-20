@@ -40,6 +40,8 @@ add_library(laserwrapper SHARED
 add_executable(laser_wrapper_test
 			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
+add_definitions(-DNO_ETHERDREAM_TRACE=1)
+
 if(SWIG_FOUND)
 	include(${SWIG_USE_FILE})
 	set(CMAKE_SWIG_FLAGS "")

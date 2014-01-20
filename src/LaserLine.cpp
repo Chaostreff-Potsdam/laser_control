@@ -6,7 +6,7 @@
 #include "laser_utilities.h"
 
 #ifndef LASERWRAPPER_LINE_POINTS
-#define LASERWRAPPER_LINE_POINTS (300)
+#define LASERWRAPPER_LINE_POINTS (200)
 #endif
 
 laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)

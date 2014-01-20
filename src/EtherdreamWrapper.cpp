@@ -12,7 +12,6 @@
 
 laser::EtherdreamWrapper::EtherdreamWrapper()
 {
-    m_pointsMutex = std::make_shared<std::mutex>();
     connect();
 }
 
@@ -24,14 +23,14 @@ laser::EtherdreamWrapper::~EtherdreamWrapper()
 
 bool laser::EtherdreamWrapper::empty()
 {
-    std::lock_guard<std::mutex> guard(*m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	return m_points.empty();
 }
 
 void laser::EtherdreamWrapper::clear()
 {
-    std::lock_guard<std::mutex> guard(*m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 	m_points.clear();
 }
@@ -74,22 +73,21 @@ void laser::EtherdreamWrapper::connect()
 
 void laser::EtherdreamWrapper::writePoints()
 {
-    std::lock_guard<std::mutex> guard(*m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
     etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
 }
 
-void laser::EtherdreamWrapper::setPoints(std::vector<etherdream_point> &p)
+void laser::EtherdreamWrapper::setPoints(const std::vector<etherdream_point> &p)
 {
-    std::cout << "setPoints" << std::endl;
-    std::lock_guard<std::mutex> guard(*m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
     m_points = p;
 }
 
 void laser::EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
 {
-    std::lock_guard<std::mutex> guard(*m_pointsMutex);
+	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
     m_points.insert(m_points.end(), p.begin(), p.end());
 }

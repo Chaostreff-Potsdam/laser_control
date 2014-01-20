@@ -88,7 +88,7 @@ namespace laser {
 		std::shared_ptr<std::thread> m_updateLoop;
 		void updateLoop();
 
-		std::shared_ptr<std::mutex> m_updateMutex;
+		std::mutex m_updateMutex;
 
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on

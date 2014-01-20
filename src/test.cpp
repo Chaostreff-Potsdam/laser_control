@@ -21,11 +21,10 @@ using namespace laser;
 
 int main(void)
 {
-    LaserPainter p(false);
+	LaserPainter p(true);
     p.aquireEtherdreamWrapper();
     p.calibrate();
 
-	//p.drawWall(1, Point(INT16_MIN, INT16_MIN), Point(INT16_MAX, INT16_MIN), Point(INT16_MAX, INT16_MAX), Point(INT16_MIN, INT16_MAX));
 	//p.drawWall(1, Point(-10000, -5000), Point(256, -5000), Point(0, 0), Point(-20000, 0));
 
 	//LaserObjectPtr l = std::make_shared<LaserLine>(0, 0, 10000, 10000);
@@ -43,9 +42,12 @@ int main(void)
 
 	LaserServer s(p);
 
-    p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
-    p.drawWall(3, Point(0, -10000), Point(0, 10000));
-    p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
+	p.drawWall(1, Point(INT16_MIN, INT16_MIN), Point(INT16_MAX, INT16_MIN));
+	//p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
+//	p.drawWall(3, Point(0, -10000), Point(0, 10000));
+
+//	std::this_thread::sleep_for(std::chrono::milliseconds(125));
+//	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
 
     s.poll();
 
