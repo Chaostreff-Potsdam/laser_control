@@ -88,7 +88,8 @@ std::vector<etherdream_point> laser::LaserLine::endPoints() const
 			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
 			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
 			p.r = 0;
-			p.g = UINT16_MAX;
+//			p.g = UINT16_MAX;
+            p.g = 0;
 			p.b = 0;
 			ps.push_back(p);
 		}
