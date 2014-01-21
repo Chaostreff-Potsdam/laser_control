@@ -1,4 +1,5 @@
 build/
+doc/
 *.bundle
 *.DS_Store
 *.user
