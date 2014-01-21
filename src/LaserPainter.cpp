@@ -5,6 +5,7 @@
 #include "LaserCircle.h"
 #include "LaserCompositeObject.h"
 #include "laser_calibration/Calibration.h"
+
 #include <utility>
 #include <memory>
 #include <cmath>

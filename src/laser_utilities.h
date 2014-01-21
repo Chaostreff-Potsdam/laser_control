@@ -10,13 +10,19 @@ namespace laser {
 	 * \param l lower limit
 	 * \param u upper limit
 	 */
-	inline int clamp(int a, int l, int u)
+	static inline int clamp(int a, int l, int u)
 	{
 		a = a > u ? u : a;
 		return a < l ? l : a;
 	}
 
-	inline int_least64_t sqr(int a)
+	template<typename T>
+	static inline void appendToVector(std::vector<T> & vec, const std::vector<T> & other)
+	{
+		vec.insert(vec.end(), other.begin(), other.end());
+	}
+
+	static inline int_least64_t sqr(int a)
 	{
 		return ((int_least64_t)a)*a;
 	}
