@@ -22,6 +22,12 @@ namespace laser {
 		vec.insert(vec.end(), other.begin(), other.end());
 	}
 
+	template<typename T>
+	static inline T degrees(T radians)
+	{
+		return 180 * (radians / M_PI);
+	}
+
 	static inline int_least64_t sqr(int a)
 	{
 		return ((int_least64_t)a)*a;

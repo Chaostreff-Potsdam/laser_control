@@ -17,6 +17,8 @@ namespace laser {
 		std::vector<etherdream_point> endPoints() const;
 		void rotate(double rad);
 		void move(int x, int y);
+		void scale(double factorX, double factorY);
+		void scale(double factor);
 
 		void addObject(const LaserObjectPtr & object);
 

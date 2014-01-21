@@ -49,17 +49,17 @@ namespace laser {
 		 *
 		 * This overrides the old #m_canvas.
 		 */
-		void paintOn(std::shared_ptr<EtherdreamWrapper> e);
+		void paintOn(const std::shared_ptr<EtherdreamWrapper> & e);
 
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
 		 */
-		void paint(LaserObjectPtrMap objects);
+		void paint(const LaserObjectPtrMap &objects);
 
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
-		void add(LaserObjectPtr object);
+		void add(const LaserObjectPtr & object);
 
 		/*!
 		 * \brief send a new array to #m_canvas

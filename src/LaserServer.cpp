@@ -9,8 +9,8 @@
 #include <boost/bind.hpp>
 
 laser::LaserServer::LaserServer(LaserPainter &painter)
-:	m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
-	m_painter(painter)
+:	m_painter(painter),
+	m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000))
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	startAccept();
