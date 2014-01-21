@@ -29,17 +29,31 @@ std::vector<etherdream_point> laser::LaserCircle::points() const
 {
 	std::vector<etherdream_point> ps;
 
-	for (int i = m_startRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS; i < m_endRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS + 1; i++)
+	for (float rad = m_startRatio;
+		 rad < m_endRatio;
+		 rad += std::abs(m_endRatio - m_startRatio)/LASERWRAPPER_CIRCLE_POINTS)
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
-		p.y = m_p.y() + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.x = m_p.x() + m_radius * cos(rad);
+		p.y = m_p.y() + m_radius * sin(rad);
 		p.r = 0;
 		p.g = UINT16_MAX;
 		p.b = 0;
 		ps.push_back(p);
 	}
+
+//	for (int i = m_startRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS; i < m_endRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS + 1; i++)
+//	{
+//		etherdream_point p;
+
+//		p.x = m_p.x() + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+//		p.y = m_p.y() + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+//		p.r = 0;
+//		p.g = UINT16_MAX;
+//		p.b = 0;
+//		ps.push_back(p);
+//	}
 
 	return ps;
 }
@@ -48,12 +62,14 @@ std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 {
 	std::vector<etherdream_point> ps;
 
-	for (int i =m_startRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS - 10; i < m_startRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS; i++)
+	for (float rad = m_startRatio - M_PI_2;
+		 rad < m_startRatio;
+		 rad += M_PI_2 / 20)
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
-		p.y = m_p.y() + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.x = m_p.x() + m_radius * cos(rad);
+		p.y = m_p.y() + m_radius * sin(rad);
 		p.r = 0;
 		p.g = 0;
 		p.b = 0;
@@ -67,12 +83,14 @@ std::vector<etherdream_point> laser::LaserCircle::endPoints() const
 {
 	std::vector<etherdream_point> ps;
 
-	for (int i = m_endRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS; i < m_endRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS + 10; i++)
+	for (float rad = m_endRatio;
+		 rad < m_endRatio + M_PI_2;
+		 rad += M_PI_2 / 20)
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
-		p.y = m_p.y() + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
+		p.x = m_p.x() + m_radius * cos(rad);
+		p.y = m_p.y() + m_radius * sin(rad);
 		p.r = 0;
 		p.g = 0;
 		p.b = 0;

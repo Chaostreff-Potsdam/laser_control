@@ -21,7 +21,7 @@ using namespace laser;
 
 int main(void)
 {
-	LaserPainter p(true);
+	LaserPainter p(false);
     p.aquireEtherdreamWrapper();
     p.calibrate();
 
@@ -31,8 +31,8 @@ int main(void)
 
 	//p.add(l);
 
-//	LaserObjectPtr c = std::make_shared<LaserCircle>(0, 0, 20000/*, M_PI_4, M_PI_2*/);
-//	p.add(c);
+	LaserObjectPtr c = std::make_shared<LaserCircle>(0, 0, 20000, M_PI + M_PI_2, 2*M_PI);
+	p.add(c);
 
 //	p.drawDoor(2, Point(2000, 2000), Point(10000, 8000));
 
@@ -42,11 +42,9 @@ int main(void)
 
 	LaserServer s(p);
 
-	p.drawWall(1, Point(INT16_MIN, INT16_MIN), Point(INT16_MAX, INT16_MIN));
 	//p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
 //	p.drawWall(3, Point(0, -10000), Point(0, 10000));
 
-//	std::this_thread::sleep_for(std::chrono::milliseconds(125));
 //	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
 
     s.poll();

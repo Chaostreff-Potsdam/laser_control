@@ -6,7 +6,7 @@
 #include "laser_utilities.h"
 
 #ifndef LASERWRAPPER_LINE_POINTS
-#define LASERWRAPPER_LINE_POINTS (200)
+#define LASERWRAPPER_LINE_POINTS (300)
 #endif
 
 laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)
@@ -14,6 +14,9 @@ laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)
 {
 	m_a = Point(xa, ya);
 	m_b = Point(xb, yb);
+
+	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
+	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
 
 	m_visible = visible;
 }
@@ -24,6 +27,11 @@ laser::LaserLine::LaserLine(Point a, Point b, bool visible)
 	m_a = a;
 	m_b = b;
 
+	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
+	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
+
+	std::cout << m_pointCount << std::endl;
+
 	m_visible = visible;
 }
 
@@ -32,16 +40,12 @@ std::vector<etherdream_point> laser::LaserLine::points() const
 	std::vector<etherdream_point> ps;
 	if (m_visible)
 	{
-		int length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
-
-		int num = length/LASERWRAPPER_LINE_POINTS;
-
-		for (int i = 0; i < num; i++)
+		for (int i = 0; i < m_pointCount; i++)
 		{
 			etherdream_point p;
 
-			p.x = m_a.x() + ((float)i)/num * (m_b.x() - m_a.x());
-			p.y = m_a.y() + ((float)i)/num * (m_b.y() - m_a.y());
+			p.x = clamp(m_a.x() + ((float)i)/m_pointCount * (m_b.x() - m_a.x()), INT16_MIN, INT16_MAX);
+			p.y = clamp(m_a.y() + ((float)i)/m_pointCount * (m_b.y() - m_a.y()), INT16_MIN, INT16_MAX);
 			p.r = 0;
 			p.g = UINT16_MAX;
 			p.b = 0;
@@ -58,12 +62,12 @@ std::vector<etherdream_point> laser::LaserLine::startPoints() const
 
 	if (m_visible)
 	{
-		for (int i = -10; i < 0; i++)
+		for (int i = - m_pointCount/5; i < 0; i++)
 		{
 			etherdream_point p;
 
-			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
-			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
+			p.x = clamp(m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x()), INT16_MIN, INT16_MAX);
+			p.y = clamp(m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y()), INT16_MIN, INT16_MAX);
 			p.r = 0;
 			p.g = 0;
 			p.b = 0;
@@ -81,12 +85,12 @@ std::vector<etherdream_point> laser::LaserLine::endPoints() const
 
 	if (m_visible)
 	{
-		for (int i = LASERWRAPPER_LINE_POINTS; i < LASERWRAPPER_LINE_POINTS + 10; i++)
+		for (int i = LASERWRAPPER_LINE_POINTS; i < LASERWRAPPER_LINE_POINTS + m_pointCount/5; i++)
 		{
 			etherdream_point p;
 
-			p.x = m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x());
-			p.y = m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y());
+			p.x = clamp(m_a.x() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.x() - m_a.x()), INT16_MIN, INT16_MAX);
+			p.y = clamp(m_a.y() + ((float)i)/LASERWRAPPER_LINE_POINTS * (m_b.y() - m_a.y()), INT16_MIN, INT16_MAX);
 			p.r = 0;
 //			p.g = UINT16_MAX;
             p.g = 0;

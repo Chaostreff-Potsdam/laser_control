@@ -21,6 +21,9 @@ namespace laser {
 		Point m_a;
 		Point m_b;
 
+		int m_length;
+		int m_pointCount;
+
 		bool m_visible;
 	};
 }

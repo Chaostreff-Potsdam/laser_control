@@ -9,8 +9,8 @@ namespace laser {
 	class LaserCircle : public LaserObject
 	{
 	public:
-		LaserCircle(int x, int y, int radius, float startRatio = 0, float endRatio = M_PI);
-		LaserCircle(Point p, int radius, float startRatio = 0, float endRatio = M_PI);
+		LaserCircle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);
+		LaserCircle(Point p, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 
 		std::vector<etherdream_point> points() const;
 		std::vector<etherdream_point> startPoints() const;

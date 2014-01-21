@@ -70,10 +70,10 @@ void laser::LaserPainter::updatePoints()
 	if (m_objects.empty())
 		return;
 
-	boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
-
 	if (m_expireObjects)
 	{
+		boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
+
 		LaserObjectPtrMap::iterator iter = m_objects.begin();
 		LaserObjectPtrMap::iterator end = m_objects.end();
 
