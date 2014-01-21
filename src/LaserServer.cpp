@@ -61,6 +61,9 @@ void laser::LaserServer::handleRead()
 	case CommandType::WALL:
 		handleWall();
 		break;
+	case CommandType::TABLE:
+		handleTable();
+		break;
 	default:
 		break;
 	}
@@ -95,5 +98,23 @@ void laser::LaserServer::handleWall()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
-    m_painter.drawWall(id, ps[0], ps[1]);
+	m_painter.drawWall(id, ps[0], ps[1]);
+}
+
+void laser::LaserServer::handleTable()
+{
+	int id = parseToInt(m_buf, 1);
+
+	std::cout << "build Table " << id << std::endl;
+
+	std::vector<Point> ps;
+
+	for (int i = 0; i < 4; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_painter.drawTable(id, ps[0], ps[1], ps[2], ps[3]);
 }

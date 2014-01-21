@@ -160,6 +160,12 @@ void laser::LaserPainter::drawDoor(int id, Point p1, Point p2)
 	m_smallestFreeId = id + 1;
 }
 
+void laser::LaserPainter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
+{
+	m_objects[id] = std::make_shared<LaserRectangle>(p1, p2, p3, p4);
+	updatePoints();
+}
+
 void laser::LaserPainter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));

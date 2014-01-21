@@ -33,6 +33,7 @@ namespace laser {
 		void handleRead();
 		void handleDelete();
 		void handleWall();
+		void handleTable();
 
 		LaserPainter& m_painter;
 
