@@ -4,14 +4,16 @@
 
 #include "LaserLine.h"
 
-laser::LaserPolygon::LaserPolygon()
-:	LaserObject()
+laser::LaserPolygon::LaserPolygon(bool sharp)
+:	LaserObject(),
+	m_sharpCorners(sharp)
 {
 
 }
 
-laser::LaserPolygon::LaserPolygon(std::vector<laser::Point> points)
-:	LaserObject()
+laser::LaserPolygon::LaserPolygon(std::vector<laser::Point> points, bool sharp)
+:	LaserObject(),
+	m_sharpCorners(sharp)
 {
 	m_corners = points;
 }
@@ -29,7 +31,8 @@ std::vector<etherdream_point> laser::LaserPolygon::points() const
 	std::vector<etherdream_point> points = startLine.points();
 	std::vector<etherdream_point> endPoints = startLine.endPoints();
 	ps.insert(ps.end(), points.begin(), points.end());
-	ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+	if (m_sharpCorners)
+		ps.insert(ps.end(), endPoints.begin(), endPoints.end());
 
 	for (auto it = start + 1; it < end - 1; it++)
 	{
@@ -37,15 +40,18 @@ std::vector<etherdream_point> laser::LaserPolygon::points() const
 		points = con.points();
 		endPoints = con.endPoints();
 		std::vector<etherdream_point> startPoints = con.startPoints();
-		ps.insert(ps.end(), startPoints.begin(), startPoints.end());
+		if (m_sharpCorners)
+			ps.insert(ps.end(), startPoints.begin(), startPoints.end());
 		ps.insert(ps.end(), points.begin(), points.end());
-		ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+		if (m_sharpCorners)
+			ps.insert(ps.end(), endPoints.begin(), endPoints.end());
 	}
 
 	LaserLine top = LaserLine(*(end - 1), *start);
 	points = top.points();
 	std::vector<etherdream_point> startPoints = top.startPoints();
-	ps.insert(ps.end(), startPoints.begin(), startPoints.end());
+	if (m_sharpCorners)
+		ps.insert(ps.end(), startPoints.begin(), startPoints.end());
 	ps.insert(ps.end(), points.begin(), points.end());
 
 	return ps;

@@ -25,7 +25,7 @@ int main(void)
     p.aquireEtherdreamWrapper();
     p.calibrate();
 
-	//p.drawWall(1, Point(-10000, -5000), Point(256, -5000), Point(0, 0), Point(-20000, 0));
+	//p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
 	//LaserObjectPtr l = std::make_shared<LaserLine>(0, 0, 10000, 10000);
 

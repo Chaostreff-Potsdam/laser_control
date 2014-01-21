@@ -11,8 +11,8 @@ namespace laser {
 	class LaserPolygon : public LaserObject
 	{
 	public:
-		LaserPolygon();
-		LaserPolygon(std::vector<Point> points);
+		LaserPolygon(bool sharp = true);
+		LaserPolygon(std::vector<Point> points, bool sharp = true);
 
 		std::vector<etherdream_point> points() const;
 		std::vector<etherdream_point> startPoints() const;
@@ -22,6 +22,7 @@ namespace laser {
 
 	protected:
 		std::vector<Point> m_corners;
+		bool m_sharpCorners;
 	};
 }
 
