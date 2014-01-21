@@ -40,8 +40,12 @@ namespace laser {
 
 		boost::posix_time::ptime started();
 
+		void setPermanent(bool permanent);
+		bool permanent();
+
 	protected:
 		boost::posix_time::ptime m_started;
+		bool m_permanent;
 	};
 
 	typedef std::shared_ptr<LaserObject> LaserObjectPtr;

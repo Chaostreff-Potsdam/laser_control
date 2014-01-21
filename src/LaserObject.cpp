@@ -11,3 +11,13 @@ boost::posix_time::ptime laser::LaserObject::started()
 {
 	return m_started;
 }
+
+void laser::LaserObject::setPermanent(bool permanent)
+{
+	m_permanent = permanent;
+}
+
+bool laser::LaserObject::permanent()
+{
+	return m_permanent;
+}
