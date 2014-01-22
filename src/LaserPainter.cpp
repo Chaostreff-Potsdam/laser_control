@@ -5,6 +5,7 @@
 #include "LaserCircle.h"
 #include "LaserCompositeObject.h"
 #include "laser_calibration/Calibration.h"
+#include "Transform.h"
 
 #include <utility>
 #include <memory>
@@ -23,7 +24,6 @@ laser::LaserPainter::LaserPainter(bool expireObjects)
 	{
 		m_updateLoop = std::make_shared<std::thread>(&LaserPainter::updateLoop, this);
 	}
-
 }
 
 void laser::LaserPainter::aquireEtherdreamWrapper()
@@ -33,7 +33,7 @@ void laser::LaserPainter::aquireEtherdreamWrapper()
 
 void laser::LaserPainter::calibrate()
 {
-    if (m_canvas == nullptr) aquireEtherdreamWrapper();
+	if (!m_canvas) aquireEtherdreamWrapper();
 
     Calibration calibration(m_canvas);
     calibration.start();
@@ -41,23 +41,21 @@ void laser::LaserPainter::calibrate()
     m_calibration = calibration.homography();
 }
 
-void laser::LaserPainter::paintOn(std::shared_ptr<EtherdreamWrapper> e)
+void laser::LaserPainter::paintOn(const std::shared_ptr<EtherdreamWrapper> &e)
 {
 	m_canvas = e;
 }
 
-void laser::LaserPainter::paint(LaserObjectPtrMap objects)
+void laser::LaserPainter::paint(const LaserObjectPtrMap & objects)
 {
 	m_objects = objects;
 
 	updatePoints();
 }
 
-void laser::LaserPainter::add(LaserObjectPtr object)
+void laser::LaserPainter::add(const LaserObjectPtr & object)
 {
-	LaserObjectPtrPair pair = make_pair(m_smallestFreeId++, object);
-
-	m_objects.insert(pair);
+	m_objects[m_smallestFreeId++] = object;
 
 	updatePoints();
 }
@@ -102,23 +100,12 @@ void laser::LaserPainter::updatePoints()
 
 	for (LaserObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
-		//if (m_objects.size() != 1)
-		{
-			std::vector<etherdream_point> s = (it->second)->startPoints();
-			ps.insert(ps.end(), s.begin(), s.end());
-		}
-
-		std::vector<etherdream_point> p = (it->second)->points();
-		ps.insert(ps.end(), p.begin(), p.end());
-
-		//if (m_objects.size() != 1)
-		{
-			std::vector<etherdream_point> e = (it->second)->endPoints();
-			ps.insert(ps.end(), e.begin(), e.end());
-		}
+		appendToVector(ps, (it->second)->startPoints());
+		appendToVector(ps, (it->second)->points());
+		appendToVector(ps, (it->second)->endPoints());
 	}
 
-	applyCalibration(ps);
+	Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
 
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
@@ -181,26 +168,5 @@ void laser::LaserPainter::updateLoop()
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updatePoints();
-	}
-}
-
-void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> & p)
-{
-	std::vector<cv::Point2f> aux_in, aux_out;
-
-	if (p.empty())
-		return;
-
-	for (auto i : p)
-	{
-		aux_in.push_back(cv::Point2f(i.x, i.y));
-	}
-
-	cv::perspectiveTransform(aux_in, aux_out, m_calibration);
-
-	// argh, that hurts... my kingdom for a better idea
-	for (unsigned int i = 0; i < p.size(); i++)
-	{
-		p[i] = etherdream_point { (int16_t) aux_out[i].x, (int16_t) aux_out[i].y, p.at(i).r, p.at(i).g, p.at(i).b };
 	}
 }

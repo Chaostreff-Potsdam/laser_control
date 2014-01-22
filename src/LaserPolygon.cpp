@@ -11,7 +11,7 @@ laser::LaserPolygon::LaserPolygon(bool sharp)
 
 }
 
-laser::LaserPolygon::LaserPolygon(std::vector<laser::Point> points, bool sharp)
+laser::LaserPolygon::LaserPolygon(const std::vector<laser::Point> & points, bool sharp)
 :	LaserObject(),
 	m_sharpCorners(sharp)
 {
