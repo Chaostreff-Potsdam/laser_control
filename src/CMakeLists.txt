@@ -24,8 +24,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
-	${LASERWRAPPER_SOURCE_DIR}/src/TransformPoint.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/TransformPoint.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h

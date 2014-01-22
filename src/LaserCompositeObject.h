@@ -19,7 +19,7 @@ namespace laser {
 		LaserCompositeObject(LaserObjectPtrTs... objects) :
 			LaserObject()
 		{
-			initTransform();
+			resetTransform();
 			add(objects...);
 		}
 
@@ -34,6 +34,8 @@ namespace laser {
 		void scale(double factorX, double factorY);
 		void scale(double factor);
 
+		void resetTransform();
+
 		template<typename LaserObjectPtrT, typename... LaserObjectPtrTs>
 		void add(LaserObjectPtrT object, LaserObjectPtrTs... others)
 		{
@@ -47,7 +49,6 @@ namespace laser {
 
 	private:
 		void add() {}
-		void initTransform();
 
 	};
 }

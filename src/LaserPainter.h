@@ -108,12 +108,7 @@ namespace laser {
 		int m_smallestFreeId;
         bool m_expireObjects;
 
-        cv::Mat m_calibration;
-        /*!
-         * \brief apply the perspective transform from m_calibration to the given vector of etherdream_points
-         */
-		void applyCalibration(std::vector<etherdream_point> &);
-
+		cv::Mat m_calibration;
 	};
 }
 

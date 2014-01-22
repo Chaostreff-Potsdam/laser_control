@@ -5,7 +5,7 @@
 #include "LaserCircle.h"
 #include "LaserCompositeObject.h"
 #include "laser_calibration/Calibration.h"
-#include "TransformPoint.h"
+#include "Transform.h"
 
 #include <utility>
 #include <memory>
@@ -105,7 +105,7 @@ void laser::LaserPainter::updatePoints()
 		appendToVector(ps, (it->second)->endPoints());
 	}
 
-	applyCalibration(ps);
+	Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
 
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
@@ -162,11 +162,4 @@ void laser::LaserPainter::updateLoop()
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updatePoints();
 	}
-}
-
-void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> & p)
-{
-	applyTransformToEtherPoints(p, [&](const TransformPoints & ins, const TransformPoints & outs){
-		cv::perspectiveTransform(ins, outs, m_calibration);
-	});
 }

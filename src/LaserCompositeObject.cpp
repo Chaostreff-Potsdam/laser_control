@@ -1,7 +1,7 @@
 #include "LaserCompositeObject.h"
 #include "laser_utilities.h"
 
-#include "TransformPoint.h"
+#include "Transform.h"
 
 #include <opencv2/imgproc/imgproc.hpp>
 
@@ -9,14 +9,14 @@ laser::LaserCompositeObject::LaserCompositeObject(const std::vector<LaserObjectP
 	: LaserObject(),
 	  m_objects(objects)
 {
-	initTransform();
+	resetTransform();
 }
 
 laser::LaserCompositeObject::LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects)
 	: LaserObject(),
 	  m_objects(objects)
 {
-	initTransform();
+	resetTransform();
 }
 
 std::vector<etherdream_point> laser::LaserCompositeObject::points() const
@@ -30,11 +30,7 @@ std::vector<etherdream_point> laser::LaserCompositeObject::points() const
 		appendToVector(ps, obj->endPoints());
 	}
 
-	cv::Mat openCVTrans = m_transform(cv::Rect(0, 0, 3, 2));
-
-	applyTransformToEtherPoints(ps, [&](const TransformPoints & ins, const TransformPoints & outs) {
-		cv::transform(ins, outs, openCVTrans);
-	});
+	Transform::applyInPlace(ps, cv::transform, m_transform(cv::Rect(0, 0, 3, 2)));
 
 	return ps;
 }
@@ -76,7 +72,7 @@ void laser::LaserCompositeObject::scale(double factor)
 	scale(factor, factor);
 }
 
-void laser::LaserCompositeObject::initTransform()
+void laser::LaserCompositeObject::resetTransform()
 {
 	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
 }
