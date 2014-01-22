@@ -44,43 +44,15 @@ int main(void)
 
 	LaserServer s(p);
 
-#if 1
+	//p.drawPlayer(5, Point(0, -10000));
+
 //	p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
+//	p.drawWall(3, Point(0, -10000), Point(0, 10000));
 
-//	p.drawWall(2, Point(0, -10000), Point(0, 10000));
-//	p.drawWall(3, Point(-10000, 6000), Point(10000, 6000));
+//	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
 
-#else
-	LaserObjectPtr wall(new LaserLine(Point(-10000, 2000), Point(10000, 2000)));
-	LaserObjectPtr wall2(new LaserLine(Point(0, -10000), Point(0, 10000)));
-	LaserObjectPtr wall3(new LaserLine(Point(-10000, 6000), Point(10000, 6000)));
-
-
-	LaserCompositeObjectPtr group(new LaserCompositeObject(wall, wall2, wall3));
-	//group->rotate(radians(0));
-	//group->move(1000, 1000);
-	//group->scale(4);
-
-	p.add(group);
-
-	int step = 0;
-	const int count = 20;
-	while (true) {
-		std::this_thread::sleep_for(std::chrono::milliseconds(200));
-
-		step = (step + 1) % count;
-		//group->move(0, step * 1000);
-		if (step == 0)
-			group->resetTransform();
-		else {
-			group->rotate(radians(360.0 / count));
-		}
-
-		p.updatePoints();
-	}
-
-#endif
-
+//	p.drawWall(2, Point(30000, 0), Point(-30000, 0));
+//	p.drawWall(3, Point(0, -30000), Point(0, 30000));
     s.poll();
 
 
