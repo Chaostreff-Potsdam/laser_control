@@ -6,7 +6,7 @@
 #include <cmath>
 
 namespace laser {
-	class LaserCircle : public LaserObject
+	class EXPORT_LASER_CONTROL LaserCircle : public LaserObject
 	{
 	public:
 		LaserCircle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);

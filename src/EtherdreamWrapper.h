@@ -2,13 +2,15 @@
 #define ETHERDREAMWRAPPER_H
 
 #include <vector>
-#include <thread>
 #include <mutex>
-#include <atomic>
 
 #include <opencv/cv.h>
 
-#include "etherdream.h"
+#ifdef _WIN32
+	#include "dac.h"
+#else // _WIN32
+	#include "etherdream.h"
+#endif // _WIN32
 
 namespace laser {
 
@@ -87,10 +89,17 @@ namespace laser {
 		 */
 		std::vector<etherdream_point> m_points;
 
+#ifdef _WIN32
+		/*!
+		 * \brief id of EtherDreamCard
+		 */
+		int m_cardNum;
+#else
 		/*!
 		 * \brief handle for the DAC
 		 */
         struct etherdream *m_etherdream;
+#endif
 	};
 }
 #endif // ETHERDREAMWRAPPER_H

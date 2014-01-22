@@ -14,6 +14,8 @@
 
 #include <boost/date_time.hpp>
 
+
+
 laser::LaserPainter::LaserPainter(bool expireObjects)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects)
@@ -180,6 +182,7 @@ void laser::LaserPainter::applyCalibration(std::vector<etherdream_point> & p)
 	// argh, that hurts... my kingdom for a better idea
 	for (unsigned int i = 0; i < p.size(); i++)
 	{
-		p[i] = etherdream_point { (int16_t) aux_out[i].x, (int16_t) aux_out[i].y, p.at(i).r, p.at(i).g, p.at(i).b };
+		etherdream_point nextpoint = { (int16_t) aux_out[i].x, (int16_t) aux_out[i].y, p.at(i).r, p.at(i).g, p.at(i).b };
+		p[i] = nextpoint;
 	}
 }

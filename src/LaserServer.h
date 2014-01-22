@@ -9,7 +9,7 @@
 
 namespace laser {
 
-	class LaserServer
+	class EXPORT_LASER_CONTROL LaserServer
 	{
 	public:
 		LaserServer(LaserPainter &painter);

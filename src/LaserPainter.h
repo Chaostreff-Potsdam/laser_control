@@ -19,7 +19,7 @@ namespace laser {
 	 *
 	 * This class manages drawing of LaserObject to the laser.
 	 */
-	class LaserPainter
+	class EXPORT_LASER_CONTROL LaserPainter
 	{
 		typedef std::pair<int, LaserObjectPtr> LaserObjectPtrPair;
 		typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;

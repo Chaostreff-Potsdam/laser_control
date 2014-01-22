@@ -6,7 +6,7 @@
 #include <vector>
 
 namespace laser {
-	class LaserRectangle : public LaserPolygon
+	class EXPORT_LASER_CONTROL LaserRectangle : public LaserPolygon
 	{
 	public:
 		LaserRectangle(int x, int y, int width, int height);

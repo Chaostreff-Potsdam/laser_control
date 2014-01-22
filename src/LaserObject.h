@@ -1,18 +1,40 @@
 #ifndef LASEROBJECT_H
 #define LASEROBJECT_H
 
-#include "etherdream.h"
+#ifdef _WIN32
+	#include "dac.h"
+
+	#undef DELETE
+
+	#ifndef _CPPUNWIND
+	#define _CPPUNWIND //To prevent it from looking for nonextistant throw_exception
+	#endif
+#else // _WIN32
+	#include "etherdream.h"
+#endif // _WIN32
+
+#include "DllExport.h"
+
 #include <vector>
 #include <memory>
 
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
+
+#ifdef _WIN32
+static int round(double number)
+	{
+		return number < 0.0 ? ceil(number-0.5) : floor(number + 0.5);
+	}
+#endif
+
 namespace laser {
+
 
 	/*!
 	 * \brief an abstract object to be painted
 	 */
-	class LaserObject
+	class EXPORT_LASER_CONTROL LaserObject
 	{
 	public:
 		LaserObject();

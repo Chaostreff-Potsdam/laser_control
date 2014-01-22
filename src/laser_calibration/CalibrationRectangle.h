@@ -4,11 +4,17 @@
 #include <vector>
 #include <opencv/cv.h>
 
-#include "etherdream.h"
+#include "DllExport.h"
+
+#ifdef _WIN32
+	#include "dac.h"
+#else // _WIN32
+	#include "etherdream.h"
+#endif // _WIN32
 
 namespace laser {
 
-class CalibrationRectangle
+class EXPORT_LASER_CONTROL CalibrationRectangle
 {
 public:
 

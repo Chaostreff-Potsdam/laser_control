@@ -4,12 +4,13 @@
 #include <memory>
 #include <opencv/cv.h>
 
+#include "DllExport.h"
 #include "CalibrationRectangle.h"
 #include "EtherdreamWrapper.h"
 
 namespace laser {
 
-class Calibration
+class EXPORT_LASER_CONTROL Calibration
 {
 public:
     Calibration(std::shared_ptr<EtherdreamWrapper> wrapper);

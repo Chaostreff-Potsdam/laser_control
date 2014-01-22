@@ -1,14 +1,9 @@
 #include "EtherdreamWrapper.h"
 
-#include <thread>
-#include <mutex>
 #include <chrono>
-
-#include <opencv/cv.h>
+#include <thread>
 
 #include <iostream>
-
-#include "etherdream.h"
 
 laser::EtherdreamWrapper::EtherdreamWrapper()
 {
@@ -17,8 +12,16 @@ laser::EtherdreamWrapper::EtherdreamWrapper()
 
 laser::EtherdreamWrapper::~EtherdreamWrapper()
 {
+#ifdef _WIN32
+	if (m_cardNum == -1) {
+			EtherDreamStop(&m_cardNum);
+			EtherDreamCloseDevice(&m_cardNum);
+		}
+	EtherDreamClose();
+#else
 	if(m_etherdream)
         etherdream_disconnect(m_etherdream);
+#endif
 }
 
 bool laser::EtherdreamWrapper::empty()
@@ -37,6 +40,36 @@ void laser::EtherdreamWrapper::clear()
 
 void laser::EtherdreamWrapper::connect()
 {
+#ifdef _WIN32
+		try
+	{
+		m_cardNum = -1;
+		// connectToEtherdream
+		if(0==EtherDreamGetCardNum()) { //it is actually card count. We use always the first laser :-)
+			std::cout << "No Etherdream found :(\n";
+			if (m_cardNum != -1) {
+				EtherDreamStop(&m_cardNum);
+				EtherDreamCloseDevice(&m_cardNum);
+			}
+			EtherDreamClose();
+			return;
+		}
+		m_cardNum = 0;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1200));
+		EtherDreamOpenDevice(&m_cardNum);
+
+		return;
+	}
+	catch (...) // if the program wants us to stop
+	{
+		if (m_cardNum != -1) {
+			EtherDreamStop(&m_cardNum);
+			EtherDreamCloseDevice(&m_cardNum);
+		}
+		EtherDreamClose();
+		return;
+	}
+#else
 	try
 	{
 		// start listening for etherdreams
@@ -69,13 +102,18 @@ void laser::EtherdreamWrapper::connect()
 			etherdream_disconnect(m_etherdream);
 		return;
 	}
+#endif
 }
 
 void laser::EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
+#ifdef _WIN32
+	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), 30000, -1);
+#else
     etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
+#endif
 }
 
 void laser::EtherdreamWrapper::setPoints(const std::vector<etherdream_point> &p)

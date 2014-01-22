@@ -21,7 +21,8 @@ std::vector<etherdream_point> CalibrationRectangle::points() const
     for (int i = 0; i < pointsPerLine; ++i)
     {
         cv::Point2f newPoint(m_topLeft.x + (i/pointsPerLine) * fromTo.x, m_topLeft.y + (i/pointsPerLine) * fromTo.y);
-		points.push_back(etherdream_point { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 } );
+		etherdream_point newEtherdreamPoint = { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 }; 
+		points.push_back(newEtherdreamPoint);
     }
 
     // bottomLeft - bottomRight
@@ -29,7 +30,8 @@ std::vector<etherdream_point> CalibrationRectangle::points() const
     for (int i = 0; i < pointsPerLine; ++i)
     {
         cv::Point2f newPoint(m_bottomLeft.x + (i/pointsPerLine) * fromTo.x, m_bottomLeft.y + (i/pointsPerLine) * fromTo.y);
-		points.push_back(etherdream_point { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 } );
+		etherdream_point newEtherdreamPoint = { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 }; 
+		points.push_back(newEtherdreamPoint);
     }
 
     // bottomRight - topRight
@@ -37,7 +39,8 @@ std::vector<etherdream_point> CalibrationRectangle::points() const
     for (int i = 0; i < pointsPerLine; ++i)
     {
         cv::Point2f newPoint(m_bottomRight.x + (i/pointsPerLine) * fromTo.x, m_bottomRight.y + (i/pointsPerLine) * fromTo.y);
-		points.push_back(etherdream_point { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 } );
+		etherdream_point newEtherdreamPoint = { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 }; 
+		points.push_back(newEtherdreamPoint);
     }
 
     // topRight - topLeft
@@ -45,7 +48,8 @@ std::vector<etherdream_point> CalibrationRectangle::points() const
     for (int i = 0; i < pointsPerLine; ++i)
     {
         cv::Point2f newPoint(m_topRight.x + (i/pointsPerLine) * fromTo.x, m_topRight.y + (i/pointsPerLine) * fromTo.y);
-		points.push_back(etherdream_point { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 } );
+		etherdream_point newEtherdreamPoint = { (int16_t) newPoint.x, (int16_t) newPoint.y, 0, UINT16_MAX, 0 }; 
+		points.push_back(newEtherdreamPoint);
     }
 
     return points;

@@ -8,7 +8,7 @@
 #include "laser_utilities.h"
 
 namespace laser {
-	class LaserPolygon : public LaserObject
+	class EXPORT_LASER_CONTROL LaserPolygon : public LaserObject
 	{
 	public:
 		LaserPolygon();
