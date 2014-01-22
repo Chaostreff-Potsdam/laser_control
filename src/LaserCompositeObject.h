@@ -2,6 +2,7 @@
 #define LASERCOMPOSITEOBJECT_H
 
 #include "LaserObject.h"
+#include "laser_utilities.h"
 
 #include <vector>
 #include <initializer_list>
@@ -26,22 +27,27 @@ namespace laser {
 		LaserCompositeObject(const std::vector<LaserObjectPtr> & objects);
 		LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects);
 
-		std::vector<etherdream_point> points() const;
-		std::vector<etherdream_point> startPoints() const;
-		std::vector<etherdream_point> endPoints() const;
-		void rotate(double rad);
-		void move(int x, int y);
-		void scale(double factorX, double factorY);
-		void scale(double factor);
-
-		void resetTransform();
-
 		template<typename LaserObjectPtrT, typename... LaserObjectPtrTs>
 		void add(LaserObjectPtrT object, LaserObjectPtrTs... others)
 		{
 			m_objects.emplace_back(object);
 			add(others...);
 		}
+
+		std::vector<etherdream_point> points() const;
+		std::vector<etherdream_point> startPoints() const;
+		std::vector<etherdream_point> endPoints() const;
+
+		void rotate(double rad);
+		void rotate(double rad, int centerX, int centerY, double scale = 1);
+		void rotate(double rad, const Point & center, double scale = 1)
+		{ rotate(rad, center.x(), center.y(), scale); }
+
+		void move(int x, int y);
+		void scale(double factorX, double factorY);
+		void scale(double factor);
+
+		void resetTransform();
 
 	protected:
 		std::vector<LaserObjectPtr> m_objects;

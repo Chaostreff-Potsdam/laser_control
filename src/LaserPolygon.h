@@ -12,7 +12,7 @@ namespace laser {
 	{
 	public:
 		LaserPolygon(bool sharp = true);
-		LaserPolygon(std::vector<Point> points, bool sharp = true);
+		LaserPolygon(const std::vector<Point> & points, bool sharp = true);
 
 		std::vector<etherdream_point> points() const;
 		std::vector<etherdream_point> startPoints() const;

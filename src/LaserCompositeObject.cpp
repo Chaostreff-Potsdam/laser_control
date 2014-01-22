@@ -55,6 +55,15 @@ void laser::LaserCompositeObject::rotate(double rad)
 	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
 }
 
+void laser::LaserCompositeObject::rotate(double rad, int centerX, int centerY, double scale)
+{
+	// TODO: Look for right matrix
+	move(-centerX, -centerY);
+	rotate(rad);
+	move(centerX, centerY);
+	if (scale != 1) this->scale(scale);
+}
+
 void laser::LaserCompositeObject::move(int x, int y)
 {
 	double m[3][3] = {{1, 0, (double) x}, {0, 1, (double) y}, {0, 0, 1}};
