@@ -39,7 +39,7 @@ int main(void)
 
 	LaserServer s(p);
 
-	p.drawPlayer(5, Point(0, -10000));
+	//p.drawPlayer(5, Point(0, -10000));
 
 //	p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
 //	p.drawWall(3, Point(0, -10000), Point(0, 10000));
