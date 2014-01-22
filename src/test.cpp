@@ -40,15 +40,16 @@ int main(void)
 
 	LaserServer s(p);
 
-//	p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
-//	p.drawWall(3, Point(0, -10000), Point(0, 10000));
+#if 1
+	p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
+	p.drawWall(3, Point(0, -10000), Point(0, 10000));
 
-//	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
+	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
 
-//	p.drawWall(2, Point(30000, 0), Point(-30000, 0));
-//	p.drawWall(3, Point(0, -30000), Point(0, 30000));
+	p.drawWall(2, Point(30000, 0), Point(-30000, 0));
+	p.drawWall(3, Point(0, -30000), Point(0, 30000));
 
-
+#else
 	LaserObjectPtr wall(new LaserLine(Point(-10000, 2000), Point(10000, 2000)));
 	LaserObjectPtr wall2(new LaserLine(Point(0, -10000), Point(0, 10000)));
 
@@ -56,6 +57,7 @@ int main(void)
 	group->rotate(radians(180));
 
 	p.add(group);
+#endif
 
     s.poll();
 

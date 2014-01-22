@@ -1,41 +1,23 @@
 #include "Transform.h"
 
+#include <iostream>
+
 namespace laser { namespace Transform {
 
-class TransformPoint: public cv::Point2f
-{
-public:
-	TransformPoint(etherdream_point & point) :
-		cv::Point2f(point.x, point.y),
-		m_original(point)
-	{
-		;;
-	}
-
-	void updateOriginal() const
-	{
-		m_original.x = (int16_t) x;
-		m_original.y = (int16_t) y;
-	}
-
-private:
-	etherdream_point & m_original;
-};
-
-typedef std::vector<TransformPoint> TransformPoints;
-
-//////////////
+typedef std::vector<cv::Point2f> TransformPoints;
 
 static void opaqueApply(std::vector<etherdream_point> & points, TransformPoints & aux_in, TransformPoints & aux_out, OpenCVTransform opencvFunc, cv::InputArray transform)
 {
 	for (auto & p: points)	{
-		aux_in.emplace_back(p);
+		aux_in.emplace_back(p.x, p.y);
 	}
 
 	opencvFunc(aux_in, aux_out, transform);
 
-	for (const auto & p: aux_out) {
-		p.updateOriginal();
+	for (unsigned int i = 0; i < points.size(); i++)
+	{
+		points[i].x = (int16_t) aux_out[i].x;
+		points[i].y = (int16_t) aux_out[i].y;
 	}
 }
 
@@ -44,7 +26,7 @@ void apply(std::vector<etherdream_point> & points, OpenCVTransform opencvFunc, c
 	if (points.empty())
 		return;
 
-	std::vector<TransformPoint> aux_in, aux_out;
+	TransformPoints aux_in, aux_out;
 	aux_in.reserve(points.size());
 	aux_out.reserve(points.size());
 
@@ -56,7 +38,7 @@ void applyInPlace(std::vector<etherdream_point> & points, OpenCVTransform opencv
 	if (points.empty())
 		return;
 
-	std::vector<TransformPoint> aux_in;
+	TransformPoints aux_in;
 	aux_in.reserve(points.size());
 
 	opaqueApply(points, aux_in, aux_in, opencvFunc, transform);
