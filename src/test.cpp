@@ -21,7 +21,7 @@ using namespace laser;
 
 int main(void)
 {
-	LaserPainter p(true);
+	LaserPainter p(false);
     p.aquireEtherdreamWrapper();
     p.calibrate();
 
@@ -36,6 +36,10 @@ int main(void)
 //	while (true) {
 
 //	}
+
+//	LaserObjectPtr circle = std::make_shared<LaserCircle>(Point(0, 0), 10000);
+
+//	p.add(circle);
 
 	LaserServer s(p);
 
