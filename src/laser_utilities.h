@@ -23,13 +23,13 @@ namespace laser {
 	}
 
 	template<typename T>
-	static inline T degrees(T radians)
+	static inline double degrees(T radians)
 	{
 		return 180.0 * (radians / M_PI);
 	}
 
 	template<typename T>
-	static inline T radians(T degrees)
+	static inline double radians(T degrees)
 	{
 		return M_PI * (degrees / 180.0);
 	}
