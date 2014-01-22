@@ -50,8 +50,8 @@ std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 {
 	std::vector<etherdream_point> ps;
 
-	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
-		return ps;
+//	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
+//		return ps;
 
 	for (float rad = m_startRatio - M_PI_2;
 		 rad < m_startRatio;
@@ -74,8 +74,8 @@ std::vector<etherdream_point> laser::LaserCircle::endPoints() const
 {
 	std::vector<etherdream_point> ps;
 
-	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
-		return ps;
+//	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
+//		return ps;
 
 	for (float rad = m_endRatio;
 		 rad < m_endRatio + M_PI_2;

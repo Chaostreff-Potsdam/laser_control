@@ -154,6 +154,13 @@ void laser::LaserPainter::drawTable(int id, laser::Point p1, laser::Point p2, la
 	updatePoints();
 }
 
+void laser::LaserPainter::drawPlayer(int id, laser::Point p1)
+{
+	m_objects[id] = std::make_shared<LaserCircle>(p1, 1000);
+	m_objects[id]->setPermanent(true);
+	updatePoints();
+}
+
 void laser::LaserPainter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));

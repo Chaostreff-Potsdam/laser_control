@@ -9,10 +9,16 @@
 #include <boost/bind.hpp>
 
 laser::LaserServer::LaserServer(LaserPainter &painter)
-:	m_painter(painter),
-	m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000))
+:	//m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
+	m_painter(painter),
+	m_socket(m_ioService),
+	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
+	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.105"), 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_socket.open(boost::asio::ip::udp::v4());
+	m_socket.bind(m_localEndpoint);
 	startAccept();
 }
 
@@ -30,9 +36,11 @@ unsigned int laser::LaserServer::parseToInt(unsigned char *array, int at)
 void laser::LaserServer::startAccept()
 {
 	std::cout << "LaserServer::startAccept" << std::endl;
-	boost::asio::ip::tcp::socket *socket = new boost::asio::ip::tcp::socket(m_ioService);
-	m_acceptor.async_accept(*socket, boost::bind(&LaserServer::handleAccept, this, socket,
-												 boost::asio::placeholders::error));
+	m_socket.async_receive_from(boost::asio::buffer(m_buf),
+							   m_senderEndpoint,
+							   boost::bind(&LaserServer::handleRead, this));
+	//m_acceptor.async_accept(*socket, boost::bind(&LaserServer::handleAccept, this, socket,
+												// boost::asio::placeholders::error));
 }
 
 void laser::LaserServer::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
@@ -53,7 +61,7 @@ void laser::LaserServer::handleAccept(boost::asio::ip::tcp::socket *socket, cons
 
 void laser::LaserServer::handleRead()
 {
-	std::cout << "got " << (int)m_buf[0] << std::endl;
+	std::cout << "LaserServer::handleRead " << (int)m_buf[0] << std::endl;
 	switch (m_buf[0]) {
 	case CommandType::DELETE:
 		handleDelete();
@@ -64,9 +72,14 @@ void laser::LaserServer::handleRead()
 	case CommandType::TABLE:
 		handleTable();
 		break;
+	case CommandType::PLAYER:
+		handlePlayer();
+		break;
 	default:
 		break;
 	}
+
+	startAccept();
 }
 
 void laser::LaserServer::handleDelete()
@@ -117,4 +130,22 @@ void laser::LaserServer::handleTable()
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.drawTable(id, ps[0], ps[1], ps[2], ps[3]);
+}
+
+void laser::LaserServer::handlePlayer()
+{
+	int id = parseToInt(m_buf, 1);
+
+	std::cout << "build Player " << id << std::endl;
+
+	std::vector<Point> ps;
+
+	for (int i = 0; i < 1; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_painter.drawPlayer(id, ps[0]);
 }
