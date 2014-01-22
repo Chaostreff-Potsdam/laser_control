@@ -64,6 +64,9 @@ void laser::LaserServer::handleRead()
 	case CommandType::TABLE:
 		handleTable();
 		break;
+	case CommandType::PLAYER:
+		handlePlayer();
+		break;
 	default:
 		break;
 	}
@@ -117,4 +120,22 @@ void laser::LaserServer::handleTable()
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.drawTable(id, ps[0], ps[1], ps[2], ps[3]);
+}
+
+void laser::LaserServer::handlePlayer()
+{
+	int id = parseToInt(m_buf, 1);
+
+	std::cout << "build Player " << id << std::endl;
+
+	std::vector<Point> ps;
+
+	for (int i = 0; i < 1; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_painter.drawPlayer(id, ps[0]);
 }

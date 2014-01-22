@@ -86,6 +86,8 @@ namespace laser {
 
 		void drawTable(int id, Point p1, Point p2, Point p3, Point p4);
 
+		void drawPlayer(int id, Point p1);
+
 	protected:
 		std::shared_ptr<std::thread> m_updateLoop;
 		void updateLoop();

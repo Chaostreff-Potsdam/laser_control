@@ -22,6 +22,7 @@ namespace laser {
 		{
 			INVALID = 0,
 			DELETE,
+			PLAYER,
 			WALL,
 			DOOR,
 			TABLE
@@ -34,6 +35,7 @@ namespace laser {
 		void handleDelete();
 		void handleWall();
 		void handleTable();
+		void handlePlayer();
 
 		LaserPainter& m_painter;
 
