@@ -47,17 +47,16 @@ std::vector<etherdream_point> laser::LaserCompositeObject::endPoints() const
 
 void laser::LaserCompositeObject::rotate(double rad)
 {
+	// Counter clockwise rotation about rad
 	double s = std::sin(rad);
 	double c = std::cos(rad);
-
-	// Counter clockwise rotation about rad
 	double m[3][3] = {{c, -s, 0}, {s, c, 0}, {0, 0, 1}};
 	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
 }
 
 void laser::LaserCompositeObject::rotate(double rad, int centerX, int centerY, double scale)
 {
-	// TODO: Look for right matrix
+	// TODO: Look up right matrix
 	move(-centerX, -centerY);
 	rotate(rad);
 	move(centerX, centerY);
