@@ -4,6 +4,7 @@
 #include "LaserRectangle.h"
 #include "LaserCircle.h"
 #include "LaserLine.h"
+#include "LaserCompositeObject.h"
 #include "LaserServer.h"
 #include "laser_calibration/Calibration.h"
 
@@ -46,6 +47,16 @@ int main(void)
 
 //	p.drawWall(2, Point(30000, 0), Point(-30000, 0));
 //	p.drawWall(3, Point(0, -30000), Point(0, 30000));
+
+
+	LaserObjectPtr wall(new LaserLine(Point(-10000, 2000), Point(10000, 2000)));
+	LaserObjectPtr wall2(new LaserLine(Point(0, -10000), Point(0, 10000)));
+
+	LaserCompositeObjectPtr group(new LaserCompositeObject(wall, wall2));
+	group->rotate(radians(180));
+
+	p.add(group);
+
     s.poll();
 
 

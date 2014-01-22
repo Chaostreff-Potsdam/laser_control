@@ -28,6 +28,12 @@ namespace laser {
 		return 180 * (radians / M_PI);
 	}
 
+	template<typename T>
+	static inline T radians(T degrees)
+	{
+		return M_PI * (degrees / 180.0);
+	}
+
 	static inline int_least64_t sqr(int a)
 	{
 		return ((int_least64_t)a)*a;

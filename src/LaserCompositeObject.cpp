@@ -7,9 +7,16 @@
 
 laser::LaserCompositeObject::LaserCompositeObject(const std::vector<LaserObjectPtr> & objects)
 	: LaserObject(),
-	  m_transform(cv::Mat::eye(3, 3, CV_64FC1))
+	  m_objects(objects)
 {
-	m_objects = objects;
+	initTransform();
+}
+
+laser::LaserCompositeObject::LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects)
+	: LaserObject(),
+	  m_objects(objects)
+{
+	initTransform();
 }
 
 std::vector<etherdream_point> laser::LaserCompositeObject::points() const
@@ -69,7 +76,7 @@ void laser::LaserCompositeObject::scale(double factor)
 	scale(factor, factor);
 }
 
-void laser::LaserCompositeObject::addObject(const laser::LaserObjectPtr &object)
+void laser::LaserCompositeObject::initTransform()
 {
-	m_objects.push_back(object);
+	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
 }
