@@ -4,7 +4,9 @@
 #include "LaserRectangle.h"
 #include "LaserCircle.h"
 #include "LaserLine.h"
-#include "LaserCompositeObject.h"
+#ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
+	#include "LaserCompositeObject.h"
+#endif
 #include "LaserServer.h"
 #include "laser_calibration/Calibration.h"
 

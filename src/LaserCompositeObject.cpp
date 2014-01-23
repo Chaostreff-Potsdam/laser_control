@@ -12,12 +12,14 @@ laser::LaserCompositeObject::LaserCompositeObject(const std::vector<LaserObjectP
 	resetTransform();
 }
 
+#ifndef _WIN32 //MSV 11 does not support initializer_list :(
 laser::LaserCompositeObject::LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects)
 	: LaserObject(),
 	  m_objects(objects)
 {
 	resetTransform();
 }
+#endif
 
 std::vector<etherdream_point> laser::LaserCompositeObject::points() const
 {

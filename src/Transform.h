@@ -1,6 +1,11 @@
 #pragma once
 
-#include "etherdream.h"
+#ifdef _WIN32
+	#include "dac.h"
+#else // _WIN32
+	#include "etherdream.h"
+#endif // _WIN32
+
 #include <opencv2/core/core.hpp>
 
 #include <vector>

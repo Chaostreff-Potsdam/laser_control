@@ -26,6 +26,12 @@ else(UNIX)
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/j4cDAC.h)
 endif(UNIX)
 
+if(UNIX)
+	set(UNIX_ONLY_WRAPPER_FILES
+		${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h)
+endif(UNIX)
+
 set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
@@ -40,11 +46,10 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
+	${UNIX_ONLY_WRAPPER_FILES}
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp

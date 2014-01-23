@@ -5,12 +5,14 @@
 #include "laser_utilities.h"
 
 #include <vector>
+#ifndef _WIN32 //MSV 11 does not suppoert initializer_list :(
 #include <initializer_list>
+#endif
 #include <opencv2/core/core.hpp>
 
 namespace laser {
 
-	class LaserCompositeObject;
+	class EXPORT_LASER_CONTROL LaserCompositeObject;
 	typedef std::shared_ptr<LaserCompositeObject> LaserCompositeObjectPtr;
 
 	class LaserCompositeObject : public LaserObject
@@ -25,7 +27,9 @@ namespace laser {
 		}
 
 		LaserCompositeObject(const std::vector<LaserObjectPtr> & objects);
+#ifndef _WIN32 //MSV 11 does not support initializer_list :(
 		LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects);
+#endif
 
 		template<typename LaserObjectPtrT, typename... LaserObjectPtrTs>
 		void add(LaserObjectPtrT object, LaserObjectPtrTs... others)
