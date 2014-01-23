@@ -6,7 +6,7 @@ namespace laser { namespace Transform {
 
 typedef std::vector<cv::Point2f> TransformPoints;
 
-static void opaqueApply(std::vector<etherdream_point> & points, TransformPoints & aux_in, TransformPoints & aux_out, OpenCVTransform opencvFunc, cv::InputArray transform)
+static void opaqueApply(EtherdreamPoints & points, TransformPoints & aux_in, TransformPoints & aux_out, OpenCVTransform opencvFunc, cv::InputArray transform)
 {
 	for (auto & p: points)	{
 		aux_in.emplace_back(p.x, p.y);
@@ -21,7 +21,7 @@ static void opaqueApply(std::vector<etherdream_point> & points, TransformPoints 
 	}
 }
 
-void apply(std::vector<etherdream_point> & points, OpenCVTransform opencvFunc, cv::InputArray transform)
+void apply(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform)
 {
 	if (points.empty())
 		return;
@@ -33,7 +33,7 @@ void apply(std::vector<etherdream_point> & points, OpenCVTransform opencvFunc, c
 	opaqueApply(points, aux_in, aux_out, opencvFunc, transform);
 }
 
-void applyInPlace(std::vector<etherdream_point> & points, OpenCVTransform opencvFunc, cv::InputArray transform)
+void applyInPlace(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform)
 {
 	if (points.empty())
 		return;

@@ -1,7 +1,7 @@
-#include "LaserServer.h"
+#include "Server.h"
 
 #include "laser_utilities.h"
-#include "LaserPainter.h"
+#include "Painter.h"
 
 #include <mutex>
 #include <iostream>

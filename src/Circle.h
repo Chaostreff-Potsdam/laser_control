@@ -1,7 +1,7 @@
 #ifndef LASERCIRCLE_H
 #define LASERCIRCLE_H
 
-#include "LaserObject.h"
+#include "Object.h"
 #include "laser_utilities.h"
 #include <cmath>
 
@@ -12,9 +12,9 @@ namespace laser {
 		LaserCircle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 		LaserCircle(Point p, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 
-		std::vector<etherdream_point> points() const;
-		std::vector<etherdream_point> startPoints() const;
-		std::vector<etherdream_point> endPoints() const;
+		EtherdreamPoints points() const;
+		EtherdreamPoints startPoints() const;
+		EtherdreamPoints endPoints() const;
 		void rotate(double rad);
 		void move(int x, int y);
 

@@ -2,11 +2,8 @@
 #define CALIBRATION_H
 
 #include <memory>
-#include <opencv/cv.h>
 
-#include "DllExport.h"
 #include "CalibrationRectangle.h"
-#include "EtherdreamWrapper.h"
 
 namespace laser {
 

@@ -1,4 +1,4 @@
-#include "LaserLine.h"
+#include "Line.h"
 
 #include <vector>
 #include <cmath>
@@ -35,9 +35,9 @@ laser::LaserLine::LaserLine(Point a, Point b, bool visible)
 	m_visible = visible;
 }
 
-std::vector<etherdream_point> laser::LaserLine::points() const
+laser::EtherdreamPoints laser::LaserLine::points() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 	if (m_visible)
 	{
 		for (int i = 0; i < m_pointCount; i++)
@@ -56,9 +56,9 @@ std::vector<etherdream_point> laser::LaserLine::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> laser::LaserLine::startPoints() const
+laser::EtherdreamPoints laser::LaserLine::startPoints() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 	if (m_visible)
 	{
@@ -79,9 +79,9 @@ std::vector<etherdream_point> laser::LaserLine::startPoints() const
 }
 
 
-std::vector<etherdream_point> laser::LaserLine::endPoints() const
+laser::EtherdreamPoints laser::LaserLine::endPoints() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 	if (m_visible)
 	{

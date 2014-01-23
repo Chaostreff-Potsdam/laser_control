@@ -1,7 +1,7 @@
 #ifndef LASERRECTANGLE_H
 #define LASERRECTANGLE_H
 
-#include "LaserPolygon.h"
+#include "Polygon.h"
 #include "laser_utilities.h"
 #include <vector>
 

@@ -1,7 +1,7 @@
 #ifndef LASERPOLYLINE_H
 #define LASERPOLYLINE_H
 
-#include "LaserObject.h"
+#include "Object.h"
 
 #include <vector>
 
@@ -14,9 +14,9 @@ namespace laser {
 		LaserPolygon(bool sharp = true);
 		LaserPolygon(const std::vector<Point> & points, bool sharp = true);
 
-		std::vector<etherdream_point> points() const;
-		std::vector<etherdream_point> startPoints() const;
-		std::vector<etherdream_point> endPoints() const;
+		EtherdreamPoints points() const;
+		EtherdreamPoints startPoints() const;
+		EtherdreamPoints endPoints() const;
 		void rotate(double rad);
 		void move(int x, int y);
 

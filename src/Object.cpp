@@ -1,4 +1,4 @@
-#include "LaserObject.h"
+#include "Object.h"
 
 #include "boost/date_time.hpp"
 

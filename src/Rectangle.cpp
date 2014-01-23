@@ -1,9 +1,9 @@
-#include "LaserRectangle.h"
+#include "Rectangle.h"
 
 #include <vector>
 
 #include "laser_utilities.h"
-#include "LaserPolygon.h"
+#include "Polygon.h"
 
 laser::LaserRectangle::LaserRectangle(int x, int y, int width, int height, bool sharp)
 :	LaserPolygon(sharp)

@@ -1,10 +1,10 @@
-#include "LaserPainter.h"
+#include "Painter.h"
 
-#include "LaserLine.h"
-#include "LaserRectangle.h"
-#include "LaserCircle.h"
+#include "Line.h"
+#include "Rectangle.h"
+#include "Circle.h"
 #ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
-#include "LaserCompositeObject.h"
+#include "CompositeObject.h"
 #endif
 #include "laser_calibration/Calibration.h"
 #include "Transform.h"
@@ -66,7 +66,7 @@ void laser::LaserPainter::add(const LaserObjectPtr & object)
 
 void laser::LaserPainter::updatePoints()
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 	std::lock_guard<std::mutex> lock(m_updateMutex);
 

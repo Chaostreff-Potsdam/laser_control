@@ -30,23 +30,23 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserPainter.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCircle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserRectangle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserLine.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserServer.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Painter.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Painter.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Object.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Object.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Circle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Circle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Rectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Rectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Line.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Line.h
+	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Server.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Server.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h

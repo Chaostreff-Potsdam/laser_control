@@ -116,14 +116,14 @@ void laser::EtherdreamWrapper::writePoints()
 #endif
 }
 
-void laser::EtherdreamWrapper::setPoints(const std::vector<etherdream_point> &p)
+void laser::EtherdreamWrapper::setPoints(const EtherdreamPoints &p)
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
     m_points = p;
 }
 
-void laser::EtherdreamWrapper::addPoints(const std::vector<etherdream_point> &p)
+void laser::EtherdreamWrapper::addPoints(const EtherdreamPoints &p)
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 

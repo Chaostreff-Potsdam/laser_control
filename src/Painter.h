@@ -2,7 +2,7 @@
 #define LASERPAINTER_H
 
 #include "EtherdreamWrapper.h"
-#include "LaserObject.h"
+#include "Object.h"
 #include "laser_utilities.h"
 
 #include <utility>

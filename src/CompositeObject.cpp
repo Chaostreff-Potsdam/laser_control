@@ -1,4 +1,4 @@
-#include "LaserCompositeObject.h"
+#include "CompositeObject.h"
 #include "laser_utilities.h"
 
 #include "Transform.h"
@@ -12,9 +12,9 @@ laser::LaserCompositeObject::LaserCompositeObject(const std::vector<LaserObjectP
 	resetTransform();
 }
 
-std::vector<etherdream_point> laser::LaserCompositeObject::points() const
+laser::EtherdreamPoints laser::LaserCompositeObject::points() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 	for (const auto & obj : m_objects)
 	{
@@ -28,14 +28,14 @@ std::vector<etherdream_point> laser::LaserCompositeObject::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> laser::LaserCompositeObject::startPoints() const
+laser::EtherdreamPoints laser::LaserCompositeObject::startPoints() const
 {
-	return std::vector<etherdream_point>();
+	return EtherdreamPoints();
 }
 
-std::vector<etherdream_point> laser::LaserCompositeObject::endPoints() const
+laser::EtherdreamPoints laser::LaserCompositeObject::endPoints() const
 {
-	return std::vector<etherdream_point>();
+	return EtherdreamPoints();
 }
 
 void laser::LaserCompositeObject::add(const LaserObjectPtr & object)

@@ -1,4 +1,4 @@
-#include "LaserCircle.h"
+#include "Circle.h"
 
 #include <vector>
 #include <cmath>
@@ -25,9 +25,9 @@ laser::LaserCircle::LaserCircle(Point p, int radius, float startRatio, float end
 	m_endRatio = endRatio;
 }
 
-std::vector<etherdream_point> laser::LaserCircle::points() const
+laser::EtherdreamPoints laser::LaserCircle::points() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 	for (float rad = m_startRatio;
 		 rad < m_endRatio;
@@ -46,9 +46,9 @@ std::vector<etherdream_point> laser::LaserCircle::points() const
 	return ps;
 }
 
-std::vector<etherdream_point> laser::LaserCircle::startPoints() const
+laser::EtherdreamPoints laser::LaserCircle::startPoints() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 //	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
 //		return ps;
@@ -70,9 +70,9 @@ std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 	return ps;
 }
 
-std::vector<etherdream_point> laser::LaserCircle::endPoints() const
+laser::EtherdreamPoints laser::LaserCircle::endPoints() const
 {
-	std::vector<etherdream_point> ps;
+	EtherdreamPoints ps;
 
 //	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
 //		return ps;

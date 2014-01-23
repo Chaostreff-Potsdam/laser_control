@@ -1,7 +1,7 @@
 #include "Calibration.h"
 
 #include <opencv/highgui.h>
-#include <opencv2/core/core.hpp>
+#include <opencv2/calib3d/calib3d.hpp>
 
 #include <vector>
 #include <cstdint>
@@ -31,7 +31,7 @@ void Calibration::start()
 
 	fs.release();
 
-    std::vector<etherdream_point> points = m_rect.points();
+    EtherdreamPoints points = m_rect.points();
     m_etherdream->setPoints(points);
     m_etherdream->writePoints();
 
@@ -110,7 +110,7 @@ void Calibration::updateRectangle()
                 );
 
     m_etherdream->clear();
-    std::vector<etherdream_point> points = m_rect.points();
+    EtherdreamPoints points = m_rect.points();
     m_etherdream->setPoints(points);
     m_etherdream->writePoints();
 }

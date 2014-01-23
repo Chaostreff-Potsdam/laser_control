@@ -1,6 +1,6 @@
 %module laserwrappercs
 %{
-#include "LaserPainter.h"
+#include "Painter.h"
 #include "laser_utilities.h"
 %}
 

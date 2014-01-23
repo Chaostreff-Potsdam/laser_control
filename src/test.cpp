@@ -1,13 +1,11 @@
 #include "EtherdreamWrapper.h"
 
-#include "LaserPainter.h"
-#include "LaserRectangle.h"
-#include "LaserCircle.h"
-#include "LaserLine.h"
-#ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
-	#include "LaserCompositeObject.h"
-#endif
-#include "LaserServer.h"
+#include "Painter.h"
+#include "Rectangle.h"
+#include "Circle.h"
+#include "Line.h"
+#include "CompositeObject.h"
+#include "Server.h"
 #include "laser_calibration/Calibration.h"
 
 #include <chrono>

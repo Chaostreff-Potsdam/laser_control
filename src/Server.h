@@ -1,7 +1,7 @@
 #ifndef LASERSERVER_H
 #define LASERSERVER_H
 
-#include "LaserPainter.h"
+#include "Painter.h"
 
 #include <boost/asio.hpp>
 #include <mutex>
