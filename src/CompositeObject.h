@@ -4,24 +4,18 @@
 #include "Object.h"
 #include "laser_utilities.h"
 
-#include <vector>
-#ifndef _WIN32 //MSV 11 does not suppoert initializer_list :(
-#include <initializer_list>
-#endif
-#include <opencv2/core/core.hpp>
-
 namespace laser {
 
-	class EXPORT_LASER_CONTROL LaserCompositeObject;
-	typedef std::shared_ptr<LaserCompositeObject> LaserCompositeObjectPtr;
+	class EXPORT_LASER_CONTROL CompositeObject;
+	typedef std::shared_ptr<CompositeObject> CompositeObjectPtr;
 
-	class LaserCompositeObject : public LaserObject
+	class CompositeObject : public Object
 	{
 	public:		
-		LaserCompositeObject(const std::vector<LaserObjectPtr> & objects = std::vector<LaserObjectPtr>());
+		CompositeObject(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
 
-		void add(const LaserObjectPtr & object);
-		void add(const std::vector<LaserObjectPtr> & objects);
+		void add(const ObjectPtr & object);
+		void add(const std::vector<ObjectPtr> & objects);
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
@@ -39,7 +33,7 @@ namespace laser {
 		void resetTransform();
 
 	protected:
-		std::vector<LaserObjectPtr> m_objects;
+		std::vector<ObjectPtr> m_objects;
 		cv::Mat m_transform;
 	};
 }

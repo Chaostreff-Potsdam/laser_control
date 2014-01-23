@@ -5,11 +5,11 @@
 #include "laser_utilities.h"
 
 namespace laser {
-	class EXPORT_LASER_CONTROL LaserLine : public LaserObject
+	class EXPORT_LASER_CONTROL Line : public Object
 	{
 	public:
-		LaserLine(int xa, int ya, int xb, int yb, bool visible = true);
-		LaserLine(Point a, Point b, bool visible = true);
+		Line(int xa, int ya, int xb, int yb, bool visible = true);
+		Line(Point a, Point b, bool visible = true);
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;

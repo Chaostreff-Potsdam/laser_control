@@ -6,11 +6,11 @@
 #include <cmath>
 
 namespace laser {
-	class EXPORT_LASER_CONTROL LaserCircle : public LaserObject
+	class EXPORT_LASER_CONTROL Circle : public Object
 	{
 	public:
-		LaserCircle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);
-		LaserCircle(Point p, int radius, float startRatio = 0, float endRatio = 2*M_PI);
+		Circle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);
+		Circle(Point p, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;

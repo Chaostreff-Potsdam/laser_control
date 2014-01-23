@@ -5,14 +5,14 @@
 
 #include <opencv2/imgproc/imgproc.hpp>
 
-laser::LaserCompositeObject::LaserCompositeObject(const std::vector<LaserObjectPtr> & objects)
-	: LaserObject(),
+laser::CompositeObject::CompositeObject(const std::vector<ObjectPtr> & objects)
+	: Object(),
 	  m_objects(objects)
 {
 	resetTransform();
 }
 
-laser::EtherdreamPoints laser::LaserCompositeObject::points() const
+laser::EtherdreamPoints laser::CompositeObject::points() const
 {
 	EtherdreamPoints ps;
 
@@ -28,27 +28,27 @@ laser::EtherdreamPoints laser::LaserCompositeObject::points() const
 	return ps;
 }
 
-laser::EtherdreamPoints laser::LaserCompositeObject::startPoints() const
+laser::EtherdreamPoints laser::CompositeObject::startPoints() const
 {
 	return EtherdreamPoints();
 }
 
-laser::EtherdreamPoints laser::LaserCompositeObject::endPoints() const
+laser::EtherdreamPoints laser::CompositeObject::endPoints() const
 {
 	return EtherdreamPoints();
 }
 
-void laser::LaserCompositeObject::add(const LaserObjectPtr & object)
+void laser::CompositeObject::add(const ObjectPtr & object)
 {
 	m_objects.emplace_back(object);
 }
 
-void laser::LaserCompositeObject::add(const std::vector<LaserObjectPtr> &objects)
+void laser::CompositeObject::add(const std::vector<ObjectPtr> &objects)
 {
 	appendToVector(m_objects, objects);
 }
 
-void laser::LaserCompositeObject::rotate(double rad)
+void laser::CompositeObject::rotate(double rad)
 {
 	// Counter clockwise rotation about rad
 	double s = std::sin(rad);
@@ -57,7 +57,7 @@ void laser::LaserCompositeObject::rotate(double rad)
 	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
 }
 
-void laser::LaserCompositeObject::rotate(double rad, int centerX, int centerY, double scale)
+void laser::CompositeObject::rotate(double rad, int centerX, int centerY, double scale)
 {
 	// TODO: Look up right matrix
 	move(-centerX, -centerY);
@@ -66,24 +66,24 @@ void laser::LaserCompositeObject::rotate(double rad, int centerX, int centerY, d
 	if (scale != 1) this->scale(scale);
 }
 
-void laser::LaserCompositeObject::move(int x, int y)
+void laser::CompositeObject::move(int x, int y)
 {
 	double m[3][3] = {{1, 0, (double) x}, {0, 1, (double) y}, {0, 0, 1}};
 	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
 }
 
-void laser::LaserCompositeObject::scale(double factorX, double factorY)
+void laser::CompositeObject::scale(double factorX, double factorY)
 {
 	double m[3][3] = {{factorX, 0, 0}, {0, factorY, 0}, {0, 0, 1}};
 	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
 }
 
-void laser::LaserCompositeObject::scale(double factor)
+void laser::CompositeObject::scale(double factor)
 {
 	scale(factor, factor);
 }
 
-void laser::LaserCompositeObject::resetTransform()
+void laser::CompositeObject::resetTransform()
 {
 	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
 }

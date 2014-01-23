@@ -9,10 +9,10 @@
 
 namespace laser {
 
-	class EXPORT_LASER_CONTROL LaserServer
+	class EXPORT_LASER_CONTROL Server
 	{
 	public:
-		LaserServer(LaserPainter &painter);
+		Server(Painter &painter);
 
 		void poll();
 
@@ -37,7 +37,7 @@ namespace laser {
 		void handleTable();
 		void handlePlayer();
 
-		LaserPainter& m_painter;
+		Painter& m_painter;
 
 		boost::asio::io_service m_ioService;
 		//boost::asio::ip::tcp::acceptor m_acceptor;

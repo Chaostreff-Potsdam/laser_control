@@ -22,7 +22,7 @@ using namespace laser;
 
 int main(void)
 {
-	LaserPainter p(false);
+	Painter p(false);
     p.aquireEtherdreamWrapper();
 #ifndef _WIN32
 	p.calibrate();
@@ -30,7 +30,7 @@ int main(void)
 
 	//p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
-	LaserObjectPtr l = std::make_shared<LaserLine>(0, 0, 10000, 10000);
+	ObjectPtr l = std::make_shared<Line>(0, 0, 10000, 10000);
 
 	p.add(l);
 
@@ -44,16 +44,16 @@ int main(void)
 
 //	p.add(circle);
 
-	LaserServer s(p);
+	Server s(p);
 
 
     s.poll();
 
-	LaserCompositeObjectPtr group(new LaserCompositeObject());
+	CompositeObjectPtr group(new CompositeObject());
 
-	group->add(std::make_shared<LaserLine>(Point(-10000, 2000), Point(10000, 2000)));
-	group->add(std::make_shared<LaserLine>(Point(0, -10000), Point(0, 10000)));
-	group->add(std::make_shared<LaserLine>(Point(-10000, 6000), Point(10000, 6000)));
+	group->add(std::make_shared<Line>(Point(-10000, 2000), Point(10000, 2000)));
+	group->add(std::make_shared<Line>(Point(0, -10000), Point(0, 10000)));
+	group->add(std::make_shared<Line>(Point(-10000, 6000), Point(10000, 6000)));
 
 	group->rotate(radians(90));
 

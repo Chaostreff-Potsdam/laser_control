@@ -8,24 +8,16 @@
 
 #include "boost/date_time/posix_time/posix_time_types.hpp"
 
-
-#ifdef _WIN32
-static int round(double number)
-	{
-		return number < 0.0 ? ceil(number-0.5) : floor(number + 0.5);
-	}
-#endif
-
 namespace laser {
 
 
 	/*!
 	 * \brief an abstract object to be painted
 	 */
-	class EXPORT_LASER_CONTROL LaserObject
+	class EXPORT_LASER_CONTROL Object
 	{
 	public:
-		LaserObject();
+		Object();
 
 		/*!
 		 * \brief calculate the points to be drawn with the laser projector
@@ -58,7 +50,7 @@ namespace laser {
 		bool m_permanent;
 	};
 
-	typedef std::shared_ptr<LaserObject> LaserObjectPtr;
+	typedef std::shared_ptr<Object> ObjectPtr;
 }
 
 #endif // LASEROBJECT_H

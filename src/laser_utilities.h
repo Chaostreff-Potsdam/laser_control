@@ -34,6 +34,14 @@ namespace laser {
 		return M_PI * (degrees / 180.0);
 	}
 
+#ifdef _WIN32
+	template<typename T>
+	static int round(T number)
+	{
+		return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
+	}
+#endif
+
 	static inline int_least64_t sqr(int a)
 	{
 		return ((int_least64_t)a)*a;

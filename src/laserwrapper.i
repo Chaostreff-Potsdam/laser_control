@@ -19,10 +19,10 @@ namespace laser
 		void setY(int y);
 	};
 
-	class LaserPainter
+	class Painter
 	{
 	public:
-		LaserPainter();
+		Painter();
 
 		void aquireEtherdreamWrapper();
 		void updatePoints();

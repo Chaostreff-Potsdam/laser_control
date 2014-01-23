@@ -20,22 +20,22 @@
 
 
 
-laser::LaserPainter::LaserPainter(bool expireObjects)
+laser::Painter::Painter(bool expireObjects)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects)
 {
 	if (expireObjects)
 	{
-		m_updateLoop = std::make_shared<std::thread>(&LaserPainter::updateLoop, this);
+		m_updateLoop = std::make_shared<std::thread>(&Painter::updateLoop, this);
 	}
 }
 
-void laser::LaserPainter::aquireEtherdreamWrapper()
+void laser::Painter::aquireEtherdreamWrapper()
 {
     m_canvas = std::make_shared<EtherdreamWrapper>();
 }
 
-void laser::LaserPainter::calibrate()
+void laser::Painter::calibrate()
 {
 	if (!m_canvas) aquireEtherdreamWrapper();
 
@@ -45,26 +45,26 @@ void laser::LaserPainter::calibrate()
     m_calibration = calibration.homography();
 }
 
-void laser::LaserPainter::paintOn(const std::shared_ptr<EtherdreamWrapper> &e)
+void laser::Painter::paintOn(const std::shared_ptr<EtherdreamWrapper> &e)
 {
 	m_canvas = e;
 }
 
-void laser::LaserPainter::paint(const LaserObjectPtrMap & objects)
+void laser::Painter::paint(const ObjectPtrMap & objects)
 {
 	m_objects = objects;
 
 	updatePoints();
 }
 
-void laser::LaserPainter::add(const LaserObjectPtr & object)
+void laser::Painter::add(const ObjectPtr & object)
 {
 	m_objects[m_smallestFreeId++] = object;
 
 	updatePoints();
 }
 
-void laser::LaserPainter::updatePoints()
+void laser::Painter::updatePoints()
 {
 	EtherdreamPoints ps;
 
@@ -77,8 +77,8 @@ void laser::LaserPainter::updatePoints()
 	{
 		boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
 
-		LaserObjectPtrMap::iterator iter = m_objects.begin();
-		LaserObjectPtrMap::iterator end = m_objects.end();
+		ObjectPtrMap::iterator iter = m_objects.begin();
+		ObjectPtrMap::iterator end = m_objects.end();
 
 		while(iter != end)
 		{
@@ -102,7 +102,7 @@ void laser::LaserPainter::updatePoints()
 		}
 	}
 
-	for (LaserObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
+	for (ObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
 		appendToVector(ps, (it->second)->startPoints());
 		appendToVector(ps, (it->second)->points());
@@ -117,16 +117,16 @@ void laser::LaserPainter::updatePoints()
 	m_canvas->writePoints();
 }
 
-void laser::LaserPainter::deleteObject(int id)
+void laser::Painter::deleteObject(int id)
 {
 	m_objects.erase(id);
 	updatePoints();
 }
 
-void laser::LaserPainter::drawWall(int id, Point p1, Point p2)
+void laser::Painter::drawWall(int id, Point p1, Point p2)
 {
 	std::cout << "Draw Wall" << std::endl;
-	m_objects[id] = std::make_shared<LaserLine>(p1, p2, true);
+	m_objects[id] = std::make_shared<Line>(p1, p2, true);
 	m_objects[id]->setPermanent(true);
 	updatePoints();
 
@@ -134,20 +134,20 @@ void laser::LaserPainter::drawWall(int id, Point p1, Point p2)
 }
 
 #ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
-void laser::LaserPainter::drawDoor(int id, Point p1, Point p2)
+void laser::Painter::drawDoor(int id, Point p1, Point p2)
 {
-	std::vector<LaserObjectPtr> objs;
+	std::vector<ObjectPtr> objs;
 
-	objs.push_back(std::make_shared<LaserLine>(p1, p2));
+	objs.push_back(std::make_shared<Line>(p1, p2));
 
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
 	float rad = atan2(p2.y() - p1.y(), p2.x() - p1.y());
 	Point middle = p1;
-	objs.push_back(std::make_shared<LaserCircle>(middle, radius, rad+0.1, rad+M_PI_4 + 0.4));
+	objs.push_back(std::make_shared<Circle>(middle, radius, rad+0.1, rad+M_PI_4 + 0.4));
 	//etherdream_point circleEnd = objs.back()->points().back();
 	//objs.push_back(std::make_shared<LaserLine>(Point(circleEnd.x, circleEnd.y), middle));
 
-	LaserObjectPtr co = std::make_shared<LaserCompositeObject>(objs);
+	ObjectPtr co = std::make_shared<CompositeObject>(objs);
 
 	m_objects.insert(make_pair(id, co));
 	updatePoints();
@@ -156,20 +156,20 @@ void laser::LaserPainter::drawDoor(int id, Point p1, Point p2)
 }
 #endif
 
-void laser::LaserPainter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
+void laser::Painter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
 {
-	m_objects[id] = std::make_shared<LaserRectangle>(p1, p2, p3, p4, false);
+	m_objects[id] = std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 	updatePoints();
 }
 
-void laser::LaserPainter::drawPlayer(int id, laser::Point p1)
+void laser::Painter::drawPlayer(int id, laser::Point p1)
 {
-	m_objects[id] = std::make_shared<LaserCircle>(p1, 1000);
+	m_objects[id] = std::make_shared<Circle>(p1, 1000);
 	m_objects[id]->setPermanent(true);
 	updatePoints();
 }
 
-void laser::LaserPainter::updateLoop()
+void laser::Painter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 	while (true)

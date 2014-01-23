@@ -19,13 +19,13 @@ namespace laser {
 	 *
 	 * This class manages drawing of LaserObject to the laser.
 	 */
-	class EXPORT_LASER_CONTROL LaserPainter
+	class EXPORT_LASER_CONTROL Painter
 	{
-		typedef std::pair<int, LaserObjectPtr> LaserObjectPtrPair;
-		typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;
+		typedef std::pair<int, ObjectPtr> ObjectPtrPair;
+		typedef std::map<int, ObjectPtr> ObjectPtrMap;
 
 	public:
-        LaserPainter(bool expireObjects = false);
+		Painter(bool expireObjects = false);
 
 		//LaserPainter& operator=(const LaserPainter&) = delete;
 
@@ -54,12 +54,12 @@ namespace laser {
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
 		 */
-		void paint(const LaserObjectPtrMap &objects);
+		void paint(const ObjectPtrMap &objects);
 
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
-		void add(const LaserObjectPtr & object);
+		void add(const ObjectPtr & object);
 
 		/*!
 		 * \brief send a new array to #m_canvas
@@ -104,7 +104,7 @@ namespace laser {
 		/*!
 		 * \brief multiple LaserObjects that are uniquely idetified by an id
 		 */
-		LaserObjectPtrMap m_objects;
+		ObjectPtrMap m_objects;
 
 		/*!
 		 * \brief the smallest number that is free no matter what

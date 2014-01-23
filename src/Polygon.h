@@ -8,11 +8,11 @@
 #include "laser_utilities.h"
 
 namespace laser {
-	class EXPORT_LASER_CONTROL LaserPolygon : public LaserObject
+	class EXPORT_LASER_CONTROL Polygon : public Object
 	{
 	public:
-		LaserPolygon(bool sharp = true);
-		LaserPolygon(const std::vector<Point> & points, bool sharp = true);
+		Polygon(bool sharp = true);
+		Polygon(const std::vector<Point> & points, bool sharp = true);
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;

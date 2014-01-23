@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <boost/bind.hpp>
 
-laser::LaserServer::LaserServer(LaserPainter &painter)
+laser::Server::Server(Painter &painter)
 :	//m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
 	m_painter(painter),
 	m_socket(m_ioService),
@@ -22,28 +22,28 @@ laser::LaserServer::LaserServer(LaserPainter &painter)
 	startAccept();
 }
 
-void laser::LaserServer::poll()
+void laser::Server::poll()
 {
 	std::cout << "LaserServer::poll" << std::endl;
 	m_ioService.run();
 }
 
-unsigned int laser::LaserServer::parseToInt(unsigned char *array, int at)
+unsigned int laser::Server::parseToInt(unsigned char *array, int at)
 {
 	return ((array[at+3]<<24)|(array[at+2]<<16)|(array[at+1]<<8)|(array[at+0]<<0));
 }
 
-void laser::LaserServer::startAccept()
+void laser::Server::startAccept()
 {
 	std::cout << "LaserServer::startAccept" << std::endl;
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
 							   m_senderEndpoint,
-							   boost::bind(&LaserServer::handleRead, this));
+							   boost::bind(&Server::handleRead, this));
 	//m_acceptor.async_accept(*socket, boost::bind(&LaserServer::handleAccept, this, socket,
 												// boost::asio::placeholders::error));
 }
 
-void laser::LaserServer::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
+void laser::Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
 {
 	std::cout << "LaserServer::handleAccept" << std::endl;
 	if (!error)
@@ -53,13 +53,13 @@ void laser::LaserServer::handleAccept(boost::asio::ip::tcp::socket *socket, cons
 		m_connections.push_back(socket);
 		m_connectionsMutex.unlock();
 		socket->async_receive(boost::asio::buffer(m_buf),
-							  boost::bind(&LaserServer::handleRead, this));
+							  boost::bind(&Server::handleRead, this));
 	}
 
 	startAccept();
 }
 
-void laser::LaserServer::handleRead()
+void laser::Server::handleRead()
 {
 	std::cout << "LaserServer::handleRead " << (int)m_buf[0] << std::endl;
 	switch (m_buf[0]) {
@@ -82,7 +82,7 @@ void laser::LaserServer::handleRead()
 	startAccept();
 }
 
-void laser::LaserServer::handleDelete()
+void laser::Server::handleDelete()
 {
 	int id = parseToInt(m_buf, 1);
 
@@ -93,7 +93,7 @@ void laser::LaserServer::handleDelete()
 	m_painter.deleteObject(id);
 }
 
-void laser::LaserServer::handleWall()
+void laser::Server::handleWall()
 {
 	int id = parseToInt(m_buf, 1);
 
@@ -114,7 +114,7 @@ void laser::LaserServer::handleWall()
 	m_painter.drawWall(id, ps[0], ps[1]);
 }
 
-void laser::LaserServer::handleTable()
+void laser::Server::handleTable()
 {
 	int id = parseToInt(m_buf, 1);
 
@@ -132,7 +132,7 @@ void laser::LaserServer::handleTable()
 	m_painter.drawTable(id, ps[0], ps[1], ps[2], ps[3]);
 }
 
-void laser::LaserServer::handlePlayer()
+void laser::Server::handlePlayer()
 {
 	int id = parseToInt(m_buf, 1);
 

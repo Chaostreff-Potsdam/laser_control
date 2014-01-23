@@ -9,8 +9,8 @@
 #define LASERWRAPPER_LINE_POINTS (300)
 #endif
 
-laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)
-:	LaserObject()
+laser::Line::Line(int xa, int ya, int xb, int yb, bool visible)
+:	Object()
 {
 	m_a = Point(xa, ya);
 	m_b = Point(xb, yb);
@@ -21,8 +21,8 @@ laser::LaserLine::LaserLine(int xa, int ya, int xb, int yb, bool visible)
 	m_visible = visible;
 }
 
-laser::LaserLine::LaserLine(Point a, Point b, bool visible)
-:	LaserObject()
+laser::Line::Line(Point a, Point b, bool visible)
+:	Object()
 {
 	m_a = a;
 	m_b = b;
@@ -35,7 +35,7 @@ laser::LaserLine::LaserLine(Point a, Point b, bool visible)
 	m_visible = visible;
 }
 
-laser::EtherdreamPoints laser::LaserLine::points() const
+laser::EtherdreamPoints laser::Line::points() const
 {
 	EtherdreamPoints ps;
 	if (m_visible)
@@ -56,7 +56,7 @@ laser::EtherdreamPoints laser::LaserLine::points() const
 	return ps;
 }
 
-laser::EtherdreamPoints laser::LaserLine::startPoints() const
+laser::EtherdreamPoints laser::Line::startPoints() const
 {
 	EtherdreamPoints ps;
 
@@ -79,7 +79,7 @@ laser::EtherdreamPoints laser::LaserLine::startPoints() const
 }
 
 
-laser::EtherdreamPoints laser::LaserLine::endPoints() const
+laser::EtherdreamPoints laser::Line::endPoints() const
 {
 	EtherdreamPoints ps;
 
@@ -102,7 +102,7 @@ laser::EtherdreamPoints laser::LaserLine::endPoints() const
 	return ps;
 }
 
-void laser::LaserLine::rotate(double rad)
+void laser::Line::rotate(double rad)
 {
 	int oldXa = m_a.x();
 	int oldYa = m_a.y();
@@ -116,7 +116,7 @@ void laser::LaserLine::rotate(double rad)
 	m_b.setY(round(oldXb * sin(rad) + oldYb * cos(rad)));
 }
 
-void laser::LaserLine::move(int x, int y)
+void laser::Line::move(int x, int y)
 {
 	m_a.setX(m_a.x() + x);
 	m_a.setY(m_a.y() + y);

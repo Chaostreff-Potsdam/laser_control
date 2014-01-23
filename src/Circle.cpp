@@ -8,8 +8,8 @@
 #define LASERWRAPPER_CIRCLE_POINTS (50)
 #endif
 
-laser::LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, float endRatio)
-:	LaserObject()
+laser::Circle::Circle(int x, int y, int radius, float startRatio, float endRatio)
+:	Object()
 {
 	m_p = Point(x, y);
 	m_radius = radius;
@@ -17,7 +17,7 @@ laser::LaserCircle::LaserCircle(int x, int y, int radius, float startRatio, floa
 	m_endRatio = endRatio;
 }
 
-laser::LaserCircle::LaserCircle(Point p, int radius, float startRatio, float endRatio)
+laser::Circle::Circle(Point p, int radius, float startRatio, float endRatio)
 {
 	m_p = p;
 	m_radius = radius;
@@ -25,7 +25,7 @@ laser::LaserCircle::LaserCircle(Point p, int radius, float startRatio, float end
 	m_endRatio = endRatio;
 }
 
-laser::EtherdreamPoints laser::LaserCircle::points() const
+laser::EtherdreamPoints laser::Circle::points() const
 {
 	EtherdreamPoints ps;
 
@@ -46,7 +46,7 @@ laser::EtherdreamPoints laser::LaserCircle::points() const
 	return ps;
 }
 
-laser::EtherdreamPoints laser::LaserCircle::startPoints() const
+laser::EtherdreamPoints laser::Circle::startPoints() const
 {
 	EtherdreamPoints ps;
 
@@ -70,7 +70,7 @@ laser::EtherdreamPoints laser::LaserCircle::startPoints() const
 	return ps;
 }
 
-laser::EtherdreamPoints laser::LaserCircle::endPoints() const
+laser::EtherdreamPoints laser::Circle::endPoints() const
 {
 	EtherdreamPoints ps;
 
@@ -94,13 +94,13 @@ laser::EtherdreamPoints laser::LaserCircle::endPoints() const
 	return ps;
 }
 
-void laser::LaserCircle::rotate(double rad)
+void laser::Circle::rotate(double rad)
 {
 	m_startRatio += rad;
 	m_endRatio += rad;
 }
 
-void laser::LaserCircle::move(int x, int y)
+void laser::Circle::move(int x, int y)
 {
 	m_p.setX(m_p.x() + x);
 	m_p.setY(m_p.y() + y);
