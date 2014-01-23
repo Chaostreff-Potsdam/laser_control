@@ -112,7 +112,9 @@ void laser::LaserPainter::updatePoints()
 		}
 	}
 
-	applyCalibration(ps);
+	if(!m_calibration.empty()) {
+		applyCalibration(ps);
+	}
 
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
