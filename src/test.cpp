@@ -48,16 +48,17 @@ int main(void)
 
 	LaserServer s(p);
 
-	//p.drawPlayer(5, Point(0, -10000));
 
-//	p.drawWall(1, Point(-10000, 2000), Point(10000, 2000));
-//	p.drawWall(3, Point(0, -10000), Point(0, 10000));
-
-//	p.drawWall(4, Point(-10000, 6000), Point(10000, 6000));
-
-//	p.drawWall(2, Point(30000, 0), Point(-30000, 0));
-//	p.drawWall(3, Point(0, -30000), Point(0, 30000));
     s.poll();
+
+	LaserCompositeObjectPtr group(new LaserCompositeObject());
+
+	group->add(std::make_shared<LaserLine>(Point(-10000, 2000), Point(10000, 2000)));
+	group->add(std::make_shared<LaserLine>(Point(0, -10000), Point(0, 10000)));
+	group->add(std::make_shared<LaserLine>(Point(-10000, 6000), Point(10000, 6000)));
+
+	group->rotate(radians(90));
+
 
 
 	return 0;

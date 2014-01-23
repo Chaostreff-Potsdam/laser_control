@@ -17,26 +17,11 @@ namespace laser {
 
 	class LaserCompositeObject : public LaserObject
 	{
-	public:
-		template<typename... LaserObjectPtrTs>
-		LaserCompositeObject(LaserObjectPtrTs... objects) :
-			LaserObject()
-		{
-			resetTransform();
-			add(objects...);
-		}
+	public:		
+		LaserCompositeObject(const std::vector<LaserObjectPtr> & objects = std::vector<LaserObjectPtr>());
 
-		LaserCompositeObject(const std::vector<LaserObjectPtr> & objects);
-#ifndef _WIN32 //MSV 11 does not support initializer_list :(
-		LaserCompositeObject(const std::initializer_list<LaserObjectPtr> && objects);
-#endif
-
-		template<typename LaserObjectPtrT, typename... LaserObjectPtrTs>
-		void add(LaserObjectPtrT object, LaserObjectPtrTs... others)
-		{
-			m_objects.emplace_back(object);
-			add(others...);
-		}
+		void add(const LaserObjectPtr & object);
+		void add(const std::vector<LaserObjectPtr> & objects);
 
 		std::vector<etherdream_point> points() const;
 		std::vector<etherdream_point> startPoints() const;
@@ -56,10 +41,6 @@ namespace laser {
 	protected:
 		std::vector<LaserObjectPtr> m_objects;
 		cv::Mat m_transform;
-
-	private:
-		void add() {}
-
 	};
 }
 
