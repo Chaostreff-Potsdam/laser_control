@@ -49,17 +49,17 @@ namespace laser {
 		 *
 		 * This overrides the old #m_canvas.
 		 */
-		void paintOn(std::shared_ptr<EtherdreamWrapper> e);
+		void paintOn(const std::shared_ptr<EtherdreamWrapper> & e);
 
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
 		 */
-		void paint(LaserObjectPtrMap objects);
+		void paint(const LaserObjectPtrMap &objects);
 
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
-		void add(LaserObjectPtr object);
+		void add(const LaserObjectPtr & object);
 
 		/*!
 		 * \brief send a new array to #m_canvas
@@ -84,6 +84,10 @@ namespace laser {
 
 		void drawDoor(int id, Point p1, Point p2);
 
+		void drawTable(int id, Point p1, Point p2, Point p3, Point p4);
+
+		void drawPlayer(int id, Point p1);
+
 	protected:
 		std::shared_ptr<std::thread> m_updateLoop;
 		void updateLoop();
@@ -106,12 +110,7 @@ namespace laser {
 		int m_smallestFreeId;
         bool m_expireObjects;
 
-        cv::Mat m_calibration;
-        /*!
-         * \brief apply the perspective transform from m_calibration to the given vector of etherdream_points
-         */
-		void applyCalibration(std::vector<etherdream_point> &);
-
+		cv::Mat m_calibration;
 	};
 }
 

@@ -22,6 +22,7 @@ namespace laser {
 		{
 			INVALID = 0,
 			DELETE,
+			PLAYER,
 			WALL,
 			DOOR,
 			TABLE
@@ -33,12 +34,17 @@ namespace laser {
 		void handleRead();
 		void handleDelete();
 		void handleWall();
+		void handleTable();
+		void handlePlayer();
 
 		LaserPainter& m_painter;
 
 		boost::asio::io_service m_ioService;
-		boost::asio::ip::tcp::acceptor m_acceptor;
+		//boost::asio::ip::tcp::acceptor m_acceptor;
 		std::vector<boost::asio::ip::tcp::socket*> m_connections;
+		boost::asio::ip::udp::socket m_socket;
+		boost::asio::ip::udp::endpoint m_localEndpoint;
+		boost::asio::ip::udp::endpoint m_senderEndpoint;
 		std::mutex m_connectionsMutex;
 		std::mutex m_painterMutex;
 

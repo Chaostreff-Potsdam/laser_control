@@ -5,8 +5,8 @@
 #include "laser_utilities.h"
 #include "LaserPolygon.h"
 
-laser::LaserRectangle::LaserRectangle(int x, int y, int width, int height)
-:	LaserPolygon()
+laser::LaserRectangle::LaserRectangle(int x, int y, int width, int height, bool sharp)
+:	LaserPolygon(sharp)
 {
 	m_corners.push_back(Point(x, y));
 	m_corners.push_back(Point(x + width, y));
@@ -14,8 +14,8 @@ laser::LaserRectangle::LaserRectangle(int x, int y, int width, int height)
 	m_corners.push_back(Point(x, y + height));
 }
 
-laser::LaserRectangle::LaserRectangle(Point p1, Point p2, Point p3, Point p4)
-:	LaserPolygon()
+laser::LaserRectangle::LaserRectangle(Point p1, Point p2, Point p3, Point p4, bool sharp)
+:	LaserPolygon(sharp)
 {
 	m_corners.push_back(p1);
 	m_corners.push_back(p2);

@@ -47,12 +47,13 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserCompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/LaserPolygon.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
-        ${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
     ${DRIVER_FILES})
-
 
 # Making stand-alone C++ Library
 add_library(laserwrapper SHARED
@@ -62,7 +63,11 @@ add_library(laserwrapper SHARED
 add_executable(laser_wrapper_test
 			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
-add_definitions(-DNO_ETHERDREAM_TRACE=1)
+option(NO_ETHERDREAM_TRACE FALSE)
+
+if(NO_ETHERDREAM_TRACE)
+	add_definitions(-DNO_ETHERDREAM_TRACE=1)
+endif(NO_ETHERDREAM_TRACE)
 
 if(SWIG_FOUND)
 	include(${SWIG_USE_FILE})

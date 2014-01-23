@@ -27,10 +27,17 @@ else(UNIX)
 endif(UNIX)
 
 if(APPLE)
+<<<<<<< HEAD
 	set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++ -Wall ${WEXTRA} -m32")
 	set(CMAKE_C_FLAGS "-std=c99 -m32")
 else(APPLE)
 	set(CMAKE_CXX_FLAGS "-std=c++11 -Wall ${WEXTRA}")
+=======
+	set(CMAKE_CXX_FLAGS "-std=c++11 -stdlib=libc++ -Wall -Wextra -O2")
+	set(CMAKE_C_FLAGS "-std=c99")
+else(APPLE)
+	set(CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -O2")
+>>>>>>> sockets
 	set(CMAKE_C_FLAGS "-std=c99")
 endif(APPLE)
 add_definitions(-D_USE_MATH_DEFINES)

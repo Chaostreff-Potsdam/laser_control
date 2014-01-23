@@ -43,24 +43,15 @@ std::vector<etherdream_point> laser::LaserCircle::points() const
 		ps.push_back(p);
 	}
 
-//	for (int i = m_startRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS; i < m_endRatio/M_PI*LASERWRAPPER_CIRCLE_POINTS + 1; i++)
-//	{
-//		etherdream_point p;
-
-//		p.x = m_p.x() + m_radius * cos(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
-//		p.y = m_p.y() + m_radius * sin(2*M_PI*i/LASERWRAPPER_CIRCLE_POINTS);
-//		p.r = 0;
-//		p.g = UINT16_MAX;
-//		p.b = 0;
-//		ps.push_back(p);
-//	}
-
 	return ps;
 }
 
 std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 {
 	std::vector<etherdream_point> ps;
+
+//	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
+//		return ps;
 
 	for (float rad = m_startRatio - M_PI_2;
 		 rad < m_startRatio;
@@ -82,6 +73,9 @@ std::vector<etherdream_point> laser::LaserCircle::startPoints() const
 std::vector<etherdream_point> laser::LaserCircle::endPoints() const
 {
 	std::vector<etherdream_point> ps;
+
+//	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
+//		return ps;
 
 	for (float rad = m_endRatio;
 		 rad < m_endRatio + M_PI_2;
