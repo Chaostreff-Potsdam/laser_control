@@ -3,9 +3,7 @@
 #include "Line.h"
 #include "Rectangle.h"
 #include "Circle.h"
-#ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
 #include "CompositeObject.h"
-#endif
 #include "laser_calibration/Calibration.h"
 #include "Transform.h"
 
@@ -133,7 +131,6 @@ void laser::Painter::drawWall(int id, Point p1, Point p2)
 	m_smallestFreeId = id + 1;
 }
 
-#ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
 void laser::Painter::drawDoor(int id, Point p1, Point p2)
 {
 	std::vector<ObjectPtr> objs;
@@ -154,7 +151,6 @@ void laser::Painter::drawDoor(int id, Point p1, Point p2)
 
 	m_smallestFreeId = id + 1;
 }
-#endif
 
 void laser::Painter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
 {

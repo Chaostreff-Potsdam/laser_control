@@ -82,9 +82,7 @@ namespace laser {
 		 */
         void drawWall(int id, Point p1, Point p2);
 
-		#ifndef _WIN32 //as LaserCompositeObject uses variadic templates, which is not supported by MSVC11
 		void drawDoor(int id, Point p1, Point p2);
-		#endif
 
 		void drawTable(int id, Point p1, Point p2, Point p3, Point p4);
 
