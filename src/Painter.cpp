@@ -133,20 +133,16 @@ void laser::Painter::drawWall(int id, Point p1, Point p2)
 
 void laser::Painter::drawDoor(int id, Point p1, Point p2)
 {
-	std::vector<ObjectPtr> objs;
-
-	objs.push_back(std::make_shared<Line>(p1, p2));
-
+	CompositeObjectPtr circle(new CompositeObject());
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
 	float rad = atan2(p2.y() - p1.y(), p2.x() - p1.y());
 	Point middle = p1;
-	objs.push_back(std::make_shared<Circle>(middle, radius, rad+0.1, rad+M_PI_4 + 0.4));
+	circle->add(std::make_shared<Circle>(middle, radius, 0, M_PI_4));
+	circle->rotate(rad);
 	//etherdream_point circleEnd = objs.back()->points().back();
 	//objs.push_back(std::make_shared<LaserLine>(Point(circleEnd.x, circleEnd.y), middle));
 
-	ObjectPtr co = std::make_shared<CompositeObject>(objs);
-
-	m_objects.insert(make_pair(id, co));
+	m_objects[id] = circle;
 	updatePoints();
 
 	m_smallestFreeId = id + 1;
@@ -163,6 +159,30 @@ void laser::Painter::drawPlayer(int id, laser::Point p1)
 	m_objects[id] = std::make_shared<Circle>(p1, 1000);
 	m_objects[id]->setPermanent(true);
 	updatePoints();
+}
+
+void laser::Painter::drawButton(int id, const std::vector<laser::Point> &ps)
+{
+	CompositeObjectPtr group(new CompositeObject());
+
+	group->add(std::make_shared<Polygon>(ps, false));
+
+	int x_avg = 0;
+	int y_avg = 0;
+
+	for (Point p : ps)
+	{
+		x_avg += p.x() / (int) ps.size();
+		y_avg += p.y() / (int) ps.size();
+	}
+
+	group->add(std::make_shared<Rectangle>(x_avg - 1000, y_avg - 1000, 2000, 2000, false));
+	group->add(std::make_shared<Circle>(x_avg, y_avg + 1000, 500, 0, M_PI));
+
+	m_objects[id] = group;
+
+	updatePoints();
+
 }
 
 void laser::Painter::updateLoop()

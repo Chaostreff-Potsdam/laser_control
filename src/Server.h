@@ -25,7 +25,8 @@ namespace laser {
 			PLAYER,
 			WALL,
 			DOOR,
-			TABLE
+			TABLE,
+			BUTTON
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
@@ -36,6 +37,7 @@ namespace laser {
 		void handleWall();
 		void handleTable();
 		void handlePlayer();
+		void handleButton();
 
 		Painter& m_painter;
 

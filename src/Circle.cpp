@@ -5,7 +5,7 @@
 #include <cstdint>
 
 #ifndef LASERWRAPPER_CIRCLE_POINTS
-#define LASERWRAPPER_CIRCLE_POINTS (50)
+#define LASERWRAPPER_CIRCLE_POINTS (100)
 #endif
 
 laser::Circle::Circle(int x, int y, int radius, float startRatio, float endRatio)
@@ -30,7 +30,7 @@ laser::EtherdreamPoints laser::Circle::points() const
 	EtherdreamPoints ps;
 
 	for (float rad = m_startRatio;
-		 rad < m_endRatio;
+		 rad <= m_endRatio;
 		 rad += std::abs(m_endRatio - m_startRatio)/LASERWRAPPER_CIRCLE_POINTS)
 	{
 		etherdream_point p;

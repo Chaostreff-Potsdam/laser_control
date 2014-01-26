@@ -149,3 +149,21 @@ void laser::Server::handlePlayer()
 
 	m_painter.drawPlayer(id, ps[0]);
 }
+
+void laser::Server::handleButton()
+{
+	int id = parseToInt(m_buf, 1);
+
+	std::cout << "build Button " << id << std::endl;
+
+	std::vector<Point> ps;
+
+	for (int i = 0; i < 3; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_painter.drawButton(id, ps);
+}
