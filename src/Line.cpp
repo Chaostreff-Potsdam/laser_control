@@ -9,20 +9,22 @@
 #define LASERWRAPPER_LINE_POINTS (300)
 #endif
 
-laser::Line::Line(int xa, int ya, int xb, int yb, bool visible)
-:	Object()
+laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
+:	Object(),
+	m_visible(visible),
+	m_dashed(dashed)
 {
 	m_a = Point(xa, ya);
 	m_b = Point(xb, yb);
 
 	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
 	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
-
-	m_visible = visible;
 }
 
-laser::Line::Line(Point a, Point b, bool visible)
-:	Object()
+laser::Line::Line(Point a, Point b, bool visible, bool dashed)
+:	Object(),
+	m_visible(visible),
+	m_dashed(dashed)
 {
 	m_a = a;
 	m_b = b;
@@ -31,8 +33,6 @@ laser::Line::Line(Point a, Point b, bool visible)
 	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
 
 	std::cout << m_pointCount << std::endl;
-
-	m_visible = visible;
 }
 
 laser::EtherdreamPoints laser::Line::points() const
@@ -47,7 +47,7 @@ laser::EtherdreamPoints laser::Line::points() const
 			p.x = clamp(m_a.x() + ((float)i)/m_pointCount * (m_b.x() - m_a.x()), INT16_MIN, INT16_MAX);
 			p.y = clamp(m_a.y() + ((float)i)/m_pointCount * (m_b.y() - m_a.y()), INT16_MIN, INT16_MAX);
 			p.r = 0;
-			p.g = UINT16_MAX;
+			p.g = m_dashed ? ((i % 4 < 2) ? UINT16_MAX : 0) : UINT16_MAX;
 			p.b = 0;
 			ps.push_back(p);
 		}

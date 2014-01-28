@@ -75,6 +75,9 @@ void laser::Server::handleRead()
 	case CommandType::PLAYER:
 		handlePlayer();
 		break;
+	case CommandType::BUTTON:
+		handleButton();
+		break;
 	default:
 		break;
 	}

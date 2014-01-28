@@ -171,7 +171,7 @@ void laser::Painter::drawButton(int id, Point p)
 	ps.push_back(Point(p.x() + 6000, p.y() - 4000));
 	ps.push_back(Point(p.x(), p.y() + 6000));
 
-	group->add(std::make_shared<Polygon>(ps, false));
+	group->add(std::make_shared<Polygon>(ps, false, true));
 
 	group->add(std::make_shared<Rectangle>(p.x() - 1000, p.y() - 1000, 2000, 2000, false));
 	group->add(std::make_shared<Circle>(p.x(), p.y() + 1000, 500, 0, M_PI));

@@ -5,16 +5,18 @@
 #include "Line.h"
 #include "laser_utilities.h"
 
-laser::Polygon::Polygon(bool sharp)
+laser::Polygon::Polygon(bool sharp, bool dashed)
 :	Object(),
-	m_sharpCorners(sharp)
+	m_sharpCorners(sharp),
+	m_dashed(dashed)
 {
 
 }
 
-laser::Polygon::Polygon(const std::vector<laser::Point> & points, bool sharp)
+laser::Polygon::Polygon(const std::vector<laser::Point> & points, bool sharp, bool dashed)
 :	Object(),
-	m_sharpCorners(sharp)
+	m_sharpCorners(sharp),
+	m_dashed(dashed)
 {
 	m_corners = points;
 }
@@ -28,7 +30,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 	std::vector<Point>::const_iterator start = m_corners.begin();
 	std::vector<Point>::const_iterator end = m_corners.end();
 
-	Line startLine = Line(*start, *(start + 1));
+	Line startLine = Line(*start, *(start + 1), true, m_dashed);
 	EtherdreamPoints points = startLine.points();
 	EtherdreamPoints endPoints = startLine.endPoints();
 	ps.insert(ps.end(), points.begin(), points.end());
@@ -37,7 +39,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 
 	for (auto it = start + 1; it < end - 1; it++)
 	{
-		Line con = Line(*it, *(it + 1));
+		Line con = Line(*it, *(it + 1), true, m_dashed);
 		points = con.points();
 		endPoints = con.endPoints();
 		EtherdreamPoints startPoints = con.startPoints();
@@ -48,7 +50,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 			ps.insert(ps.end(), endPoints.begin(), endPoints.end());
 	}
 
-	Line top = Line(*(end - 1), *start);
+	Line top = Line(*(end - 1), *start, true, m_dashed);
 	points = top.points();
 	EtherdreamPoints startPoints = top.startPoints();
 	if (m_sharpCorners)
