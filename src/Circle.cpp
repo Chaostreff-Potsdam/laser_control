@@ -35,8 +35,8 @@ laser::EtherdreamPoints laser::Circle::points() const
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(rad);
-		p.y = m_p.y() + m_radius * sin(rad);
+		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
+		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
 		p.r = 0;
 		p.g = UINT16_MAX;
 		p.b = 0;
@@ -59,8 +59,8 @@ laser::EtherdreamPoints laser::Circle::startPoints() const
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(rad);
-		p.y = m_p.y() + m_radius * sin(rad);
+		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
+		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
 		p.r = 0;
 		p.g = 0;
 		p.b = 0;
@@ -83,8 +83,8 @@ laser::EtherdreamPoints laser::Circle::endPoints() const
 	{
 		etherdream_point p;
 
-		p.x = m_p.x() + m_radius * cos(rad);
-		p.y = m_p.y() + m_radius * sin(rad);
+		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
+		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
 		p.r = 0;
 		p.g = 0;
 		p.b = 0;
