@@ -138,7 +138,7 @@ void laser::Painter::drawDoor(int id, Point p1, Point p2)
 	float rad = atan2(p2.y() - p1.y(), p2.x() - p1.y());
 	Point middle = p1;
 	circle->add(std::make_shared<Circle>(middle, radius, 0, M_PI_4));
-	circle->rotate(rad);
+	circle->rotate(rad, p1);
 	//etherdream_point circleEnd = objs.back()->points().back();
 	//objs.push_back(std::make_shared<LaserLine>(Point(circleEnd.x, circleEnd.y), middle));
 
