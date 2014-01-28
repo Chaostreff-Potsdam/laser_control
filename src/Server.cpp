@@ -78,6 +78,9 @@ void laser::Server::handleRead()
 	case CommandType::BUTTON:
 		handleButton();
 		break;
+	case CommandType::DOOR:
+		handleDoor();
+		break;
 	default:
 		break;
 	}
@@ -171,4 +174,22 @@ void laser::Server::handleButton()
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.drawButton(id, ps[0]);
+}
+
+void laser::Server::handleDoor()
+{
+	int id = parseToInt(m_buf, 1);
+
+	std::cout << "build Door " << id << std::endl;
+
+	std::vector<Point> ps;
+
+	for (int i = 0; i < 2; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+
+	m_painter.drawDoor(id, ps[0], ps[1]);
 }

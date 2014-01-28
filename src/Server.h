@@ -38,6 +38,7 @@ namespace laser {
 		void handleTable();
 		void handlePlayer();
 		void handleButton();
+		void handleDoor();
 
 		Painter& m_painter;
 
