@@ -13,7 +13,7 @@ laser::Server::Server(Painter &painter)
 	m_painter(painter),
 	m_socket(m_ioService),
 	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
-	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.102"), 30000)
+	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.112"), 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
