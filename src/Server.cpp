@@ -13,7 +13,7 @@ laser::Server::Server(Painter &painter)
 	m_painter(painter),
 	m_socket(m_ioService),
 	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
-	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.105"), 30000)
+	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.102"), 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
@@ -145,6 +145,8 @@ void laser::Server::handlePlayer()
 						   -parseToInt(m_buf, 8*i+9)));
 	}
 
+	std::cout << ps[0].x() << ", " << ps[0].y() << std::endl;
+
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
 	m_painter.drawPlayer(id, ps[0]);
@@ -158,12 +160,12 @@ void laser::Server::handleButton()
 
 	std::vector<Point> ps;
 
-	for (int i = 0; i < 3; ++i) {
+	for (int i = 0; i < 1; ++i) {
 		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
 						   -parseToInt(m_buf, 8*i+9)));
 	}
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
-	m_painter.drawButton(id, ps);
+	m_painter.drawButton(id, ps[0]);
 }

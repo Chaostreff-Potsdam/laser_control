@@ -161,23 +161,20 @@ void laser::Painter::drawPlayer(int id, laser::Point p1)
 	updatePoints();
 }
 
-void laser::Painter::drawButton(int id, const std::vector<laser::Point> &ps)
+void laser::Painter::drawButton(int id, Point p)
 {
 	CompositeObjectPtr group(new CompositeObject());
 
+	std::vector<Point> ps;
+
+	ps.push_back(Point(p.x() - 6000, p.y() - 4000));
+	ps.push_back(Point(p.x() + 6000, p.y() - 4000));
+	ps.push_back(Point(p.x(), p.y() + 6000));
+
 	group->add(std::make_shared<Polygon>(ps, false));
 
-	int x_avg = 0;
-	int y_avg = 0;
-
-	for (Point p : ps)
-	{
-		x_avg += p.x() / (int) ps.size();
-		y_avg += p.y() / (int) ps.size();
-	}
-
-	group->add(std::make_shared<Rectangle>(x_avg - 1000, y_avg - 1000, 2000, 2000, false));
-	group->add(std::make_shared<Circle>(x_avg, y_avg + 1000, 500, 0, M_PI));
+	group->add(std::make_shared<Rectangle>(p.x() - 1000, p.y() - 1000, 2000, 2000, false));
+	group->add(std::make_shared<Circle>(p.x(), p.y() + 1000, 500, 0, M_PI));
 
 	m_objects[id] = group;
 

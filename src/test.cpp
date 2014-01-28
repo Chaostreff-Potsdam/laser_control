@@ -30,11 +30,7 @@ int main(void)
 
 	//p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
-	std::vector<Point> ps;
-	ps.push_back(Point(0, 0));
-	ps.push_back(Point(10000, 0));
-	ps.push_back(Point(0, -20000));
-	p.drawButton(2, ps);
+	//p.drawButton(2, Point(0, 0));
 
 //	while (true) {
 

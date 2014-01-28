@@ -88,7 +88,7 @@ namespace laser {
 
 		void drawPlayer(int id, Point p1);
 
-		void drawButton(int id, const std::vector<Point> &ps);
+		void drawButton(int id, Point p);
 
 	protected:
 		std::shared_ptr<std::thread> m_updateLoop;
