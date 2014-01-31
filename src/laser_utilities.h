@@ -10,10 +10,41 @@ namespace laser {
 	 * \param l lower limit
 	 * \param u upper limit
 	 */
-	inline int clamp(int a, int l, int u)
+	static inline int clamp(int a, int l, int u)
 	{
 		a = a > u ? u : a;
 		return a < l ? l : a;
+	}
+
+	template<typename T>
+	static inline void appendToVector(std::vector<T> & vec, const std::vector<T> & other)
+	{
+		vec.insert(vec.end(), other.begin(), other.end());
+	}
+
+	template<typename T>
+	static inline double degrees(T radians)
+	{
+		return 180.0 * (radians / M_PI);
+	}
+
+	template<typename T>
+	static inline double radians(T degrees)
+	{
+		return M_PI * (degrees / 180.0);
+	}
+
+#ifdef _WIN32
+	template<typename T>
+	static int round(T number)
+	{
+		return number < 0.0 ? ceil(number - 0.5) : floor(number + 0.5);
+	}
+#endif
+
+	static inline int_least64_t sqr(int a)
+	{
+		return ((int_least64_t)a)*a;
 	}
 
 	/*!

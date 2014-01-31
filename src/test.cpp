@@ -1,9 +1,12 @@
 #include "EtherdreamWrapper.h"
 
-#include "LaserPainter.h"
-#include "LaserRectangle.h"
-#include "LaserCircle.h"
-#include "LaserLine.h"
+#include "Painter.h"
+#include "Rectangle.h"
+#include "Circle.h"
+#include "Line.h"
+#include "CompositeObject.h"
+#include "Server.h"
+#include "laser_calibration/Calibration.h"
 
 #include <chrono>
 
@@ -11,26 +14,33 @@
 #include <cmath>
 
 #include <vector>
+#include <iostream>
+
+#include <opencv/cv.h>
 
 using namespace laser;
 
 int main(void)
 {
-	LaserPainter p;
+	Painter p(false);
+    p.aquireEtherdreamWrapper();
+#ifndef _WIN32
+	p.calibrate();
+#endif
 
-	p.aquireEtherdreamWrapper();
+	//p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
-	p.drawWall(1, Point(-20000, -20000), Point(20000, -20000), Point(20000, 20000), Point(-20000, 20000));
+	//p.drawButton(2, Point(0, 0));
 
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+//	while (true) {
 
-	p.deleteObject(1);
+//	}
 
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+	Server s(p);
 
-	p.drawWall(1, Point(-20000, -20000), Point(20000, -20000), Point(20000, 20000), Point(-20000, 20000));
 
-	std::this_thread::sleep_for(std::chrono::seconds(3));
+	s.poll();
+
 
 	return 0;
 }

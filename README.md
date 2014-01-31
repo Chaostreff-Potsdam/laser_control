@@ -30,6 +30,9 @@ This should be pretty straightforward:
 
 Use cmake to generate a VS project. Compile it.
 
+To run it from VS, it has to find openCV DLLs:
+Add to path: Z:/lib_msvc11/opencv/2.4.8/build/x64/vc11/bin;
+
 ### Unity (Mac and Linux)
 
     cp lib/laserwrappercs.so [path-to-Unity-project]/Assets/Plugin/

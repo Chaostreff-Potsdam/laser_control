@@ -2,13 +2,24 @@
 #define ETHERDREAMWRAPPER_H
 
 #include <vector>
-#include <thread>
 #include <mutex>
-#include <atomic>
 
-#include "etherdream.h"
+#include <opencv2/core/core.hpp>
+
+#ifdef _WIN32
+#	include "dac.h"
+#	undef DELETE
+
+#	ifndef _CPPUNWIND
+#		define _CPPUNWIND //To prevent it from looking for nonextistant throw_exception
+#	endif
+#else // _WIN32
+#	include "etherdream.h"
+#endif // _WIN32
 
 namespace laser {
+
+	typedef std::vector<etherdream_point> EtherdreamPoints;
 
 	/*!
 	 * \brief provides access to the
@@ -31,9 +42,9 @@ namespace laser {
 		 * \details On construction, this wrapper automatically connects to the
 		 * etherdream and starts to write.
 		 */
-		EtherdreamWrapper();
+        EtherdreamWrapper();
+        EtherdreamWrapper(cv::Mat calibration);
 		~EtherdreamWrapper();
-
 
 		/*!
 		 * \brief clears #m_points
@@ -48,17 +59,18 @@ namespace laser {
 		 * \brief overwrites the old #m_points and sets it anew
 		 * \param p new #m_points
 		 */
-		void setPoints(std::vector<etherdream_point> &p);
+		void setPoints(const EtherdreamPoints &p);
 		/*!
 		 * \brief appends the contents of \a p to #m_points
 		 */
-		void addPoints(std::vector<etherdream_point> const&p);
+		void addPoints(const EtherdreamPoints &p);
 		/*!
 		 * \brief sends new points to the DAC if needed
 		 *
 		 * If there are new points since the last write this function updates
 		 * the DAC to show #m_points in a loop. Otherwise, it yields this
 		 * time slice.
+         * This also applies the perspective transform (see setPoints).
 		 */
 		void writePoints();
 
@@ -75,10 +87,6 @@ namespace laser {
 		void connect();
 
 		/*!
-		 * \brief the connection and writing part is a seperate thread
-		 */
-		std::thread m_thread;
-		/*!
 		 * \brief protects #m_points
 		 */
 		std::mutex m_pointsMutex;
@@ -86,19 +94,19 @@ namespace laser {
 		/*!
 		 * \brief all points that should be drawn by the laser
 		 */
-		std::vector<etherdream_point> m_points;
-		/*!
-		 * \brief denotes whether there are new points since the last write
-		 *
-		 * This has to be atomic because it may accessed from two different
-		 * threads.
-		 */
-		std::atomic_bool m_newPoints;
+		EtherdreamPoints m_points;
 
+#ifdef _WIN32
+		/*!
+		 * \brief id of EtherDreamCard
+		 */
+		int m_cardNum;
+#else
 		/*!
 		 * \brief handle for the DAC
 		 */
-		struct etherdream *m_etherdream;
+        struct etherdream *m_etherdream;
+#endif
 	};
 }
 #endif // ETHERDREAMWRAPPER_H

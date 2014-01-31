@@ -2,12 +2,15 @@
 #define LASERPAINTER_H
 
 #include "EtherdreamWrapper.h"
-#include "LaserObject.h"
+#include "Object.h"
 #include "laser_utilities.h"
 
 #include <utility>
 #include <memory>
+#include <thread>
+#include <mutex>
 #include <map>
+#include <opencv/cv.h>
 
 namespace laser {
 
@@ -16,13 +19,15 @@ namespace laser {
 	 *
 	 * This class manages drawing of LaserObject to the laser.
 	 */
-	class LaserPainter
+	class EXPORT_LASER_CONTROL Painter
 	{
-		typedef std::pair<int, LaserObjectPtr> LaserObjectPtrPair;
-		typedef std::map<int, LaserObjectPtr> LaserObjectPtrMap;
+		typedef std::pair<int, ObjectPtr> ObjectPtrPair;
+		typedef std::map<int, ObjectPtr> ObjectPtrMap;
 
 	public:
-		LaserPainter();
+		Painter(bool expireObjects = false);
+
+		//LaserPainter& operator=(const LaserPainter&) = delete;
 
 		/*!
 		 * \brief gets a new EtherdreamWrapper
@@ -33,20 +38,29 @@ namespace laser {
 		 * destroyed. This hasn't been tested yet, though.
 		 */
 		void aquireEtherdreamWrapper();
+
+        /*!
+         * \brief calibrates the LaserPainter to scale and anti-keystone the image
+         */
+        void calibrate();
+
 		/*!
 		 * \brief set a new EtherdreamWrapper
 		 *
 		 * This overrides the old #m_canvas.
 		 */
-		void paintOn(std::shared_ptr<EtherdreamWrapper> e);
+		void paintOn(const std::shared_ptr<EtherdreamWrapper> & e);
+
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
 		 */
-		void paint(LaserObjectPtrMap objects);
+		void paint(const ObjectPtrMap &objects);
+
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
-		void add(LaserObjectPtr object);
+		int add(const ObjectPtr & object);
+
 		/*!
 		 * \brief send a new array to #m_canvas
 		 *
@@ -57,28 +71,48 @@ namespace laser {
 		 * connected with ugly lines.
 		 */
 		void updatePoints();
+
 		/*!
 		 * \brief deletes an object from #m_objects with ID \a id
 		 */
 		void deleteObject(int id);
+
 		/*!
 		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
 		 */
-		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
+        void drawWall(int id, Point p1, Point p2);
 
-	private:
+		void drawDoor(int id, Point p1, Point p2);
+
+		void drawTable(int id, Point p1, Point p2, Point p3, Point p4);
+
+		void drawPlayer(int id, Point p1);
+
+		void drawButton(int id, Point p);
+
+	protected:
+		std::shared_ptr<std::thread> m_updateLoop;
+		void updateLoop();
+
+		std::mutex m_updateMutex;
+
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on
 		 */
 		std::shared_ptr<EtherdreamWrapper> m_canvas;
+
 		/*!
 		 * \brief multiple LaserObjects that are uniquely idetified by an id
 		 */
-		LaserObjectPtrMap m_objects;
+		ObjectPtrMap m_objects;
+
 		/*!
 		 * \brief the smallest number that is free no matter what
 		 */
 		int m_smallestFreeId;
+        bool m_expireObjects;
+
+		cv::Mat m_calibration;
 	};
 }
 

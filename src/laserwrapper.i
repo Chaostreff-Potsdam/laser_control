@@ -1,6 +1,6 @@
 %module laserwrappercs
 %{
-#include "LaserPainter.h"
+#include "Painter.h"
 #include "laser_utilities.h"
 %}
 
@@ -19,14 +19,14 @@ namespace laser
 		void setY(int y);
 	};
 
-	class LaserPainter
+	class Painter
 	{
 	public:
-		LaserPainter();
+		Painter();
 
 		void aquireEtherdreamWrapper();
 		void updatePoints();
 		void deleteObject(int id);
-		void drawWall(int id, Point p1, Point p2, Point p3, Point p4);
+		void drawWall(int id, Point p1, Point p2);
 	};
 }
