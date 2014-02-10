@@ -37,8 +37,13 @@ laser::EtherdreamPoints laser::Circle::points() const
 
 		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
 		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
+		
+		bool pointVisible = true;
+		if(p.x == INT16_MIN || p.x == INT16_MAX || p.y == INT16_MIN || p.y == INT16_MAX) 
+			pointVisible = false;
+
 		p.r = 0;
-		p.g = UINT16_MAX;
+		p.g = pointVisible ? UINT16_MAX : 0;
 		p.b = 0;
 		ps.push_back(p);
 	}
