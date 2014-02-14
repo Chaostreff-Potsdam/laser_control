@@ -28,7 +28,7 @@ int main(void)
 	p.calibrate();
 #endif
 
-	//p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
+	p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
 	//p.drawButton(2, Point(0, 0));
 

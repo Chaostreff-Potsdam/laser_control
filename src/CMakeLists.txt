@@ -57,7 +57,7 @@ set(MYSOURCES
 
 # Making stand-alone C++ Library
 add_library(laserwrapper SHARED
-			${MYSOURCES})
+	${MYSOURCES})
 
 # Making test application
 add_executable(laser_wrapper_test
@@ -114,3 +114,7 @@ TARGET_LINK_LIBRARIES(laserwrapper
 					${THREAD_LIBRARY}
 					${Boost_LIBRARIES}
 					${OpenCV_LIBS})
+
+if(WIN32)
+	SET_TARGET_PROPERTIES(laserwrapper PROPERTIES DEBUG_POSTFIX "d")
+endif(WIN32)
