@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include <iostream>
 
 #include "dac.h"
 
@@ -60,6 +61,8 @@ int dac_open_connection(dac_t *d) {
 	// Connect to the DAC
 	if (dac_connect(d, host, "7765") < 0) {
 		trace(d, "!! DAC connection failed.\n");
+		std::cout << "[laser_control]: !! DAC connection failed.\n";
+		std::cout.flush();
 		return -1;
 	}
 
@@ -70,6 +73,8 @@ int dac_open_connection(dac_t *d) {
 	d->workerthread = (HANDLE)_beginthreadex(NULL, 0, &LoopUpdate, d, 0, NULL);
 	if (!d->workerthread) {
 		trace(d, "!! Begin thread error: %s\n", strerror(errno));
+		std::cout << "[laser_control]: !! Begin thread error:" << strerror(errno) << "\n";
+		std::cout.flush();
 		return -1;
 	}
 
@@ -88,6 +93,8 @@ void dac_close_connection(dac_t *d) {
 	int rv = WaitForSingleObject(d->workerthread, 250);
 	if (rv != WAIT_OBJECT_0) {
 		trace(d, "Exit worker thread timed out.\n");
+		std::cout << "[laser_control]: Exit worker thread timed out.\n";
+		std::cout.flush();
 		TerminateThread(d->workerthread,-1);
 	}
 	CloseHandle(d->workerthread);
@@ -221,6 +228,8 @@ unsigned __stdcall LoopUpdate(void *dv){
 		trace(d, "Timer set to 1ms\n");
 	} else {
 		trace(d, "Timer error\n");
+		std::cout << "[laser_control]: Timer error\n";
+		std::cout.flush();
 	}
 #endif
 
@@ -239,6 +248,8 @@ unsigned __stdcall LoopUpdate(void *dv){
 			if (res != WAIT_OBJECT_0) {
 				trace(d, "!! WFSO failed: %lu\n",
 					GetLastError());
+				std::cout << "[laser_control]: !! WFSO failed: " << GetLastError() << "\n";
+				std::cout.flush();
 				d->state = ST_BROKEN;
 #ifdef CHANGE_TIMER
 				timeEndPeriod(1);

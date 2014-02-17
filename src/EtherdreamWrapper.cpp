@@ -46,7 +46,8 @@ void laser::EtherdreamWrapper::connect()
 		m_cardNum = -1;
 		// connectToEtherdream
 		if(0==EtherDreamGetCardNum()) { //it is actually card count. We use always the first laser :-)
-			std::cout << "No Etherdream found :(\n";
+			std::cout << "[laser_control]: No Etherdream found :(\n";
+			std::cout.flush();
 			if (m_cardNum != -1) {
 				EtherDreamStop(&m_cardNum);
 				EtherDreamCloseDevice(&m_cardNum);
