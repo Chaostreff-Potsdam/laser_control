@@ -13,6 +13,7 @@
 #include <mutex>
 #include <iostream>
 #include <algorithm>
+#include <vector>
 
 #include <boost/date_time.hpp>
 
@@ -101,18 +102,18 @@ void laser::Painter::updatePoints()
 			}
 		}
 	}
-
+	
 	for (ObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
 		appendToVector(ps, (it->second)->startPoints());
 		appendToVector(ps, (it->second)->points());
 		appendToVector(ps, (it->second)->endPoints());
 	}
-
+	
 	if(!m_calibration.empty()) {
 		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
 	}
-
+	
 	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
 }
@@ -182,6 +183,10 @@ void laser::Painter::drawButton(int id, Point p)
 
 	updatePoints();
 
+}
+
+void laser::Painter::setCalibration(cv::Mat homography) {
+	m_calibration = homography;
 }
 
 void laser::Painter::updateLoop()

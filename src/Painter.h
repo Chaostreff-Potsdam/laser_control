@@ -90,6 +90,8 @@ namespace laser {
 
 		void drawButton(int id, Point p);
 
+		void setCalibration(cv::Mat homography);
+
 	protected:
 		std::shared_ptr<std::thread> m_updateLoop;
 		void updateLoop();

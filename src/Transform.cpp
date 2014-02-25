@@ -1,4 +1,5 @@
 #include "Transform.h"
+#include "laser_utilities.h"
 
 #include <iostream>
 
@@ -16,6 +17,14 @@ static void opaqueApply(EtherdreamPoints & points, TransformPoints & aux_in, Tra
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{
+		aux_out[i].x = clamp(aux_out[i].x, INT16_MIN, INT16_MAX);
+		aux_out[i].y = clamp(aux_out[i].y, INT16_MIN, INT16_MAX);
+		if(aux_out[i].x == INT16_MAX || aux_out[i].x == INT16_MIN || aux_out[i].y == INT16_MAX || aux_out[i].y == INT16_MIN) {
+			points[i].r = 0;
+			points[i].g = 0;
+			points[i].b = 0;
+		}
+
 		points[i].x = (int16_t) aux_out[i].x;
 		points[i].y = (int16_t) aux_out[i].y;
 	}
