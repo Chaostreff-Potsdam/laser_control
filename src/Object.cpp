@@ -1,18 +1,61 @@
 #include "Object.h"
 #include "Transform.h"
 
-#include "boost/date_time.hpp"
+#include <boost/date_time.hpp>
 
 #include <opencv2/imgproc/imgproc.hpp>
+#include <assert.h>
 
-laser::Object::Object()
-:	m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
-	m_dirty(false)
+laser::Object::Object(const ObjectPtr & parent)
+	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
+	  m_dirty(true),
+	  m_parent(parent)
 {
 	resetTransform();
 }
 
-boost::posix_time::ptime laser::Object::started()
+/**** Scene-graph ****/
+
+laser::ObjectPtr laser::Object::parent() const
+{
+	return m_parent.lock();
+}
+
+void laser::Object::setParent(const ObjectPtr &newParent)
+{
+	if (ObjectPtr oldParent = parent()) {
+		oldParent->removeChild(self());
+	}
+	m_parent = newParent;
+}
+
+void laser::Object::add(const ObjectPtr & object)
+{
+	object->setParent(self());
+	m_children.emplace_back(object);
+}
+
+void laser::Object::add(const std::vector<ObjectPtr> &objects)
+{
+	for (ObjectPtr obj: objects)
+		add(obj);
+}
+
+void laser::Object::removeChild(const ObjectPtr &object)
+{
+	std::remove(m_children.begin(), m_children.end(), object);
+}
+
+laser::ObjectPtr laser::Object::self()
+{
+#warning "Object::self not implemented!!!!"
+#warning "Thus Object:add and Object::setParent are unsafe now."
+	return ObjectPtr();
+}
+
+/**** Other ****/
+
+boost::posix_time::ptime laser::Object::started() const
 {
 	return m_started;
 }
@@ -22,34 +65,39 @@ void laser::Object::setPermanent(bool permanent)
 	m_permanent = permanent;
 }
 
-bool laser::Object::permanent()
+bool laser::Object::permanent() const
 {
 	return m_permanent;
 }
 
 void laser::Object::update()
 {
-	// TODO: notify parent, that we've updated
-	m_points = points();
-	m_startPoints = startPoints();
-	m_endPoints = endPoints();
+	m_untransformedPoints.clear();
+
+	appendToVector(m_untransformedPoints, startPoints());
+	appendToVector(m_untransformedPoints, points());
+	appendToVector(m_untransformedPoints, endPoints());
+
 	m_dirty = false;
+	for (const ObjectPtr & child: m_children) {
+		appendToVector(m_untransformedPoints, child->pointsToPaint());
+	}
+
+	if (ObjectPtr myParent = parent())
+		myParent->update();
 }
 
 laser::EtherdreamPoints laser::Object::pointsToPaint() const
 {
+	/*if (m_dirty)
+		update();*/
+
 	// TODO: append directly to vector
 	//       transform already before accessing that function.
-	EtherdreamPoints ps;
-
-	appendToVector(ps, m_startPoints);
-	appendToVector(ps, m_points);
-	appendToVector(ps, m_endPoints);
-
+	EtherdreamPoints ps = m_untransformedPoints;
 	Transform::applyInPlace(ps, cv::transform, m_transform(cv::Rect(0, 0, 3, 2)));
 	return ps;
 }
-
 
 /**** Transform ***/
 

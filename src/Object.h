@@ -4,13 +4,15 @@
 #include "EtherdreamWrapper.h"
 #include "DllExport.h"
 
-#include <memory>
 
-#include "boost/date_time/posix_time/posix_time_types.hpp"
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 #include "laser_utilities.h"
+#include <memory>
 
 namespace laser {
 
+	class Object;
+	typedef std::shared_ptr<Object> ObjectPtr;
 
 	/*!
 	 * \brief an abstract object to be painted
@@ -18,17 +20,25 @@ namespace laser {
 	class EXPORT_LASER_CONTROL Object
 	{
 	public:
-		Object();
+		Object(const ObjectPtr & parent = ObjectPtr());
+
+		ObjectPtr parent() const;
+		void setParent(const ObjectPtr & newParent);
+
+		void add(const ObjectPtr & object);
+		void add(const std::vector<ObjectPtr> & objects);
+
+		void removeChild(const ObjectPtr & object);
 
 		/*!
 		 * \brief update the point cache, so you'll not need to acces points() etc.
 		 */
 		void update(); // FIXME: Rename
 
-		boost::posix_time::ptime started();
+		boost::posix_time::ptime started() const;
 
 		void setPermanent(bool permanent);
-		bool permanent();
+		bool permanent() const;
 
 		/*** Transforms ***/
 		/*!
@@ -54,6 +64,8 @@ namespace laser {
 		boost::posix_time::ptime m_started;
 		bool m_permanent;
 
+		ObjectPtr self();
+
 		/*!
 		 * \brief calculate the points to be drawn with the laser projector
 		 */
@@ -68,13 +80,14 @@ namespace laser {
 		virtual EtherdreamPoints endPoints() const = 0;
 
 	private:
-		bool m_dirty; // TODO: Do we need that?
-		EtherdreamPoints m_points, m_startPoints, m_endPoints;
+		bool m_dirty;
+		EtherdreamPoints m_untransformedPoints;
 
 		cv::Mat m_transform;
+		std::weak_ptr<Object> m_parent;
+		std::vector<ObjectPtr> m_children;
 	};
 
-	typedef std::shared_ptr<Object> ObjectPtr;
 }
 
 #endif // LASEROBJECT_H

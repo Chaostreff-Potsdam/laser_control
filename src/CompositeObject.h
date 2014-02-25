@@ -11,17 +11,11 @@ namespace laser {
 	class CompositeObject : public Object
 	{
 	public:		
-		CompositeObject(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
-
-		void add(const ObjectPtr & object);
-		void add(const std::vector<ObjectPtr> & objects);
+		CompositeObject(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>(), const ObjectPtr & parent = ObjectPtr());
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
-
-	protected:
-		std::vector<ObjectPtr> m_objects;
 	};
 }
 

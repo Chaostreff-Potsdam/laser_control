@@ -16,8 +16,6 @@
 
 #include <boost/date_time.hpp>
 
-
-
 laser::Painter::Painter(bool expireObjects)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects)
