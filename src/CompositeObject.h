@@ -2,7 +2,6 @@
 #define LASERCOMPOSITEOBJECT_H
 
 #include "Object.h"
-#include "laser_utilities.h"
 
 namespace laser {
 
@@ -21,20 +20,8 @@ namespace laser {
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
 
-		void rotate(double rad);
-		void rotate(double rad, int centerX, int centerY, double scale = 1);
-		void rotate(double rad, const Point & center, double scale = 1)
-		{ rotate(rad, center.x(), center.y(), scale); }
-
-		void move(int x, int y);
-		void scale(double factorX, double factorY);
-		void scale(double factor);
-
-		void resetTransform();
-
 	protected:
 		std::vector<ObjectPtr> m_objects;
-		cv::Mat m_transform;
 	};
 }
 

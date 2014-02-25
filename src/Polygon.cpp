@@ -69,24 +69,3 @@ laser::EtherdreamPoints laser::Polygon::endPoints() const
 {
 	return Line(m_corners.back(), m_corners.front()).endPoints();
 }
-
-void laser::Polygon::rotate(double rad)
-{
-	for (auto it = m_corners.begin(); it < m_corners.end(); it++)
-	{
-		int oldX = it->x();
-		int oldY = it->y();
-
-		it->setX(round(cos(rad) * oldX - sin(rad) * oldY));
-		it->setY(round(sin(rad) * oldX + cos(rad) * oldY));
-	}
-}
-
-void laser::Polygon::move(int x, int y)
-{
-	for (auto it = m_corners.begin(); it < m_corners.end(); it++)
-	{
-		it->setX(it->x() + x);
-		it->setY(it->y() + y);
-	}
-}

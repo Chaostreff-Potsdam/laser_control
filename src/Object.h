@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "boost/date_time/posix_time/posix_time_types.hpp"
+#include "laser_utilities.h"
 
 namespace laser {
 
@@ -20,6 +21,40 @@ namespace laser {
 		Object();
 
 		/*!
+		 * \brief update the point cache, so you'll not need to acces points() etc.
+		 */
+		void update(); // FIXME: Rename
+
+		boost::posix_time::ptime started();
+
+		void setPermanent(bool permanent);
+		bool permanent();
+
+		/*** Transforms ***/
+		/*!
+		 * \brief rotate this object by \f$\frac{180\cdot rad}{\pi}\f$ degrees
+		 */
+		void rotate(double rad);
+		void rotate(double rad, int centerX, int centerY, double scale = 1);
+		void rotate(double rad, const Point & center, double scale = 1)
+		{ rotate(rad, center.x(), center.y(), scale); }
+
+		/*!
+		 * \brief move this object by x and y
+		 */
+		void move(int x, int y);
+		void scale(double factorX, double factorY);
+		void scale(double factor);
+
+		void resetTransform();
+
+		EtherdreamPoints pointsToPaint() const;
+
+	protected:
+		boost::posix_time::ptime m_started;
+		bool m_permanent;
+
+		/*!
 		 * \brief calculate the points to be drawn with the laser projector
 		 */
 		virtual EtherdreamPoints points() const = 0;
@@ -31,23 +66,12 @@ namespace laser {
 		 * \brief just like startPoints() for the end
 		 */
 		virtual EtherdreamPoints endPoints() const = 0;
-		/*!
-		 * \brief rotate this object by \f$\frac{180\cdot rad}{\pi}\f$ degrees
-		 */
-		virtual void rotate(double rad) = 0;
-		/*!
-		 * \brief move this object by x and y
-		 */
-		virtual void move(int x, int y) = 0;
 
-		boost::posix_time::ptime started();
+	private:
+		bool m_dirty; // TODO: Do we need that?
+		EtherdreamPoints m_points, m_startPoints, m_endPoints;
 
-		void setPermanent(bool permanent);
-		bool permanent();
-
-	protected:
-		boost::posix_time::ptime m_started;
-		bool m_permanent;
+		cv::Mat m_transform;
 	};
 
 	typedef std::shared_ptr<Object> ObjectPtr;

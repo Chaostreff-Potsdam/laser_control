@@ -106,26 +106,3 @@ laser::EtherdreamPoints laser::Line::endPoints() const
 
 	return ps;
 }
-
-void laser::Line::rotate(double rad)
-{
-	int oldXa = m_a.x();
-	int oldYa = m_a.y();
-	int oldXb = m_b.x();
-	int oldYb = m_b.y();
-
-	m_a.setX(round(oldXa * cos(rad) - oldYa * sin(rad)));
-	m_a.setY(round(oldXa * sin(rad) + oldYa * cos(rad)));
-
-	m_b.setX(round(oldXb * cos(rad) - oldYb * sin(rad)));
-	m_b.setY(round(oldXb * sin(rad) + oldYb * cos(rad)));
-}
-
-void laser::Line::move(int x, int y)
-{
-	m_a.setX(m_a.x() + x);
-	m_a.setY(m_a.y() + y);
-
-	m_b.setX(m_b.x() + x);
-	m_b.setY(m_b.y() + y);
-}

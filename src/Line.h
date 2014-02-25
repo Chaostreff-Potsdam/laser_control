@@ -14,8 +14,6 @@ namespace laser {
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
-		void rotate(double rad);
-		void move(int x, int y);
 
 	private:
 		Point m_a;

@@ -104,9 +104,7 @@ void laser::Painter::updatePoints()
 
 	for (ObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
 	{
-		appendToVector(ps, (it->second)->startPoints());
-		appendToVector(ps, (it->second)->points());
-		appendToVector(ps, (it->second)->endPoints());
+		appendToVector(ps, (it->second)->pointsToPaint());
 	}
 
 	if(!m_calibration.empty()) {
