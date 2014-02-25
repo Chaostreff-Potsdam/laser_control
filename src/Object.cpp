@@ -1,76 +1,35 @@
 #include "Object.h"
 #include "Transform.h"
+#include "CompositeObject.h"
 
 #include <boost/date_time.hpp>
 
 #include <opencv2/imgproc/imgproc.hpp>
 #include <assert.h>
 
-laser::Object::Object(const ObjectPtr & parent)
+laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
-	  m_dirty(true),
-	  m_parent(parent)
+	  m_dirty(true)
 {
 	resetTransform();
 }
 
-/**** Scene-graph ****/
+/**** For scene graph structure with CompositeObject ****/
 
-laser::ObjectPtr laser::Object::parent() const
+laser::Object::parent_t laser::Object::parent() const
 {
 	return m_parent.lock();
 }
 
-void laser::Object::setParent(const ObjectPtr &newParent)
+void laser::Object::setParent(const parent_t & newParent)
 {
-	if (ObjectPtr oldParent = parent()) {
-		oldParent->removeChild(self());
+	if (parent_t oldParent = parent()) {
+		oldParent->removeChild(this);
 	}
 	m_parent = newParent;
 }
 
-void laser::Object::add(const ObjectPtr & object)
-{
-	object->setParent(self());
-	m_children.emplace_back(object);
-}
-
-void laser::Object::add(const std::vector<ObjectPtr> &objects)
-{
-	for (ObjectPtr obj: objects)
-		add(obj);
-}
-
-void laser::Object::removeChild(const ObjectPtr &object)
-{
-	std::remove(m_children.begin(), m_children.end(), object);
-}
-
-laser::ObjectPtr laser::Object::self()
-{
-#warning "Object::self not implemented!!!!"
-#warning "Thus Object:add and Object::setParent are unsafe now."
-	return ObjectPtr();
-}
-
-/**** Other ****/
-
-boost::posix_time::ptime laser::Object::started() const
-{
-	return m_started;
-}
-
-void laser::Object::setPermanent(bool permanent)
-{
-	m_permanent = permanent;
-}
-
-bool laser::Object::permanent() const
-{
-	return m_permanent;
-}
-
-void laser::Object::update()
+void laser::Object::rebuildCache()
 {
 	m_untransformedPoints.clear();
 
@@ -78,19 +37,18 @@ void laser::Object::update()
 	appendToVector(m_untransformedPoints, points());
 	appendToVector(m_untransformedPoints, endPoints());
 
+	// Now I'm rebuild and I prevent my parent from calling
+	// this function
 	m_dirty = false;
-	for (const ObjectPtr & child: m_children) {
-		appendToVector(m_untransformedPoints, child->pointsToPaint());
+	if (parent_t myParent = parent()) {
+		myParent->rebuildCache();
 	}
-
-	if (ObjectPtr myParent = parent())
-		myParent->update();
 }
 
-laser::EtherdreamPoints laser::Object::pointsToPaint() const
+laser::EtherdreamPoints laser::Object::pointsToPaint()
 {
-	/*if (m_dirty)
-		update();*/
+	if (m_dirty)
+		rebuildCache();
 
 	// TODO: append directly to vector
 	//       transform already before accessing that function.
@@ -139,4 +97,21 @@ void laser::Object::scale(double factor)
 void laser::Object::resetTransform()
 {
 	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
+}
+
+/**** Other ****/
+
+boost::posix_time::ptime laser::Object::started() const
+{
+	return m_started;
+}
+
+void laser::Object::setPermanent(bool permanent)
+{
+	m_permanent = permanent;
+}
+
+bool laser::Object::permanent() const
+{
+	return m_permanent;
 }

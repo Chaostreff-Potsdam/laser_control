@@ -77,7 +77,6 @@ void laser::Painter::updatePoints()
 
 		ObjectPtrMap::iterator iter = m_objects.begin();
 		ObjectPtrMap::iterator end = m_objects.end();
-
 		while(iter != end)
 		{
 
@@ -131,7 +130,7 @@ void laser::Painter::drawWall(int id, Point p1, Point p2)
 
 void laser::Painter::drawDoor(int id, Point p1, Point p2)
 {
-	CompositeObjectPtr circle(new CompositeObject());
+	CompositeObjectPtr circle = CompositeObject::construct();
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
 	float rad = atan2(p2.y() - p1.y(), p2.x() - p1.y());
 	Point middle = p1;
@@ -161,7 +160,7 @@ void laser::Painter::drawPlayer(int id, laser::Point p1)
 
 void laser::Painter::drawButton(int id, Point p)
 {
-	CompositeObjectPtr group(new CompositeObject());
+	CompositeObjectPtr group = CompositeObject::construct();
 
 	std::vector<Point> ps;
 

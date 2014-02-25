@@ -14,31 +14,23 @@ namespace laser {
 	class Object;
 	typedef std::shared_ptr<Object> ObjectPtr;
 
+	class CompositeObject;
+	typedef std::shared_ptr<CompositeObject> CompositeObjectPtr;
+
 	/*!
 	 * \brief an abstract object to be painted
 	 */
 	class EXPORT_LASER_CONTROL Object
 	{
 	public:
-		Object(const ObjectPtr & parent = ObjectPtr());
+		typedef CompositeObjectPtr parent_t;
 
-		ObjectPtr parent() const;
-		void setParent(const ObjectPtr & newParent);
+		Object();
 
-		void add(const ObjectPtr & object);
-		void add(const std::vector<ObjectPtr> & objects);
+		parent_t parent() const;
+		void setParent(const parent_t & newParent);
 
-		void removeChild(const ObjectPtr & object);
-
-		/*!
-		 * \brief update the point cache, so you'll not need to acces points() etc.
-		 */
-		void update(); // FIXME: Rename
-
-		boost::posix_time::ptime started() const;
-
-		void setPermanent(bool permanent);
-		bool permanent() const;
+		EtherdreamPoints pointsToPaint();
 
 		/*** Transforms ***/
 		/*!
@@ -58,13 +50,19 @@ namespace laser {
 
 		void resetTransform();
 
-		EtherdreamPoints pointsToPaint() const;
+		/*** Timeout ***/
+
+		boost::posix_time::ptime started() const;
+
+		void setPermanent(bool permanent);
+		bool permanent() const;
 
 	protected:
 		boost::posix_time::ptime m_started;
 		bool m_permanent;
 
-		ObjectPtr self();
+		void nowDirty()
+		{ m_dirty = true; }
 
 		/*!
 		 * \brief calculate the points to be drawn with the laser projector
@@ -84,8 +82,12 @@ namespace laser {
 		EtherdreamPoints m_untransformedPoints;
 
 		cv::Mat m_transform;
-		std::weak_ptr<Object> m_parent;
-		std::vector<ObjectPtr> m_children;
+		std::weak_ptr<CompositeObject> m_parent;
+
+		/*!
+		 * \brief update the point cache, so you'll not need to acces points() etc.
+		 */
+		void rebuildCache();
 	};
 
 }
