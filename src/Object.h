@@ -57,16 +57,6 @@ namespace laser {
 		void setPermanent(bool permanent);
 		bool permanent() const;
 
-	protected:
-		boost::posix_time::ptime m_started;
-		bool m_permanent;
-
-		/*!
-		 * \brief call this to trigger a repaint
-		 */
-		void nowDirty()
-		{ m_dirty = true; }
-
 		/*!
 		 * \brief calculate the points to be drawn with the laser projector
 		 */
@@ -79,6 +69,17 @@ namespace laser {
 		 * \brief just like startPoints() for the end
 		 */
 		virtual EtherdreamPoints endPoints() const = 0;
+
+
+	protected:
+		boost::posix_time::ptime m_started;
+		bool m_permanent;
+
+		/*!
+		 * \brief call this to trigger a repaint
+		 */
+		void nowDirty()
+		{ m_dirty = true; }
 
 	private:
 		bool m_dirty;

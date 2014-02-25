@@ -10,7 +10,7 @@ laser::Polygon::Polygon(bool sharp, bool dashed)
 	m_sharpCorners(sharp),
 	m_dashed(dashed)
 {
-
+	;;
 }
 
 laser::Polygon::Polygon(const std::vector<laser::Point> & points, bool sharp, bool dashed)
@@ -25,37 +25,33 @@ laser::EtherdreamPoints laser::Polygon::points() const
 {
 	EtherdreamPoints ps;
 
-	// TODO refine this
+	auto append = [&ps](const EtherdreamPoints & points) {
+		appendToVector(ps, points);
+	};
+
+	auto appendIfSharp = [&ps, this](const EtherdreamPoints & points) {
+		if (m_sharpCorners)
+			appendToVector(ps, points);
+	};
 
 	std::vector<Point>::const_iterator start = m_corners.begin();
 	std::vector<Point>::const_iterator end = m_corners.end();
 
 	Line startLine = Line(*start, *(start + 1), true, m_dashed);
-	EtherdreamPoints points = startLine.points();
-	EtherdreamPoints endPoints = startLine.endPoints();
-	ps.insert(ps.end(), points.begin(), points.end());
-	if (m_sharpCorners)
-		ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+	append       (startLine.points());
+	appendIfSharp(startLine.endPoints());
 
 	for (auto it = start + 1; it < end - 1; it++)
 	{
 		Line con = Line(*it, *(it + 1), true, m_dashed);
-		points = con.points();
-		endPoints = con.endPoints();
-		EtherdreamPoints startPoints = con.startPoints();
-		if (m_sharpCorners)
-			ps.insert(ps.end(), startPoints.begin(), startPoints.end());
-		ps.insert(ps.end(), points.begin(), points.end());
-		if (m_sharpCorners)
-			ps.insert(ps.end(), endPoints.begin(), endPoints.end());
+		appendIfSharp(con.startPoints());
+		append       (con.points());
+		appendIfSharp(con.endPoints());
 	}
 
-	Line top = Line(*(end - 1), *start, true, m_dashed);
-	points = top.points();
-	EtherdreamPoints startPoints = top.startPoints();
-	if (m_sharpCorners)
-		ps.insert(ps.end(), startPoints.begin(), startPoints.end());
-	ps.insert(ps.end(), points.begin(), points.end());
+	Line endLine = Line(*(end - 1), *start, true, m_dashed);
+	appendIfSharp(endLine.startPoints());
+	append       (endLine.points());
 
 	return ps;
 }

@@ -11,7 +11,6 @@ namespace laser {
 		Line(int xa, int ya, int xb, int yb, bool visible = true, bool dashed = false);
 		Line(Point a, Point b, bool visible = true, bool dashed = false);
 
-	protected:
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;

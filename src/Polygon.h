@@ -14,7 +14,6 @@ namespace laser {
 		Polygon(bool sharp = true, bool dashed = false);
 		Polygon(const std::vector<Point> & points, bool sharp = true, bool dashed = false);
 
-	protected:
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
