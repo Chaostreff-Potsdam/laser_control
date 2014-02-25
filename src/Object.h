@@ -61,6 +61,9 @@ namespace laser {
 		boost::posix_time::ptime m_started;
 		bool m_permanent;
 
+		/*!
+		 * \brief call this to trigger a repaint
+		 */
 		void nowDirty()
 		{ m_dirty = true; }
 

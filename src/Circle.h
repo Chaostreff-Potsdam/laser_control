@@ -12,6 +12,7 @@ namespace laser {
 		Circle(int x, int y, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 		Circle(Point p, int radius, float startRatio = 0, float endRatio = 2*M_PI);
 
+	protected:
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
