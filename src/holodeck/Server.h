@@ -1,13 +1,13 @@
 #ifndef LASERSERVER_H
 #define LASERSERVER_H
 
-#include "Painter.h"
+#include "../Painter.h"
 
 #include <boost/asio.hpp>
 #include <mutex>
 #include <memory>
 
-namespace laser {
+namespace laser { namespace holodeck {
 
 	class EXPORT_LASER_CONTROL Server
 	{
@@ -54,5 +54,6 @@ namespace laser {
 		unsigned char m_buf[2048];
 	};
 
-}
+}} // namespace laser::holodeck
+
 #endif // LASERSERVER_H

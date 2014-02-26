@@ -5,7 +5,7 @@
 #include "Circle.h"
 #include "Line.h"
 #include "CompositeObject.h"
-#include "Server.h"
+#include "holodeck/Server.h"
 #include "laser_calibration/Calibration.h"
 
 #include <chrono>
@@ -30,7 +30,6 @@ int main(void)
 
 	// p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
-
 	CompositeObjectPtr group = CompositeObject::construct();
 	ObjectPtr outerRect = std::make_shared<Rectangle>(-10000, -10000, 20000, 20000);
 	group->add(outerRect);
@@ -44,7 +43,7 @@ int main(void)
 		std::this_thread::sleep_for(std::chrono::milliseconds(30));
 	}
 
-	Server s(p);
+	holodeck::Server s(p);
 
 
 	s.poll();

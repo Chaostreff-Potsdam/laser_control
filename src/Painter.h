@@ -63,6 +63,11 @@ namespace laser {
 		int add(const ObjectPtr & object);
 
 		/*!
+		 * \brief adds \a object to #m_object under \a id and calls updatePoints()
+		 */
+		int add(int id, const ObjectPtr & object);
+
+		/*!
 		 * \brief send a new array to #m_canvas
 		 *
 		 * This constructs a new array out of #m_objects. This takes
@@ -82,19 +87,6 @@ namespace laser {
 		 * \brief Clear the whole scene
 		 */
 		void deleteAll();
-
-		/*!
-		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
-		 */
-		ObjectPtr drawWall(int id, Point p1, Point p2);
-
-		ObjectPtr drawDoor(int id, Point p1, Point p2);
-
-		ObjectPtr drawTable(int id, Point p1, Point p2, Point p3, Point p4);
-
-		ObjectPtr drawPlayer(int id, Point p1);
-
-		ObjectPtr drawButton(int id, Point p);
 
 	protected:
 		std::thread m_updateLoop;
