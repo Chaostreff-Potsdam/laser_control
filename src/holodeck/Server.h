@@ -30,6 +30,8 @@ namespace laser { namespace holodeck {
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
+		std::vector<Point> readPoints(int n);
+
 		void startAccept();
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();

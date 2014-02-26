@@ -90,6 +90,17 @@ void Server::handleRead()
 	startAccept();
 }
 
+std::vector<Point> Server::readPoints(int n)
+{
+	std::vector<Point> ps;
+
+	for (int i = 0; i < n; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+	return ps;
+}
+
 void Server::handleDelete()
 {
 	int id = parseToInt(m_buf, 1);
@@ -97,102 +108,64 @@ void Server::handleDelete()
 	std::cout << "delete " << id << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.deleteObject(id);
 }
 
 void Server::handleWall()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
 
 	std::cout << "build " << id << std::endl;
-
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 2; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::cout << "(" << ps[0].x() << "; " << ps[0].y() << ")" << std::endl;
 	std::cout << "(" << ps[1].x() << "; " << ps[1].y() << ")" << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.add(id, InstructionFactory::wall(ps[0], ps[1]));
 }
 
 void Server::handleTable()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(4));
 
 	std::cout << "build Table " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 4; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.add(id, InstructionFactory::table(ps[0], ps[1], ps[2], ps[3]));
 }
 
 void Server::handlePlayer()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
 
 	std::cout << "build Player " << id << std::endl;
-
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 1; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::cout << ps[0].x() << ", " << ps[0].y() << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.add(id, InstructionFactory::player(ps[0]));
 }
 
 void Server::handleButton()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
 
 	std::cout << "build Button " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 1; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.add(id, InstructionFactory::button(ps[0]));
 }
 
 void Server::handleDoor()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
 
 	std::cout << "build Door " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 2; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.add(id, InstructionFactory::door(ps[0], ps[1]));
 }
 
