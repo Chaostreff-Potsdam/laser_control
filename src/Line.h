@@ -2,7 +2,6 @@
 #define LASERLINE_H
 
 #include "Object.h"
-#include "laser_utilities.h"
 
 namespace laser {
 	class EXPORT_LASER_CONTROL Line : public Object

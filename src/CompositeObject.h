@@ -10,6 +10,8 @@ namespace laser {
 	public:		
 		static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
 
+		//!< Add this object and take overship
+		void add(Object *object);
 		void add(const ObjectPtr & object);
 		void add(const std::vector<ObjectPtr> & objects);
 

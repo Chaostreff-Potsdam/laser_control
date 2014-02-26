@@ -2,7 +2,6 @@
 #define LASERCIRCLE_H
 
 #include "Object.h"
-#include "laser_utilities.h"
 #include <cmath>
 
 namespace laser {

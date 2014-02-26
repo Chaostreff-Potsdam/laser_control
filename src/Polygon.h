@@ -11,7 +11,6 @@ namespace laser {
 	class EXPORT_LASER_CONTROL Polygon : public Object
 	{
 	public:
-		Polygon(bool sharp = true, bool dashed = false);
 		Polygon(const std::vector<Point> & points, bool sharp = true, bool dashed = false);
 
 		EtherdreamPoints points() const;
@@ -19,6 +18,8 @@ namespace laser {
 		EtherdreamPoints endPoints() const;
 
 	protected:
+		Polygon(bool sharp = true, bool dashed = false);
+
 		std::vector<Point> m_corners;
 		bool m_sharpCorners;
 		bool m_dashed;

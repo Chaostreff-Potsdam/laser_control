@@ -16,6 +16,11 @@ laser::CompositeObject::CompositeObject()
 	;;
 }
 
+void laser::CompositeObject::add(Object *object)
+{
+	add(ObjectPtr(object));
+}
+
 void laser::CompositeObject::add(const ObjectPtr & object)
 {
 	object->setParent(self.lock());
@@ -34,6 +39,7 @@ void laser::CompositeObject::removeChild(const ObjectPtr &object)
 	m_children.erase(
 		std::remove(m_children.begin(), m_children.end(), object),
 		m_children.end());
+	nowDirty();
 }
 
 void laser::CompositeObject::removeChild(const Object *object)
@@ -42,6 +48,7 @@ void laser::CompositeObject::removeChild(const Object *object)
 		std::remove_if(m_children.begin(), m_children.end(), [=](const ObjectPtr & cur) {
 			return cur.get() == object;
 		}),  m_children.end());
+	nowDirty();
 }
 
 laser::EtherdreamPoints laser::CompositeObject::points() const

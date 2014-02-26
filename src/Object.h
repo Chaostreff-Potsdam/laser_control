@@ -82,8 +82,8 @@ namespace laser {
 		{ m_dirty = true; }
 
 	private:
-		bool m_dirty;
-		EtherdreamPoints m_untransformedPoints;
+		bool m_dirty, m_isUpdating;
+		EtherdreamPoints m_cache;
 
 		cv::Mat m_transform;
 		std::weak_ptr<CompositeObject> m_parent;

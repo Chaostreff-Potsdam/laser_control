@@ -38,6 +38,8 @@ namespace laser {
 	class EtherdreamWrapper
 	{
 	public:
+		static const int pps;
+
 		/*!
 		 * \details On construction, this wrapper automatically connects to the
 		 * etherdream and starts to write.

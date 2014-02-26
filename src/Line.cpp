@@ -31,8 +31,6 @@ laser::Line::Line(Point a, Point b, bool visible, bool dashed)
 
 	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
 	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
-
-	//std::cout << m_pointCount << std::endl;
 }
 
 laser::EtherdreamPoints laser::Line::points() const

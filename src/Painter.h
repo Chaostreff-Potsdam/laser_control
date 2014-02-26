@@ -26,6 +26,7 @@ namespace laser {
 
 	public:
 		Painter(bool expireObjects = false);
+		~Painter();
 
 		//LaserPainter& operator=(const LaserPainter&) = delete;
 
@@ -78,20 +79,25 @@ namespace laser {
 		void deleteObject(int id);
 
 		/*!
+		 * \brief Clear the whole scene
+		 */
+		void deleteAll();
+
+		/*!
 		 * \brief draw a rectangle with ID \a id and corners \a p1 to \a p4
 		 */
-        void drawWall(int id, Point p1, Point p2);
+		ObjectPtr drawWall(int id, Point p1, Point p2);
 
-		void drawDoor(int id, Point p1, Point p2);
+		ObjectPtr drawDoor(int id, Point p1, Point p2);
 
-		void drawTable(int id, Point p1, Point p2, Point p3, Point p4);
+		ObjectPtr drawTable(int id, Point p1, Point p2, Point p3, Point p4);
 
-		void drawPlayer(int id, Point p1);
+		ObjectPtr drawPlayer(int id, Point p1);
 
-		void drawButton(int id, Point p);
+		ObjectPtr drawButton(int id, Point p);
 
 	protected:
-		std::shared_ptr<std::thread> m_updateLoop;
+		std::thread m_updateLoop;
 		void updateLoop();
 
 		std::mutex m_updateMutex;
@@ -113,6 +119,11 @@ namespace laser {
         bool m_expireObjects;
 
 		cv::Mat m_calibration;
+
+	private:
+		void removeExpiredObjects();
+		bool m_running;
+
 	};
 }
 

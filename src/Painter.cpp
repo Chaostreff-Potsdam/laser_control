@@ -11,19 +11,25 @@
 #include <memory>
 #include <cmath>
 #include <mutex>
-#include <iostream>
 #include <algorithm>
 
 #include <boost/date_time.hpp>
 
 laser::Painter::Painter(bool expireObjects)
 :	m_smallestFreeId(0),
-	m_expireObjects(expireObjects)
+	m_expireObjects(expireObjects),
+	m_running(true)
 {
 	if (expireObjects)
 	{
-		m_updateLoop = std::make_shared<std::thread>(&Painter::updateLoop, this);
+		m_updateLoop = std::thread(&Painter::updateLoop, this);
 	}
+}
+
+laser::Painter::~Painter()
+{
+	m_running = false;
+	m_updateLoop.join();
 }
 
 void laser::Painter::aquireEtherdreamWrapper()
@@ -62,49 +68,51 @@ int laser::Painter::add(const ObjectPtr & object)
 	return m_smallestFreeId-1;
 }
 
+void laser::Painter::removeExpiredObjects()
+{
+	boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
+
+	ObjectPtrMap::iterator iter = m_objects.begin();
+	ObjectPtrMap::iterator end = m_objects.end();
+	while(iter != end)
+	{
+
+		if ((iter->second)->permanent())
+		{
+			++iter;
+			continue;
+		}
+
+		boost::posix_time::time_duration lifetime = now - (iter->second)->started();
+
+		if (lifetime > boost::posix_time::seconds(10))
+		{
+				m_objects.erase(iter++);
+		}
+		else
+		{
+				++iter;
+		}
+	}
+}
+
 void laser::Painter::updatePoints()
 {
-	EtherdreamPoints ps;
-
-	std::lock_guard<std::mutex> lock(m_updateMutex);
-
 	if (m_objects.empty())
 		return;
 
-	if (m_expireObjects)
-	{
-		boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
+	EtherdreamPoints ps;
+	std::lock_guard<std::mutex> lock(m_updateMutex);
 
-		ObjectPtrMap::iterator iter = m_objects.begin();
-		ObjectPtrMap::iterator end = m_objects.end();
-		while(iter != end)
-		{
-
-			if ((iter->second)->permanent())
-			{
-				++iter;
-				continue;
-			}
-
-			boost::posix_time::time_duration lifetime = now - (iter->second)->started();
-
-			if (lifetime > boost::posix_time::seconds(10))
-			{
-					m_objects.erase(iter++);
-			}
-			else
-			{
-					++iter;
-			}
-		}
+	if (m_expireObjects) {
+		removeExpiredObjects();
 	}
 
-	for (ObjectPtrMap::iterator it = m_objects.begin(); it != m_objects.end(); it++)
-	{
-		appendToVector(ps, (it->second)->pointsToPaint());
+	for (auto objPair: m_objects) {
+		appendToVector(ps, objPair.second->pointsToPaint());
 	}
 
-	if(!m_calibration.empty()) {
+	if (!m_calibration.empty()) {
 		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
 	}
 
@@ -118,17 +126,23 @@ void laser::Painter::deleteObject(int id)
 	updatePoints();
 }
 
-void laser::Painter::drawWall(int id, Point p1, Point p2)
+void laser::Painter::deleteAll()
 {
-	std::cout << "Draw Wall" << std::endl;
+	m_objects.clear();
+	updatePoints();
+}
+
+laser::ObjectPtr laser::Painter::drawWall(int id, Point p1, Point p2)
+{
 	m_objects[id] = std::make_shared<Line>(p1, p2, true);
 	m_objects[id]->setPermanent(true);
 	updatePoints();
 
 	m_smallestFreeId = id + 1;
+	return m_objects[id];
 }
 
-void laser::Painter::drawDoor(int id, Point p1, Point p2)
+laser::ObjectPtr laser::Painter::drawDoor(int id, Point p1, Point p2)
 {
 	CompositeObjectPtr circle = CompositeObject::construct();
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
@@ -143,22 +157,25 @@ void laser::Painter::drawDoor(int id, Point p1, Point p2)
 	updatePoints();
 
 	m_smallestFreeId = id + 1;
+	return circle;
 }
 
-void laser::Painter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
+laser::ObjectPtr laser::Painter::drawTable(int id, laser::Point p1, laser::Point p2, laser::Point p3, laser::Point p4)
 {
 	m_objects[id] = std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 	updatePoints();
+	return m_objects[id];
 }
 
-void laser::Painter::drawPlayer(int id, laser::Point p1)
+laser::ObjectPtr laser::Painter::drawPlayer(int id, laser::Point p1)
 {
 	m_objects[id] = std::make_shared<Circle>(p1, 1000);
 	m_objects[id]->setPermanent(true);
 	updatePoints();
+	return m_objects[id];
 }
 
-void laser::Painter::drawButton(int id, Point p)
+laser::ObjectPtr laser::Painter::drawButton(int id, Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -176,13 +193,13 @@ void laser::Painter::drawButton(int id, Point p)
 	m_objects[id] = group;
 
 	updatePoints();
-
+	return m_objects[id];
 }
 
 void laser::Painter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
-	while (true)
+	while (m_running)
 	{
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		updatePoints();

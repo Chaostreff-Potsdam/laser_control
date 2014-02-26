@@ -8,7 +8,8 @@
 #include <assert.h>
 
 laser::Object::Object()
-	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time())
+	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
+	  m_isUpdating(false)
 {
 	resetTransform();
 }
@@ -30,11 +31,18 @@ void laser::Object::setParent(const parent_t & newParent)
 
 void laser::Object::rebuildCache()
 {
-	m_untransformedPoints.clear();
+	if (m_isUpdating)
+		return;
 
-	appendToVector(m_untransformedPoints, startPoints());
-	appendToVector(m_untransformedPoints, points());
-	appendToVector(m_untransformedPoints, endPoints());
+	m_isUpdating = true;
+
+	m_cache.clear();
+
+	appendToVector(m_cache, startPoints());
+	appendToVector(m_cache, points());
+	appendToVector(m_cache, endPoints());
+
+	Transform::applyInPlace(m_cache, cv::transform, m_transform(cv::Rect(0, 0, 3, 2)));
 
 	// Now I'm rebuild and I prevent my parent from calling
 	// this function
@@ -42,6 +50,7 @@ void laser::Object::rebuildCache()
 	if (parent_t myParent = parent()) {
 		myParent->rebuildCache();
 	}
+	m_isUpdating = false;
 }
 
 laser::EtherdreamPoints laser::Object::pointsToPaint()
@@ -49,11 +58,7 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 	if (m_dirty)
 		rebuildCache();
 
-	// TODO: append directly to vector
-	//       transform already before accessing that function.
-	EtherdreamPoints ps = m_untransformedPoints;
-	Transform::applyInPlace(ps, cv::transform, m_transform(cv::Rect(0, 0, 3, 2)));
-	return ps;
+	return m_cache;
 }
 
 /**** Transform ***/
