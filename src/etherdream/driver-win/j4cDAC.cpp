@@ -524,7 +524,7 @@ EXPORT bool __stdcall EzAudDacWriteFrameNR(const int *CardNum, const struct EAD_
 		int Bytes, uint16_t PPS, uint16_t Reps) {
 	dac_t *d = dac_get(*CardNum);
 	if (!d) return 0;
-	return do_write_frame(d, data, Bytes, PPS, Reps, EzAudDac_convert_data);
+	return do_write_frame(d, data, Bytes, PPS, Reps, false, EzAudDac_convert_data);
 }
 
 EXPORT bool __stdcall EzAudDacWriteFrame(const int *CardNum, const struct EAD_Pnt_s* data,
@@ -536,7 +536,7 @@ EXPORT bool __stdcall EasyLaseWriteFrameNR(const int *CardNum, const struct EL_P
 		int Bytes, uint16_t PPS, uint16_t Reps) {
 	dac_t *d = dac_get(*CardNum);
 	if (!d) return 0;
-	return do_write_frame(d, data, Bytes, PPS, Reps, EasyLase_convert_data);
+	return do_write_frame(d, data, Bytes, PPS, Reps, false, EasyLase_convert_data);
 }
 
 EXPORT bool __stdcall EasyLaseWriteFrame(const int *CardNum, const struct EL_Pnt_s* data,

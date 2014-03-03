@@ -55,10 +55,10 @@ void laser::Painter::paint(const ObjectPtrMap & objects)
 }
 
 int laser::Painter::add(const ObjectPtr & object)
-{
-	while (m_objects.find(m_smallestFreeId++) == m_objects.end())
+{	
+	while (m_objects.find(m_smallestFreeId++) != m_objects.end())
 		continue;
-
+	
 	m_objects[m_smallestFreeId] = object;
 	updatePoints();
 	return m_smallestFreeId;

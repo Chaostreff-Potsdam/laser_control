@@ -167,17 +167,21 @@ int dac_get_status(dac_t *d) {
  */
 
 int do_write_frame(dac_t *d, const void * data, int bytes, int pps,
-	int reps, int (*convert)(struct buffer_item *, const void *, int)) {
+	int reps, bool isSecondTryWritingFrame, int (*convert)(struct buffer_item *, const void *, int)) {
 
 	int points = convert(NULL, NULL, bytes);
 
 	if (reps == ((uint16_t) -1))
 		reps = -1;
 
-	/* If not ready for a new frame, bail */
+	/* If not ready for a new frame, <strike>bail</strike> try again. but only once. */
 	if (dac_get_status(d) != GET_STATUS_READY) {
-		trace(d, "M: NOT READY: %d points, %d reps\n", points, reps);
-		return 0;
+		if(isSecondTryWritingFrame) {
+			trace(d, "M: NOT READY: %d points, %d reps\n", points, reps);
+			return 0;
+		} else {
+			do_write_frame(d, data, bytes, pps, reps, true, convert);
+		}
 	}
 
 	/* Ignore 0-repeat frames */
