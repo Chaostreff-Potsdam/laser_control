@@ -1,13 +1,13 @@
 #ifndef LASERSERVER_H
 #define LASERSERVER_H
 
-#include "Painter.h"
+#include "../Painter.h"
 
 #include <boost/asio.hpp>
 #include <mutex>
 #include <memory>
 
-namespace laser {
+namespace laser { namespace holodeck {
 
 	class EXPORT_LASER_CONTROL Server
 	{
@@ -30,6 +30,8 @@ namespace laser {
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
+		std::vector<Point> readPoints(int n);
+
 		void startAccept();
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();
@@ -54,5 +56,6 @@ namespace laser {
 		unsigned char m_buf[2048];
 	};
 
-}
+}} // namespace laser::holodeck
+
 #endif // LASERSERVER_H

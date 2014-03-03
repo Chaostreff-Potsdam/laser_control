@@ -1,30 +1,64 @@
 #include "CompositeObject.h"
-#include "laser_utilities.h"
 
-#include "Transform.h"
 
-#include <opencv2/imgproc/imgproc.hpp>
-
-laser::CompositeObject::CompositeObject(const std::vector<ObjectPtr> & objects)
-	: Object(),
-	  m_objects(objects)
+laser::CompositeObjectPtr laser::CompositeObject::construct(const std::vector<ObjectPtr> &objects)
 {
-	resetTransform();
+	CompositeObjectPtr group(new CompositeObject());
+
+	group->self = group;
+	group->add(objects);
+	return group;
+}
+
+laser::CompositeObject::CompositeObject()
+	: Object()
+{
+	;;
+}
+
+void laser::CompositeObject::add(Object *object)
+{
+	add(ObjectPtr(object));
+}
+
+void laser::CompositeObject::add(const ObjectPtr & object)
+{
+	object->setParent(self.lock());
+	m_children.emplace_back(object);
+	nowDirty();
+}
+
+void laser::CompositeObject::add(const std::vector<ObjectPtr> &objects)
+{
+	for (ObjectPtr obj: objects)
+		add(obj);
+}
+
+void laser::CompositeObject::removeChild(const ObjectPtr &object)
+{
+	m_children.erase(
+		std::remove(m_children.begin(), m_children.end(), object),
+		m_children.end());
+	nowDirty();
+}
+
+void laser::CompositeObject::removeChild(const Object *object)
+{
+	m_children.erase(
+		std::remove_if(m_children.begin(), m_children.end(), [=](const ObjectPtr & cur) {
+			return cur.get() == object;
+		}),  m_children.end());
+	nowDirty();
 }
 
 laser::EtherdreamPoints laser::CompositeObject::points() const
 {
 	EtherdreamPoints ps;
 
-	for (const auto & obj : m_objects)
+	for (auto & child : m_children)
 	{
-		appendToVector(ps, obj->startPoints());
-		appendToVector(ps, obj->points());
-		appendToVector(ps, obj->endPoints());
+		appendToVector(ps, child->pointsToPaint());
 	}
-
-	Transform::applyInPlace(ps, cv::transform, m_transform(cv::Rect(0, 0, 3, 2)));
-
 	return ps;
 }
 
@@ -38,52 +72,3 @@ laser::EtherdreamPoints laser::CompositeObject::endPoints() const
 	return EtherdreamPoints();
 }
 
-void laser::CompositeObject::add(const ObjectPtr & object)
-{
-	m_objects.emplace_back(object);
-}
-
-void laser::CompositeObject::add(const std::vector<ObjectPtr> &objects)
-{
-	appendToVector(m_objects, objects);
-}
-
-void laser::CompositeObject::rotate(double rad)
-{
-	// Counter clockwise rotation about rad
-	double s = std::sin(rad);
-	double c = std::cos(rad);
-	double m[3][3] = {{c, -s, 0}, {s, c, 0}, {0, 0, 1}};
-	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
-}
-
-void laser::CompositeObject::rotate(double rad, int centerX, int centerY, double scale)
-{
-	// TODO: Look up right matrix
-	move(-centerX, -centerY);
-	rotate(rad);
-	move(centerX, centerY);
-	if (scale != 1) this->scale(scale);
-}
-
-void laser::CompositeObject::move(int x, int y)
-{
-	double m[3][3] = {{1, 0, (double) x}, {0, 1, (double) y}, {0, 0, 1}};
-	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
-}
-
-void laser::CompositeObject::scale(double factorX, double factorY)
-{
-	double m[3][3] = {{factorX, 0, 0}, {0, factorY, 0}, {0, 0, 1}};
-	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
-}
-
-void laser::CompositeObject::scale(double factor)
-{
-	scale(factor, factor);
-}
-
-void laser::CompositeObject::resetTransform()
-{
-	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
-}

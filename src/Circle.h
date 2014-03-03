@@ -2,7 +2,6 @@
 #define LASERCIRCLE_H
 
 #include "Object.h"
-#include "laser_utilities.h"
 #include <cmath>
 
 namespace laser {
@@ -15,8 +14,6 @@ namespace laser {
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
-		void rotate(double rad);
-		void move(int x, int y);
 
 	private:
 		Point m_p;

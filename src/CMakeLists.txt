@@ -42,8 +42,10 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/Line.h
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Server.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Server.h
+	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
+	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.h

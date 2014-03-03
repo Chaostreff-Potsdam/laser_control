@@ -98,16 +98,3 @@ laser::EtherdreamPoints laser::Circle::endPoints() const
 
 	return ps;
 }
-
-void laser::Circle::rotate(double rad)
-{
-	m_startRatio += rad;
-	m_endRatio += rad;
-}
-
-void laser::Circle::move(int x, int y)
-{
-	m_p.setX(m_p.x() + x);
-	m_p.setY(m_p.y() + y);
-}
-

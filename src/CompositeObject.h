@@ -2,39 +2,34 @@
 #define LASERCOMPOSITEOBJECT_H
 
 #include "Object.h"
-#include "laser_utilities.h"
 
 namespace laser {
 
-	class EXPORT_LASER_CONTROL CompositeObject;
-	typedef std::shared_ptr<CompositeObject> CompositeObjectPtr;
-
-	class CompositeObject : public Object
+	class EXPORT_LASER_CONTROL CompositeObject : public Object
 	{
 	public:		
-		CompositeObject(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
+		static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
 
+		//!< Add this object and take overship
+		void add(Object *object);
 		void add(const ObjectPtr & object);
 		void add(const std::vector<ObjectPtr> & objects);
+
+		void removeChild(const ObjectPtr & object);
+
+	protected:
+		CompositeObject();
 
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
 
-		void rotate(double rad);
-		void rotate(double rad, int centerX, int centerY, double scale = 1);
-		void rotate(double rad, const Point & center, double scale = 1)
-		{ rotate(rad, center.x(), center.y(), scale); }
+	private:
+		std::vector<ObjectPtr> m_children;
+		std::weak_ptr<CompositeObject> self;
 
-		void move(int x, int y);
-		void scale(double factorX, double factorY);
-		void scale(double factor);
-
-		void resetTransform();
-
-	protected:
-		std::vector<ObjectPtr> m_objects;
-		cv::Mat m_transform;
+		void removeChild(const Object *object);
+		friend void Object::setParent(const parent_t &);
 	};
 }
 

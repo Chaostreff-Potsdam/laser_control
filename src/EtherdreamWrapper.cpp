@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+const int laser::EtherdreamWrapper::pps = 30000; // Our laser operates at 30kpps
+
 laser::EtherdreamWrapper::EtherdreamWrapper()
 {
     connect();
@@ -111,9 +113,9 @@ void laser::EtherdreamWrapper::writePoints()
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 #ifdef _WIN32
-	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), 30000, -1);
+	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), pps, -1);
 #else
-    etherdream_write(m_etherdream, m_points.data(), m_points.size(), 30000, -1);
+	etherdream_write(m_etherdream, m_points.data(), m_points.size(), pps, -1);
 #endif
 }
 

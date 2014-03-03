@@ -1,14 +1,16 @@
 #include "Server.h"
+#include "InstructionFactory.h"
 
-#include "laser_utilities.h"
-#include "Painter.h"
+#include "../Painter.h"
 
 #include <mutex>
 #include <iostream>
 #include <cstdint>
 #include <boost/bind.hpp>
 
-laser::Server::Server(Painter &painter)
+namespace laser { namespace holodeck {
+
+Server::Server(Painter &painter)
 :	//m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
 	m_painter(painter),
 	m_socket(m_ioService),
@@ -22,18 +24,18 @@ laser::Server::Server(Painter &painter)
 	startAccept();
 }
 
-void laser::Server::poll()
+void Server::poll()
 {
 	std::cout << "LaserServer::poll" << std::endl;
 	m_ioService.run();
 }
 
-unsigned int laser::Server::parseToInt(unsigned char *array, int at)
+unsigned int Server::parseToInt(unsigned char *array, int at)
 {
 	return ((array[at+3]<<24)|(array[at+2]<<16)|(array[at+1]<<8)|(array[at+0]<<0));
 }
 
-void laser::Server::startAccept()
+void Server::startAccept()
 {
 	std::cout << "LaserServer::startAccept" << std::endl;
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
@@ -43,7 +45,7 @@ void laser::Server::startAccept()
 												// boost::asio::placeholders::error));
 }
 
-void laser::Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
+void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
 {
 	std::cout << "LaserServer::handleAccept" << std::endl;
 	if (!error)
@@ -59,7 +61,7 @@ void laser::Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boo
 	startAccept();
 }
 
-void laser::Server::handleRead()
+void Server::handleRead()
 {
 	std::cout << "LaserServer::handleRead " << (int)m_buf[0] << std::endl;
 	switch (m_buf[0]) {
@@ -88,108 +90,83 @@ void laser::Server::handleRead()
 	startAccept();
 }
 
-void laser::Server::handleDelete()
+std::vector<Point> Server::readPoints(int n)
+{
+	std::vector<Point> ps;
+
+	for (int i = 0; i < n; ++i) {
+		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
+						   -parseToInt(m_buf, 8*i+9)));
+	}
+	return ps;
+}
+
+void Server::handleDelete()
 {
 	int id = parseToInt(m_buf, 1);
 
 	std::cout << "delete " << id << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_painter.deleteObject(id);
 }
 
-void laser::Server::handleWall()
+void Server::handleWall()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
 
 	std::cout << "build " << id << std::endl;
-
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 2; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::cout << "(" << ps[0].x() << "; " << ps[0].y() << ")" << std::endl;
 	std::cout << "(" << ps[1].x() << "; " << ps[1].y() << ")" << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
-	m_painter.drawWall(id, ps[0], ps[1]);
+	m_painter.add(id, InstructionFactory::wall(ps[0], ps[1]));
 }
 
-void laser::Server::handleTable()
+void Server::handleTable()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(4));
 
 	std::cout << "build Table " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 4; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
-	m_painter.drawTable(id, ps[0], ps[1], ps[2], ps[3]);
+	m_painter.add(id, InstructionFactory::table(ps[0], ps[1], ps[2], ps[3]));
 }
 
-void laser::Server::handlePlayer()
+void Server::handlePlayer()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
 
 	std::cout << "build Player " << id << std::endl;
-
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 1; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::cout << ps[0].x() << ", " << ps[0].y() << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
-	m_painter.drawPlayer(id, ps[0]);
+	m_painter.add(id, InstructionFactory::player(ps[0]));
 }
 
-void laser::Server::handleButton()
+void Server::handleButton()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
 
 	std::cout << "build Button " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 1; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
-	m_painter.drawButton(id, ps[0]);
+	m_painter.add(id, InstructionFactory::button(ps[0]));
 }
 
-void laser::Server::handleDoor()
+void Server::handleDoor()
 {
 	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
 
 	std::cout << "build Door " << id << std::endl;
 
-	std::vector<Point> ps;
-
-	for (int i = 0; i < 2; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
-	}
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-
-	m_painter.drawDoor(id, ps[0], ps[1]);
+	m_painter.add(id, InstructionFactory::door(ps[0], ps[1]));
 }
+
+}} // namespace laser::holodeck
