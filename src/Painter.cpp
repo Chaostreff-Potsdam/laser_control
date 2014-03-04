@@ -25,7 +25,8 @@ laser::Painter::Painter(bool expireObjects)
 laser::Painter::~Painter()
 {
 	m_running = false;
-	m_updateLoop.join();
+	if(m_expireObjects)
+		m_updateLoop.join();
 }
 
 void laser::Painter::aquireEtherdreamWrapper()
