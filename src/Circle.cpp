@@ -5,7 +5,7 @@
 #include <cstdint>
 
 #ifndef LASERWRAPPER_CIRCLE_POINTS
-#define LASERWRAPPER_CIRCLE_POINTS (100)
+#define LASERWRAPPER_CIRCLE_POINTS (70)
 #endif
 
 laser::Circle::Circle(int x, int y, int radius, float startRatio, float endRatio)

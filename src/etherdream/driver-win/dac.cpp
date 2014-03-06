@@ -178,6 +178,8 @@ int do_write_frame(dac_t *d, const void * data, int bytes, int pps,
 	if (dac_get_status(d) != GET_STATUS_READY) {
 		if(isSecondTryWritingFrame) {
 			trace(d, "M: NOT READY: %d points, %d reps\n", points, reps);
+			/*std::cout << "[laser_control] frame could not be written: DAC still not ready on second try. " << points << " points, " << reps << " reps.\n";
+			std::cout.flush();*/
 			return 0;
 		} else {
 			do_write_frame(d, data, bytes, pps, reps, true, convert);

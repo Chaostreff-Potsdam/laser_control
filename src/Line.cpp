@@ -6,7 +6,7 @@
 #include "laser_utilities.h"
 
 #ifndef LASERWRAPPER_LINE_POINTS
-#define LASERWRAPPER_LINE_POINTS (300)
+#define LASERWRAPPER_LINE_POINTS (50)
 #endif
 
 laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
@@ -18,7 +18,7 @@ laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
 	m_b = Point(xb, yb);
 
 	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
-	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
+	m_pointCount = LASERWRAPPER_LINE_POINTS;
 }
 
 laser::Line::Line(Point a, Point b, bool visible, bool dashed)
@@ -30,7 +30,7 @@ laser::Line::Line(Point a, Point b, bool visible, bool dashed)
 	m_b = b;
 
 	m_length = std::sqrt(sqr(m_a.x() - m_b.x()) + sqr(m_a.y() - m_b.y()));
-	m_pointCount = m_length/LASERWRAPPER_LINE_POINTS;
+	m_pointCount = LASERWRAPPER_LINE_POINTS;
 }
 
 laser::EtherdreamPoints laser::Line::points() const
