@@ -1,7 +1,7 @@
 #ifndef CALIBRATIONRECTANGLE_H
 #define CALIBRATIONRECTANGLE_H
 
-#include "../EtherdreamWrapper.h"
+#include "EtherdreamWrapper.h"
 #include "DllExport.h"
 
 namespace laser {

@@ -88,6 +88,11 @@ namespace laser {
 		 */
 		void deleteAll();
 
+		/*!
+		 * \brief get Object pointer by ID
+		 */
+		ObjectPtr getObject(int id);
+
 		void setCalibration(cv::Mat homography);
 
 	protected:

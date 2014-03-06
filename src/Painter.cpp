@@ -84,6 +84,11 @@ void laser::Painter::deleteAll()
 	updatePoints();
 }
 
+laser::ObjectPtr laser::Painter::getObject(int id)
+{
+	return m_objects[id];
+}
+
 void laser::Painter::removeExpiredObjects()
 {
 	boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());

@@ -65,6 +65,7 @@ int main(void)
 	int smallerCircleID = p.add(std::make_shared<Circle>(-5000, -5000, 5000, 0, 2.0*M_PI));
 	p.deleteObject(largerCircleID);
 
+	p.add(std::make_shared<laser::Rectangle>(0,0,10000, 10000, true));
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 
