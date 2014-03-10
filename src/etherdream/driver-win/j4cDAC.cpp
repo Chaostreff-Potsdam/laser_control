@@ -392,6 +392,8 @@ EXPORT int __stdcall EtherDreamGetCardNum(void){
 	timeval_subtract(&tv_diff, &tv, &load_time);
 	int ms_left = 1100 - ((tv_diff.tv_sec * 1000) + 
 	                      (tv_diff.tv_usec / 1000));
+	if (ms_left < 0)
+		ms_left = 0;
 	trace(NULL, "Waiting %d milliseconds.\n", ms_left);
 	Sleep(ms_left);
 
