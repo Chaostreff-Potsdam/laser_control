@@ -60,12 +60,12 @@ namespace laser {
 		/*!
 		 * \brief adds \a object to #m_objects and calls updatePoints()
 		 */
-		int add(const ObjectPtr & object);
+		int add(const ObjectPtr & object, bool update = true);
 
 		/*!
 		 * \brief adds \a object to #m_object under \a id and calls updatePoints()
 		 */
-		int add(int id, const ObjectPtr & object);
+		int add(int id, const ObjectPtr & object, bool update = true);
 
 		/*!
 		 * \brief send a new array to #m_canvas
@@ -81,7 +81,7 @@ namespace laser {
 		/*!
 		 * \brief deletes an object from #m_objects with ID \a id
 		 */
-		void deleteObject(int id);
+		void deleteObject(int id, bool update = true);
 
 		/*!
 		 * \brief Clear the whole scene

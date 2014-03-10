@@ -55,27 +55,30 @@ void laser::Painter::paint(const ObjectPtrMap & objects)
 	updatePoints();
 }
 
-int laser::Painter::add(const ObjectPtr & object)
+int laser::Painter::add(const ObjectPtr & object, bool update)
 {	
 	while (m_objects.find(m_smallestFreeId++) != m_objects.end())
 		continue;
 	
 	m_objects[m_smallestFreeId] = object;
-	updatePoints();
+	if (update)
+		updatePoints();
 	return m_smallestFreeId;
 }
 
-int laser::Painter::add(int id, const ObjectPtr &object)
+int laser::Painter::add(int id, const ObjectPtr &object, bool update)
 {
 	m_objects[id] = object;
-	updatePoints();
+	if (update)
+		updatePoints();
 	return id;
 }
 
-void laser::Painter::deleteObject(int id)
+void laser::Painter::deleteObject(int id, bool update)
 {
 	m_objects.erase(id);
-	updatePoints();
+	if (update)
+		updatePoints();
 }
 
 void laser::Painter::deleteAll()
