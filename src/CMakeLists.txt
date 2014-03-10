@@ -71,24 +71,6 @@ if(NO_ETHERDREAM_TRACE)
 	add_definitions(-DNO_ETHERDREAM_TRACE=1)
 endif(NO_ETHERDREAM_TRACE)
 
-if(SWIG_FOUND)
-	include(${SWIG_USE_FILE})
-	set(CMAKE_SWIG_FLAGS "")
-	set_source_files_properties(laserwrapper.i PROPERTIES CPLUSPLUS ON)
-	set_property(SOURCE laserwrapper.i PROPERTY SWIG_FLAGS "-namespace" "laser")
-	swig_add_module(laserwrappercs csharp laserwrapper.i)
-	swig_link_libraries(laserwrappercs
-					laserwrapper
-					m
-					pthread
-					${THREAD_LIBRARY}
-					${Boost_LIBRARIES})
-else(SWIG_FOUND)
-	message(WARNING
-			"SWIG was not found. You will not be able to compile for C#.")
-endif(SWIG_FOUND)
-
-
 if(UNIX)
 	if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
 		SET(THREAD_LIBRARY rt)
