@@ -53,4 +53,43 @@ void applyInPlace(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::Inp
 	opaqueApply(points, aux_in, aux_in, opencvFunc, transform);
 }
 
+EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform)
+{
+	if (points.empty())
+		return points;
+
+	EtherdreamPoints returnPoints;
+	
+	TransformPoints transformPoints;
+	transformPoints.reserve(points.size());
+
+	for (auto & p: points)	{
+		transformPoints.emplace_back(p.x, p.y);
+	}
+
+	opencvFunc(transformPoints, transformPoints, transform);
+
+	int canvasMargin = 1000;
+
+	for (unsigned int i = 0; i < points.size(); i++)
+	{
+		if(transformPoints[i].x < INT16_MAX + canvasMargin && transformPoints[i].x > INT16_MIN  - canvasMargin 
+			&& transformPoints[i].y < INT16_MAX  + canvasMargin && transformPoints[i].y > INT16_MIN - canvasMargin) {
+			transformPoints[i].x = clamp(transformPoints[i].x, INT16_MIN, INT16_MAX);
+			transformPoints[i].y = clamp(transformPoints[i].y, INT16_MIN, INT16_MAX);
+			if(transformPoints[i].x == INT16_MAX || transformPoints[i].x == INT16_MIN || transformPoints[i].y == INT16_MAX || transformPoints[i].y == INT16_MIN) {
+				points[i].r = 0;
+				points[i].g = 0;
+				points[i].b = 0;
+			}
+
+			points[i].x = (int16_t) transformPoints[i].x;
+			points[i].y = (int16_t) transformPoints[i].y;
+
+			returnPoints.push_back(points[i]);
+		}
+	}
+	return returnPoints;
+}
+
 }} // namespace Laser::Transform

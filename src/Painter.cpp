@@ -11,9 +11,10 @@
 
 #include <boost/date_time.hpp>
 
-laser::Painter::Painter(bool expireObjects)
+laser::Painter::Painter(bool expireObjects, bool cropObjects)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
+	m_cropObjects(cropObjects),
 	m_running(true)
 {
 	if (expireObjects)
@@ -136,11 +137,18 @@ void laser::Painter::updatePoints()
 		appendToVector(ps, objPair.second->pointsToPaint());
 	}
 
-	if (!m_calibration.empty()) {
-		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
+	if(m_cropObjects) {
+		EtherdreamPoints transformedPoints;
+		if (!m_calibration.empty()) 
+			transformedPoints = Transform::applyReturning(ps, cv::perspectiveTransform, m_calibration);
+		else
+			transformedPoints = ps;
+		m_canvas->setPoints(transformedPoints);
+	} else {
+		if (!m_calibration.empty()) 
+			Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
+		m_canvas->setPoints(ps);
 	}
-
-	m_canvas->setPoints(ps);
 	m_canvas->writePoints();
 }
 
