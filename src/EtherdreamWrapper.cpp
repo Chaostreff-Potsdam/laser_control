@@ -113,6 +113,15 @@ void laser::EtherdreamWrapper::writePoints()
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
 #ifdef _WIN32
+	if(m_points.size() == 0) {
+		etherdream_point blackPoint;
+		blackPoint.x = 0;
+		blackPoint.y = 0;
+		blackPoint.r = 0;
+		blackPoint.g = 0;
+		blackPoint.b = 0;
+		m_points.push_back(blackPoint);
+	}
 	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), pps, -1);
 #else
 	etherdream_write(m_etherdream, m_points.data(), m_points.size(), pps, -1);
