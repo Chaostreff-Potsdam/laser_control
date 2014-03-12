@@ -69,7 +69,7 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 
 	opencvFunc(transformPoints, transformPoints, transform);
 
-	int canvasMargin = 1000;
+	int canvasMargin = 10000;
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{

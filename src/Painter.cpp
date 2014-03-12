@@ -152,7 +152,8 @@ void laser::Painter::updatePoints()
 	m_canvas->writePoints();
 }
 
-void laser::Painter::setCalibration(cv::Mat homography) {
+void laser::Painter::setCalibration(cv::Mat homography)
+{
 	m_calibration = homography;
 }
 
