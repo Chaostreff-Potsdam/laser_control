@@ -26,6 +26,7 @@
 #include <iphlpapi.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <iostream>
 
 #include "dac.h"
 
@@ -49,6 +50,8 @@ void log_socket_error(dac_t *d, const char *call) {
 		buf, sizeof(buf), 0);
 
 	trace(d, "!! Socket error in %s: %d: %s\n", call, err, buf);
+	std::cout << "[laser_control]: Socket error in " << call << ": " << err << ": " << buf << "\n";
+	std::cout.flush();
 }
 
 
@@ -112,6 +115,7 @@ int dac_read_bytes(dac_t *d, char *buf, int len) {
 			return -1;
 		} else if (res == 0) {
 			trace(d, "!! Read from DAC timed out.\n");
+			std::cout << "[laser_control]: Read from DAC timed out.\n"; std::cout.flush();
 			closesocket(d->conn.sock);
 			closesocket(d->conn.udp_sock);
 			d->conn.sock = INVALID_SOCKET;
@@ -192,6 +196,7 @@ int dac_connect(dac_t *d, const char *host, const char *port) {
 	int res = getaddrinfo(host, port, &hints, &result);
 	if (res != 0) {
 		trace(d, "getaddrinfo failed: %d\n", res);
+		std::cout << "[laser_control]: getaddrinfo failed: " << res << "\n"; std::cout.flush();
 		return -1;
 	}
 
@@ -242,6 +247,7 @@ int dac_connect(dac_t *d, const char *host, const char *port) {
 		return -1;
 	} else if (res == 0) {
 		trace(d, "Connection to %s timed out.\n", host);
+		std::cout << "[laser_control]: Connection to " << host << " timed out.\n"; std::cout.flush();
 		closesocket(conn->sock);
 		conn->sock = INVALID_SOCKET;
 		return -1;
@@ -331,6 +337,8 @@ int dac_sendall(dac_t *d, const char *data, int len) {
 			return -1;
 		} else if (res == 0) {
 			trace(d, "write timed out\n");
+			std::cout << "[laser_control]: write timed out\n"; std::cout.flush();
+		
 		}
 
 		res = send(d->conn.sock, data, len, 0);
@@ -355,6 +363,7 @@ int check_data_response(dac_t *d) {
 	if (conn->resp.command == 'd') {
 		if (conn->ackbuf_prod == conn->ackbuf_cons) {
 			trace(d, "!! Protocol error: didn't expect data ack\n");
+			std::cout << "[laser_control]: Protocol error: didn't expect data ack\n"; std::cout.flush();
 			return -1;
 		}
 		conn->unacked_points -= conn->ackbuf[conn->ackbuf_cons];
@@ -367,6 +376,7 @@ int check_data_response(dac_t *d) {
 		trace(d, "!! Protocol error: ACK for '%c' got '%c' (%d)\n",
 			conn->resp.command,
 			conn->resp.response, conn->resp.response);
+		std::cout << "[laser_control]: Protocol error: ACK for " << conn->resp.command << " got " << conn->resp.response << "\n"; std::cout.flush();
 		return -1;
 	}
 
