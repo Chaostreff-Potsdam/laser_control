@@ -40,6 +40,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/Rectangle.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Line.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Line.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Spiral.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Spiral.h
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.h
 	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
