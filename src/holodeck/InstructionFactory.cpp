@@ -56,4 +56,24 @@ ObjectPtr InstructionFactory::button(Point p)
 	return group;
 }
 
+void InstructionFactory::calculateRectangleCharacteristics(Point p1, Point p2, float &angle, float &length, Point &start, Point &mid, Point &end)
+{
+	// calculate rotation
+	int dx = p2.x() - p1.x();
+	int dy = p2.y() - p1.y();
+	angle = atan2(dy, dx);
+
+	// length of wall
+	length = sqrt(sqr(dx) + sqr(dy));
+
+	start.setX((p1.x() + p2.x()) / 2 - length/2);
+	start.setY((p1.y() + p2.y()) / 2);
+
+	end.setX((p1.x() + p2.x()) / 2 + length/2);
+	end.setY((p1.y() + p2.y()) / 2);
+
+	mid.setX((p1.x() + p2.x()) / 2);
+	mid.setY((p1.y() + p2.y()) / 2);
+}
+
 }} // namespace laser::holodeck

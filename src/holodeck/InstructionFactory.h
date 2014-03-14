@@ -11,6 +11,18 @@ namespace InstructionFactory {
 	ObjectPtr player(Point p);
 	ObjectPtr button(Point p);
 
+	/*!
+	 * \brief determine characteristic values for a rectangle
+	 * \image html calculateRectangleCharacteristics.svg
+	 * \param[in] p1 midpoint of one short side of the rectangle
+	 * \param[in] p2 midpoint of the other short side
+	 * \param[out] angle angle between x-axis and line between \a p1 and \a p2
+	 * \param[out] length \f$ \mbox{length} = \sqrt{(\mbox{p1}_x - \mbox{p2}_x)^2 + (\mbox{p1}_y - \mbox{p2}_y)^2} \f$
+	 * \param[out] start start point of axis aligned bounding box
+	 * \param[out] mid mid point of axis aligned bounding box
+	 * \param[out] end end point of axis aligned bounding box
+	 */
+	void calculateRectangleCharacteristics(Point p1, Point p2, float &angle, float &length, Point &start, Point &mid, Point &end);
 }
 
 }} // namespace laser::holodeck
