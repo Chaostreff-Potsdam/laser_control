@@ -10,6 +10,11 @@ namespace InstructionFactory {
 	ObjectPtr table(Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr player(Point p);
 	ObjectPtr button(Point p);
+	ObjectPtr beam(Point p1, Point p2);
+	ObjectPtr portal(Point p1, Point p2, bool active);
+	ObjectPtr zipline(Point p1, Point p2);
+	ObjectPtr stool(Point p1, Point p2);
+	ObjectPtr corpse(Point head, Point hip, Point leftHand, Point rightHand);
 
 	/*!
 	 * \brief determine characteristic values for a rectangle

@@ -26,7 +26,13 @@ namespace laser { namespace holodeck {
 			WALL,
 			DOOR,
 			TABLE,
-			BUTTON
+			BUTTON,
+			BEAM,
+			PORTAL_INACTIVE,
+			PORTAL_ACTIVE,
+			ZIPLINE,
+			CORPSE,
+			STOOL
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
@@ -41,6 +47,11 @@ namespace laser { namespace holodeck {
 		void handlePlayer();
 		void handleButton();
 		void handleDoor();
+		void handleBeam();
+		void handlePortal(bool active);
+		void handleZipline();
+		void handleCorpse();
+		void handleStool();
 
 		Painter& m_painter;
 

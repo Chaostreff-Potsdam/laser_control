@@ -83,6 +83,24 @@ void Server::handleRead()
 	case CommandType::DOOR:
 		handleDoor();
 		break;
+	case CommandType::BEAM:
+		handleBeam();
+		break;
+	case CommandType::PORTAL_INACTIVE:
+		handlePortal(false);
+		break;
+	case CommandType::PORTAL_ACTIVE:
+		handlePortal(true);
+		break;
+	case CommandType::ZIPLINE:
+		handleZipline();
+		break;
+	case CommandType::CORPSE:
+		handleCorpse();
+		break;
+	case CommandType::STOOL:
+		handleStool();
+		break;
 	default:
 		break;
 	}
@@ -167,6 +185,61 @@ void Server::handleDoor()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.add(id, InstructionFactory::door(ps[0], ps[1]));
+}
+
+void Server::handleBeam()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Beam " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::beam(ps[0], ps[1]));
+}
+
+void Server::handlePortal(bool active)
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Portal " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::portal(ps[0], ps[1], active));
+}
+
+void Server::handleZipline()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Zipline " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::zipline(ps[0], ps[1]));
+}
+
+void Server::handleCorpse()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Corpse " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::corpse(ps[0], ps[1]));
+}
+
+void Server::handleStool()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Stool " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::stool(ps[0], ps[1]));
 }
 
 }} // namespace laser::holodeck
