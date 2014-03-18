@@ -223,12 +223,12 @@ void Server::handleZipline()
 void Server::handleCorpse()
 {
 	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
+	std::vector<Point> ps(readPoints(4));
 
 	std::cout << "build Corpse " << id << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::corpse(ps[0], ps[1]));
+	m_painter.add(id, InstructionFactory::corpse(ps[0], ps[1], ps[2], ps[3]));
 }
 
 void Server::handleStool()
