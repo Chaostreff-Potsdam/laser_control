@@ -70,6 +70,7 @@ void Server::handleRead()
 		break;
 	case CommandType::DELETE_ALL:
 		handleDeleteAll();
+		break;
 	case CommandType::WALL:
 		handleWall();
 		break;
