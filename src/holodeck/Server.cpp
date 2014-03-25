@@ -68,6 +68,8 @@ void Server::handleRead()
 	case CommandType::DELETE:
 		handleDelete();
 		break;
+	case CommandType::DELETE_ALL:
+		handleDeleteAll();
 	case CommandType::WALL:
 		handleWall();
 		break;
@@ -127,6 +129,12 @@ void Server::handleDelete()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.deleteObject(id);
+}
+
+void Server::handleDeleteAll()
+{
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.deleteAll();
 }
 
 void Server::handleWall()

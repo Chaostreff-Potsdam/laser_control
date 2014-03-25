@@ -22,6 +22,7 @@ namespace laser { namespace holodeck {
 		{
 			INVALID = 0,
 			DELETE,
+			DELETE_ALL,
 			PLAYER,
 			WALL,
 			DOOR,
@@ -42,6 +43,7 @@ namespace laser { namespace holodeck {
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();
 		void handleDelete();
+		void handleDeleteAll();
 		void handleWall();
 		void handleTable();
 		void handlePlayer();
