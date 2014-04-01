@@ -104,6 +104,9 @@ void Server::handleRead()
 	case CommandType::STOOL:
 		handleStool();
 		break;
+	case CommandType::WATER:
+		handleWater();
+		break;
 	default:
 		break;
 	}
@@ -249,6 +252,18 @@ void Server::handleStool()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.add(id, InstructionFactory::stool(ps[0], ps[1]));
+}
+
+void Server::handleWater()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
+
+	std::cout << "build Water " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::water(ps[0]));
+
 }
 
 }} // namespace laser::holodeck

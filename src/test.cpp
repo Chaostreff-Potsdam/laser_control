@@ -6,6 +6,7 @@
 #include "Line.h"
 #include "CompositeObject.h"
 #include "holodeck/Server.h"
+#include "holodeck/InstructionFactory.h"
 #include "laser_calibration/Calibration.h"
 
 #include <chrono>
@@ -60,12 +61,9 @@ int main(void)
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));*/
 
 
-	
-	int largerCircleID = p.add(std::make_shared<Circle>(-10000, -10000, 10000, 0, 2.0*M_PI));
-	int smallerCircleID = p.add(std::make_shared<Circle>(-5000, -5000, 5000, 0, 2.0*M_PI));
-	p.deleteObject(largerCircleID);
+	p.add(holodeck::InstructionFactory::water(Point(-10000, -10000)));
 
-	p.add(std::make_shared<laser::Rectangle>(0,0,100000, 10000, true));
+	//p.add(50, ObjectPtr(new Line(-20000,-10000, 10000, -10000)));
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 

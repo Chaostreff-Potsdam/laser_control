@@ -33,7 +33,8 @@ namespace laser { namespace holodeck {
 			PORTAL_ACTIVE,
 			ZIPLINE,
 			CORPSE,
-			STOOL
+			STOOL,
+			WATER
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
@@ -54,6 +55,7 @@ namespace laser { namespace holodeck {
 		void handleZipline();
 		void handleCorpse();
 		void handleStool();
+		void handleWater();
 
 		Painter& m_painter;
 

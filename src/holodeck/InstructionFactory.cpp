@@ -254,4 +254,17 @@ void InstructionFactory::calculateRectangleCharacteristics(Point p1, Point p2, f
 	mid.setY((p1.y() + p2.y()) / 2);
 }
 
+ObjectPtr InstructionFactory::water(Point p)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+
+	group->add(new Circle(p, 2000, 3.8*M_PI_4, 9*M_PI_4));
+	group->add(new Line(p.x() - 1750, p.y()+500, p.x(), p.y() + 4000));
+	group->add(new Line(p.x() + 1750, p.y()+500, p.x(), p.y() + 4000));
+
+	//group->rotate(M_PI, p);
+
+	return group;
+}
+
 }} // namespace laser::holodeck
