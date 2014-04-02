@@ -16,6 +16,7 @@ namespace InstructionFactory {
 	ObjectPtr stool(Point p1, Point p2);
 	ObjectPtr corpse(Point head, Point hip, Point leftHand, Point rightHand);
 	ObjectPtr water(Point p);
+	ObjectPtr poke(Point p1, Point p2);
 
 	/*!
 	 * \brief determine characteristic values for a rectangle

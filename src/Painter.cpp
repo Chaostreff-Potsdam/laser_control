@@ -11,13 +11,13 @@
 
 #include <boost/date_time.hpp>
 
-laser::Painter::Painter(bool expireObjects, bool cropObjects)
+laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
 	m_cropObjects(cropObjects),
 	m_running(true)
 {
-	if (expireObjects)
+	if (runUpdateLoop || expireObjects)
 	{
 		m_updateLoop = std::thread(&Painter::updateLoop, this);
 	}
@@ -136,6 +136,7 @@ void laser::Painter::updatePoints()
 	}
 
 	for (auto objPair: m_objects) {
+		objPair.second->tick();
 		appendToVector(ps, objPair.second->pointsToPaint());
 	}
 
@@ -163,7 +164,7 @@ void laser::Painter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));
 	while (m_running) {
-		std::this_thread::sleep_for(std::chrono::seconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 		updatePoints();
 	}
 }

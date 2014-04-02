@@ -8,6 +8,7 @@
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include "laser_utilities.h"
 #include <memory>
+#include <functional>
 
 namespace laser {
 
@@ -16,6 +17,8 @@ namespace laser {
 
 	class CompositeObject;
 	typedef std::shared_ptr<CompositeObject> CompositeObjectPtr;
+
+	typedef std::function<void()> Animation;
 
 	/*!
 	 * \brief an abstract object to be painted
@@ -49,6 +52,13 @@ namespace laser {
 		void scale(double factor);
 
 		void resetTransform();
+
+		void setAnimation(Animation animation);
+
+		void setVisible(bool visible);
+		bool visible();
+
+		void tick();
 
 		/*** Timeout ***/
 
@@ -87,6 +97,9 @@ namespace laser {
 
 		cv::Mat m_transform;
 		std::weak_ptr<CompositeObject> m_parent;
+
+		Animation m_animation;
+		bool m_isVisible;
 
 		/*!
 		 * \brief update the point cache, so you'll not need to acces points() etc.

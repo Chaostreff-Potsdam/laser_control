@@ -9,7 +9,8 @@
 
 laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
-	  m_isUpdating(false)
+	  m_isUpdating(false),
+	  m_isVisible(true)
 {
 	resetTransform();
 }
@@ -55,6 +56,9 @@ void laser::Object::rebuildCache()
 
 laser::EtherdreamPoints laser::Object::pointsToPaint()
 {
+	if (!m_isVisible)
+		return EtherdreamPoints();
+
 	if (m_dirty)
 		rebuildCache();
 
@@ -105,6 +109,33 @@ void laser::Object::resetTransform()
 {
 	m_transform = cv::Mat::eye(3, 3, CV_64FC1);
 	nowDirty();
+}
+
+void laser::Object::setAnimation(Animation animation)
+{
+	m_animation = animation;
+}
+
+void laser::Object::setVisible(bool visible)
+{
+	m_isVisible = visible;
+}
+
+bool laser::Object::visible()
+{
+	return m_isVisible;
+}
+
+void laser::Object::tick()
+{
+	if (m_animation)
+	{
+		m_animation();
+	}
+	else
+	{
+		return;
+	}
 }
 
 /**** Other ****/

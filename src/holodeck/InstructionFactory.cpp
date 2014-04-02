@@ -8,6 +8,8 @@
 
 #include <cmath>
 
+#include <boost/date_time/time.hpp>
+
 namespace laser { namespace holodeck {
 
 ObjectPtr InstructionFactory::wall(Point p1, Point p2)
@@ -262,7 +264,39 @@ ObjectPtr InstructionFactory::water(Point p)
 	group->add(new Line(p.x() - 1750, p.y()+500, p.x(), p.y() + 4000));
 	group->add(new Line(p.x() + 1750, p.y()+500, p.x(), p.y() + 4000));
 
-	//group->rotate(M_PI, p);
+	return group;
+}
+
+ObjectPtr InstructionFactory::poke(Point p1, Point p2)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+
+	float alpha;
+	float length;
+	Point mid;
+	Point start;
+	Point end;
+
+	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
+
+	group->add(new Rectangle(start.x(), start.y()-500, length, 1000, false));
+	group->add(new Rectangle(start.x()+3000, start.y()-3000, length-3000, 2500, false));
+	group->add(new Rectangle(mid.x()+2000, start.y(), length/2-2000, 2500, false));
+	group->add(new Line(start.x()+3000, start.y() -2000, mid.x()+2000, start.y() -2000));
+	group->add(new Line(start.x()+3000, start.y() -1000, mid.x()+2000, start.y() -1000));
+	group->rotate(alpha, mid);
+
+	group->setAnimation([group]()
+						{
+							static int ticks = 0;
+							if (ticks > 20) // every second
+							{
+								std::cout << "eior" << std::endl;
+								group->setVisible(!group->visible());
+								ticks = 0;
+							}
+							ticks++;
+						});
 
 	return group;
 }

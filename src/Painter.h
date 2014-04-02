@@ -25,7 +25,7 @@ namespace laser {
 		typedef std::map<int, ObjectPtr> ObjectPtrMap;
 
 	public:
-		Painter(bool expireObjects = false, bool cropObjects = false);
+		Painter(bool expireObjects = false, bool cropObjects = false, bool runUpdateLoop = false);
 		~Painter();
 
 		//LaserPainter& operator=(const LaserPainter&) = delete;

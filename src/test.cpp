@@ -23,7 +23,7 @@ using namespace laser;
 
 int main(void)
 {
-	Painter p(false);
+	Painter p(false, false, true);
     p.aquireEtherdreamWrapper();
 #ifndef _WIN32
 	p.calibrate();
@@ -60,9 +60,9 @@ int main(void)
 	std::cout.flush();
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));*/
 
+	ObjectPtr poke = holodeck::InstructionFactory::poke(Point(-10000, -10000), Point(-15000, -15000));
 
-	p.add(holodeck::InstructionFactory::water(Point(-10000, -10000)));
-
+	p.add(poke);
 	//p.add(50, ObjectPtr(new Line(-20000,-10000, 10000, -10000)));
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
