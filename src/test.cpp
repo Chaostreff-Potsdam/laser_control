@@ -60,9 +60,12 @@ int main(void)
 	std::cout.flush();
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));*/
 
-	ObjectPtr poke = holodeck::InstructionFactory::poke(Point(-10000, -10000), Point(-15000, -15000));
 
-	p.add(poke);
+//	p.add(holodeck::InstructionFactory::beam(Point(10000, 10000), Point(10000, 5000)));
+//	p.add(holodeck::InstructionFactory::button(Point(0, 0)));
+//	p.add(holodeck::InstructionFactory::wall(Point(-20000, -20000), Point(-5000, -20000)));
+//	p.add(holodeck::InstructionFactory::wall(Point(30000, -5000), Point(30000, 10000)));
+	p.add(holodeck::InstructionFactory::stomper(Point(-10000, -10000), Point(-20000, -20000)));
 	//p.add(50, ObjectPtr(new Line(-20000,-10000, 10000, -10000)));
 	
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-const int laser::EtherdreamWrapper::pps = 30000; // Our laser operates at 30kpps
+const int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
 
 laser::EtherdreamWrapper::EtherdreamWrapper()
 {

@@ -107,6 +107,12 @@ void Server::handleRead()
 	case CommandType::WATER:
 		handleWater();
 		break;
+	case CommandType::POKE:
+		handlePoke();
+		break;
+	case CommandType::STOMPER:
+		handleStomper();
+		break;
 	default:
 		break;
 	}
@@ -264,6 +270,28 @@ void Server::handleWater()
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.add(id, InstructionFactory::water(ps[0]));
 
+}
+
+void Server::handlePoke()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Poke " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::poke(ps[0], ps[1]));
+}
+
+void Server::handleStomper()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(2));
+
+	std::cout << "build Stomper " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::stomper(ps[0], ps[1]));
 }
 
 }} // namespace laser::holodeck

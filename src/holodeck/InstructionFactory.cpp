@@ -291,12 +291,32 @@ ObjectPtr InstructionFactory::poke(Point p1, Point p2)
 							static int ticks = 0;
 							if (ticks > 20) // every second
 							{
-								std::cout << "eior" << std::endl;
 								group->setVisible(!group->visible());
 								ticks = 0;
 							}
 							ticks++;
 						});
+
+	return group;
+}
+
+ObjectPtr InstructionFactory::stomper(Point p1, Point p2)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+
+	float alpha;
+	float length;
+	Point mid;
+	Point start;
+	Point end;
+
+	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
+
+	group->add(new Line(start.x(), start.y(), end.x()-2000, end.y()));
+	group->add(new Line(end.x()-2000, end.y(), end.x()-3000, end.y()+1000));
+	group->add(new Line(end.x()-3000, end.y()-1000, end.x()-2000, end.y()));
+	group->add(new Line(end.x()-1000, end.y()-2000, end.x()-1000, end.y()+2000));
+	group->rotate(alpha, mid);
 
 	return group;
 }
