@@ -12,14 +12,14 @@
 
 namespace laser { namespace holodeck {
 
-ObjectPtr InstructionFactory::wall(Point p1, Point p2)
+ObjectPtr InstructionFactory::Wall(Point p1, Point p2)
 {
 	ObjectPtr w(new Line(p1, p2, true));
 	w->setPermanent(true);
 	return w;
 }
 
-ObjectPtr InstructionFactory::door(Point p1, Point p2)
+ObjectPtr InstructionFactory::Door(Point p1, Point p2)
 {
 	CompositeObjectPtr circle = CompositeObject::construct();
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
@@ -30,19 +30,19 @@ ObjectPtr InstructionFactory::door(Point p1, Point p2)
 	return circle;
 }
 
-ObjectPtr InstructionFactory::table(Point p1, Point p2, Point p3, Point p4)
+ObjectPtr InstructionFactory::Table(Point p1, Point p2, Point p3, Point p4)
 {
 	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 }
 
-ObjectPtr InstructionFactory::player(Point p)
+ObjectPtr InstructionFactory::Player(Point p)
 {
 	ObjectPtr c(new Circle(p, 1000));
 	c->setPermanent(true);
 	return c;
 }
 
-ObjectPtr InstructionFactory::button(Point p)
+ObjectPtr InstructionFactory::Button(Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -59,7 +59,7 @@ ObjectPtr InstructionFactory::button(Point p)
 	return group;
 }
 
-ObjectPtr InstructionFactory::beam(Point p1, Point p2)
+ObjectPtr InstructionFactory::Beam(Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -111,7 +111,7 @@ ObjectPtr InstructionFactory::beam(Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::portal(Point p1, Point p2, bool active)
+static ObjectPtr InstructionFactory::Portal(Point p1, Point p2, bool active)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -149,7 +149,13 @@ ObjectPtr InstructionFactory::portal(Point p1, Point p2, bool active)
 	return group;
 }
 
-ObjectPtr InstructionFactory::zipline(Point p1, Point p2)
+ObjectPtr InstructionFactory::InActivePortal(Point p1, Point p2)
+{ return Portal(p1, p2, false); }
+
+ObjectPtr InstructionFactory::ActivePortal(Point p1, Point p2)
+{ return Portal(p1, p2, true); }
+
+ObjectPtr InstructionFactory::Zipline(Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -190,7 +196,7 @@ ObjectPtr InstructionFactory::zipline(Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::stool(Point p1, Point p2)
+ObjectPtr InstructionFactory::Stool(Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -212,7 +218,7 @@ ObjectPtr InstructionFactory::stool(Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::corpse(Point head, Point hip, Point leftHand, Point rightHand)
+ObjectPtr InstructionFactory::Corpse(Point head, Point hip, Point leftHand, Point rightHand)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -256,7 +262,7 @@ void InstructionFactory::calculateRectangleCharacteristics(Point p1, Point p2, f
 	mid.setY((p1.y() + p2.y()) / 2);
 }
 
-ObjectPtr InstructionFactory::water(Point p)
+ObjectPtr InstructionFactory::Water(Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -267,7 +273,7 @@ ObjectPtr InstructionFactory::water(Point p)
 	return group;
 }
 
-ObjectPtr InstructionFactory::poke(Point p1, Point p2)
+ObjectPtr InstructionFactory::Poke(Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -300,7 +306,7 @@ ObjectPtr InstructionFactory::poke(Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::stomper(Point p1, Point p2)
+ObjectPtr InstructionFactory::Stomper(Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -321,7 +327,7 @@ ObjectPtr InstructionFactory::stomper(Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::footwear(Point p)
+ObjectPtr InstructionFactory::Footwear(Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 	CompositeObjectPtr groupA = CompositeObject::construct();
@@ -380,7 +386,7 @@ ObjectPtr InstructionFactory::footwear(Point p)
 	return group;
 }
 
-ObjectPtr InstructionFactory::heat(Point p)
+ObjectPtr InstructionFactory::Heat(Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -402,7 +408,7 @@ ObjectPtr InstructionFactory::heat(Point p)
     return group;
 }
 
-ObjectPtr InstructionFactory::elevator(Point p1, Point p2, Point p3)
+ObjectPtr InstructionFactory::Elevator(Point p1, Point p2, Point p3)
 {
     CompositeObjectPtr group = CompositeObject::construct();
 

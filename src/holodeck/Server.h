@@ -1,7 +1,7 @@
-#ifndef LASERSERVER_H
-#define LASERSERVER_H
+#pragma once
 
 #include "../Painter.h"
+#include "InstructionCaller.h"
 
 #include <boost/asio.hpp>
 #include <mutex>
@@ -16,33 +16,23 @@ namespace laser { namespace holodeck {
 
 		void poll();
 
-	protected:
-		typedef void (Server::*Handler)();
-		static const std::vector<Handler> Handlers;
 
-		enum CommandType
+	public:
+		void handleDelete();
+		void handleDeleteAll();
+
+		template <size_t num_points, typename FuncType>
+		void createObject(const char *name, FuncType constructor)
 		{
-			INVALID = 0,
-			DELETE,
-			DELETE_ALL,
-			PLAYER,
-			WALL,
-			DOOR,
-			TABLE,
-			BUTTON,
-			BEAM,
-			PORTAL_INACTIVE,
-			PORTAL_ACTIVE,
-			ZIPLINE,
-			CORPSE,
-			STOOL,
-			WATER,
-			POKE,
-			STOMPER,
-			FOOTWEAR,
-            HEAT,
-			ELEVATOR,
-		};
+			InstructionCaller<num_points> caller;
+
+			int id = parseToInt(m_buf, 1);
+			addObjectToPainter(id, name, caller(&constructor, readPoints(num_points)));
+		}
+
+	protected:
+		typedef std::function<void(Server *)> Handler;
+		static const std::vector<Handler> Handlers;
 
 		static unsigned int parseToInt(unsigned char *array, int at);
 		std::vector<Point> readPoints(int n);
@@ -50,28 +40,7 @@ namespace laser { namespace holodeck {
 		void startAccept();
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();
-
-		void handleDelete();
-		void handleDeleteAll();
-		void handleWall();
-		void handleTable();
-		void handlePlayer();
-		void handleButton();
-		void handleDoor();
-		void handleBeam();
-		void handleInActivePortal()
-		{ return handlePortal(false); }
-		void handleActivePortal()
-		{ return handlePortal(true); }
-		void handleZipline();
-		void handleCorpse();
-		void handleStool();
-		void handleWater();
-		void handlePoke();
-		void handleStomper();
-		void handleFootwear();
-		void handleHeat();
-        void handleElevator();
+		void addObjectToPainter(const int id, const char *name, const ObjectPtr & object);
 
 		void handlePortal(bool active);
 		Painter& m_painter;
@@ -89,5 +58,3 @@ namespace laser { namespace holodeck {
 	};
 
 }} // namespace laser::holodeck
-
-#endif // LASERSERVER_H

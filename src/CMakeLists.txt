@@ -10,7 +10,6 @@ include_directories(${LASERWRAPPER_SOURCE_DIR}/src
 					${Boost_INCLUDE_DIRS})
 link_directories(${LASERWRAPPER_BINARY_DIR}/src)
 
-
 if(UNIX)
 	set(DRIVER_FILES
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/common/protocol.h
@@ -24,6 +23,18 @@ else(UNIX)
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/dac.h 	
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/j4cDAC.cpp
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/j4cDAC.h)
+endif(UNIX)
+
+if(UNIX)
+	set(HOLODECK_FILES
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionCaller.h
+	)
+else(UNIX)
+	set(HOLODECK_FILES )
 endif(UNIX)
 
 set(MYSOURCES
@@ -46,10 +57,6 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/Spiral.h
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
-	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.h
@@ -59,6 +66,7 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
+	${HOLODECK_FILES}
     ${DRIVER_FILES})
 
 # Making stand-alone C++ Library

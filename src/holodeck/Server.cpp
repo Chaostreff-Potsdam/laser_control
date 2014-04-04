@@ -1,36 +1,46 @@
 #include "Server.h"
 #include "InstructionFactory.h"
 
-#include "../Painter.h"
-
-#include <mutex>
 #include <iostream>
-#include <cstdint>
 #include <boost/bind.hpp>
 
 namespace laser { namespace holodeck {
 
+#define HANDLER(Name) \
+	[](Server *s) { \
+		s->handle##Name(); \
+	}
+
+#define HANDLE_OBJECT(ObjectT, num_points) \
+	[](Server *s) { \
+		s->createObject<num_points>(#ObjectT, InstructionFactory::ObjectT); \
+	}
+
+#define EMPTY_LINE(ObjectT, num_points) \
+	[](Server *) {}
+
 const std::vector<Server::Handler> Server::Handlers = {
-	nullptr,
-	&Server::handleDelete,
-	&Server::handleDeleteAll,
-	&Server::handleWall,
-	&Server::handleTable,
-	&Server::handlePlayer,
-	&Server::handleButton,
-	&Server::handleDoor,
-	&Server::handleBeam,
-	&Server::handleInActivePortal,
-	&Server::handleActivePortal,
-	&Server::handleZipline,
-	&Server::handleCorpse,
-	&Server::handleStool,
-	&Server::handleWater,
-	&Server::handlePoke,
-	&Server::handleStomper,
-	&Server::handleFootwear,
-	&Server::handleHeat,
-	&Server::handleElevator,
+	EMPTY_LINE(Invalid, dummy),
+
+	HANDLER(Delete),
+	HANDLER(DeleteAll),
+	HANDLE_OBJECT(Player, 1),
+	HANDLE_OBJECT(Wall, 2),
+	HANDLE_OBJECT(Door, 2),
+	HANDLE_OBJECT(Table, 4),
+	HANDLE_OBJECT(Button, 1),
+	HANDLE_OBJECT(Beam, 2),
+	HANDLE_OBJECT(InActivePortal, 2),
+	HANDLE_OBJECT(ActivePortal, 2),
+	HANDLE_OBJECT(Zipline, 2),
+	HANDLE_OBJECT(Corpse, 4),
+	HANDLE_OBJECT(Stool, 2),
+	HANDLE_OBJECT(Water, 1),
+	HANDLE_OBJECT(Poke, 2),
+	HANDLE_OBJECT(Stomper, 2),
+	HANDLE_OBJECT(Footwear, 1),
+	HANDLE_OBJECT(Heat, 1),
+	HANDLE_OBJECT(Elevator, 3)
 };
 
 Server::Server(Painter &painter)
@@ -86,7 +96,7 @@ void Server::handleRead()
 	unsigned int command = (unsigned int)m_buf[0];
 	std::cout << "LaserServer::handleRead " << command  << std::endl;
 	if (0 < command && command < Handlers.size())
-			(this->*Handlers[command])();
+			Handlers[command](this);
 	startAccept();
 }
 
@@ -117,184 +127,11 @@ void Server::handleDeleteAll()
 	m_painter.deleteAll();
 }
 
-void Server::handleWall()
+void Server::addObjectToPainter(const int id, const char *name, const ObjectPtr &object)
 {
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build " << id << std::endl;
-	std::cout << "(" << ps[0].x() << "; " << ps[0].y() << ")" << std::endl;
-	std::cout << "(" << ps[1].x() << "; " << ps[1].y() << ")" << std::endl;
-
+	std::cout << "build " << name << " " << id << std::endl;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::wall(ps[0], ps[1]));
-}
-
-void Server::handleTable()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(4));
-
-	std::cout << "build Table " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::table(ps[0], ps[1], ps[2], ps[3]));
-}
-
-void Server::handlePlayer()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(1));
-
-	std::cout << "build Player " << id << std::endl;
-	std::cout << ps[0].x() << ", " << ps[0].y() << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::player(ps[0]));
-}
-
-void Server::handleButton()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(1));
-
-	std::cout << "build Button " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::button(ps[0]));
-}
-
-void Server::handleDoor()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Door " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::door(ps[0], ps[1]));
-}
-
-void Server::handleBeam()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Beam " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::beam(ps[0], ps[1]));
-}
-
-void Server::handlePortal(bool active)
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Portal " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::portal(ps[0], ps[1], active));
-}
-
-void Server::handleZipline()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Zipline " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::zipline(ps[0], ps[1]));
-}
-
-void Server::handleCorpse()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(4));
-
-	std::cout << "build Corpse " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::corpse(ps[0], ps[1], ps[2], ps[3]));
-}
-
-void Server::handleStool()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Stool " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::stool(ps[0], ps[1]));
-}
-
-void Server::handleWater()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(1));
-
-	std::cout << "build Water " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::water(ps[0]));
-
-}
-
-void Server::handlePoke()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Poke " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::poke(ps[0], ps[1]));
-}
-
-void Server::handleStomper()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(2));
-
-	std::cout << "build Stomper " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::stomper(ps[0], ps[1]));
-}
-
-void Server::handleFootwear()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(1));
-
-	std::cout << "build Footwear " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::footwear(ps[0]));
-}
-
-void Server::handleHeat()
-{
-	int id = parseToInt(m_buf, 1);
-	std::vector<Point> ps(readPoints(1));
-
-	std::cout << "build Heat " << id << std::endl;
-
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-    m_painter.add(id, InstructionFactory::heat(ps[0]));
-}
-
-void Server::handleElevator()
-{
-    int id = parseToInt(m_buf, 1);
-    std::vector<Point> ps(readPoints(3));
-
-    std::cout << "build Elevator " << id << std::endl;
-
-    std::lock_guard<std::mutex> lock(m_painterMutex);
-    m_painter.add(id, InstructionFactory::elevator(ps[0], ps[1], ps[2]));
+	m_painter.add(id, object);
 }
 
 }} // namespace laser::holodeck

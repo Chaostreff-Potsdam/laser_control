@@ -5,22 +5,23 @@
 namespace laser { namespace holodeck {
 
 namespace InstructionFactory {
-	ObjectPtr wall(Point p1, Point p2);
-	ObjectPtr door(Point p1, Point p2);
-	ObjectPtr table(Point p1, Point p2, Point p3, Point p4);
-	ObjectPtr player(Point p);
-	ObjectPtr button(Point p);
-	ObjectPtr beam(Point p1, Point p2);
-	ObjectPtr portal(Point p1, Point p2, bool active);
-	ObjectPtr zipline(Point p1, Point p2);
-	ObjectPtr stool(Point p1, Point p2);
-	ObjectPtr corpse(Point head, Point hip, Point leftHand, Point rightHand);
-	ObjectPtr water(Point p);
-	ObjectPtr poke(Point p1, Point p2);
-	ObjectPtr stomper(Point p1, Point p2);
-	ObjectPtr footwear(Point p);
-	ObjectPtr heat(Point p);
-    ObjectPtr elevator(Point p1, Point p2, Point p3);
+	ObjectPtr Wall(Point p1, Point p2);
+	ObjectPtr Door(Point p1, Point p2);
+	ObjectPtr Table(Point p1, Point p2, Point p3, Point p4);
+	ObjectPtr Player(Point p);
+	ObjectPtr Button(Point p);
+	ObjectPtr Beam(Point p1, Point p2);
+	ObjectPtr InActivePortal(Point p1, Point p2);
+	ObjectPtr ActivePortal(Point p1, Point p2);
+	ObjectPtr Zipline(Point p1, Point p2);
+	ObjectPtr Stool(Point p1, Point p2);
+	ObjectPtr Corpse(Point head, Point hip, Point leftHand, Point rightHand);
+	ObjectPtr Water(Point p);
+	ObjectPtr Poke(Point p1, Point p2);
+	ObjectPtr Stomper(Point p1, Point p2);
+	ObjectPtr Footwear(Point p);
+	ObjectPtr Heat(Point p);
+	ObjectPtr Elevator(Point p1, Point p2, Point p3);
 
 	/*!
 	 * \brief determine characteristic values for a rectangle
