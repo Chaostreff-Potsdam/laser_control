@@ -111,7 +111,7 @@ ObjectPtr InstructionFactory::Beam(Point p1, Point p2)
 	return group;
 }
 
-static ObjectPtr InstructionFactory::Portal(Point p1, Point p2, bool active)
+static ObjectPtr Portal(Point p1, Point p2, bool active)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -121,7 +121,7 @@ static ObjectPtr InstructionFactory::Portal(Point p1, Point p2, bool active)
 	Point start;
 	Point end;
 
-	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
+	InstructionFactory::calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
 
 	if (active)
 	{
