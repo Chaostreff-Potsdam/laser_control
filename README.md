@@ -10,10 +10,6 @@ For *nix OSs, this will be gcc >= 4.7.
 
 Visual Studio supports C++11 since its 2012 incarnation.
 
-### SWIG
-
-If you want to wrap this wrapper for other programming languages just like C#, you will need to install [SWIG][swig].
-
 ## 1. Building
 
 ### *nixes
