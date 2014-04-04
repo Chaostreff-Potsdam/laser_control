@@ -10,7 +10,6 @@ if(WIN32)
 	set(BOOST_VERSION 1.55)
 endif(WIN32)
 
-find_package(SWIG)
 find_package(OpenCV REQUIRED)
 find_package(Boost ${BOOST_VERSION}
 			REQUIRED
