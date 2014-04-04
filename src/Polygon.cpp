@@ -5,18 +5,20 @@
 #include "Line.h"
 #include "laser_utilities.h"
 
-laser::Polygon::Polygon(bool sharp, bool dashed)
+laser::Polygon::Polygon(bool sharp, bool dashed, bool closed)
 :	Object(),
 	m_sharpCorners(sharp),
-	m_dashed(dashed)
+	m_dashed(dashed),
+	m_closed(closed)
 {
 	;;
 }
 
-laser::Polygon::Polygon(const std::vector<laser::Point> & points, bool sharp, bool dashed)
+laser::Polygon::Polygon(const std::vector<laser::Point> & points, bool sharp, bool dashed, bool closed)
 :	Object(),
 	m_sharpCorners(sharp),
-	m_dashed(dashed)
+	m_dashed(dashed),
+	m_closed(closed)
 {
 	m_corners = points;
 }
@@ -49,9 +51,12 @@ laser::EtherdreamPoints laser::Polygon::points() const
 		appendIfSharp(con.endPoints());
 	}
 
-	Line endLine = Line(*(end - 1), *start, true, m_dashed);
-	appendIfSharp(endLine.startPoints());
-	append       (endLine.points());
+	if (m_closed)
+	{
+		Line endLine = Line(*(end - 1), *start, true, m_dashed);
+		appendIfSharp(endLine.startPoints());
+		append       (endLine.points());
+	}
 
 	return ps;
 }
@@ -63,5 +68,8 @@ laser::EtherdreamPoints laser::Polygon::startPoints() const
 
 laser::EtherdreamPoints laser::Polygon::endPoints() const
 {
-	return Line(m_corners.back(), m_corners.front()).endPoints();
+	if (m_closed)
+		return Line(m_corners.back(), m_corners.front()).endPoints();
+	else
+		return Line(*(m_corners.end() - 2), *(m_corners.end() - 1)).endPoints();
 }
