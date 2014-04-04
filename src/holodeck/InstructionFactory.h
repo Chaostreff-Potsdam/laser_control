@@ -20,6 +20,7 @@ namespace InstructionFactory {
 	ObjectPtr stomper(Point p1, Point p2);
 	ObjectPtr footwear(Point p);
 	ObjectPtr heat(Point p);
+    ObjectPtr elevator(Point p1, Point p2, Point p3);
 
 	/*!
 	 * \brief determine characteristic values for a rectangle

@@ -38,7 +38,8 @@ namespace laser { namespace holodeck {
 			POKE,
 			STOMPER,
 			FOOTWEAR,
-			HEAT
+            HEAT,
+            ELEVATOR
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
@@ -64,6 +65,7 @@ namespace laser { namespace holodeck {
 		void handleStomper();
 		void handleFootwear();
 		void handleHeat();
+        void handleElevator();
 
 		Painter& m_painter;
 

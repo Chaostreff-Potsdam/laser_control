@@ -319,7 +319,18 @@ void Server::handleHeat()
 	std::cout << "build Heat " << id << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, InstructionFactory::heat(ps[0]));
+    m_painter.add(id, InstructionFactory::heat(ps[0]));
+}
+
+void Server::handleElevator()
+{
+    int id = parseToInt(m_buf, 1);
+    std::vector<Point> ps(readPoints(3));
+
+    std::cout << "build Elevator " << id << std::endl;
+
+    std::lock_guard<std::mutex> lock(m_painterMutex);
+    m_painter.add(id, InstructionFactory::elevator(ps[0], ps[1], ps[2]));
 }
 
 }} // namespace laser::holodeck

@@ -399,7 +399,36 @@ ObjectPtr InstructionFactory::heat(Point p)
 
 	group->add(new Polygon(points, false, false, false));
 
-	return group;
+    return group;
+}
+
+ObjectPtr InstructionFactory::elevator(Point p1, Point p2, Point p3)
+{
+    CompositeObjectPtr group = CompositeObject::construct();
+
+    Point arrowOneBottom((p1.x() - p2.x())/5 + (p2.x() - p3.x())/5, (p1.y() - p2.y())/5 + (p2.y() - p3.y())/5);
+    Point arrowOneTop((p1.x() - p2.x())/5 + (p2.x() - p3.x())*4/5, (p1.y() - p2.y())/5 + (p2.y() - p3.y())*4/5);
+    Point arrowTwoBottom((p1.x() - p2.x())*4/5 + (p2.x() - p3.x())/5, (p1.y() - p2.y())*4/5 + (p2.y() - p3.y())/5);
+    Point arrowTwoTop((p1.x() - p2.x())*4/5 + (p2.x() - p3.x())*4/5, (p1.y() - p2.y())*4/5 + (p2.y() - p3.y())*4/5);
+    Point arrowOneTopTipRight(arrowOneTop.x() - 1.0/10 * (p1.x() - p3.x()), arrowOneTop.y() - 1.0/10 * (p1.y() - p3.y()));
+    Point arrowOneTopTipLeft(arrowOneTop.x() + 1.0/10 * (p1.x() - p3.x()), arrowOneTop.y() - 1.0/10 * (p1.y() - p3.y()));
+    Point arrowTwoBottomTipRight(arrowTwoBottom.x() + 1.0/10 * (p1.x() - p3.x()), arrowTwoBottom.y() + 1.0/10 * (p1.y() - p3.y()));
+    Point arrowTwoBottomTipLeft(arrowTwoBottom.x() - 1.0/10 * (p1.x() - p3.x()), arrowTwoBottom.y() + 1.0/10 * (p1.y() - p3.y()));
+    //Point arrowOneTopTipLeft();
+
+    group->add(new Rectangle(p1.x(), p1.y(), p2.x(), p2.y(), p3.x(), p3.y(), p3.x()+(p1.x() - p2.x()), p3.y()+(p1.y() - p2.y()), false));
+    group->add(new Line(arrowOneBottom, arrowOneTop));
+    group->add(new Line(arrowOneTop, arrowOneTopTipRight));
+    group->add(new Line(arrowOneTop, arrowOneTopTipLeft));
+    group->add(new Line(arrowTwoBottom, arrowTwoTop));
+    group->add(new Line(arrowTwoBottom, arrowTwoBottomTipRight));
+    group->add(new Line(arrowTwoBottom, arrowTwoBottomTipLeft));
+
+
+    std::cout << arrowOneTopTipRight.x() << " " << arrowOneTopTipRight.y() << std::endl;
+
+
+    return group;
 }
 
 }} // namespace laser::holodeck
