@@ -18,6 +18,8 @@ namespace InstructionFactory {
 	ObjectPtr water(Point p);
 	ObjectPtr poke(Point p1, Point p2);
 	ObjectPtr stomper(Point p1, Point p2);
+	ObjectPtr footwear(Point p);
+	ObjectPtr heat(Point p);
 
 	/*!
 	 * \brief determine characteristic values for a rectangle
