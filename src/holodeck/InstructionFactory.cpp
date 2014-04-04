@@ -321,4 +321,85 @@ ObjectPtr InstructionFactory::stomper(Point p1, Point p2)
 	return group;
 }
 
+ObjectPtr InstructionFactory::footwear(Point p)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+	CompositeObjectPtr groupA = CompositeObject::construct();
+	CompositeObjectPtr groupB = CompositeObject::construct();
+
+	groupA->add(new Circle(p, 1000));
+	groupA->add(new Circle(p.x() + 1000, p.y() + 1000, 300));
+
+
+	std::vector<Point> points;
+
+	points.push_back(Point(p.x() + 300, p.y() + 700));
+	points.push_back(Point(p.x() + 200, p.y() + 1400));
+	points.push_back(Point(p.x()      , p.y() + 700));
+	points.push_back(Point(p.x() - 200, p.y() + 1400));
+	points.push_back(Point(p.x() - 300, p.y() + 700));
+	points.push_back(Point(p.x() - 500, p.y() + 1400));
+	points.push_back(Point(p.x() - 700, p.y() + 700));
+	//points.push_back(Point(p.x() + 500, p.y() + 700));
+
+	groupA->add(new Polygon(points, false));
+
+	groupA->move(-p.x(), -p.y());
+	groupA->scale(1, 2);
+	groupA->move(p.x(), p.y());
+
+	groupA->move(-1500, 0);
+
+
+	groupB->add(new Circle(p, 1000));
+	groupB->add(new Circle(p.x() + 1000, p.y() + 1000, 300));
+
+
+	std::vector<Point> pointsB;
+
+	pointsB.push_back(Point(p.x() + 300, p.y() + 700));
+	pointsB.push_back(Point(p.x() + 200, p.y() + 1400));
+	pointsB.push_back(Point(p.x()      , p.y() + 700));
+	pointsB.push_back(Point(p.x() - 200, p.y() + 1400));
+	pointsB.push_back(Point(p.x() - 300, p.y() + 700));
+	pointsB.push_back(Point(p.x() - 500, p.y() + 1400));
+	pointsB.push_back(Point(p.x() - 700, p.y() + 700));
+	//points.push_back(Point(p.x() + 500, p.y() + 700));
+
+	groupB->add(new Polygon(pointsB, false));
+
+	groupB->move(-p.x(), -p.y());
+	groupB->scale(-1, 2);
+	groupB->move(p.x(), p.y());
+
+	groupB->move(1500, 0);
+
+	group->add(groupA);
+	group->add(groupB);
+
+	return group;
+}
+
+ObjectPtr InstructionFactory::heat(Point p)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+
+	group->add(new Circle(p, 2000, 3.8*M_PI_4, 9*M_PI_4));
+
+
+	std::vector<Point> points;
+
+	points.push_back(Point(p.x() - 1750, p.y() + 500));
+	points.push_back(Point(p.x() - 1500, p.y() + 1000));
+	points.push_back(Point(p.x() - 1000, p.y() + 750));
+	points.push_back(Point(p.x()       , p.y() + 2000));
+	points.push_back(Point(p.x() + 500, p.y() + 1000));
+	points.push_back(Point(p.x() + 1250, p.y() + 4000));
+	points.push_back(Point(p.x() + 1750, p.y() + 500));
+
+	group->add(new Polygon(points, false, false, false));
+
+	return group;
+}
+
 }} // namespace laser::holodeck

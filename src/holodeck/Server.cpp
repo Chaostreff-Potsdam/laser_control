@@ -113,6 +113,12 @@ void Server::handleRead()
 	case CommandType::STOMPER:
 		handleStomper();
 		break;
+	case CommandType::FOOTWEAR:
+		handleFootwear();
+		break;
+	case CommandType::HEAT:
+		handleHeat();
+		break;
 	default:
 		break;
 	}
@@ -292,6 +298,28 @@ void Server::handleStomper()
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.add(id, InstructionFactory::stomper(ps[0], ps[1]));
+}
+
+void Server::handleFootwear()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
+
+	std::cout << "build Footwear " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::footwear(ps[0]));
+}
+
+void Server::handleHeat()
+{
+	int id = parseToInt(m_buf, 1);
+	std::vector<Point> ps(readPoints(1));
+
+	std::cout << "build Heat " << id << std::endl;
+
+	std::lock_guard<std::mutex> lock(m_painterMutex);
+	m_painter.add(id, InstructionFactory::heat(ps[0]));
 }
 
 }} // namespace laser::holodeck
