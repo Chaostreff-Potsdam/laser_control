@@ -17,6 +17,8 @@ namespace laser { namespace holodeck {
 		void poll();
 
 	protected:
+		typedef void (Server::*Handler)();
+		static const std::vector<Handler> Handlers;
 
 		enum CommandType
 		{
@@ -39,7 +41,7 @@ namespace laser { namespace holodeck {
 			STOMPER,
 			FOOTWEAR,
             HEAT,
-            ELEVATOR
+			ELEVATOR,
 		};
 
 		static unsigned int parseToInt(unsigned char *array, int at);
@@ -48,6 +50,7 @@ namespace laser { namespace holodeck {
 		void startAccept();
 		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
 		void handleRead();
+
 		void handleDelete();
 		void handleDeleteAll();
 		void handleWall();
@@ -56,7 +59,10 @@ namespace laser { namespace holodeck {
 		void handleButton();
 		void handleDoor();
 		void handleBeam();
-		void handlePortal(bool active);
+		void handleInActivePortal()
+		{ return handlePortal(false); }
+		void handleActivePortal()
+		{ return handlePortal(true); }
 		void handleZipline();
 		void handleCorpse();
 		void handleStool();
@@ -67,6 +73,7 @@ namespace laser { namespace holodeck {
 		void handleHeat();
         void handleElevator();
 
+		void handlePortal(bool active);
 		Painter& m_painter;
 
 		boost::asio::io_service m_ioService;

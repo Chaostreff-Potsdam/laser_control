@@ -10,9 +10,31 @@
 
 namespace laser { namespace holodeck {
 
+const std::vector<Server::Handler> Server::Handlers = {
+	nullptr,
+	&Server::handleDelete,
+	&Server::handleDeleteAll,
+	&Server::handleWall,
+	&Server::handleTable,
+	&Server::handlePlayer,
+	&Server::handleButton,
+	&Server::handleDoor,
+	&Server::handleBeam,
+	&Server::handleInActivePortal,
+	&Server::handleActivePortal,
+	&Server::handleZipline,
+	&Server::handleCorpse,
+	&Server::handleStool,
+	&Server::handleWater,
+	&Server::handlePoke,
+	&Server::handleStomper,
+	&Server::handleFootwear,
+	&Server::handleHeat,
+	&Server::handleElevator,
+};
+
 Server::Server(Painter &painter)
-:	//m_acceptor(m_ioService, boost::asio::ip::tcp::endpoint(boost::asio::ip::tcp::v4(), 30000)),
-	m_painter(painter),
+:	m_painter(painter),
 	m_socket(m_ioService),
 	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
 	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.112"), 30000)
@@ -41,8 +63,6 @@ void Server::startAccept()
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
 							   m_senderEndpoint,
 							   boost::bind(&Server::handleRead, this));
-	//m_acceptor.async_accept(*socket, boost::bind(&LaserServer::handleAccept, this, socket,
-												// boost::asio::placeholders::error));
 }
 
 void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
@@ -63,66 +83,10 @@ void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::sys
 
 void Server::handleRead()
 {
-	std::cout << "LaserServer::handleRead " << (int)m_buf[0] << std::endl;
-	switch (m_buf[0]) {
-	case CommandType::DELETE:
-		handleDelete();
-		break;
-	case CommandType::DELETE_ALL:
-		handleDeleteAll();
-		break;
-	case CommandType::WALL:
-		handleWall();
-		break;
-	case CommandType::TABLE:
-		handleTable();
-		break;
-	case CommandType::PLAYER:
-		handlePlayer();
-		break;
-	case CommandType::BUTTON:
-		handleButton();
-		break;
-	case CommandType::DOOR:
-		handleDoor();
-		break;
-	case CommandType::BEAM:
-		handleBeam();
-		break;
-	case CommandType::PORTAL_INACTIVE:
-		handlePortal(false);
-		break;
-	case CommandType::PORTAL_ACTIVE:
-		handlePortal(true);
-		break;
-	case CommandType::ZIPLINE:
-		handleZipline();
-		break;
-	case CommandType::CORPSE:
-		handleCorpse();
-		break;
-	case CommandType::STOOL:
-		handleStool();
-		break;
-	case CommandType::WATER:
-		handleWater();
-		break;
-	case CommandType::POKE:
-		handlePoke();
-		break;
-	case CommandType::STOMPER:
-		handleStomper();
-		break;
-	case CommandType::FOOTWEAR:
-		handleFootwear();
-		break;
-	case CommandType::HEAT:
-		handleHeat();
-		break;
-	default:
-		break;
-	}
-
+	unsigned int command = (unsigned int)m_buf[0];
+	std::cout << "LaserServer::handleRead " << command  << std::endl;
+	if (0 < command && command < Handlers.size())
+			(this->*Handlers[command])();
 	startAccept();
 }
 
