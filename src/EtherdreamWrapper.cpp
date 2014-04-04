@@ -7,7 +7,8 @@
 
 const int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
 
-laser::EtherdreamWrapper::EtherdreamWrapper()
+laser::EtherdreamWrapper::EtherdreamWrapper():
+    m_etherdream(nullptr)
 {
     connect();
 }
