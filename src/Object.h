@@ -48,8 +48,8 @@ namespace laser {
 		 * \brief move this object by x and y
 		 */
 		void move(int x, int y);
-		void move(Point p)
-		{ move(p.x, p.y); }
+		void move(const Point & p)
+		{ move(p.x(), p.y()); }
 
 		void scale(double factorX, double factorY);
 		void scale(double factor);

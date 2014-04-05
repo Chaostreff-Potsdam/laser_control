@@ -18,6 +18,34 @@ static void ShiftPoints(std::vector<Point> & points, Point base)
 		p += base;
 }
 
+/*!
+ * \brief determine characteristic values for a rectangle
+ * \image html calculateRectangleCharacteristics.svg
+ * \param[in] p1 midpoint of one short side of the rectangle
+ * \param[in] p2 midpoint of the other short side
+ * \param[out] angle angle between x-axis and line between \a p1 and \a p2
+ * \param[out] length \f$ \mbox{length} = \sqrt{(\mbox{p1}_x - \mbox{p2}_x)^2 + (\mbox{p1}_y - \mbox{p2}_y)^2} \f$
+ * \param[out] start start point of axis aligned bounding box
+ * \param[out] mid mid point of axis aligned bounding box
+ * \param[out] end end point of axis aligned bounding box
+ */
+void calculateRectangleCharacteristics(Point p1, Point p2, float &angle, float &length, Point &start, Point &mid, Point &end)
+{
+	// calculate rotation
+	int dx = p2.x() - p1.x();
+	int dy = p2.y() - p1.y();
+	angle = atan2(dy, dx);
+
+	// length of wall
+	length = sqrt(sqr(dx) + sqr(dy));
+
+	mid = (p1 + p2) / 2;
+	start = mid - Point(0, length / 2);
+	end   = mid + Point(0, length / 2);
+}
+
+////////////////////////////////////////////////////////////
+
 ObjectPtr InstructionFactory::Wall(Point p1, Point p2)
 {
 	ObjectPtr w(new Line(p1, p2, true));
@@ -127,7 +155,7 @@ static ObjectPtr Portal(Point p1, Point p2, bool active)
 	Point start;
 	Point end;
 
-	InstructionFactory::calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
+	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
 
 	if (active)
 	{
@@ -137,7 +165,7 @@ static ObjectPtr Portal(Point p1, Point p2, bool active)
 	}
 	else
 	{
-		group->add(new Line(start, end);
+		group->add(new Line(start, end));
 		group->add(new Spiral(mid.x(), mid.y() + length/8, 200, length/4, 3, active));
 	}
 
@@ -237,21 +265,6 @@ ObjectPtr InstructionFactory::Corpse(Point head, Point hip, Point leftHand, Poin
 	group->add(new Line(rightHand, mid));
 
 	return group;
-}
-
-void InstructionFactory::calculateRectangleCharacteristics(Point p1, Point p2, float &angle, float &length, Point &start, Point &mid, Point &end)
-{
-	// calculate rotation
-	int dx = p2.x() - p1.x();
-	int dy = p2.y() - p1.y();
-	angle = atan2(dy, dx);
-
-	// length of wall
-	length = sqrt(sqr(dx) + sqr(dy));
-
-	mid = (p1 + p2) / 2;
-	start = mid - Point(0, length / 2);
-	end   = mid + Point(0, length / 2);
 }
 
 ObjectPtr InstructionFactory::Water(Point p)
