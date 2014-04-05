@@ -149,10 +149,10 @@ static ObjectPtr Portal(Point p1, Point p2, bool active)
 	return group;
 }
 
-ObjectPtr InstructionFactory::InActivePortal(Point p1, Point p2)
+ObjectPtr InstructionFactory::PortalInactive(Point p1, Point p2)
 { return Portal(p1, p2, false); }
 
-ObjectPtr InstructionFactory::ActivePortal(Point p1, Point p2)
+ObjectPtr InstructionFactory::PortalActive(Point p1, Point p2)
 { return Portal(p1, p2, true); }
 
 ObjectPtr InstructionFactory::Zipline(Point p1, Point p2)

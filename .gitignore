@@ -6,3 +6,5 @@ doc/
 *.user
 .*.swp
 .*.swo
+*.pyc
+*.autosave
