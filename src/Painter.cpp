@@ -14,8 +14,8 @@
 laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
-	m_cropObjects(cropObjects),
-	m_running(true)
+	m_running(true),
+	m_cropObjects(cropObjects)
 {
 	if (runUpdateLoop || expireObjects)
 	{

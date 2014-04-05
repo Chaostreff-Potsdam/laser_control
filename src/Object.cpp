@@ -129,13 +129,7 @@ bool laser::Object::visible()
 void laser::Object::tick()
 {
 	if (m_animation)
-	{
 		m_animation();
-	}
-	else
-	{
-		return;
-	}
 }
 
 /**** Other ****/

@@ -12,6 +12,12 @@
 
 namespace laser { namespace holodeck {
 
+static void ShiftPoints(std::vector<Point> & points, Point base)
+{
+	for (Point & p: points)
+		p += base;
+}
+
 ObjectPtr InstructionFactory::Wall(Point p1, Point p2)
 {
 	ObjectPtr w(new Line(p1, p2, true));
@@ -47,10 +53,10 @@ ObjectPtr InstructionFactory::Button(Point p)
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	std::vector<Point> ps;
-
-	ps.push_back(Point(p.x() - 6000, p.y() - 4000));
-	ps.push_back(Point(p.x() + 6000, p.y() - 4000));
-	ps.push_back(Point(p.x(), p.y() + 6000));
+	ps.emplace_back(-6000, -4000);
+	ps.emplace_back( 6000, -4000);
+	ps.emplace_back(    0,  6000);
+	ShiftPoints(ps, p);
 
 	group->add(new Polygon(ps, false, true));
 
@@ -125,22 +131,13 @@ static ObjectPtr Portal(Point p1, Point p2, bool active)
 
 	if (active)
 	{
-		group->add(new Line(start.x(),
-							start.y(),
-							start.x() + length/3,
-							start.y()));
+		group->add(new Line(start, start + Point(length / 3, 0)));
 		group->add(new Spiral(mid.x(), mid.y() + length/8, 200, length/4, 3, active));
-		group->add(new Line(end.x() - length/3,
-							end.y(),
-							end.x(),
-							end.y()));
+		group->add(new Line(end - Point(length/3, 0), end));
 	}
 	else
 	{
-		group->add(new Line(start.x(),
-							start.y(),
-							end.x(),
-							end.y()));
+		group->add(new Line(start, end);
 		group->add(new Spiral(mid.x(), mid.y() + length/8, 200, length/4, 3, active));
 	}
 
@@ -252,14 +249,9 @@ void InstructionFactory::calculateRectangleCharacteristics(Point p1, Point p2, f
 	// length of wall
 	length = sqrt(sqr(dx) + sqr(dy));
 
-	start.setX((p1.x() + p2.x()) / 2 - length/2);
-	start.setY((p1.y() + p2.y()) / 2);
-
-	end.setX((p1.x() + p2.x()) / 2 + length/2);
-	end.setY((p1.y() + p2.y()) / 2);
-
-	mid.setX((p1.x() + p2.x()) / 2);
-	mid.setY((p1.y() + p2.y()) / 2);
+	mid = (p1 + p2) / 2;
+	start = mid - Point(0, length / 2);
+	end   = mid + Point(0, length / 2);
 }
 
 ObjectPtr InstructionFactory::Water(Point p)
@@ -334,49 +326,49 @@ ObjectPtr InstructionFactory::Footwear(Point p)
 	CompositeObjectPtr groupB = CompositeObject::construct();
 
 	groupA->add(new Circle(p, 1000));
-	groupA->add(new Circle(p.x() + 1000, p.y() + 1000, 300));
+	groupA->add(new Circle(p + Point(1000, 1000), 300));
 
 
 	std::vector<Point> points;
-
-	points.push_back(Point(p.x() + 300, p.y() + 700));
-	points.push_back(Point(p.x() + 200, p.y() + 1400));
-	points.push_back(Point(p.x()      , p.y() + 700));
-	points.push_back(Point(p.x() - 200, p.y() + 1400));
-	points.push_back(Point(p.x() - 300, p.y() + 700));
-	points.push_back(Point(p.x() - 500, p.y() + 1400));
-	points.push_back(Point(p.x() - 700, p.y() + 700));
-	//points.push_back(Point(p.x() + 500, p.y() + 700));
+	points.emplace_back(+ 300,  700);
+	points.emplace_back(+ 200, 1400);
+	points.emplace_back(    0,  700);
+	points.emplace_back(- 200, 1400);
+	points.emplace_back(- 300,  700);
+	points.emplace_back(- 500, 1400);
+	points.emplace_back(- 700,  700);
+	//points.emplace_back(+ 500,  700);
+	ShiftPoints(points, p);
 
 	groupA->add(new Polygon(points, false));
 
-	groupA->move(-p.x(), -p.y());
+	groupA->move(-p);
 	groupA->scale(1, 2);
-	groupA->move(p.x(), p.y());
+	groupA->move(p);
 
 	groupA->move(-1500, 0);
 
 
 	groupB->add(new Circle(p, 1000));
-	groupB->add(new Circle(p.x() + 1000, p.y() + 1000, 300));
+	groupB->add(new Circle(p + Point(1000, 1000), 300));
 
 
-	std::vector<Point> pointsB;
+	points.clear();
+	points.emplace_back(+ 300,  700);
+	points.emplace_back(+ 200, 1400);
+	points.emplace_back(    0,  700);
+	points.emplace_back(- 200, 1400);
+	points.emplace_back(- 300,  700);
+	points.emplace_back(- 500, 1400);
+	points.emplace_back(- 700,  700);
+	//points.emplace_back(+ 500, 700);
+	ShiftPoints(points, p);
 
-	pointsB.push_back(Point(p.x() + 300, p.y() + 700));
-	pointsB.push_back(Point(p.x() + 200, p.y() + 1400));
-	pointsB.push_back(Point(p.x()      , p.y() + 700));
-	pointsB.push_back(Point(p.x() - 200, p.y() + 1400));
-	pointsB.push_back(Point(p.x() - 300, p.y() + 700));
-	pointsB.push_back(Point(p.x() - 500, p.y() + 1400));
-	pointsB.push_back(Point(p.x() - 700, p.y() + 700));
-	//points.push_back(Point(p.x() + 500, p.y() + 700));
+	groupB->add(new Polygon(points, false));
 
-	groupB->add(new Polygon(pointsB, false));
-
-	groupB->move(-p.x(), -p.y());
+	groupB->move(-p);
 	groupB->scale(-1, 2);
-	groupB->move(p.x(), p.y());
+	groupB->move(p);
 
 	groupB->move(1500, 0);
 
@@ -395,13 +387,14 @@ ObjectPtr InstructionFactory::Heat(Point p)
 
 	std::vector<Point> points;
 
-	points.push_back(Point(p.x() - 1750, p.y() + 500));
-	points.push_back(Point(p.x() - 1500, p.y() + 1000));
-	points.push_back(Point(p.x() - 1000, p.y() + 750));
-	points.push_back(Point(p.x()       , p.y() + 2000));
-	points.push_back(Point(p.x() + 500, p.y() + 1000));
-	points.push_back(Point(p.x() + 1250, p.y() + 4000));
-	points.push_back(Point(p.x() + 1750, p.y() + 500));
+	points.emplace_back(-1750,  500);
+	points.emplace_back(-1500, 1000);
+	points.emplace_back(-1000,  750);
+	points.emplace_back(    0, 2000);
+	points.emplace_back(  500, 1000);
+	points.emplace_back( 1250, 4000);
+	points.emplace_back( 1750,  500);
+	ShiftPoints(points, p);
 
 	group->add(new Polygon(points, false, false, false));
 
@@ -410,31 +403,38 @@ ObjectPtr InstructionFactory::Heat(Point p)
 
 ObjectPtr InstructionFactory::Elevator(Point p1, Point p2, Point p3)
 {
-    CompositeObjectPtr group = CompositeObject::construct();
+	CompositeObjectPtr group = CompositeObject::construct();
 
-    Point arrowOneBottom((p1.x() - p2.x())/5 + (p2.x() - p3.x())/5, (p1.y() - p2.y())/5 + (p2.y() - p3.y())/5);
-    Point arrowOneTop((p1.x() - p2.x())/5 + (p2.x() - p3.x())*4/5, (p1.y() - p2.y())/5 + (p2.y() - p3.y())*4/5);
-    Point arrowTwoBottom((p1.x() - p2.x())*4/5 + (p2.x() - p3.x())/5, (p1.y() - p2.y())*4/5 + (p2.y() - p3.y())/5);
-    Point arrowTwoTop((p1.x() - p2.x())*4/5 + (p2.x() - p3.x())*4/5, (p1.y() - p2.y())*4/5 + (p2.y() - p3.y())*4/5);
-    Point arrowOneTopTipRight(arrowOneTop.x() - 1.0/10 * (p1.x() - p3.x()), arrowOneTop.y() - 1.0/10 * (p1.y() - p3.y()));
-    Point arrowOneTopTipLeft(arrowOneTop.x() + 1.0/10 * (p1.x() - p3.x()), arrowOneTop.y() - 1.0/10 * (p1.y() - p3.y()));
-    Point arrowTwoBottomTipRight(arrowTwoBottom.x() + 1.0/10 * (p1.x() - p3.x()), arrowTwoBottom.y() + 1.0/10 * (p1.y() - p3.y()));
-    Point arrowTwoBottomTipLeft(arrowTwoBottom.x() - 1.0/10 * (p1.x() - p3.x()), arrowTwoBottom.y() + 1.0/10 * (p1.y() - p3.y()));
-    //Point arrowOneTopTipLeft();
+	/* I refactored that.
+	 * Please check if it still looks allright.
+	 * SK
+	 */
+	Point s12 = p1 - p2;
+	Point s13 = p1 - p3;
+	Point s23 = p1 - p2;
+	Point arrowOneBottom = s12 / 5   + s23 / 5;
+	Point arrowOneTop    = s12 / 5   + s23 * 0.8;
+	Point arrowTwoBottom = s12 * 0.8 + s23 / 5;
+	Point arrowTwoTop    = s12 * 0.8 + s23 * 0.8;
 
-    group->add(new Rectangle(p1.x(), p1.y(), p2.x(), p2.y(), p3.x(), p3.y(), p3.x()+(p1.x() - p2.x()), p3.y()+(p1.y() - p2.y()), false));
-    group->add(new Line(arrowOneBottom, arrowOneTop));
-    group->add(new Line(arrowOneTop, arrowOneTopTipRight));
-    group->add(new Line(arrowOneTop, arrowOneTopTipLeft));
-    group->add(new Line(arrowTwoBottom, arrowTwoTop));
-    group->add(new Line(arrowTwoBottom, arrowTwoBottomTipRight));
-    group->add(new Line(arrowTwoBottom, arrowTwoBottomTipLeft));
+	Point arrowOneTopTipRight = arrowOneTop - s13 * 0.1;
+	Point arrowOneTopTipLeft  = arrowOneTop + s13 * 0.1;
+	Point arrowTwoBottomTipRight = arrowTwoBottom + s13 * 0.1;
+	Point arrowTwoBottomTipLeft = arrowTwoBottom + Point(-s13.x(), s13.y()) * 0.1;
+	//Point arrowOneTopTipLeft();
+
+	group->add(new Rectangle(p1, p2, p3, p3 + s12, false));
+	group->add(new Line(arrowOneBottom, arrowOneTop));
+	group->add(new Line(arrowOneTop, arrowOneTopTipRight));
+	group->add(new Line(arrowOneTop, arrowOneTopTipLeft));
+	group->add(new Line(arrowTwoBottom, arrowTwoTop));
+	group->add(new Line(arrowTwoBottom, arrowTwoBottomTipRight));
+	group->add(new Line(arrowTwoBottom, arrowTwoBottomTipLeft));
+
+	std::cout << arrowOneTopTipRight.x() << " " << arrowOneTopTipRight.y() << std::endl;
 
 
-    std::cout << arrowOneTopTipRight.x() << " " << arrowOneTopTipRight.y() << std::endl;
-
-
-    return group;
+	return group;
 }
 
 }} // namespace laser::holodeck
