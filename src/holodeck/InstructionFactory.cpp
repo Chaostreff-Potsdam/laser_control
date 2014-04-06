@@ -424,7 +424,7 @@ ObjectPtr InstructionFactory::Elevator(Point p1, Point p2, Point p3)
 	 */
 	Point s12 = p1 - p2;
 	Point s13 = p1 - p3;
-	Point s23 = p1 - p2;
+	Point s23 = p2 - p3;
 	Point arrowOneBottom = s12 / 5   + s23 / 5;
 	Point arrowOneTop    = s12 / 5   + s23 * 0.8;
 	Point arrowTwoBottom = s12 * 0.8 + s23 / 5;
@@ -448,6 +448,14 @@ ObjectPtr InstructionFactory::Elevator(Point p1, Point p2, Point p3)
 
 
 	return group;
+}
+
+ObjectPtr InstructionFactory::Guardrail(Point p1, Point p2)
+{
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(new Circle(p1, 325));
+	group->add(new Line(p1, p2, true, true));
+	group->add(new Circle(p2, 325));
 }
 
 }} // namespace laser::holodeck

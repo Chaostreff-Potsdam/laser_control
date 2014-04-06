@@ -19,6 +19,7 @@ namespace laser { namespace holodeck {
 #define EMPTY_LINE(ObjectT, num_points) \
 	[](Server *) {}
 
+// If you need the enum for the client side, run getHolodeckEnum.py
 const std::vector<Server::Handler> Server::Handlers = {
 	EMPTY_LINE(Invalid, dummy),
 
@@ -40,7 +41,8 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Stomper, 2),
 	HANDLE_OBJECT(Footwear, 1),
 	HANDLE_OBJECT(Heat, 1),
-	HANDLE_OBJECT(Elevator, 3)
+	HANDLE_OBJECT(Elevator, 3),
+	HANDLE_OBJECT(Guardrail, 2)
 };
 
 Server::Server(Painter &painter)

@@ -22,6 +22,7 @@ namespace InstructionFactory {
 	ObjectPtr Footwear(Point p);
 	ObjectPtr Heat(Point p);
 	ObjectPtr Elevator(Point p1, Point p2, Point p3);
+	ObjectPtr Guardrail(Point p1, Point p2);
 }
 
 }} // namespace laser::holodeck
