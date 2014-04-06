@@ -456,6 +456,7 @@ ObjectPtr InstructionFactory::Guardrail(Point p1, Point p2)
 	group->add(new Circle(p1, 325));
 	group->add(new Line(p1, p2, true, true));
 	group->add(new Circle(p2, 325));
+	return group;
 }
 
 }} // namespace laser::holodeck
