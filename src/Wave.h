@@ -15,7 +15,7 @@ namespace laser {
 
 	protected:
 		Point m_p1;
-		Point m_p2;
+		Point m_s12;
 
 		int m_amplitude;
 		int m_frequency;

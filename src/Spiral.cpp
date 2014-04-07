@@ -36,8 +36,11 @@ laser::EtherdreamPoints laser::Spiral::points() const
 		 rad <= 2*M_PI*m_revolutions;
 		 rad += 2*M_PI/LASERWRAPPER_SPIRAL_POINTS_PER_REVOLUTION)
 	{
-		etherdream_point p;
+	//	const Point onCircle(cos(rad), sin(rad));
+	//	ps.push_back(etherdreamPoint(m_p + onCircle * currentRadius));
 
+
+		etherdream_point p;
 		int currentRadius = m_innerRadius
 				+ (m_outerRadius - m_innerRadius) * (rad / (2*M_PI*m_revolutions));
 
@@ -67,17 +70,10 @@ laser::EtherdreamPoints laser::Spiral::startPoints() const
 		 rad < 0;
 		 rad += M_PI_2/20)
 	{
-		etherdream_point p;
-
-		int currentRadius = m_innerRadius
+		const int currentRadius = m_innerRadius
 				+ (m_outerRadius - m_innerRadius) * (rad / (2*M_PI*m_revolutions));
-
-		p.x = clamp(m_p.x() + currentRadius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + currentRadius * sin(rad), INT16_MIN, INT16_MAX);
-		p.r = 0;
-		p.g = 0;
-		p.b = 0;
-		ps.push_back(p);
+		const Point onCircle(cos(rad), sin(rad));
+		ps.push_back(etherdreamPoint(m_p + onCircle * currentRadius, false));
 	}
 
 	return ps;
@@ -91,17 +87,10 @@ laser::EtherdreamPoints laser::Spiral::endPoints() const
 		 rad < 2*M_PI*m_revolutions + M_PI_2;
 		 rad += M_PI_2/20)
 	{
-		etherdream_point p;
-
-		int currentRadius = m_innerRadius
+		const int currentRadius = m_innerRadius
 				+ (m_outerRadius - m_innerRadius) * (rad / (2*M_PI*m_revolutions));
-
-		p.x = clamp(m_p.x() + currentRadius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + currentRadius * sin(rad), INT16_MIN, INT16_MAX);
-		p.r = 0;
-		p.g = 0;
-		p.b = 0;
-		ps.push_back(p);
+		const Point onCircle(cos(rad), sin(rad));
+		ps.push_back(etherdreamPoint(m_p + onCircle * currentRadius, false));
 	}
 
 	return ps;

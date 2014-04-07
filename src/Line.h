@@ -16,9 +16,8 @@ namespace laser {
 
 	private:
 		Point m_a;
-		Point m_b;
+		Point m_sAB;
 
-		int m_length;
 		int m_pointCount;
 
 		bool m_visible;

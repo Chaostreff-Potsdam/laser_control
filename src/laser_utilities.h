@@ -2,6 +2,7 @@
 #define LASER_UTILITIES_H
 
 #include <cstdint>
+#include <cmath>
 
 namespace laser {
 	/*!
@@ -72,21 +73,24 @@ namespace laser {
 		void setX(int x) {m_x = x;}
 		void setY(int y) {m_y = y;}
 
-		Point operator+(const Point & other)
+		float abs() const
+		{ return std::sqrt(sqr(m_x) + sqr(m_y)); }
+
+		Point operator+(const Point & other) const
 		{ return Point(m_x + other.m_x, m_y + other.m_y); }
 
-		Point operator-(const Point & other)
+		Point operator-(const Point & other) const
 		{ return Point(m_x - other.m_x, m_y - other.m_y); }
 
-		Point operator-()
+		Point operator-() const
 		{ return Point(-m_x, -m_y); }
 
 		template <typename T>
-		Point operator*(const T factor)
+		Point operator*(const T factor) const
 		{ return Point(m_x * factor, m_y * factor); }
 
 		template <typename T>
-		Point operator/(const T factor)
+		Point operator/(const T factor) const
 		{ return Point(m_x / factor, m_y / factor); }
 
 		Point & operator+=(const Point & other)

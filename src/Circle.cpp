@@ -33,19 +33,8 @@ laser::EtherdreamPoints laser::Circle::points() const
 		 rad <= m_endRatio;
 		 rad += std::abs(m_endRatio - m_startRatio)/LASERWRAPPER_CIRCLE_POINTS)
 	{
-		etherdream_point p;
-
-		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
-		
-		bool pointVisible = true;
-		if(p.x == INT16_MIN || p.x == INT16_MAX || p.y == INT16_MIN || p.y == INT16_MAX) 
-			pointVisible = false;
-
-		p.r = 0;
-		p.g = pointVisible ? UINT16_MAX : 0;
-		p.b = 0;
-		ps.push_back(p);
+		const Point onCircle(cos(rad), sin(rad));
+		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius));
 	}
 
 	return ps;
@@ -62,14 +51,8 @@ laser::EtherdreamPoints laser::Circle::startPoints() const
 		 rad < m_startRatio;
 		 rad += M_PI_2 / 20)
 	{
-		etherdream_point p;
-
-		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
-		p.r = 0;
-		p.g = 0;
-		p.b = 0;
-		ps.push_back(p);
+		const Point onCircle(cos(rad), sin(rad));
+		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius, false));
 	}
 
 	return ps;
@@ -86,14 +69,8 @@ laser::EtherdreamPoints laser::Circle::endPoints() const
 		 rad < m_endRatio + M_PI_2;
 		 rad += M_PI_2 / 20)
 	{
-		etherdream_point p;
-
-		p.x = clamp(m_p.x() + m_radius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + m_radius * sin(rad), INT16_MIN, INT16_MAX);
-		p.r = 0;
-		p.g = 0;
-		p.b = 0;
-		ps.push_back(p);
+		const Point onCircle(cos(rad), sin(rad));
+		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius, false));
 	}
 
 	return ps;

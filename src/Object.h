@@ -94,6 +94,10 @@ namespace laser {
 		void nowDirty()
 		{ m_dirty = true; }
 
+		const etherdream_point etherdreamPoint(int x, int y, bool visible = true) const;
+		const etherdream_point etherdreamPoint(Point p, bool visible = true) const
+		{ return etherdreamPoint(p.x(), p.y(), visible); }
+
 	private:
 		bool m_dirty, m_isUpdating;
 		EtherdreamPoints m_cache;

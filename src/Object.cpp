@@ -65,6 +65,23 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 	return m_cache;
 }
 
+const etherdream_point laser::Object::etherdreamPoint(int x, int y, bool visible) const
+{
+	etherdream_point p;
+	bzero(&p, sizeof(p));
+
+	p.x = clamp(x, INT16_MIN, INT16_MAX);
+	p.y = clamp(y, INT16_MIN, INT16_MAX);
+
+	visible &= (p.x != INT16_MIN && p.x != INT16_MAX && p.y != INT16_MIN && p.y != INT16_MAX);
+
+	// TODO: Set real color
+	p.r = 0;
+	p.g = visible ? UINT16_MAX : 0;
+	p.b = 0;
+	return p;
+}
+
 /**** Transform ***/
 
 void laser::Object::rotate(double rad)

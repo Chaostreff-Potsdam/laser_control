@@ -27,6 +27,7 @@ namespace laser { namespace holodeck {
 			InstructionCaller<num_points> caller;
 
 			int id = parseToInt(m_buf, 1);
+			// int turkerId = parseToInt(m_buf, 6);
 			addObjectToPainter(id, name, caller(&constructor, readPoints(num_points)));
 		}
 

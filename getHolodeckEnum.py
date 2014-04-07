@@ -21,14 +21,10 @@ def findHandlers():
 		if handler:
 			yield handler
 
-def camelCaseToEnum(name):
-	s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-	return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).upper()
-
 def printEnum():
 	print "enum CommandType"
 	print "{"
-	print ",\n".join("\t%s = %d" % (camelCaseToEnum(handler), idx)
+	print ",\n".join("\t%s = %d" % (handler, idx)
 						for idx, handler in enumerate(findHandlers()))
 	print "};"
 
