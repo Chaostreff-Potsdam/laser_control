@@ -36,27 +36,11 @@ laser::EtherdreamPoints laser::Spiral::points() const
 		 rad <= 2*M_PI*m_revolutions;
 		 rad += 2*M_PI/LASERWRAPPER_SPIRAL_POINTS_PER_REVOLUTION)
 	{
-	//	const Point onCircle(cos(rad), sin(rad));
-	//	ps.push_back(etherdreamPoint(m_p + onCircle * currentRadius));
-
-
-		etherdream_point p;
-		int currentRadius = m_innerRadius
+		const Point onCircle(cos(rad), sin(rad));
+		const int currentRadius = m_innerRadius
 				+ (m_outerRadius - m_innerRadius) * (rad / (2*M_PI*m_revolutions));
-
-		//std::cout << rad << "; " << currentRadius << std::endl;
-
-		p.x = clamp(m_p.x() + currentRadius * cos(rad), INT16_MIN, INT16_MAX);
-		p.y = clamp(m_p.y() + currentRadius * sin(rad), INT16_MIN, INT16_MAX);
-
-		bool pointVisible = true;
-		if(p.x == INT16_MIN || p.x == INT16_MAX || p.y == INT16_MIN || p.y == INT16_MAX)
-			pointVisible = false;
-
-		p.r = 0;
-		p.g = pointVisible ? (m_active ? UINT16_MAX : (fmod(rad, M_PI_4/2) < M_PI_4/4 ? UINT16_MAX : 0)) : 0;
-		p.b = 0;
-		ps.push_back(p);
+		const bool visible = m_active || (!m_active && fmod(rad, M_PI_4/2) < M_PI_4/4);
+		ps.push_back(etherdreamPoint(m_p + onCircle * currentRadius, visible));
 	}
 
 	return ps;

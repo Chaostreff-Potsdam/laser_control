@@ -43,7 +43,7 @@ void Calibration::start()
                        &Calibration::yScaleChanged, (void*)this);
     cv::createTrackbar("Keystone", "Calibration", &m_topEdge, 100,
                        &Calibration::topEdgeChanged, (void*)this);
-    cv::createButton("Print homography", &Calibration::printHomography, (void*)this);
+	//cv::createButton("Print homography", &Calibration::printHomography, (void*)this);
 
     cv::waitKey();
 
