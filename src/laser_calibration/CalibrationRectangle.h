@@ -1,30 +1,29 @@
-#ifndef CALIBRATIONRECTANGLE_H
-#define CALIBRATIONRECTANGLE_H
+#pragma once
 
-#include "EtherdreamWrapper.h"
-#include "DllExport.h"
+#include "../EtherdreamWrapper.h"
+#include "../Object.h"
 
 namespace laser {
 
-class EXPORT_LASER_CONTROL CalibrationRectangle
+class EXPORT_LASER_CONTROL CalibrationRectangle: public Object
 {
 public:
+	CalibrationRectangle(Point topLeft, Point bottomLeft, Point bottomRight, Point topRight);
 
-    CalibrationRectangle(cv::Point2f topLeft, cv::Point2f bottomLeft, cv::Point2f bottomRight, cv::Point2f topRight);
+	EtherdreamPoints points() const;
+	std::vector<cv::Point2f> corners();
 
-    EtherdreamPoints points() const;
-    std::vector<cv::Point2f> corners();
+	EtherdreamPoints startPoints() const
+	{ return EtherdreamPoints(); }
 
-    void print();
-
+	EtherdreamPoints endPoints() const
+	{ return EtherdreamPoints(); }
 
 private:
-    cv::Point2f m_topLeft;
-    cv::Point2f m_bottomLeft;
-    cv::Point2f m_bottomRight;
-    cv::Point2f m_topRight;
+	Point m_topLeft;
+	Point m_bottomLeft;
+	Point m_bottomRight;
+	Point m_topRight;
 };
 
 }
-
-#endif // CALIBRATIONRECTANGLE_H

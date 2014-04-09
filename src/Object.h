@@ -36,6 +36,10 @@ namespace laser {
 		EtherdreamPoints pointsToPaint();
 
 		/*** Transforms ***/
+
+		cv::Mat transform() const
+		{ return m_transform; }
+
 		/*!
 		 * \brief rotate this object by \f$\frac{180\cdot rad}{\pi}\f$ degrees
 		 */

@@ -10,129 +10,98 @@
 using namespace laser;
 
 Calibration::Calibration(std::shared_ptr<EtherdreamWrapper> wrapper)
-    : m_scale(100), m_topEdge(100),
+	: m_scale(100),
+	  m_yScale(100),
+	  m_keystoneFactor(100),
       m_rect(maxRect()),
-      m_etherdream(wrapper)
+	  m_etherdream(wrapper),
+	  m_homography(0, 0, CV_8UC1, nullptr)
 {
+	;;
+}
+
+bool Calibration::alreadyCalibrated()
+{
+	cv::FileStorage fs("calibration.yml", cv::FileStorage::READ);
+
+	if (!fs.isOpened())
+		return false;
+
+	fs["homography"] >> m_homography;
+	std::cout << "Found calibration.yml file. Skipping calibration." << std::endl;
+	return true;
 }
 
 void Calibration::start()
 {
-	cv::FileStorage fs("calibration.yml", cv::FileStorage::READ);
-
-	if (fs.isOpened())
-	{
-		fs["homography"] >> m_homography;
-		fs.release();
-
-        std::cout << "Found calibration.yml file. Skipping calibration." << std::endl;
+	if (alreadyCalibrated())
 		return;
-	}
 
-	fs.release();
+	void (*callback)(int, void *) = [](int, void *t){static_cast<Calibration *>(t)->repaint();};
 
-    EtherdreamPoints points = m_rect.points();
-    m_etherdream->setPoints(points);
-    m_etherdream->writePoints();
-
-    cv::namedWindow("Calibration");
-
-    cv::createTrackbar("Scale", "Calibration", &m_scale, 100,
-                       &Calibration::scaleChanged, (void*)this);
-    cv::createTrackbar("y-Scale", "Calibration", &m_yScale, 100,
-                       &Calibration::yScaleChanged, (void*)this);
-    cv::createTrackbar("Keystone", "Calibration", &m_topEdge, 100,
-                       &Calibration::topEdgeChanged, (void*)this);
+	cv::namedWindow("Calibration");
+	cv::createTrackbar("Scale", "Calibration", &m_scale, 100, callback, (void*)this);
+	cv::createTrackbar("y-Scale", "Calibration", &m_yScale, 100, callback, (void*)this);
+	cv::createTrackbar("Keystone", "Calibration", &m_keystoneFactor, 100, callback, (void*)this);
 	//cv::createButton("Print homography", &Calibration::printHomography, (void*)this);
 
-    cv::waitKey();
+	repaint();
 
-    computeHomography();
+	cv::waitKey();
 
+	cv::destroyWindow("Calibration");
+
+	computeHomography();
 	cv::FileStorage fs1("calibration.yml", cv::FileStorage::WRITE);
-
 	fs1 << "homography" << m_homography;
-
-	fs1.release();
-
-    cv::destroyWindow("Calibration");
 }
 
-void Calibration::scaleChanged(int scale, void * inst)
+void Calibration::repaint()
 {
-    Calibration *instance = (Calibration*)inst;
-    instance->m_scale = scale;
-    instance->updateRectangle();
-}
+	float scaleFactor = m_scale / 100.0;
+	float yScaleFactor = m_yScale / 100.0;
+	float keystoneFactor = m_keystoneFactor / 100.0;
 
-void Calibration::yScaleChanged(int scale, void * inst)
-{
-    Calibration *instance = (Calibration*)inst;
-    instance->m_yScale = scale;
-    instance->updateRectangle();
-}
+	m_rect = CalibrationRectangle(
+			// top edges gets scaled,
+			// bottom edges scaled and moved in x direction
 
-void Calibration::topEdgeChanged(int length, void * inst)
-{
-    Calibration *instance = (Calibration*)inst;
-    instance->m_topEdge = length;
-    instance->updateRectangle();
-}
+			// top left
+			Point(INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor),
 
-void Calibration::printHomography(int /*unused*/, void *inst)
-{
-    Calibration *instance = (Calibration*)inst;
-    cv::Mat h = instance->homography();
-    std::cout << h << std::endl;
-}
+			// bottom left
+			Point(INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
 
-void Calibration::updateRectangle()
-{
-    float scaleFactor = m_scale / 100.0;
-    float yScaleFactor = m_yScale / 100.0;
-    float keystoneFactor = m_topEdge / 100.0;
+			// bottom right
+			Point(-INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
 
-    m_rect = CalibrationRectangle(
-                // top edges gets scaled,
-                // bottom edges scaled and moved in x direction
+			// top right
+			Point(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor)
+			);
 
-                // top left
-                cv::Point2f(INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor),
-
-                // bottom left
-                cv::Point2f(INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
-
-                // bottom right
-                cv::Point2f(-INT16_MAX * scaleFactor * keystoneFactor, -INT16_MAX * scaleFactor * yScaleFactor),
-
-                // top right
-                cv::Point2f(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor)
-                );
-
-    m_etherdream->clear();
-    EtherdreamPoints points = m_rect.points();
-    m_etherdream->setPoints(points);
-    m_etherdream->writePoints();
+	m_etherdream->setPoints(m_rect.points());
+	m_etherdream->writePoints();
 }
 
 cv::Mat Calibration::homography()
 {
-    // TODO check if m_homography is valid!
-    // computeHomography() otherwise
-    return m_homography;
+	if (m_homography.empty())
+		computeHomography();
+
+	return m_homography;
 }
 
 void Calibration::computeHomography()
 {
-    std::vector<cv::Point2f> src = maxRect().corners();
-    std::vector<cv::Point2f> dst = m_rect.corners();
-    m_homography = cv::findHomography(src, dst);
+	std::vector<cv::Point2f> src = maxRect().corners();
+	std::vector<cv::Point2f> dst = m_rect.corners();
+	m_homography = cv::findHomography(src, dst);
 }
 
 CalibrationRectangle Calibration::maxRect()
 {
-    return CalibrationRectangle(cv::Point2f(INT16_MAX, INT16_MAX),
-                                cv::Point2f(INT16_MAX, -INT16_MAX),
-                                cv::Point2f(-INT16_MAX, -INT16_MAX),
-                                cv::Point2f(-INT16_MAX, INT16_MAX));
+	return CalibrationRectangle(Point(INT16_MAX, INT16_MAX),
+								Point(INT16_MAX, -INT16_MAX),
+								Point(-INT16_MAX, -INT16_MAX),
+								Point(-INT16_MAX, INT16_MAX));
 }

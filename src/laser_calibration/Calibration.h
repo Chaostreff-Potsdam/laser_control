@@ -1,5 +1,4 @@
-#ifndef CALIBRATION_H
-#define CALIBRATION_H
+#pragma once
 
 #include <memory>
 
@@ -16,21 +15,16 @@ public:
     cv::Mat homography();
 
 private:
-
-    void updateRectangle();
+	bool alreadyCalibrated();
+    void repaint();
 
     void computeHomography();
-
-    static void scaleChanged(int scale, void* instance);    
-    static void yScaleChanged(int scale, void* instance);
-    static void topEdgeChanged(int length, void* instance);
-    static void printHomography(int, void* instance);
 
     static CalibrationRectangle maxRect();
 
     int m_scale;
     int m_yScale;
-    int m_topEdge;
+    int m_keystoneFactor;
 
     CalibrationRectangle m_rect;
     std::shared_ptr<EtherdreamWrapper> m_etherdream;
@@ -39,5 +33,3 @@ private:
 
 
 }
-
-#endif
