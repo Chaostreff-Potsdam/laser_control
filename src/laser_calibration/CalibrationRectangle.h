@@ -1,29 +1,19 @@
 #pragma once
 
-#include "../EtherdreamWrapper.h"
-#include "../Object.h"
+#include "EtherdreamWrapper.h"
+#include "../Polygon.h"
 
 namespace laser {
 
-class EXPORT_LASER_CONTROL CalibrationRectangle: public Object
+class EXPORT_LASER_CONTROL CalibrationRectangle: public Polygon
 {
 public:
-	CalibrationRectangle(Point topLeft, Point bottomLeft, Point bottomRight, Point topRight);
+	static std::vector<Point> undistoredCorners();
 
-	EtherdreamPoints points() const;
+	CalibrationRectangle();
+	void setKeystoneFactor(float keystoneFactor);
+
 	std::vector<cv::Point2f> corners();
-
-	EtherdreamPoints startPoints() const
-	{ return EtherdreamPoints(); }
-
-	EtherdreamPoints endPoints() const
-	{ return EtherdreamPoints(); }
-
-private:
-	Point m_topLeft;
-	Point m_bottomLeft;
-	Point m_bottomRight;
-	Point m_topRight;
 };
 
 }

@@ -16,20 +16,16 @@ public:
 
 private:
 	bool alreadyCalibrated();
-    void repaint();
+	void repaint();
+	void computeHomography();
 
-    void computeHomography();
+	int m_scale;
+	int m_yScale;
+	int m_keystoneFactor;
 
-    static CalibrationRectangle maxRect();
-
-    int m_scale;
-    int m_yScale;
-    int m_keystoneFactor;
-
-    CalibrationRectangle m_rect;
-    std::shared_ptr<EtherdreamWrapper> m_etherdream;
-    cv::Mat m_homography;
+	CalibrationRectangle m_rect;
+	std::shared_ptr<EtherdreamWrapper> m_etherdream;
+	cv::Mat m_homography;
 };
-
 
 }

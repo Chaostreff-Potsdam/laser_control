@@ -1,57 +1,47 @@
 #include "CalibrationRectangle.h"
-#include "../Line.h"
+#include "Calibration.h"
+#include "../Transform.h"
 
-#include <iostream>
 #include <cstdint>
 
 using namespace laser;
 
-static cv::Point2f toCV(const Point & p)
-{ return cv::Point2f(p.x(), p.y()); }
+std::vector<Point> CalibrationRectangle::undistoredCorners()
+{
+	std::vector<Point> points;
 
-CalibrationRectangle::CalibrationRectangle(Point topLeft, Point bottomLeft, Point bottomRight, Point topRight)
-	: Object(),
-	  m_topLeft(topLeft), m_bottomLeft(bottomLeft), m_bottomRight(bottomRight), m_topRight(topRight)
+	points.emplace_back(INT16_MIN, INT16_MIN);
+	points.emplace_back(INT16_MIN, INT16_MAX);
+	points.emplace_back(INT16_MAX, INT16_MAX);
+	points.emplace_back(INT16_MAX, INT16_MIN);
+	return points;
+}
+
+CalibrationRectangle::CalibrationRectangle() :
+	Polygon(undistoredCorners())
+
 {
 	;;
 }
 
-laser::EtherdreamPoints CalibrationRectangle::points() const
+void CalibrationRectangle::setKeystoneFactor(float keystoneFactor)
 {
-	const float pointsPerLine = 50;
-	EtherdreamPoints points;
-
-	auto drawLineFromTo = [&](const Point & from, const Point & to) {
-		Point fromTo = from - to;
-		for (int i = 0; i < pointsPerLine; ++i)
-		{
-			Point newPoint = to + fromTo * (i/pointsPerLine);
-			points.push_back(etherdreamPoint(newPoint));
-		}
-	};
-
-#if 1
-	appendToVector(points, Line(m_topLeft, m_topRight).points());
-	appendToVector(points, Line(m_topRight, m_bottomRight).points());
-	appendToVector(points, Line(m_bottomRight, m_bottomLeft).points());
-	appendToVector(points, Line(m_bottomLeft, m_topLeft).points());
-#else
-	drawLineFromTo(m_topLeft, m_topRight);
-	drawLineFromTo(m_bottomLeft, m_topLeft);
-	drawLineFromTo(m_bottomRight, m_bottomLeft);
-	drawLineFromTo(m_topRight, m_bottomRight);
-#endif
-
-	return points;
+	int topHalfLength = std::max(100.0f, keystoneFactor * (int)INT16_MAX);
+	m_corners[0].setX(-topHalfLength);
+	m_corners[3].setX(+topHalfLength);
+	nowDirty();
 }
 
 std::vector<cv::Point2f> CalibrationRectangle::corners()
 {
-	std::vector<cv::Point2f> corners;
-	corners.push_back(toCV(m_topLeft));
-	corners.push_back(toCV(m_bottomLeft));
-	corners.push_back(toCV(m_bottomRight));
-	corners.push_back(toCV(m_topRight));
+	EtherdreamPoints corners;
+	for (const auto & p: m_corners)
+		corners.push_back(etherdreamPoint(p));
 
-	return corners;
+	Transform::applyInPlace(corners, cv::transform, transform()(cv::Rect(0, 0, 3, 2)));
+
+	std::vector<cv::Point2f> result;
+	for (const auto & p: corners)
+		result.emplace_back(p.x, p.y);
+	return result;
 }
