@@ -1,5 +1,4 @@
-#ifndef LASERCOMPOSITEOBJECT_H
-#define LASERCOMPOSITEOBJECT_H
+#pragma once
 
 #include "Object.h"
 
@@ -32,5 +31,3 @@ namespace laser {
 		friend void Object::setParent(const parent_t &);
 	};
 }
-
-#endif // LASERCOMPOSITEOBJECT_H

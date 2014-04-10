@@ -41,6 +41,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.h
+	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Config.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Painter.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Painter.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Object.cpp

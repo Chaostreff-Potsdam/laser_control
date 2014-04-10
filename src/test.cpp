@@ -6,6 +6,7 @@
 #include "Line.h"
 #include "Wave.h"
 #include "CompositeObject.h"
+#include "Config.h"
 
 #ifndef _WIN32
 #  include "holodeck/Server.h"
@@ -27,13 +28,14 @@
 using namespace laser;
 
 #ifndef _WIN32
-int main(void)
+int main(int argc, char *argv[])
 {
+	config::readCommandLine(argc, argv);
+
 	Painter p(false, false, true);
     p.aquireEtherdreamWrapper();
 
 	p.calibrate();
-
 
 	// p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 

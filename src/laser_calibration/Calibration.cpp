@@ -1,4 +1,5 @@
 #include "Calibration.h"
+#include "../Config.h"
 
 #include <opencv/highgui.h>
 #include <opencv2/calib3d/calib3d.hpp>
@@ -33,7 +34,7 @@ bool Calibration::alreadyCalibrated()
 
 void Calibration::start()
 {
-	if (alreadyCalibrated())
+	if (!config::forceRecalibration && alreadyCalibrated())
 		return;
 
 	void (*callback)(int, void *) = [](int, void *t){static_cast<Calibration *>(t)->repaint();};

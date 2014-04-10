@@ -1,5 +1,4 @@
-#ifndef LASEROBJECT_H
-#define LASEROBJECT_H
+#pragma once
 
 #include "EtherdreamWrapper.h"
 #include "DllExport.h"
@@ -119,5 +118,3 @@ namespace laser {
 	};
 
 }
-
-#endif // LASEROBJECT_H

@@ -26,7 +26,7 @@ CalibrationRectangle::CalibrationRectangle() :
 
 void CalibrationRectangle::setKeystoneFactor(float keystoneFactor)
 {
-	int topHalfLength = std::max(100.0f, keystoneFactor * (int)INT16_MAX);
+	int topHalfLength = keystoneFactor * (int)INT16_MAX;
 	m_corners[0].setX(-topHalfLength);
 	m_corners[3].setX(+topHalfLength);
 	nowDirty();

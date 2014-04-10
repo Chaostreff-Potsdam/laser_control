@@ -1,5 +1,5 @@
-#ifndef SPIRAL_H
-#define SPIRAL_H
+#pragma once
+
 #include "Object.h"
 
 namespace laser {
@@ -21,5 +21,3 @@ namespace laser {
 		bool m_active;
 	};
 }
-
-#endif // SPIRAL_H

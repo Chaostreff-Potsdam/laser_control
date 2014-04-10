@@ -34,7 +34,7 @@ laser::EtherdreamPoints laser::Line::points() const
 	EtherdreamPoints ps;
 	if (m_visible)
 	{
-		for (int i = 0; i <= m_pointCount; i++)
+		for (int i = 0; i < m_pointCount; i++)
 		{
 			const Point p = m_a + m_sAB * ((float)i)/m_pointCount;
 			const bool visible = !m_dashed || (m_dashed && (i % 4 < 2));

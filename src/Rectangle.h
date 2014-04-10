@@ -1,5 +1,4 @@
-#ifndef LASERRECTANGLE_H
-#define LASERRECTANGLE_H
+#pragma once
 
 #include "Polygon.h"
 #include "laser_utilities.h"
@@ -14,5 +13,3 @@ namespace laser {
 		Rectangle(int p1x, int p1y, int p2x, int p2y, int p3x, int p3y, int p4x, int p4y, bool sharp);
 	};
 }
-
-#endif // LASERRECTANGLE_H

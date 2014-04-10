@@ -1,5 +1,4 @@
-#ifndef ETHERDREAMWRAPPER_H
-#define ETHERDREAMWRAPPER_H
+#pragma once
 
 #include <vector>
 #include <mutex>
@@ -111,4 +110,3 @@ namespace laser {
 #endif
 	};
 }
-#endif // ETHERDREAMWRAPPER_H

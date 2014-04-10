@@ -1,5 +1,4 @@
-#ifndef LASERPAINTER_H
-#define LASERPAINTER_H
+#pragma once
 
 #include "EtherdreamWrapper.h"
 #include "Object.h"
@@ -126,5 +125,3 @@ namespace laser {
 
 	};
 }
-
-#endif // LASERPAINTER_H

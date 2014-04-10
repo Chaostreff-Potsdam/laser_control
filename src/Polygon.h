@@ -1,5 +1,4 @@
-#ifndef LASERPOLYLINE_H
-#define LASERPOLYLINE_H
+#pragma once
 
 #include "Object.h"
 
@@ -26,5 +25,3 @@ namespace laser {
 		bool m_closed;
 	};
 }
-
-#endif // LASERPOLYLINE_H

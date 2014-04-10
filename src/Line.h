@@ -1,5 +1,4 @@
-#ifndef LASERLINE_H
-#define LASERLINE_H
+#pragma once
 
 #include "Object.h"
 
@@ -24,5 +23,3 @@ namespace laser {
 		bool m_dashed;
 	};
 }
-
-#endif // LASERLINE_H

@@ -1,5 +1,4 @@
-#ifndef LASERWAVE_H
-#define LASERWAVE_H
+#pragma once
 
 #include "Object.h"
 
@@ -22,6 +21,3 @@ namespace laser {
 		int m_pointCount;
 	};
 }
-
-
-#endif // LASERWAVE_H
