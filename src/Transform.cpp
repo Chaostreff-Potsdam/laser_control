@@ -17,16 +17,14 @@ static void opaqueApply(EtherdreamPoints & points, TransformPoints & aux_in, Tra
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{
-		aux_out[i].x = clamp(aux_out[i].x, INT16_MIN, INT16_MAX);
-		aux_out[i].y = clamp(aux_out[i].y, INT16_MIN, INT16_MAX);
-		if(aux_out[i].x == INT16_MAX || aux_out[i].x == INT16_MIN || aux_out[i].y == INT16_MAX || aux_out[i].y == INT16_MIN) {
+		if (aux_out[i].x > INT16_MAX || aux_out[i].x < INT16_MIN || aux_out[i].y > INT16_MAX || aux_out[i].y < INT16_MIN) {
 			points[i].r = 0;
 			points[i].g = 0;
 			points[i].b = 0;
 		}
 
-		points[i].x = (int16_t) aux_out[i].x;
-		points[i].y = (int16_t) aux_out[i].y;
+		points[i].x = clamp(aux_out[i].x, INT16_MIN, INT16_MAX);
+		points[i].y = clamp(aux_out[i].y, INT16_MIN, INT16_MAX);
 	}
 }
 
@@ -75,16 +73,15 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	{
 		if(transformPoints[i].x < INT16_MAX + canvasMargin && transformPoints[i].x > INT16_MIN  - canvasMargin 
 			&& transformPoints[i].y < INT16_MAX  + canvasMargin && transformPoints[i].y > INT16_MIN - canvasMargin) {
-			transformPoints[i].x = clamp(transformPoints[i].x, INT16_MIN, INT16_MAX);
-			transformPoints[i].y = clamp(transformPoints[i].y, INT16_MIN, INT16_MAX);
-			if(transformPoints[i].x == INT16_MAX || transformPoints[i].x == INT16_MIN || transformPoints[i].y == INT16_MAX || transformPoints[i].y == INT16_MIN) {
+
+			if(transformPoints[i].x > INT16_MAX || transformPoints[i].x < INT16_MIN || transformPoints[i].y > INT16_MAX || transformPoints[i].y < INT16_MIN) {
 				points[i].r = 0;
 				points[i].g = 0;
 				points[i].b = 0;
 			}
 
-			points[i].x = (int16_t) transformPoints[i].x;
-			points[i].y = (int16_t) transformPoints[i].y;
+			points[i].x = (int16_t) clamp(transformPoints[i].x, INT16_MIN, INT16_MAX);
+			points[i].y = (int16_t) clamp(transformPoints[i].y, INT16_MIN, INT16_MAX);
 
 			returnPoints.push_back(points[i]);
 		}

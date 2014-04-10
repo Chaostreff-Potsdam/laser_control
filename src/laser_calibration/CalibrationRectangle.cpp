@@ -1,4 +1,5 @@
 #include "CalibrationRectangle.h"
+#include "../Line.h"
 
 #include <iostream>
 #include <cstdint>
@@ -29,10 +30,17 @@ laser::EtherdreamPoints CalibrationRectangle::points() const
 		}
 	};
 
+#if 1
+	appendToVector(points, Line(m_topLeft, m_topRight).points());
+	appendToVector(points, Line(m_topRight, m_bottomRight).points());
+	appendToVector(points, Line(m_bottomRight, m_bottomLeft).points());
+	appendToVector(points, Line(m_bottomLeft, m_topLeft).points());
+#else
 	drawLineFromTo(m_topLeft, m_topRight);
 	drawLineFromTo(m_bottomLeft, m_topLeft);
 	drawLineFromTo(m_bottomRight, m_bottomLeft);
 	drawLineFromTo(m_topRight, m_bottomRight);
+#endif
 
 	return points;
 }

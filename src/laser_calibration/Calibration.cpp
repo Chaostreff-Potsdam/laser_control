@@ -79,7 +79,7 @@ void Calibration::repaint()
 			Point(-INT16_MAX * scaleFactor, INT16_MAX * scaleFactor * yScaleFactor)
 			);
 
-	m_etherdream->setPoints(m_rect.points());
+	m_etherdream->setPoints(m_rect.pointsToPaint());
 	m_etherdream->writePoints();
 }
 
