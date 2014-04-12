@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <mutex>
+#include <memory>
 
 #include <opencv2/core/core.hpp>
 
@@ -109,4 +110,6 @@ namespace laser {
         struct etherdream *m_etherdream;
 #endif
 	};
+
+	typedef std::shared_ptr<EtherdreamWrapper> EtherdreamWrapperPtr;
 }

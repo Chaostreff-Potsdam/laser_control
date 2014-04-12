@@ -32,20 +32,25 @@ laser::Painter::~Painter()
 
 void laser::Painter::aquireEtherdreamWrapper()
 {
-    m_canvas = std::make_shared<EtherdreamWrapper>();
+	paintOn(std::make_shared<EtherdreamWrapper>());
 }
 
 void laser::Painter::calibrate()
 {
-	if (!m_canvas) aquireEtherdreamWrapper();
-
-    Calibration calibration(m_canvas);
+	Calibration calibration(canvas());
     calibration.start();
 
     m_calibration = calibration.homography();
 }
 
-void laser::Painter::paintOn(const std::shared_ptr<EtherdreamWrapper> &e)
+laser::EtherdreamWrapperPtr laser::Painter::canvas()
+{
+	if (!m_canvas) aquireEtherdreamWrapper();
+
+	return m_canvas;
+}
+
+void laser::Painter::paintOn(const EtherdreamWrapperPtr &e)
 {
 	m_canvas = e;
 }
@@ -141,23 +146,13 @@ void laser::Painter::updatePoints()
 	}
 
 	if(m_cropObjects) {
-		EtherdreamPoints transformedPoints;
-		if (!m_calibration.empty()) 
-			transformedPoints = Transform::applyReturning(ps, cv::perspectiveTransform, m_calibration);
-		else
-			transformedPoints = ps;
-		m_canvas->setPoints(transformedPoints);
+		EtherdreamPoints transformedPoints = Transform::applyReturning(ps, cv::perspectiveTransform, m_calibration);
+		canvas()->setPoints(transformedPoints);
 	} else {
-		if (!m_calibration.empty()) 
-			Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
-		m_canvas->setPoints(ps);
+		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
+		canvas()->setPoints(ps);
 	}
-	m_canvas->writePoints();
-}
-
-void laser::Painter::setCalibration(cv::Mat homography)
-{
-	m_calibration = homography;
+	canvas()->writePoints();
 }
 
 void laser::Painter::updateLoop()

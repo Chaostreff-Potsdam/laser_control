@@ -5,7 +5,6 @@
 #include "laser_utilities.h"
 
 #include <utility>
-#include <memory>
 #include <thread>
 #include <mutex>
 #include <map>
@@ -39,17 +38,25 @@ namespace laser {
 		 */
 		void aquireEtherdreamWrapper();
 
-        /*!
-         * \brief calibrates the LaserPainter to scale and anti-keystone the image
-         */
-        void calibrate();
+		/*!
+		 * \brief calibrates the LaserPainter to scale and anti-keystone the image
+		 */
+		void calibrate();
+
+		/*!
+		 * \brief Returns the current canvas.
+		 *
+		 * If there is no one yet it will aquire a EtherdreamWrapper
+		 */
+		EtherdreamWrapperPtr canvas();
 
 		/*!
 		 * \brief set a new EtherdreamWrapper
 		 *
 		 * This overrides the old #m_canvas.
 		 */
-		void paintOn(const std::shared_ptr<EtherdreamWrapper> & e);
+		void paintOn(const EtherdreamWrapperPtr & e);
+
 
 		/*!
 		 * \brief overrides #m_objects with \a objects and calls updatePoints()
@@ -92,18 +99,12 @@ namespace laser {
 		 */
 		ObjectPtr getObject(int id);
 
-		void setCalibration(cv::Mat homography);
-
 	protected:
 		std::thread m_updateLoop;
 		void updateLoop();
 
 		std::mutex m_updateMutex;
 
-		/*!
-		 * \brief the EtherdreamWrapper the objects will be painted on
-		 */
-		std::shared_ptr<EtherdreamWrapper> m_canvas;
 
 		/*!
 		 * \brief multiple LaserObjects that are uniquely idetified by an id
@@ -123,5 +124,9 @@ namespace laser {
 		bool m_running;
 		bool m_cropObjects;
 
+		/*!
+		 * \brief the EtherdreamWrapper the objects will be painted on
+		 */
+		EtherdreamWrapperPtr m_canvas;
 	};
 }

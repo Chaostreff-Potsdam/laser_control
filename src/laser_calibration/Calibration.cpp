@@ -10,7 +10,7 @@
 
 using namespace laser;
 
-Calibration::Calibration(std::shared_ptr<EtherdreamWrapper> wrapper)
+Calibration::Calibration(EtherdreamWrapperPtr wrapper)
 	: m_scale(100),
 	  m_yScale(100),
 	  m_keystoneFactor(100),

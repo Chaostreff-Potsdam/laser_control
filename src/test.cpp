@@ -33,11 +33,7 @@ int main(int argc, char *argv[])
 	config::readCommandLine(argc, argv);
 
 	Painter p(false, false, true);
-    p.aquireEtherdreamWrapper();
-
 	p.calibrate();
-
-	// p.drawTable(1, Point(-10000, -20000), Point(256, -20000), Point(0, 0), Point(-20000, 0));
 
 	/*CompositeObjectPtr group = CompositeObject::construct();
 	ObjectPtr outerRect = std::make_shared<Rectangle>(-10000, -10000, 20000, 20000);
@@ -57,22 +53,12 @@ int main(int argc, char *argv[])
 
 	s.poll();
 	*/
-	
-
-	
-	/*
-	std::cout << "larger circle added\n";
-	std::cout.flush();
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));*/
-
 
 //	p.add(holodeck::InstructionFactory::Beam(Point(10000, 10000), Point(10000, 5000)));
 //	p.add(holodeck::InstructionFactory::Button(Point(0, 0)));
 //	p.add(holodeck::InstructionFactory::Wall(Point(-20000, -20000), Point(-5000, -20000)));
 //	p.add(holodeck::InstructionFactory::Wall(Point(30000, -5000), Point(30000, 10000)));
-	p.add(holodeck::InstructionFactory::Elevator(Point(-20000, -10000), Point(10000, -20000), Point(0, 0)));
-	//p.add(50, ObjectPtr(new Line(-20000,-10000, 10000, -10000)));
-	
+	p.add(holodeck::InstructionFactory::Elevator(Point(-20000, -10000), Point(10000, -20000), Point(0, 0)));	
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 	return 0;
