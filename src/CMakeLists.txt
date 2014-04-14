@@ -25,19 +25,8 @@ else(UNIX)
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/j4cDAC.h)
 endif(UNIX)
 
-if(UNIX)
-	set(HOLODECK_FILES
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionCaller.h
-	)
-else(UNIX)
-	set(HOLODECK_FILES )
-endif(UNIX)
-
 set(MYSOURCES
+	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Config.h
 	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
@@ -68,15 +57,27 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/objects/Spiral.h
 	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.h
-	${HOLODECK_FILES}
     ${DRIVER_FILES})
 
 # Making stand-alone C++ Library
 add_library(laserwrapper SHARED
 	${MYSOURCES})
 
+if(UNIX)
+	set(HOLODECK_FILES
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionCaller.h
+	)
+else(UNIX)
+	set(HOLODECK_FILES )
+endif(UNIX)
+
 # Making test application
 add_executable(laser_wrapper_test
+			${HOLODECK_FILES}
 			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
 
 option(NO_ETHERDREAM_TRACE FALSE)
