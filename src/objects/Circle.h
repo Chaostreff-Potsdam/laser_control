@@ -1,5 +1,4 @@
-#ifndef LASERCIRCLE_H
-#define LASERCIRCLE_H
+#pragma once
 
 #include "Object.h"
 #include <cmath>
@@ -22,5 +21,3 @@ namespace laser {
 		float m_startRatio;
 	};
 }
-
-#endif // LASERCIRCLE_H

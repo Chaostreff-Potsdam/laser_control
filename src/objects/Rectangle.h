@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Polygon.h"
-#include "laser_utilities.h"
 #include <vector>
 
 namespace laser {

@@ -104,7 +104,7 @@ void laser::Painter::removeExpiredObjects()
 
 	ObjectPtrMap::iterator iter = m_objects.begin();
 	ObjectPtrMap::iterator end = m_objects.end();
-	while(iter != end)
+	while (iter != end)
 	{
 
 		if ((iter->second)->permanent())
@@ -145,7 +145,7 @@ void laser::Painter::updatePoints()
 		appendToVector(ps, objPair.second->pointsToPaint());
 	}
 
-	if(m_cropObjects) {
+	if (m_cropObjects) {
 		EtherdreamPoints transformedPoints = Transform::applyReturning(ps, cv::perspectiveTransform, m_calibration);
 		canvas()->setPoints(transformedPoints);
 	} else {

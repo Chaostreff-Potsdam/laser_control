@@ -1,11 +1,10 @@
 #pragma once
 
-#include "EtherdreamWrapper.h"
-#include "DllExport.h"
-
+#include "../EtherdreamWrapper.h"
+#include "../laser_utilities.h"
+#include "../DllExport.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
-#include "laser_utilities.h"
 #include <memory>
 #include <functional>
 

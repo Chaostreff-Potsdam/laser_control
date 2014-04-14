@@ -1,7 +1,7 @@
 #pragma once
 
-#include "EtherdreamWrapper.h"
-#include "../Polygon.h"
+#include "../EtherdreamWrapper.h"
+#include "../objects/Polygon.h"
 
 namespace laser {
 

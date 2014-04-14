@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Object.h"
-
 #include <vector>
-
-#include "laser_utilities.h"
 
 namespace laser {
 	class EXPORT_LASER_CONTROL Polygon : public Object

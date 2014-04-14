@@ -1,10 +1,8 @@
 #pragma once
 
 #include "EtherdreamWrapper.h"
-#include "Object.h"
-#include "laser_utilities.h"
+#include "objects/Object.h"
 
-#include <utility>
 #include <thread>
 #include <mutex>
 #include <map>

@@ -38,36 +38,36 @@ else(UNIX)
 endif(UNIX)
 
 set(MYSOURCES
+	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Config.h
 	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Config.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Painter.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Painter.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Object.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Object.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Circle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Circle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Wave.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Wave.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Rectangle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Rectangle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Line.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Line.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Spiral.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Spiral.h
-	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/CompositeObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Polygon.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/CompositeObject.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/CompositeObject.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Line.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Line.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Object.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Object.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Polygon.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Polygon.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Rectangle.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Rectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Spiral.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Spiral.h
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.h
 	${HOLODECK_FILES}
     ${DRIVER_FILES})
 

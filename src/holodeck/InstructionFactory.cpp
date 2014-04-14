@@ -1,10 +1,10 @@
 #include "InstructionFactory.h"
 
-#include "../Line.h"
-#include "../Circle.h"
-#include "../Rectangle.h"
-#include "../Spiral.h"
-#include "../CompositeObject.h"
+#include "../objects/Line.h"
+#include "../objects/Circle.h"
+#include "../objects/Rectangle.h"
+#include "../objects/Spiral.h"
+#include "../objects/CompositeObject.h"
 
 #include <cmath>
 
