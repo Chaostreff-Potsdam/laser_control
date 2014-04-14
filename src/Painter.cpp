@@ -132,15 +132,18 @@ void laser::Painter::updatePoints()
 	#endif
 
 	EtherdreamPoints ps;
-	std::lock_guard<std::mutex> lock(m_updateMutex);
 
-	if (m_expireObjects) {
-		removeExpiredObjects();
-	}
+	{
+		std::lock_guard<std::mutex> lock(m_updateMutex);
 
-	for (auto objPair: m_objects) {
-		objPair.second->tick();
-		appendToVector(ps, objPair.second->pointsToPaint());
+		if (m_expireObjects) {
+			removeExpiredObjects();
+		}
+
+		for (auto objPair: m_objects) {
+			objPair.second->tick();
+			appendToVector(ps, objPair.second->pointsToPaint());
+		}
 	}
 
 	if (m_cropObjects) {

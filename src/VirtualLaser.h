@@ -8,14 +8,19 @@ namespace laser {
 class VirtualLaser: public Canvas
 {
 public:
-	static const char *windowName;
-	static const int windowSize;
-	static const float scale;
-
 	VirtualLaser();
 	virtual ~VirtualLaser();
 
 	void writePoints();
+
+private:
+	/*!
+	 * \brief draws all next points of the same color
+	 *
+	 * \return the starting index of the next line
+	 */
+	size_t drawNextPolyline(size_t currentIndex, cv::Mat & canvas);
+
 };
 
 }
