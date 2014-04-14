@@ -37,6 +37,8 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/Painter.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
+	${LASERWRAPPER_SOURCE_DIR}/src/VirtualLaser.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/VirtualLaser.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp

@@ -1,8 +1,8 @@
-#ifndef LASER_UTILITIES_H
-#define LASER_UTILITIES_H
+#pragma once
 
 #include <cstdint>
 #include <cmath>
+#include <opencv2/core/core.hpp>
 
 namespace laser {
 	/*!
@@ -105,5 +105,3 @@ namespace laser {
 		int m_y;
 	};
 }
-
-#endif // LASER_UTILITIES_H

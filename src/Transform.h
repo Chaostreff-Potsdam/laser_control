@@ -1,6 +1,7 @@
 #pragma once
 
 #include "EtherdreamWrapper.h"
+#include <opencv2/core/core.hpp>
 
 #include <functional>
 

@@ -1,8 +1,6 @@
 #pragma once
 #include "Canvas.h"
 
-#include <opencv2/core/core.hpp>
-
 namespace laser {
 
 	/*!
@@ -40,7 +38,7 @@ namespace laser {
 		 */
 		void writePoints();
 
-	protected:
+	private:
 		/*!
 		 * \brief establishes connection to the DAC
 		 *

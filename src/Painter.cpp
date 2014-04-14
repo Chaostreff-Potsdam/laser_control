@@ -4,16 +4,14 @@
 #include "Transform.h"
 
 #include <utility>
-#include <memory>
-#include <mutex>
 #include <algorithm>
-#include <vector>
 
 #include <boost/date_time.hpp>
 
 laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
+	m_calibration(cv::Mat::eye(3, 3, CV_64FC1)),
 	m_running(true),
 	m_cropObjects(cropObjects)
 {
