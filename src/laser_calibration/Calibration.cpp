@@ -10,7 +10,7 @@
 
 using namespace laser;
 
-Calibration::Calibration(EtherdreamWrapperPtr wrapper)
+Calibration::Calibration(CanvasPtr wrapper)
 	: m_scale(100),
 	  m_yScale(100),
 	  m_keystoneFactor(100),

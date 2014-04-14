@@ -26,7 +26,7 @@ laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop
 laser::Painter::~Painter()
 {
 	m_running = false;
-	if(m_expireObjects)
+	if (m_expireObjects)
 		m_updateLoop.join();
 }
 
@@ -43,14 +43,14 @@ void laser::Painter::calibrate()
     m_calibration = calibration.homography();
 }
 
-laser::EtherdreamWrapperPtr laser::Painter::canvas()
+laser::CanvasPtr laser::Painter::canvas()
 {
 	if (!m_canvas) aquireEtherdreamWrapper();
 
 	return m_canvas;
 }
 
-void laser::Painter::paintOn(const EtherdreamWrapperPtr &e)
+void laser::Painter::paintOn(const CanvasPtr &e)
 {
 	m_canvas = e;
 }

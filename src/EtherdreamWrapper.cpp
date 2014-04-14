@@ -2,12 +2,12 @@
 
 #include <chrono>
 #include <thread>
-
 #include <iostream>
 
 const int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
 
-laser::EtherdreamWrapper::EtherdreamWrapper():
+laser::EtherdreamWrapper::EtherdreamWrapper() :
+	Canvas(),
     m_etherdream(nullptr)
 {
     connect();
@@ -25,20 +25,6 @@ laser::EtherdreamWrapper::~EtherdreamWrapper()
 	if(m_etherdream)
         etherdream_disconnect(m_etherdream);
 #endif
-}
-
-bool laser::EtherdreamWrapper::empty()
-{
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
-	return m_points.empty();
-}
-
-void laser::EtherdreamWrapper::clear()
-{
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
-	m_points.clear();
 }
 
 void laser::EtherdreamWrapper::connect()
@@ -127,18 +113,4 @@ void laser::EtherdreamWrapper::writePoints()
 #else
 	etherdream_write(m_etherdream, m_points.data(), m_points.size(), pps, -1);
 #endif
-}
-
-void laser::EtherdreamWrapper::setPoints(const EtherdreamPoints &p)
-{
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
-    m_points = p;
-}
-
-void laser::EtherdreamWrapper::addPoints(const EtherdreamPoints &p)
-{
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
-    m_points.insert(m_points.end(), p.begin(), p.end());
 }

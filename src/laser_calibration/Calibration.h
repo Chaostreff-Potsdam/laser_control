@@ -9,7 +9,7 @@ namespace laser {
 class EXPORT_LASER_CONTROL Calibration
 {
 public:
-	Calibration(EtherdreamWrapperPtr wrapper);
+	Calibration(CanvasPtr wrapper);
 
     void start();
     cv::Mat homography();
@@ -24,7 +24,7 @@ private:
 	int m_keystoneFactor;
 
 	CalibrationRectangle m_rect;
-	EtherdreamWrapperPtr m_etherdream;
+	CanvasPtr m_etherdream;
 	cv::Mat m_homography;
 };
 

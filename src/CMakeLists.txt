@@ -26,6 +26,7 @@ else(UNIX)
 endif(UNIX)
 
 set(MYSOURCES
+	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Config.h

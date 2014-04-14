@@ -46,14 +46,14 @@ namespace laser {
 		 *
 		 * If there is no one yet it will aquire a EtherdreamWrapper
 		 */
-		EtherdreamWrapperPtr canvas();
+		CanvasPtr canvas();
 
 		/*!
 		 * \brief set a new EtherdreamWrapper
 		 *
 		 * This overrides the old #m_canvas.
 		 */
-		void paintOn(const EtherdreamWrapperPtr & e);
+		void paintOn(const CanvasPtr & e);
 
 
 		/*!
@@ -125,6 +125,6 @@ namespace laser {
 		/*!
 		 * \brief the EtherdreamWrapper the objects will be painted on
 		 */
-		EtherdreamWrapperPtr m_canvas;
+		CanvasPtr m_canvas;
 	};
 }
