@@ -11,7 +11,7 @@
 
 #include "laser_calibration/Calibration.h"
 
-#include "objects/Rectangle.h"
+#include "objects/Circle.h"
 
 #include <chrono>
 
@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 #if 0
 	holodeck::Server s(p);
 #else
-	ObjectPtr rect = std::make_shared<Rectangle>(-10000, -10000, 20000, 20000);
+	ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
 	p.add(rect);
 
 	while (true) {

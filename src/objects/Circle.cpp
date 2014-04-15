@@ -33,8 +33,8 @@ laser::EtherdreamPoints laser::Circle::points() const
 		 rad <= m_endRatio;
 		 rad += std::abs(m_endRatio - m_startRatio)/LASERWRAPPER_CIRCLE_POINTS)
 	{
-		const Point onCircle(cos(rad), sin(rad));
-		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius));
+		const Point onCircle(cos(rad) * m_radius, sin(rad) * m_radius);
+		ps.push_back(etherdreamPoint(m_p + onCircle));
 	}
 
 	return ps;
@@ -51,8 +51,8 @@ laser::EtherdreamPoints laser::Circle::startPoints() const
 		 rad < m_startRatio;
 		 rad += M_PI_2 / 20)
 	{
-		const Point onCircle(cos(rad), sin(rad));
-		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius, false));
+		const Point onCircle(cos(rad) * m_radius, sin(rad) * m_radius);
+		ps.push_back(etherdreamPoint(m_p + onCircle, false));
 	}
 
 	return ps;
@@ -69,8 +69,8 @@ laser::EtherdreamPoints laser::Circle::endPoints() const
 		 rad < m_endRatio + M_PI_2;
 		 rad += M_PI_2 / 20)
 	{
-		const Point onCircle(cos(rad), sin(rad));
-		ps.push_back(etherdreamPoint(m_p + onCircle * m_radius, false));
+		const Point onCircle(cos(rad) * m_radius, sin(rad) * m_radius);
+		ps.push_back(etherdreamPoint(m_p + onCircle, false));
 	}
 
 	return ps;

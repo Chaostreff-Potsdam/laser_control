@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cmath>
 #include <opencv2/core/core.hpp>
+#include <iostream>
 
 namespace laser {
 	/*!
@@ -104,4 +105,12 @@ namespace laser {
 		int m_x;
 		int m_y;
 	};
+}
+
+namespace /* this space intentionally left blank */ {
+	std::ostream& operator<< (std::ostream& stream, const laser::Point& point)
+	{
+		stream << "(" << point.x() << "; " << point.y() << ")";
+		return stream;
+	}
 }
