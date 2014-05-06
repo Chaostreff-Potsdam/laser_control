@@ -70,6 +70,8 @@ if(UNIX)
 	set(HOLODECK_FILES
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Instruction.cpp
+		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Instruction.h
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionCaller.h

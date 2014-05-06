@@ -22,10 +22,10 @@ namespace laser {
 		EtherdreamPoints points() const;
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
-
-	private:
 		std::vector<ObjectPtr> m_children;
 		std::weak_ptr<CompositeObject> self;
+
+	private:
 
 		void removeChild(const Object *object);
 		friend void Object::setParent(const parent_t &);
