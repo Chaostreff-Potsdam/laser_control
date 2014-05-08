@@ -64,11 +64,6 @@ void Server::poll()
 	m_ioService.run();
 }
 
-unsigned int Server::parseToInt(unsigned char *array, int at)
-{
-	return ((array[at+3]<<24)|(array[at+2]<<16)|(array[at+1]<<8)|(array[at+0]<<0));
-}
-
 void Server::startAccept()
 {
 	std::cout << "LaserServer::startAccept" << std::endl;
@@ -79,7 +74,6 @@ void Server::startAccept()
 
 void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
 {
-	std::cout << "LaserServer::handleAccept" << std::endl;
 	if (!error)
 	{
 		std::cout << "[Info] new client" << std::endl;
@@ -95,11 +89,38 @@ void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::sys
 
 void Server::handleRead()
 {
-	unsigned int command = (unsigned int)m_buf[0];
-	std::cout << "LaserServer::handleRead " << command  << std::endl;
-	if (0 < command && command < Handlers.size())
-			Handlers[command](this);
+	m_current = 0;
+	unsigned int instructionCode = readChar();
+	std::cout << "LaserServer::handleRead " << instructionCode  << std::endl;
+	if (0 < instructionCode && instructionCode < Handlers.size())
+			Handlers[instructionCode](this);
 	startAccept();
+}
+
+int Server::readChar()
+{
+	return m_buf[m_current++];
+}
+
+int Server::readInt32()
+{
+	int res = ((m_buf[m_current+3]<<24)|
+			   (m_buf[m_current+2]<<16)|
+			   (m_buf[m_current+1]<< 8)|
+			   (m_buf[m_current+0]<< 0));
+	m_current += sizeof(int32_t);
+	return res;
+}
+
+std::vector<int> Server::readTurkerIds()
+{
+	std::vector<int> turkerIds;
+
+	int numberOfTurkers = readInt32();
+	for (int i = 0; i < numberOfTurkers; i++)
+		turkerIds.emplace_back(readInt32());
+
+	return turkerIds;
 }
 
 std::vector<Point> Server::readPoints(int n)
@@ -107,20 +128,21 @@ std::vector<Point> Server::readPoints(int n)
 	std::vector<Point> ps;
 
 	for (int i = 0; i < n; ++i) {
-		ps.push_back(Point(parseToInt(m_buf, 8*i+5),
-						   -parseToInt(m_buf, 8*i+9)));
+		const int x = readInt32();
+		const int y = readInt32();
+		ps.emplace_back(x, y);
 	}
 	return ps;
 }
 
 void Server::handleDelete()
 {
-	int id = parseToInt(m_buf, 1);
+	int instructionId = readInt32();
 
-	std::cout << "delete " << id << std::endl;
+	std::cout << "delete " << instructionId << std::endl;
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.deleteObject(id);
+	m_painter.deleteObject(instructionId);
 }
 
 void Server::handleDeleteAll()

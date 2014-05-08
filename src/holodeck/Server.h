@@ -26,16 +26,17 @@ namespace laser { namespace holodeck {
 		{
 			InstructionCaller<num_points> caller;
 
-			int id = parseToInt(m_buf, 1);
-			// int turkerId = parseToInt(m_buf, 6);
-			addObjectToPainter(id, name, caller(&constructor, readPoints(num_points)));
+			int instructionId = readInt32();
+			addObjectToPainter(instructionId, name, caller(&constructor, readPoints(num_points)));
 		}
 
 	protected:
 		typedef std::function<void(Server *)> Handler;
 		static const std::vector<Handler> Handlers;
 
-		static unsigned int parseToInt(unsigned char *array, int at);
+		int readChar();
+		int readInt32();
+		std::vector<int> readTurkerIds();
 		std::vector<Point> readPoints(int n);
 
 		void startAccept();
@@ -43,11 +44,9 @@ namespace laser { namespace holodeck {
 		void handleRead();
 		void addObjectToPainter(const int id, const char *name, const ObjectPtr & object);
 
-		void handlePortal(bool active);
 		Painter& m_painter;
 
 		boost::asio::io_service m_ioService;
-		//boost::asio::ip::tcp::acceptor m_acceptor;
 		std::vector<boost::asio::ip::tcp::socket*> m_connections;
 		boost::asio::ip::udp::socket m_socket;
 		boost::asio::ip::udp::endpoint m_localEndpoint;
@@ -55,6 +54,7 @@ namespace laser { namespace holodeck {
 		std::mutex m_connectionsMutex;
 		std::mutex m_painterMutex;
 
+		int m_current;
 		unsigned char m_buf[2048];
 	};
 
