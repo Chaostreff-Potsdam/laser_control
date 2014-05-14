@@ -18,17 +18,9 @@
 using namespace laser;
 
 #ifndef _WIN32
-int main(int argc, char *argv[])
+
+void runServer(Painter & p)
 {
-	config::readCommandLine(argc, argv);
-	Painter p(false, false, true);
-
-	if (config::useVirtualLaser)
-		p.paintOn(std::make_shared<VirtualLaser>());
-	else
-		p.calibrate();
-
-#if 1
 	holodeck::Server s(p);
 
 	std::thread pollThread([&](){
@@ -39,19 +31,25 @@ int main(int argc, char *argv[])
 		p.updatePoints();
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 	}
-	pollThread.join();
-#else
-	ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
-	p.add(rect);
+}
 
-	while (true) {
-		rect->rotate(radians(5));
-		p.updatePoints();
-		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+int main(int argc, char *argv[])
+{
+	config::readCommandLine(argc, argv);
+	Painter p(false, false, true);
+
+	if (config::useVirtualLaser)
+		p.paintOn(std::make_shared<VirtualLaser>());
+	else
+		p.calibrate();
+
+	if (config::displayTests) {
+		ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
+		p.add(rect);
+	} else {
+		runServer(p);
 	}
 
-	//p.add(holodeck::InstructionFactory::Elevator(Point(-20000, -10000), Point(10000, -20000), Point(0, 0)));
-#endif
 	return 0;
 }
 #else
