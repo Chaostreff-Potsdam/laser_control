@@ -16,7 +16,6 @@ static std::pair<cv::Point, cv::Scalar> parsePoint(const etherdream_point & p)
 					cv::Point(p.x * windowScale + windowCenter, p.y * windowScale + windowCenter),
 					cv::Scalar(p.b, p.g, p.r)
 				);
-
 }
 
 VirtualLaser::VirtualLaser() :
@@ -60,7 +59,8 @@ size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)
 
 	const cv::Point *pts = currentPoints.data();
 	const int nums = (int) currentPoints.size();
-	cv::polylines(canvas, &pts, &nums, 1, false, currentColor);
+	if (currentColor != cv::Scalar(0,0,0))
+		cv::polylines(canvas, &pts, &nums, 1, false, currentColor);
 
 	return currentIndex;
 }

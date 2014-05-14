@@ -126,11 +126,12 @@ void laser::Painter::removeExpiredObjects()
 
 void laser::Painter::updatePoints()
 {
+/*
 	#ifndef _WIN32
 	if (m_objects.empty())
 		return;
 	#endif
-
+*/
 	EtherdreamPoints ps;
 
 	{

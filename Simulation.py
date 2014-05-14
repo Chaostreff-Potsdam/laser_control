@@ -43,19 +43,21 @@ class LaserClient(object):
 		self.socket.sendto(packet, (self.host, self.port))
 
 	def delete(self, instructionID):
-		self.__sendPacket("!BI", Delete, instructionID)
+		self.__sendPacket("<BI", Delete, instructionID)
 
 	def deleteAll(self):
-		self.__sendPacket("!B", DeleteAll)
+		self.__sendPacket("<B", DeleteAll)
 
 	def instruction(self, code, points=None, instructionID=-1, turkerIds=None):
 		if points is None:
 			points = []
+		if self.lastSendID < instructionID:
+			self.lastSendID = instructionID + 1
 		if instructionID == -1:
 			self.lastSendID += 1
 			instructionID = self.lastSendID
 
-		self.__sendPacket("!BIi" + "i" * 2 * len(points), 
+		self.__sendPacket("<BIi" + "i" * 2 * len(points),
 				code, instructionID, 0,
 				 *itertools.chain(*points))
 		return instructionID

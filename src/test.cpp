@@ -28,8 +28,18 @@ int main(int argc, char *argv[])
 	else
 		p.calibrate();
 
-#if 0
+#if 1
 	holodeck::Server s(p);
+
+	std::thread pollThread([&](){
+		s.poll();
+	});
+
+	while (true) {
+		p.updatePoints();
+		std::this_thread::sleep_for(std::chrono::milliseconds(50));
+	}
+	pollThread.join();
 #else
 	ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
 	p.add(rect);
@@ -41,7 +51,6 @@ int main(int argc, char *argv[])
 	}
 
 	//p.add(holodeck::InstructionFactory::Elevator(Point(-20000, -10000), Point(10000, -20000), Point(0, 0)));
-	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 #endif
 	return 0;
 }

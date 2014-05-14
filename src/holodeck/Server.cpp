@@ -66,7 +66,6 @@ void Server::poll()
 
 void Server::startAccept()
 {
-	std::cout << "LaserServer::startAccept" << std::endl;
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
 							   m_senderEndpoint,
 							   boost::bind(&Server::handleRead, this));
@@ -76,22 +75,18 @@ void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::sys
 {
 	if (!error)
 	{
-		std::cout << "[Info] new client" << std::endl;
 		m_connectionsMutex.lock();
 		m_connections.push_back(socket);
 		m_connectionsMutex.unlock();
 		socket->async_receive(boost::asio::buffer(m_buf),
 							  boost::bind(&Server::handleRead, this));
 	}
-
-	startAccept();
 }
 
 void Server::handleRead()
 {
 	m_current = 0;
 	unsigned int instructionCode = readChar();
-	std::cout << "LaserServer::handleRead " << instructionCode  << std::endl;
 	if (0 < instructionCode && instructionCode < Handlers.size())
 			Handlers[instructionCode](this);
 	startAccept();
@@ -139,23 +134,22 @@ void Server::handleDelete()
 {
 	int instructionId = readInt32();
 
-	std::cout << "delete " << instructionId << std::endl;
-
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.deleteObject(instructionId);
 }
 
 void Server::handleDeleteAll()
 {
+	std::cerr << "delete all" << std::endl;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.deleteAll();
 }
 
 void Server::addObjectToPainter(const int id, const char *name, const ObjectPtr &object)
 {
-	std::cout << "build " << name << " " << id << std::endl;
+	(void)name;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.add(id, object);
+	m_painter.add(id, object, false);
 }
 
 }} // namespace laser::holodeck

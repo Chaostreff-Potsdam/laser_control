@@ -13,9 +13,7 @@ namespace laser { namespace holodeck {
 	{
 	public:
 		Server(Painter &painter);
-
 		void poll();
-
 
 	public:
 		void handleDelete();
@@ -27,6 +25,7 @@ namespace laser { namespace holodeck {
 			InstructionCaller<num_points> caller;
 
 			int instructionId = readInt32();
+			readTurkerIds();
 			addObjectToPainter(instructionId, name, caller(&constructor, readPoints(num_points)));
 		}
 
