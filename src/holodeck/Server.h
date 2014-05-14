@@ -12,8 +12,8 @@ namespace laser { namespace holodeck {
 	class EXPORT_LASER_CONTROL Server
 	{
 	public:
-		Server(Painter &painter);
-		void poll();
+		Server(Painter &painter, bool deferStart = false);
+		void poll(bool blocking = false);
 
 	public:
 		void handleDelete();
@@ -52,6 +52,8 @@ namespace laser { namespace holodeck {
 		boost::asio::ip::udp::endpoint m_senderEndpoint;
 		std::mutex m_connectionsMutex;
 		std::mutex m_painterMutex;
+
+		std::thread m_pollThread;
 
 		int m_current;
 		unsigned char m_buf[2048];

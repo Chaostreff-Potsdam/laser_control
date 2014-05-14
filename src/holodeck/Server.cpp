@@ -45,7 +45,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Guardrail, 2)
 };
 
-Server::Server(Painter &painter)
+Server::Server(Painter &painter, bool deferStart)
 :	m_painter(painter),
 	m_socket(m_ioService),
 	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
@@ -56,12 +56,17 @@ Server::Server(Painter &painter)
 	m_socket.open(boost::asio::ip::udp::v4());
 	m_socket.bind(m_localEndpoint);
 	startAccept();
+	if (!deferStart)
+		poll();
 }
 
-void Server::poll()
+void Server::poll(bool blocking)
 {
 	std::cout << "LaserServer::poll" << std::endl;
-	m_ioService.run();
+	if (!blocking)
+		m_pollThread = std::thread([&](){
+			m_ioService.run();
+		});
 }
 
 void Server::startAccept()
