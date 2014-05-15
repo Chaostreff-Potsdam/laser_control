@@ -90,7 +90,7 @@ namespace laser {
 		/*!
 		 * \brief Clear the whole scene
 		 */
-		void deleteAll();
+		void deleteAll(bool update = true);
 
 		/*!
 		 * \brief get Object pointer by ID

@@ -31,14 +31,17 @@ VirtualLaser::~VirtualLaser()
 
 void VirtualLaser::writePoints()
 {
-	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
 	cv::Mat canvas = cv::Mat::zeros(windowSize, windowSize, CV_16UC3);
 
-	for (size_t currentIndex = 0; currentIndex < m_points.size(); )
-		currentIndex = drawNextPolyline(currentIndex, canvas);
+	{
+		std::lock_guard<std::mutex> guard(m_pointsMutex);
 
-	cv::imshow(windowName, canvas);
+		for (size_t currentIndex = 0; currentIndex < m_points.size(); )
+			currentIndex = drawNextPolyline(currentIndex, canvas);
+
+		cv::imshow(windowName, canvas);
+	}
+
 	if (cv::waitKey(1) == 'q') exit(0);
 }
 

@@ -140,14 +140,14 @@ void Server::handleDelete()
 	int instructionId = readInt32();
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.deleteObject(instructionId);
+	m_painter.deleteObject(instructionId, false);
 }
 
 void Server::handleDeleteAll()
 {
 	std::cerr << "delete all" << std::endl;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.deleteAll();
+	m_painter.deleteAll(false);
 }
 
 void Server::addObjectToPainter(const int id, const char *name, const ObjectPtr &object)

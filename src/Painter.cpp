@@ -85,10 +85,11 @@ void laser::Painter::deleteObject(int id, bool update)
 		updatePoints();
 }
 
-void laser::Painter::deleteAll()
+void laser::Painter::deleteAll(bool update)
 {
 	m_objects.clear();
-	updatePoints();
+	if (update)
+		updatePoints();
 }
 
 laser::ObjectPtr laser::Painter::getObject(int id)
@@ -126,12 +127,6 @@ void laser::Painter::removeExpiredObjects()
 
 void laser::Painter::updatePoints()
 {
-/*
-	#ifndef _WIN32
-	if (m_objects.empty())
-		return;
-	#endif
-*/
 	EtherdreamPoints ps;
 
 	{
