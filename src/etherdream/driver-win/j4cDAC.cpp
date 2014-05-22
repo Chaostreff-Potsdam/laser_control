@@ -230,7 +230,7 @@ unsigned __stdcall FindDACs(void *_bogus) {
 		dac_t * new_dac = (dac_t *)malloc(sizeof(dac_t));
 		if (!new_dac) {
 			trace(NULL, "!! malloc(sizeof(dac_t)) failed\n");
-			std::cout << "[laser_control]: !! malloc(sizeof(dac_t)) failed\n";
+			std::cout << "[laser_control]: malloc(sizeof(dac_t)) failed\n";
 			std::cout.flush();
 			continue;
 		}
@@ -295,7 +295,7 @@ bool __stdcall DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved) {
 		int res = WSAStartup(MAKEWORD(2,2), &wsaData);
 		if (res != 0) {
 			trace(NULL, "!! WSAStartup failed: %d\n", res);
-			std::cout << "[laser_control]: !! WSAStartup failed: " << res << "\n";
+			std::cout << "[laser_control]: WSAStartup failed: " << res << "\n";
 			std::cout.flush();
 			fucked = 1;
 		}
@@ -307,7 +307,7 @@ bool __stdcall DllMain(HANDLE hModule, DWORD reason, LPVOID lpReserved) {
 		watcherthread = (HANDLE)_beginthreadex(NULL, 0, &FindDACs, NULL, 0, NULL);
 		if (!watcherthread) {
 			trace(NULL, "!! BeginThreadEx error: %s\n", strerror(errno));
-			std::cout << "[laser_control]: !! WSAStartup failed: " << strerror(errno) << "\n";
+			std::cout << "[laser_control]: WSAStartup failed: " << strerror(errno) << "\n";
 			std::cout.flush();
 			fucked = 1;
 		}
@@ -416,6 +416,7 @@ EXPORT int __stdcall EtherDreamGetCardNum(void){
 EXPORT bool __stdcall EtherDreamStop(const int *CardNum){
 	dac_t *d = dac_get(*CardNum);
 	trace(d, "== Stop(%d) ==\n", *CardNum);
+	std::cout << "[laser_control]: etherdream stop. CardNum: " << *CardNum << "\n"; std::cout.flush();
 	if (!d) return 0;
 	EnterCriticalSection(&d->buffer_lock);
 	if (d->state == ST_READY)
@@ -435,7 +436,7 @@ EXPORT bool __stdcall EtherDreamClose(void){
 		if (WaitForSingleObject(watcherthread, 1200) != WAIT_OBJECT_0) {
 			TerminateThread(watcherthread, -1);
 			trace(NULL, "!! Had to kill watcher thread on exit.\n");
-			std::cout << "[laser_control]: !! Had to kill watcher thread on exit.\n";
+			std::cout << "[laser_control]: Had to kill watcher thread on exit.\n";
 			std::cout.flush();
 		}
 		CloseHandle(watcherthread);
@@ -526,7 +527,7 @@ EXPORT bool __stdcall EzAudDacWriteFrameNR(const int *CardNum, const struct EAD_
 		int Bytes, uint16_t PPS, uint16_t Reps) {
 	dac_t *d = dac_get(*CardNum);
 	if (!d) return 0;
-	return do_write_frame(d, data, Bytes, PPS, Reps, false, EzAudDac_convert_data);
+	return do_write_frame(d, data, Bytes, PPS, Reps, 0, EzAudDac_convert_data);
 }
 
 EXPORT bool __stdcall EzAudDacWriteFrame(const int *CardNum, const struct EAD_Pnt_s* data,
@@ -538,7 +539,7 @@ EXPORT bool __stdcall EasyLaseWriteFrameNR(const int *CardNum, const struct EL_P
 		int Bytes, uint16_t PPS, uint16_t Reps) {
 	dac_t *d = dac_get(*CardNum);
 	if (!d) return 0;
-	return do_write_frame(d, data, Bytes, PPS, Reps, false, EasyLase_convert_data);
+	return do_write_frame(d, data, Bytes, PPS, Reps, 0, EasyLase_convert_data);
 }
 
 EXPORT bool __stdcall EasyLaseWriteFrame(const int *CardNum, const struct EL_Pnt_s* data,

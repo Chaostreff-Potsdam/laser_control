@@ -133,7 +133,7 @@ struct buffer_item *buf_get_write(dac_t *d);
 void buf_advance_write(dac_t *d);
 int dac_get_status(dac_t *d);
 int do_write_frame(dac_t *d, const void * data, int bytes, int pps,
-	int reps, bool isSecondTryWritingFrame, int (*convert)(struct buffer_item *, const void *, int));
+	int reps, int tryCount, int (*convert)(struct buffer_item *, const void *, int));
 void dac_get_name(dac_t *d, char *buf, int max);
 int dac_get_acks(dac_t *d, int wait);
 

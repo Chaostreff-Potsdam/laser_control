@@ -83,7 +83,11 @@ int wait_for_write(dac_t *d, int usec) {
 	struct timeval time;
 	time.tv_sec = usec / 1000000;
 	time.tv_usec = usec % 1000000;
+	unsigned long beforeChunkSent = GetTickCount();
 	int res = select(0, NULL, &set, &set, &time);
+	unsigned long afterChunkSent = GetTickCount();
+/*		if(afterChunkSent - beforeChunkSent > 0)
+			std::cout << afterChunkSent - beforeChunkSent << "ms "; std::cout.flush();*/
 
 	if (res == SOCKET_ERROR) {
 		log_socket_error(d, "select");
@@ -332,13 +336,13 @@ int dac_disconnect(dac_t *d) {
 
 int dac_sendall(dac_t *d, const char *data, int len) {
 	do {
-		int res = wait_for_write(d, 1500000);
+		int res = wait_for_write(d, 4000000);
+		
 		if (res < 0) {
 			return -1;
 		} else if (res == 0) {
 			trace(d, "write timed out\n");
 			std::cout << "[laser_control]: write timed out\n"; std::cout.flush();
-		
 		}
 
 		res = send(d->conn.sock, data, len, 0);
@@ -387,13 +391,15 @@ int dac_send_data(dac_t *d, struct dac_point *data, int npoints, int rate) {
 	int res;
 	const struct dac_status *st = &d->conn.resp.dac_status;
 
-	/* Write the header */
-
 	if (st->playback_state == 0) {
-		trace(d, "L: Sending prepare command...\n");
+		//std::cout << "[laser_control]: Sending prepare command\n"; std::cout.flush();
+		trace(d, "playback_state is 0. Sending prepare command...\n");
 		char c = 'p';
-		if ((res = dac_sendall(d, &c, sizeof(c))) < 0)
+		if ((res = dac_sendall(d, &c, sizeof(c))) < 0) {
+			std::cout << "[laser_control]: Failed to send prepare command\n"; std::cout.flush();
 			return res;
+		}
+		
 
 		/* Read ACK */
 		d->conn.pending_meta_acks++;
@@ -403,10 +409,13 @@ int dac_send_data(dac_t *d, struct dac_point *data, int npoints, int rate) {
 			dac_get_acks(d, 1500);
 
 		trace(d, "L: prepare ACKed\n");
+		//std::cout << "[laser_control]: prepare ACKed\n"; std::cout.flush();
 	}
 
 	if (st->buffer_fullness > 1600 && st->playback_state == 1 \
 	    && !d->conn.begin_sent) {
+			
+		//std::cout << "[laser_control]: Sending begin command\n"; std::cout.flush();
 		trace(d, "L: Sending begin command...\n");
 
 		struct begin_command b;
@@ -432,7 +441,7 @@ int dac_send_data(dac_t *d, struct dac_point *data, int npoints, int rate) {
 	d->conn.local_buffer.data[0].control |= DAC_CTRL_RATE_CHANGE;
 
 	ct_assert(sizeof(d->conn.local_buffer) == 18008);
-
+	
 	/* Write the data */
 	if ((res = dac_sendall(d, (const char *)&d->conn.local_buffer,
 		8 + npoints * sizeof(struct dac_point))) < 0)
@@ -454,6 +463,7 @@ int dac_get_acks(dac_t *d, int wait) {
 	/* Read any ACKs we are owed */
 	while (d->conn.pending_meta_acks
 	       || (d->conn.ackbuf_prod != d->conn.ackbuf_cons)) {
+		//std::cout << ".";
 		int res;
 		if (wait_for_activity(d, wait)) { 
 			if ((res = dac_read_resp(d, 1)) < 0)

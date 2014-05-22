@@ -23,6 +23,8 @@
 #include <math.h>
 #include <string.h>
 #include <iostream>
+#include <thread>
+#include <chrono>
 
 #include "dac.h"
 
@@ -93,8 +95,6 @@ void dac_close_connection(dac_t *d) {
 	int rv = WaitForSingleObject(d->workerthread, 250);
 	if (rv != WAIT_OBJECT_0) {
 		trace(d, "Exit worker thread timed out.\n");
-		std::cout << "[laser_control]: Exit worker thread timed out.\n";
-		std::cout.flush();
 		TerminateThread(d->workerthread,-1);
 	}
 	CloseHandle(d->workerthread);
@@ -167,8 +167,7 @@ int dac_get_status(dac_t *d) {
  */
 
 int do_write_frame(dac_t *d, const void * data, int bytes, int pps,
-	int reps, bool isSecondTryWritingFrame, int (*convert)(struct buffer_item *, const void *, int)) {
-
+	int reps, int tryCount, int (*convert)(struct buffer_item *, const void *, int)) {
 	int points = convert(NULL, NULL, bytes);
 
 	if (reps == ((uint16_t) -1))
@@ -176,13 +175,16 @@ int do_write_frame(dac_t *d, const void * data, int bytes, int pps,
 
 	/* If not ready for a new frame, <strike>bail</strike> try again. but only once. */
 	if (dac_get_status(d) != GET_STATUS_READY) {
-		if(isSecondTryWritingFrame) {
-			trace(d, "M: NOT READY: %d points, %d reps\n", points, reps);
-			/*std::cout << "[laser_control] frame could not be written: DAC still not ready on second try. " << points << " points, " << reps << " reps.\n";
-			std::cout.flush();*/
+		if(tryCount > 4) {
+			trace(d, "M: Frame could not be written: DAC still not ready on try %d. %d points, %d reps\n", tryCount, points, reps);
+			std::cout << "[laser_control] do_write_Frame: frame could not be written: DAC still not ready on fifth try. " << points << " points.\n";
+			std::cout.flush();
 			return 0;
 		} else {
-			do_write_frame(d, data, bytes, pps, reps, true, convert);
+			if(tryCount > 1)
+				Sleep(3);
+			do_write_frame(d, data, bytes, pps, reps, tryCount + 1, convert);
+			return 0;
 		}
 	}
 
@@ -226,21 +228,12 @@ unsigned __stdcall LoopUpdate(void *dv){
 	dac_t *d = (dac_t *)dv;
 
 	int res;
-	res = SetThreadPriority(GetCurrentThread, THREAD_PRIORITY_TIME_CRITICAL);
+	res = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 	trace(d, "SetThreadPriority ret %d\n");
 
-#ifdef CHANGE_TIMER
-	if (timeBeginPeriod(1) == TIMERR_NOERROR) {
-		trace(d, "Timer set to 1ms\n");
-	} else {
-		trace(d, "Timer error\n");
-		std::cout << "[laser_control]: Timer error\n";
-		std::cout.flush();
-	}
-#endif
-
 	EnterCriticalSection(&d->buffer_lock);
-
+	
+	unsigned long before = GetTickCount();
 	while (1) {
 		/* Wait for us to have data */
 		while (d->state == ST_READY) {
@@ -252,24 +245,19 @@ unsigned __stdcall LoopUpdate(void *dv){
 
 			EnterCriticalSection(&d->buffer_lock);
 			if (res != WAIT_OBJECT_0) {
-				trace(d, "!! WFSO failed: %lu\n",
+				trace(d, "!! WaitForSingleObject failed: %lu\n",
 					GetLastError());
-				std::cout << "[laser_control]: !! WFSO failed: " << GetLastError() << "\n";
+				std::cout << "[laser_control]: !! WaitForSingleObject failed: " << GetLastError() << "\n";
 				std::cout.flush();
 				d->state = ST_BROKEN;
-#ifdef CHANGE_TIMER
-				timeEndPeriod(1);
-#endif
 				return 0;
 			}
 		}
 
 		if (d->state != ST_RUNNING) {
 			trace(d, "L: Shutting down.\n");
+			std::cout << "[laser_control]: Shutting down.\n"; std::cout.flush();
 			LeaveCriticalSection(&d->buffer_lock);
-#ifdef CHANGE_TIMER
-			timeEndPeriod(1);
-#endif
 			return 0;
 		}
 
@@ -303,10 +291,8 @@ unsigned __stdcall LoopUpdate(void *dv){
 					iu, expected_fullness, cap,
 					d->conn.pending_meta_acks,
 					d->conn.resp.dac_status.playback_state);
-
 			if (cap > DAC_MIN_SEND) break;
 			if (iters++ > 1) break;
-
 			/* Wait a little. */
 			int diff = DAC_MIN_SEND - cap;
 			int sleeptime = 1 + (1000 * diff / b->pps);
@@ -315,37 +301,42 @@ unsigned __stdcall LoopUpdate(void *dv){
 
 		/* How many points can we send? */
 		int b_left = b->points - b->idx;
-
+		
 		if (cap > b_left)
 			cap = b_left;
 		if (cap > 80)
 			cap = 80;
 		if (cap < 0)
 			cap = 1;
+		
 
+		
 		int res = dac_send_data(d, b->data + b->idx, cap, b->pps);
 
+		//std::cout << "[laser_control]: sent " << cap << " points\n";
+
 		if (res < 0) {
+			std::cout << "[laser_control]: dac_send_data return < 0. Welp, something's wrong.\n"; std::cout.flush();
 			/* Welp, something's wrong. There's not much we
 			 * can do at an API level other than start throwing
 			 * "error" returns up to the application... */
 			EnterCriticalSection(&d->buffer_lock);
 			d->state = ST_BROKEN;
 			LeaveCriticalSection(&d->buffer_lock);
-#ifdef CHANGE_TIMER
-			timeEndPeriod(1);
-#endif
 			return 1;
 		}
-
 		/* What next? */
 		EnterCriticalSection(&d->buffer_lock);
 		b->idx += res;
 
 		if (b->idx < b->points) {
-			/* There's more in this frame. */
 			continue;
 		}
+
+		unsigned long after = GetTickCount();
+
+		//std::cout << ".";std::cout.flush();
+		before = after;		
 
 		b->idx = 0;
 
@@ -356,6 +347,7 @@ unsigned __stdcall LoopUpdate(void *dv){
 			/* Move to the next frame */
 			trace(d, "L: advancing - b %d\n",
 				d->buffer_fullness);
+			//std::cout << "advancing to new frame.\n";std::cout.flush();
 			d->buffer_fullness--;
 			d->buffer_read++;
 			if (d->buffer_read >= BUFFER_NFRAMES)
@@ -363,9 +355,11 @@ unsigned __stdcall LoopUpdate(void *dv){
 		} else if (b->repeatcount >= 0) {
 			/* Stop playing until we get a new frame. */
 			trace(d, "L: returning to idle\n");
+			//std::cout << "frame sent, not repeated. returning to idle.\n";std::cout.flush();
 			d->state = ST_READY;
 		} else {
 			/* Repeat this frame */
+			//std::cout << "repeat this frame.\n";std::cout.flush();
 		}
 
 		/* If we get here without hitting any of the above cases,
@@ -374,8 +368,5 @@ unsigned __stdcall LoopUpdate(void *dv){
 		 * and again. */ 
 	}
 
-#ifdef CHANGE_TIMER
-	timeEndPeriod(1);
-#endif
 	return 0;
 }
