@@ -11,10 +11,11 @@
 laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
-	m_calibration(cv::Mat::eye(3, 3, CV_64FC1)),
 	m_running(true),
 	m_cropObjects(cropObjects)
 {
+	m_calibration = (cv::Mat_<double>(3,3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
+
 	if (runUpdateLoop || expireObjects)
 	{
 		m_updateLoop = std::thread(&Painter::updateLoop, this);

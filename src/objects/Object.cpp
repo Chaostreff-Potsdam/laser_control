@@ -68,7 +68,11 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 const etherdream_point laser::Object::etherdreamPoint(int x, int y, bool visible) const
 {
 	etherdream_point p;
+#ifdef _WIN32 //TODO: should this be used always, not just in windows?
+	memset(&p, 0, sizeof(p));
+#else
 	bzero(&p, sizeof(p));
+#endif
 
 	p.x = clamp(x, INT16_MIN, INT16_MAX);
 	p.y = clamp(y, INT16_MIN, INT16_MAX);
