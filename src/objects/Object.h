@@ -3,6 +3,7 @@
 #include "../EtherdreamWrapper.h"
 #include "../laser_utilities.h"
 #include "../DllExport.h"
+#include "../Color.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <memory>
@@ -65,6 +66,9 @@ namespace laser {
 
 		void tick();
 
+		void setColor(Color color);
+		Color color();
+
 		/*** Timeout ***/
 
 		boost::posix_time::ptime started() const;
@@ -89,6 +93,7 @@ namespace laser {
 	protected:
 		boost::posix_time::ptime m_started;
 		bool m_permanent;
+		Color m_color;
 
 		/*!
 		 * \brief call this to trigger a repaint
