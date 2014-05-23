@@ -4,11 +4,12 @@
 #include <mutex>
 
 #ifdef _WIN32
+#	include <opencv2/core/core.hpp> //has to be included BEFORE dac.h for dac.h somehow breaks cv otherwise
 #	include "dac.h"
 #	undef DELETE
 
 #	ifndef _CPPUNWIND
-#		define _CPPUNWIND //To prevent it from looking for nonextistant throw_exception
+#		define _CPPUNWIND //To prevent boost from looking for nonextistant throw_exception
 #	endif
 #else // _WIN32
 #	include "etherdream.h"

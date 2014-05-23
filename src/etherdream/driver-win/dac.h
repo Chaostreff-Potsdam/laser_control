@@ -16,8 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef DAC_H
-#define DAC_H
+#pragma once
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
@@ -144,4 +143,3 @@ int dac_disconnect(dac_t *d);
 int dac_send_data(dac_t *d, struct dac_point *data, int npoints, int rate);
 
 extern LARGE_INTEGER timer_freq;
-#endif

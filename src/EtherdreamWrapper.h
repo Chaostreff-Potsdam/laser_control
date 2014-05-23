@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Canvas.h"
 
 namespace laser {

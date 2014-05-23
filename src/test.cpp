@@ -12,6 +12,7 @@
 #include "laser_calibration/Calibration.h"
 
 #include "objects/Circle.h"
+#include "objects/Line.h"
 
 #include <chrono>
 
@@ -53,10 +54,24 @@ int main(int argc, char *argv[])
 	return 0;
 }
 #else
+
+void test() 
+{
+	cv::Mat a = cv::Mat::eye(3, 3, CV_64FC1);
+	std::cout << a;
+}
+
 int main(void)
 {
 	Painter p(false, false, false);
 	p.aquireEtherdreamWrapper();
+	std::cout << "aquire Etherdream done\n";
+
+
+	ObjectPtr line = std::make_shared<Line>(-10000, -10000, 20000, 10000);
+	p.add(line);
+	test();
+	std::cout << "done";
 	std::this_thread::sleep_for(std::chrono::milliseconds(100000));
 	return 0;
 }
