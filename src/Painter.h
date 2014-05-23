@@ -97,6 +97,11 @@ namespace laser {
 		 */
 		ObjectPtr getObject(int id);
 
+		/*!
+		 * \brief set calibration homography matrix
+		 */
+		void setCalibration(cv::Mat homography);
+
 	protected:
 		std::thread m_updateLoop;
 		void updateLoop();

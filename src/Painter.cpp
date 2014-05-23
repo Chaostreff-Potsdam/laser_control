@@ -158,6 +158,11 @@ void laser::Painter::updatePoints()
 	canvas()->writePoints();
 }
 
+void laser::Painter::setCalibration(cv::Mat homography)
+{
+	m_calibration = homography;
+}
+
 void laser::Painter::updateLoop()
 {
 	std::this_thread::sleep_for(std::chrono::seconds(5));

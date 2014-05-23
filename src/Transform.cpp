@@ -1,8 +1,6 @@
 #include "Transform.h"
 #include "laser_utilities.h"
 
-#include <iostream>
-
 namespace laser { namespace Transform {
 
 typedef std::vector<cv::Point2f> TransformPoints;
@@ -17,14 +15,16 @@ static void opaqueApply(EtherdreamPoints & points, TransformPoints & aux_in, Tra
 
 	for (unsigned int i = 0; i < points.size(); i++)
 	{
-		if (aux_out[i].x > INT16_MAX || aux_out[i].x < INT16_MIN || aux_out[i].y > INT16_MAX || aux_out[i].y < INT16_MIN) {
+		aux_out[i].x = clamp(aux_out[i].x, INT16_MIN, INT16_MAX);
+		aux_out[i].y = clamp(aux_out[i].y, INT16_MIN, INT16_MAX);
+		if(aux_out[i].x == INT16_MAX || aux_out[i].x == INT16_MIN || aux_out[i].y == INT16_MAX || aux_out[i].y == INT16_MIN) {
 			points[i].r = 0;
 			points[i].g = 0;
 			points[i].b = 0;
 		}
 
-		points[i].x = clamp(aux_out[i].x, INT16_MIN, INT16_MAX);
-		points[i].y = clamp(aux_out[i].y, INT16_MIN, INT16_MAX);
+		points[i].x = (int16_t) aux_out[i].x;
+		points[i].y = (int16_t) aux_out[i].y;
 	}
 }
 
@@ -56,7 +56,7 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	if (points.empty())
 		return points;
 
-	EtherdreamPoints returnPoints;
+	EtherdreamPoints returnPoints; //will be all transformed points within the canvas (+margin)
 	
 	TransformPoints transformPoints;
 	transformPoints.reserve(points.size());
@@ -73,15 +73,16 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	{
 		if(transformPoints[i].x < INT16_MAX + canvasMargin && transformPoints[i].x > INT16_MIN  - canvasMargin 
 			&& transformPoints[i].y < INT16_MAX  + canvasMargin && transformPoints[i].y > INT16_MIN - canvasMargin) {
-
-			if(transformPoints[i].x > INT16_MAX || transformPoints[i].x < INT16_MIN || transformPoints[i].y > INT16_MAX || transformPoints[i].y < INT16_MIN) {
+			transformPoints[i].x = clamp(transformPoints[i].x, INT16_MIN, INT16_MAX);
+			transformPoints[i].y = clamp(transformPoints[i].y, INT16_MIN, INT16_MAX);
+			if(transformPoints[i].x == INT16_MAX || transformPoints[i].x == INT16_MIN || transformPoints[i].y == INT16_MAX || transformPoints[i].y == INT16_MIN) {
 				points[i].r = 0;
 				points[i].g = 0;
 				points[i].b = 0;
 			}
 
-			points[i].x = (int16_t) clamp(transformPoints[i].x, INT16_MIN, INT16_MAX);
-			points[i].y = (int16_t) clamp(transformPoints[i].y, INT16_MIN, INT16_MAX);
+			points[i].x = (int16_t) transformPoints[i].x;
+			points[i].y = (int16_t) transformPoints[i].y;
 
 			returnPoints.push_back(points[i]);
 		}

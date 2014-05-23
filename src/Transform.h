@@ -13,7 +13,15 @@ namespace laser {
 			OpenCVTransform;
 
 		extern void apply(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform);
+		
+		/*!
+		 * \brief apply transformation on points. moves all points that afterwards are outside of the canvas to its border and makes them black
+		 */
 		extern void applyInPlace(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform);
+
+		/*!
+		 * \brief apply transformation on points. moves all points that afterwards are outside of the canvas to its border and makes them black. points that are far away from the canvas are deleted
+		 */
 		extern EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform);
 	}
 
