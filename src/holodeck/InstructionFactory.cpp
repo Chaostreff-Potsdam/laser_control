@@ -418,34 +418,26 @@ ObjectPtr InstructionFactory::Elevator(Point p1, Point p2, Point p3)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
-	/* I refactored that.
-	 * Please check if it still looks allright.
-	 * SK
-	 */
-	Point s12 = p1 - p2;
-	Point s13 = p1 - p3;
-	Point s23 = p2 - p3;
-	Point arrowOneBottom = s12 / 5   + s23 / 5;
-	Point arrowOneTop    = s12 / 5   + s23 * 0.8;
-	Point arrowTwoBottom = s12 * 0.8 + s23 / 5;
-	Point arrowTwoTop    = s12 * 0.8 + s23 * 0.8;
+	Point s12 = p2 - p1;
+	Point s13 = p3 - p1;
+	Point s23 = p3 - p2;
+	Point arrowOneBottom = p1 + s12 / 5   + s23 / 5;
+	Point arrowOneTop    = p1 + s12 / 5   + s23 * 0.8;
+	Point arrowTwoBottom = p1 + s12 * 0.8 + s23 / 5;
+	Point arrowTwoTop    = p1 + s12 * 0.8 + s23 * 0.8;
 
 	Point arrowOneTopTipRight = arrowOneTop - s13 * 0.1;
-	Point arrowOneTopTipLeft  = arrowOneTop + s13 * 0.1;
+	Point arrowOneTopTipLeft  = arrowOneTop + Point(s13.x(), -s13.y()) * 0.1;
 	Point arrowTwoBottomTipRight = arrowTwoBottom + s13 * 0.1;
 	Point arrowTwoBottomTipLeft = arrowTwoBottom + Point(-s13.x(), s13.y()) * 0.1;
-	//Point arrowOneTopTipLeft();
 
-	group->add(new Rectangle(p1, p2, p3, p3 + s12, false));
+	group->add(new Rectangle(p1, p2, p3, p3 - s12, false));
 	group->add(new Line(arrowOneBottom, arrowOneTop));
 	group->add(new Line(arrowOneTop, arrowOneTopTipRight));
 	group->add(new Line(arrowOneTop, arrowOneTopTipLeft));
 	group->add(new Line(arrowTwoBottom, arrowTwoTop));
 	group->add(new Line(arrowTwoBottom, arrowTwoBottomTipRight));
 	group->add(new Line(arrowTwoBottom, arrowTwoBottomTipLeft));
-
-	std::cout << arrowOneTopTipRight.x() << " " << arrowOneTopTipRight.y() << std::endl;
-
 
 	return group;
 }
