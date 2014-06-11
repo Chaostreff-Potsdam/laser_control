@@ -11,6 +11,8 @@ namespace laser {
 		class Instruction;
 		typedef std::shared_ptr<Instruction> InstructionPtr;
 
+		typedef std::vector<std::vector<Point>> PointLUT;
+
 		class Instruction : public laser::CompositeObject
 		{
 		public:
@@ -20,8 +22,12 @@ namespace laser {
 		protected:
 			Instruction(int instructionId, const std::vector<int> & turkerIds);
 
+			std::vector<ObjectPtr> turkerIdsToPolygons();
+
 			int m_instructionId;
 			std::vector<int> m_turkerIds;
+
+			static const PointLUT s_numbers;
 		};
 	}
 }
