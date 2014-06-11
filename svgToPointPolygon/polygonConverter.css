@@ -1,0 +1,77 @@
+body {
+	margin: 2cm auto;
+	background: #f2f2f2;
+	max-width: 45em;
+	font-size: 13pt;
+}
+
+svg {
+	border: 1px solid #ccc;
+	margin: 2mm -4mm 2mm 8mm;
+	background:#fff;
+	height:5cm;
+	width:5cm;
+}
+
+svg #path, svg polygon {
+	stroke:#000;
+	stroke-width:1px;
+	fill:rgba(255,0,0,0)
+}
+
+svg .typoLine {
+	stroke: #000;
+	stroke-width: 0.1px;
+	fill: none;
+}
+
+textarea {
+	width: 100%;
+	min-height: 2cm;
+	display:block;
+}
+
+
+#parameters {
+	float: left;
+}
+
+#sliderBox {
+	padding: 2mm;
+}
+#nameBox {
+	padding: 4mm 6mm;
+}
+
+#samplesCount, #sampleStep, #cornerCount {
+	display: block;
+	padding-left: 4mm;
+}
+
+#sampleSlider {
+	width: 8cm;
+}
+
+
+#svgs {
+	float: right;
+}
+
+input {
+	margin: 0 4mm;
+	padding: 1mm;
+}
+
+#output {
+	overflow: auto;
+	width: 100%;
+	height: 7cm;
+	border: 1px solid #ccc;
+	background: #fff;
+	margin: 2mm 0;
+}
+
+textarea, #output {
+	padding: 2mm;
+	font-size: 10pt;
+}

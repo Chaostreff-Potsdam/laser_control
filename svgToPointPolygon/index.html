@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+		"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+	<head> 
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>Converting SVG Path to Point Polygon</title>
+		<link rel="stylesheet" href="polygonConverter.css" type="text/css" />
+		<script type="text/javascript" src="polygonConverter.js"></script>
+	</head>
+
+	<body onload="init()">
+
+		<h1>Converting SVG Path to Point Polygon</h1>
+
+		<p>Enter SVG Path code (with coordinates from 0,0 to 100,100):</p>
+
+		<textarea id="pathInput" oninput="processInput()">M 34.617417,71.75 34.5,4.8522527 C 52.261339,3.5455972 67.416136,2.6942001 65.808439,23.35372 64.952019,34.359041 57.615914,40.960017 42.78125,40.8125
+		</textarea>
+
+		<div id="parameters">
+
+			<div id="nameBox">Name: <input id="name" type="text" onchange="updateName(this.value)"/> </div>
+			<div id="sliderBox">
+				<span id="sampleStep"></span>
+				<input id="sampleSlider" onchange="updateSampleStep(this.value)" type="range" min="1" max="40"/>
+				<span id="samplesCount"></span>
+				<span id="cornerCount"></span>
+			</div>
+
+
+		</div>
+
+		<div id="svgs">
+			<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full">
+				<defs><circle id="dot" cx="0" cy="0" r="1" fill="#06c" opacity="0.9" stroke="none"/></defs>
+				<path id="path" d=""/>
+				<path class="typoLine" d="m -1.1872673,0.06260863 103.0981273,0" />
+				<path class="typoLine" d="m -1.1999942,3.9339658 103.0981242,0" />
+				<path class="typoLine" d="m -1.2127196,26.17484 103.0981296,0" />
+				<path class="typoLine" d="m -1.2127196,71.826857 103.0981296,0" />
+				<path class="typoLine" d="m -1.2127196,99.9375 103.0981296,0" />
+
+			</svg>
+
+		<svg id="sampled" class="labeled" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" baseProfile="full"></svg>
+		</div>
+
+		<pre id="output"></pre>
+
+	</body>
+</html>
