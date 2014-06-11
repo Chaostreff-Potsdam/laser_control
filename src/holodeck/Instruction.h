@@ -15,17 +15,13 @@ namespace laser {
 		{
 		public:
 			static InstructionPtr construct(const std::vector<ObjectPtr> & objects, int instructionId, const std::vector<int> & turkerIds);
+            static InstructionPtr construct(const ObjectPtr object, int instructionId, const std::vector<int> & turkerIds);
 
 		protected:
 			Instruction(int instructionId, const std::vector<int> & turkerIds);
 
-            //CompositeObjectPtr
-
 			int m_instructionId;
 			std::vector<int> m_turkerIds;
 		};
-
-
-
 	}
 }

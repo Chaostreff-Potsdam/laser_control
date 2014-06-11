@@ -1,4 +1,5 @@
 #pragma once
+#include "Instruction.h"
 #include "../Painter.h"
 
 #include <boost/config.hpp>
@@ -77,15 +78,16 @@ template <size_t num_args>
 struct InstructionCaller
 {
 	template <typename FuncType>
-	ObjectPtr operator () (FuncType f, const std::vector<Point> &args){
+    ObjectPtr operator () (FuncType f, int instructionId, const std::vector<int> &turkerIds, const std::vector<Point> &args){
 		assert(args.size() >= num_args);
-		return call(f, args, BuildIndices<num_args>{});
+        return call(f, instructionId, turkerIds, args, BuildIndices<num_args>{});
 	}
 
 private:
 	template <typename FuncType, size_t... I>
-	ObjectPtr call(FuncType f, const std::vector<Point> &args, indices<I...>){
-		return (*f)(args[I]...);
+    ObjectPtr call(FuncType f, int instructionId, const std::vector<int> &turkerIds, const std::vector<Point> &args, indices<I...>){
+
+        return Instruction::construct((*f)(args[I]...), instructionId, turkerIds);
 	}
 };
 
