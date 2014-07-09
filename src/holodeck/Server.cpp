@@ -1,23 +1,24 @@
-#include "Server.h"
+﻿#include "Server.h"
 #include "InstructionFactory.h"
 
 #include <iostream>
 #include <boost/bind.hpp>
+#include <json/value.h>
 
 namespace laser { namespace holodeck {
 
 #define HANDLER(Name) \
-	[](Server *s) { \
+	[](Server *s, Json::Value& /*root*/) { \
 		s->handle##Name(); \
 	}
 
 #define HANDLE_OBJECT(ObjectT, num_points) \
-	[](Server *s) { \
+	[](Server *s, Json::Value& root) { \
 		s->createObject<num_points>(#ObjectT, InstructionFactory::ObjectT); \
 	}
 
 #define EMPTY_LINE(ObjectT, num_points) \
-	[](Server *) {}
+	[](Server *, Json::Value& /*root*/) {}
 
 // If you need the enum for the client side, run getHolodeckEnum.py
 const std::vector<Server::Handler> Server::Handlers = {
@@ -47,6 +48,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 
 Server::Server(Painter &painter, bool deferStart)
 :	m_painter(painter),
+	m_jsonreader(),
 	m_socket(m_ioService),
 	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
 	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.112"), 30000)
@@ -71,29 +73,29 @@ void Server::poll(bool blocking)
 
 void Server::startAccept()
 {
+	std::cout << "Server::startAccept" << std::endl;
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
-							   m_senderEndpoint,
-							   boost::bind(&Server::handleRead, this));
+								m_senderEndpoint,
+								boost::bind(&Server::handleRead,
+											this,
+											boost::asio::placeholders::error,
+											boost::asio::placeholders::bytes_transferred));
+
 }
 
-void Server::handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error)
+void Server::handleRead(const boost::system::error_code &ec, std::size_t transferred_bytes)
 {
-	if (!error)
+	Json::Value root;
+	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))
 	{
-		m_connectionsMutex.lock();
-		m_connections.push_back(socket);
-		m_connectionsMutex.unlock();
-		socket->async_receive(boost::asio::buffer(m_buf),
-							  boost::bind(&Server::handleRead, this));
+		unsigned int instructionCode = root.get("instruction", Json::Value(0)).asUInt();
+		if (0 < instructionCode && instructionCode < Handlers.size())
+				Handlers[instructionCode](this, root);
 	}
-}
-
-void Server::handleRead()
-{
-	m_current = 0;
-	unsigned int instructionCode = readChar();
-	if (0 < instructionCode && instructionCode < Handlers.size())
-			Handlers[instructionCode](this);
+	else
+	{
+		std::cout << m_jsonreader.getFormatedErrorMessages() << std::endl;
+	}
 	startAccept();
 }
 

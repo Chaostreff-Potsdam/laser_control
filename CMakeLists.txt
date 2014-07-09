@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.6)
 project(LASERWRAPPER)
 
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
+
 set(BOOST_VERSION 1.40)
 if(WIN32)
 	set(OpenCV_DIR "Z:/lib_msvc11/opencv/2.4.8")
@@ -13,7 +15,16 @@ endif(WIN32)
 find_package(OpenCV REQUIRED)
 find_package(Boost ${BOOST_VERSION}
 			REQUIRED
-			COMPONENTS system regex date_time)
+                        COMPONENTS system regex date_time)
+
+if(UNIX)
+        find_package(Jsoncpp REQUIRED)
+
+        if(Jsoncpp_FOUND)
+            message(STATUS Jsoncpp_INCLUDE_DIR = ${Jsoncpp_INCLUDE_DIR})
+            message(STATUS Jsoncpp_LIBRARY = ${Jsoncpp_LIBRARY})
+        endif(Jsoncpp_FOUND)
+endif(UNIX)
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)

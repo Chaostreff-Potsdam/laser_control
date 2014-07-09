@@ -6,6 +6,9 @@
 #include <boost/asio.hpp>
 #include <mutex>
 #include <memory>
+#include <json/reader.h>
+
+#define LASERWRAPPER_SERVER_BUFFER_SIZE 2048
 
 namespace laser { namespace holodeck {
 
@@ -20,16 +23,17 @@ namespace laser { namespace holodeck {
 		void handleDeleteAll();
 
 		template <size_t num_points, typename FuncType>
-		void createObject(const char *name, FuncType constructor)
+		void createObject(const char *name, FuncType constructor, Json::Value& root)
 		{
 			InstructionCaller<num_points> caller;
 
-			int instructionId = readInt32();
-            addObjectToPainter(instructionId, name, caller(&constructor, instructionId, readTurkerIds(), readPoints(num_points)));
+			int instructionId = root.get("id", Json::Value(0)).asInt();
+			readTurkerIds();
+			addObjectToPainter(instructionId, name, caller(&constructor, readPoints(num_points)));
 		}
 
 	protected:
-		typedef std::function<void(Server *)> Handler;
+		typedef std::function<void(Server *, Json::Value&)> Handler;
 		static const std::vector<Handler> Handlers;
 
 		int readChar();
@@ -38,12 +42,12 @@ namespace laser { namespace holodeck {
 		std::vector<Point> readPoints(int n);
 
 		void startAccept();
-		void handleAccept(boost::asio::ip::tcp::socket *socket, const boost::system::error_code &error);
-		void handleRead();
+		void handleRead(const boost::system::error_code& ec, std::size_t transferred_bytes);
 		void addObjectToPainter(const int id, const char *name, const ObjectPtr & object);
 
 		Painter& m_painter;
 
+		Json::Reader m_jsonreader;
 		boost::asio::io_service m_ioService;
 		std::vector<boost::asio::ip::tcp::socket*> m_connections;
 		boost::asio::ip::udp::socket m_socket;
@@ -55,7 +59,7 @@ namespace laser { namespace holodeck {
 		std::thread m_pollThread;
 
 		int m_current;
-		unsigned char m_buf[2048];
+		char m_buf[LASERWRAPPER_SERVER_BUFFER_SIZE];
 	};
 
 }} // namespace laser::holodeck

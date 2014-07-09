@@ -69,6 +69,7 @@ add_library(laserwrapper SHARED
 	${MYSOURCES})
 
 if(UNIX)
+        INCLUDE_DIRECTORIES(${Jsoncpp_INCLUDE_DIR})
 	set(HOLODECK_FILES
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
 		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
@@ -100,7 +101,8 @@ if(UNIX)
 
 	set(OS_SPECIFIC_LINK_LIBRARIES 
 			m
-			pthread)
+                        pthread
+                        ${Jsoncpp_LIBRARY})
 else(UNIX)
 	set(OS_SPECIFIC_LINK_LIBRARIES 
 			shlwapi
