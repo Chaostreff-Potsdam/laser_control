@@ -14,7 +14,7 @@ namespace laser { namespace holodeck {
 
 #define HANDLE_OBJECT(ObjectT, num_points) \
 	[](Server *s, Json::Value& root) { \
-		s->createObject<num_points>(#ObjectT, InstructionFactory::ObjectT); \
+		s->createObject<num_points>(#ObjectT, InstructionFactory::ObjectT, root); \
 	}
 
 #define EMPTY_LINE(ObjectT, num_points) \
@@ -83,7 +83,7 @@ void Server::startAccept()
 
 }
 
-void Server::handleRead(const boost::system::error_code &ec, std::size_t transferred_bytes)
+void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t transferred_bytes)
 {
 	Json::Value root;
 	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))

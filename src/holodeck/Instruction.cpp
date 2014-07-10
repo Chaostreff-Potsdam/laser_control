@@ -1,6 +1,9 @@
 #include "Instruction.h"
 
 #include "../objects/Polygon.h"
+
+#include <json/value.h>
+
 #include <vector>
 
 laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const std::vector<laser::ObjectPtr> &objects, int instructionId, const std::vector<int> & turkerIds)
@@ -22,7 +25,28 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Ob
 	group->add(object);
 	group->add(group->turkerIdsToPolygons());
 
-    return group;
+	return group;
+}
+
+laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Json::Value &root)
+{
+	std::vector<int> turkerIds;
+	int id = root.get("id", Json::Value(0)).asInt();
+
+	Json::Value turkers = root.get("turkers", Json::Value());
+
+	// TODO we should be able to refine this
+	for (Json::Value::iterator it = turkers.begin(); it != turkers.end(); ++it)
+	{
+		turkerIds.push_back(it.key().asInt());
+	}
+
+	return InstructionPtr(new Instruction(id, turkerIds));
+}
+
+void laser::holodeck::Instruction::putTurkerIdsAt(laser::Point p)
+{
+
 }
 
 laser::holodeck::Instruction::Instruction(int instructionId, const std::vector<int> &turkerIds)

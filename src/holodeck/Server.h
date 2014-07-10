@@ -4,9 +4,10 @@
 #include "InstructionCaller.h"
 
 #include <boost/asio.hpp>
+#include <json/reader.h>
+
 #include <mutex>
 #include <memory>
-#include <json/reader.h>
 
 #define LASERWRAPPER_SERVER_BUFFER_SIZE 2048
 
@@ -28,8 +29,7 @@ namespace laser { namespace holodeck {
 			InstructionCaller<num_points> caller;
 
 			int instructionId = root.get("id", Json::Value(0)).asInt();
-			readTurkerIds();
-			addObjectToPainter(instructionId, name, caller(&constructor, readPoints(num_points)));
+			addObjectToPainter(instructionId, name, caller(&constructor, root, readPoints(num_points)));
 		}
 
 	protected:
@@ -42,12 +42,13 @@ namespace laser { namespace holodeck {
 		std::vector<Point> readPoints(int n);
 
 		void startAccept();
-		void handleRead(const boost::system::error_code& ec, std::size_t transferred_bytes);
+		void handleRead(const boost::system::error_code& /*ec*/, std::size_t transferred_bytes);
 		void addObjectToPainter(const int id, const char *name, const ObjectPtr & object);
 
 		Painter& m_painter;
 
 		Json::Reader m_jsonreader;
+
 		boost::asio::io_service m_ioService;
 		std::vector<boost::asio::ip::tcp::socket*> m_connections;
 		boost::asio::ip::udp::socket m_socket;

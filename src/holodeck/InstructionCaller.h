@@ -2,6 +2,8 @@
 #include "Instruction.h"
 #include "../Painter.h"
 
+#include <json/forwards.h>
+
 #include <boost/config.hpp>
 
 namespace laser { namespace holodeck {
@@ -78,16 +80,19 @@ template <size_t num_args>
 struct InstructionCaller
 {
 	template <typename FuncType>
-    ObjectPtr operator () (FuncType f, int instructionId, const std::vector<int> &turkerIds, const std::vector<Point> &args){
+	ObjectPtr operator () (FuncType f, Json::Value& root, const std::vector<Point> &args){
 		assert(args.size() >= num_args);
-        return call(f, instructionId, turkerIds, args, BuildIndices<num_args>{});
+		return call(f, root, args, BuildIndices<num_args>{});
 	}
 
 private:
 	template <typename FuncType, size_t... I>
-    ObjectPtr call(FuncType f, int instructionId, const std::vector<int> &turkerIds, const std::vector<Point> &args, indices<I...>){
+	ObjectPtr call(FuncType f, Json::Value& root, const std::vector<Point> &args, indices<I...>){
 
-        return Instruction::construct((*f)(args[I]...), instructionId, turkerIds);
+		InstructionPtr instruction = Instruction::construct(root);
+		instruction->add((*f)(instruction, args[I]...));
+		return instruction;
+
 	}
 };
 

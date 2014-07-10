@@ -2,8 +2,10 @@
 
 #include "../objects/CompositeObject.h"
 
+#include <json/forwards.h>
 #include <vector>
 #include <memory>
+
 
 namespace laser {
 	namespace holodeck {
@@ -16,8 +18,11 @@ namespace laser {
 		class Instruction : public laser::CompositeObject
 		{
 		public:
-			static InstructionPtr construct(const std::vector<ObjectPtr> & objects, int instructionId, const std::vector<int> & turkerIds);
-            static InstructionPtr construct(const ObjectPtr object, int instructionId, const std::vector<int> & turkerIds);
+			static LASER_DEPRECATED InstructionPtr construct(const std::vector<ObjectPtr> & objects, int instructionId, const std::vector<int> & turkerIds);
+			static LASER_DEPRECATED InstructionPtr construct(const ObjectPtr object, int instructionId, const std::vector<int> & turkerIds);
+			static InstructionPtr construct(const Json::Value &root);
+
+			void putTurkerIdsAt(Point p);
 
 		protected:
 			Instruction(int instructionId, const std::vector<int> & turkerIds);

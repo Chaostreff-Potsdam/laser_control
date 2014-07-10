@@ -1,5 +1,14 @@
 #pragma once
 
+#ifdef __GNUC__
+#define LASER_DEPRECATED __attribute__((deprecated))
+#elif defined(_MSC_VER)
+#define LASER_DEPRECATED __declspec(deprecated)
+#else
+#pragma message("WARNING: You need to implement DEPRECATED for this compiler")
+#define LASER_DEPRECATED
+#endif
+
 #include <cstdint>
 #include <cmath>
 #include <opencv2/core/core.hpp>
