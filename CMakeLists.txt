@@ -23,6 +23,8 @@ if(UNIX)
         if(Jsoncpp_FOUND)
             message(STATUS Jsoncpp_INCLUDE_DIR = ${Jsoncpp_INCLUDE_DIR})
             message(STATUS Jsoncpp_LIBRARY = ${Jsoncpp_LIBRARY})
+		else(Jsoncpp_FOUND)
+			message(FATAL_ERROR "Please install Jsoncpp from https://github.com/open-source-parsers/jsoncpp")
         endif(Jsoncpp_FOUND)
 endif(UNIX)
 
