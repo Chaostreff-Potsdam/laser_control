@@ -1,7 +1,9 @@
 ﻿#include "Server.h"
 #include "InstructionFactory.h"
+#include "Config.h"
 
 #include <iostream>
+#include <assert.h>
 #include <boost/bind.hpp>
 #include <json/value.h>
 
@@ -46,12 +48,17 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Guardrail, 2)
 };
 
+namespace basioip = boost::asio::ip;
+
 Server::Server(Painter &painter, bool deferStart)
 :	m_painter(painter),
 	m_jsonreader(),
 	m_socket(m_ioService),
-	m_localEndpoint(boost::asio::ip::udp::v4(), 30000),
-	m_senderEndpoint(boost::asio::ip::address::from_string("192.168.1.112"), 30000)
+	m_localEndpoint(basioip::udp::v4(), 30000),
+	m_senderEndpoint(basioip::address::from_string(laser::config::testServer ?
+													   "127.0.0.1"
+													 : "192.168.1.112"),
+					 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 
@@ -94,7 +101,7 @@ void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t tra
 	}
 	else
 	{
-		std::cout << m_jsonreader.getFormatedErrorMessages() << std::endl;
+		std::cerr << m_jsonreader.getFormatedErrorMessages() << std::endl;
 	}
 	startAccept();
 }
@@ -125,13 +132,17 @@ std::vector<int> Server::readTurkerIds()
 	return turkerIds;
 }
 
-std::vector<Point> Server::readPoints(int n)
+std::vector<Point> Server::readPoints(Json::Value &root, unsigned int n)
 {
 	std::vector<Point> ps;
 
-	for (int i = 0; i < n; ++i) {
-		const int x = readInt32();
-		const int y = readInt32();
+	Json::Value points = root.get("points", Json::Value());
+
+	assert(n == points.size());
+
+	for (Json::Value::iterator it = points.begin(); points.end() != it; ++it) {
+		const int x = (*it).get("x", Json::Value()).asInt();
+		const int y = (*it).get("y", Json::Value()).asInt();
 		ps.emplace_back(x, y);
 	}
 	return ps;

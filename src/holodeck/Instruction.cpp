@@ -38,7 +38,7 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Js
 	// TODO we should be able to refine this
 	for (Json::Value::iterator it = turkers.begin(); it != turkers.end(); ++it)
 	{
-		turkerIds.push_back(it.key().asInt());
+		turkerIds.push_back((*it).asInt());
 	}
 
 	return InstructionPtr(new Instruction(id, turkerIds));

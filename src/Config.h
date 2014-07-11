@@ -8,5 +8,6 @@ EXPORT_LASER_CONTROL void readCommandLine(int argc, char *argv[]);
 EXPORT_LASER_CONTROL extern bool forceRecalibration;
 EXPORT_LASER_CONTROL extern bool useVirtualLaser;
 EXPORT_LASER_CONTROL extern bool displayTests;
+EXPORT_LASER_CONTROL extern bool testServer;
 
 }} // namespace laser::config

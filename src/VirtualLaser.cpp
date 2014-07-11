@@ -47,6 +47,7 @@ void VirtualLaser::writePoints()
 
 size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)
 {
+	std::cout << m_points[currentIndex].x << " " << m_points[currentIndex].y << std::endl;
 	std::vector<cv::Point> currentPoints;
 
 	auto firstPoint = parsePoint(m_points[currentIndex]);

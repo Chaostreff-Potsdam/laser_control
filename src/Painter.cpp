@@ -73,6 +73,7 @@ int laser::Painter::add(const ObjectPtr & object, bool update)
 
 int laser::Painter::add(int id, const ObjectPtr &object, bool update)
 {
+	std::cout << "Painter::add(" << id << ", …)" << std::endl;
 	m_objects[id] = object;
 	if (update)
 		updatePoints();

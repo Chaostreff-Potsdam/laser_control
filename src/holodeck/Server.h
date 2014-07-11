@@ -29,7 +29,7 @@ namespace laser { namespace holodeck {
 			InstructionCaller<num_points> caller;
 
 			int instructionId = root.get("id", Json::Value(0)).asInt();
-			addObjectToPainter(instructionId, name, caller(&constructor, root, readPoints(num_points)));
+			addObjectToPainter(instructionId, name, caller(&constructor, root, readPoints(root, num_points)));
 		}
 
 	protected:
@@ -39,7 +39,7 @@ namespace laser { namespace holodeck {
 		int readChar();
 		int readInt32();
 		std::vector<int> readTurkerIds();
-		std::vector<Point> readPoints(int n);
+		std::vector<Point> readPoints(Json::Value &root, unsigned int n);
 
 		void startAccept();
 		void handleRead(const boost::system::error_code& /*ec*/, std::size_t transferred_bytes);
