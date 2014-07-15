@@ -113,34 +113,6 @@ ObjectPtr InstructionFactory::Beam(InstructionPtr instruction, Point p1, Point p
 									   false);
 	group->add(bigRect);
 
-	Rectangle *bottomLeft = new Rectangle(midPoint.x() - 1200,
-										  midPoint.y() - length/2 + 200,
-										  200,
-										  200,
-										  false);
-	group->add(bottomLeft);
-
-	Rectangle *bottomRight = new Rectangle(midPoint.x() + 1000,
-										  midPoint.y() - length/2 + 200,
-										  200,
-										  200,
-										  false);
-	group->add(bottomRight);
-
-	Rectangle *topLeft = new Rectangle(midPoint.x() - 1200,
-										  midPoint.y() + length/2 - 400,
-										  200,
-										  200,
-										  false);
-	group->add(topLeft);
-
-	Rectangle *topRight = new Rectangle(midPoint.x() + 1000,
-										  midPoint.y() + length/2 - 400,
-										  200,
-										  200,
-										  false);
-	group->add(topRight);
-
 	group->rotate(alpha, midPoint);
 
 	return group;
