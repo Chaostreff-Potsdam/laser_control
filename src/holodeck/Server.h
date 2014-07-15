@@ -20,15 +20,15 @@ namespace laser { namespace holodeck {
 		void poll(bool blocking = false);
 
 	public:
-		void handleDelete();
-		void handleDeleteAll();
+		void handleDelete(const Json::Value &root);
+		void handleDeleteAll(const Json::Value &root);
 
 		template <size_t num_points, typename FuncType>
 		void createObject(const char *name, FuncType constructor, Json::Value& root)
 		{
 			InstructionCaller<num_points> caller;
 
-			int instructionId = root.get("id", Json::Value(0)).asInt();
+			int instructionId = root.get("instance", Json::Value(0)).asInt();
 			addObjectToPainter(instructionId, name, caller(&constructor, root, readPoints(root, num_points)));
 		}
 

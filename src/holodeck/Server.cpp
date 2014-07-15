@@ -10,8 +10,8 @@
 namespace laser { namespace holodeck {
 
 #define HANDLER(Name) \
-	[](Server *s, Json::Value& /*root*/) { \
-		s->handle##Name(); \
+	[](Server *s, Json::Value& root) { \
+		s->handle##Name(root); \
 	}
 
 #define HANDLE_OBJECT(ObjectT, num_points) \
@@ -38,7 +38,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(PortalActive, 2),
 	HANDLE_OBJECT(Zipline, 2),
 	HANDLE_OBJECT(Corpse, 4),
-	HANDLE_OBJECT(Stool, 2),
+	HANDLE_OBJECT(Stool, 4),
 	HANDLE_OBJECT(Water, 1),
 	HANDLE_OBJECT(Poke, 2),
 	HANDLE_OBJECT(Stomper, 2),
@@ -57,7 +57,7 @@ Server::Server(Painter &painter, bool deferStart)
 	m_localEndpoint(basioip::udp::v4(), 30000),
 	m_senderEndpoint(basioip::address::from_string(laser::config::testServer ?
 													   "127.0.0.1"
-													 : "192.168.1.112"),
+													 : "192.168.1.100"),
 					 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
@@ -71,7 +71,6 @@ Server::Server(Painter &painter, bool deferStart)
 
 void Server::poll(bool blocking)
 {
-	std::cout << "LaserServer::poll" << std::endl;
 	if (!blocking)
 		m_pollThread = std::thread([&](){
 			m_ioService.run();
@@ -80,7 +79,6 @@ void Server::poll(bool blocking)
 
 void Server::startAccept()
 {
-	std::cout << "Server::startAccept" << std::endl;
 	m_socket.async_receive_from(boost::asio::buffer(m_buf),
 								m_senderEndpoint,
 								boost::bind(&Server::handleRead,
@@ -93,6 +91,7 @@ void Server::startAccept()
 void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t transferred_bytes)
 {
 	Json::Value root;
+	std::cout << std::string(m_buf, transferred_bytes) << std::endl;
 	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))
 	{
 		unsigned int instructionCode = root.get("instruction", Json::Value(0)).asUInt();
@@ -148,19 +147,19 @@ std::vector<Point> Server::readPoints(Json::Value &root, unsigned int n)
 	return ps;
 }
 
-void Server::handleDelete()
+void Server::handleDelete(const Json::Value &root)
 {
-	int instructionId = readInt32();
+	int instructionId = root.get("instance", Json::Value()).asInt();
 
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.deleteObject(instructionId, false);
+	m_painter.deleteObject(instructionId);
 }
 
-void Server::handleDeleteAll()
+void Server::handleDeleteAll(const Json::Value &root)
 {
 	std::cerr << "delete all" << std::endl;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
-	m_painter.deleteAll(false);
+	m_painter.deleteAll();
 }
 
 void Server::addObjectToPainter(const int id, const char *name, const ObjectPtr &object)

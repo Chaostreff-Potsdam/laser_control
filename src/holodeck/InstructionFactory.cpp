@@ -194,26 +194,9 @@ ObjectPtr InstructionFactory::Zipline(InstructionPtr instruction, Point p1, Poin
 	return group;
 }
 
-ObjectPtr InstructionFactory::Stool(InstructionPtr instruction, Point p1, Point p2)
+ObjectPtr InstructionFactory::Stool(InstructionPtr instruction, Point p1, Point p2, Point p3, Point p4)
 {
-	CompositeObjectPtr group = CompositeObject::construct();
-
-	float alpha;
-	float length;
-	Point mid;
-	Point start;
-	Point end;
-
-	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
-
-	group->add(new Rectangle(start.x(), start.y() - length/2,
-							 length, length, false));
-	group->add(new Line(start.x() + length/6, start.y() - length/2 + 500,
-						start.x() + length/6, start.y() + length/2 + 500));
-
-	group->rotate(alpha);
-
-	return group;
+	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 }
 
 ObjectPtr InstructionFactory::Corpse(InstructionPtr instruction, Point head, Point hip, Point leftHand, Point rightHand)

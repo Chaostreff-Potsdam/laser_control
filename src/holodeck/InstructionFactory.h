@@ -15,7 +15,7 @@ namespace InstructionFactory {
 	ObjectPtr PortalInactive(InstructionPtr instruction, Point p1, Point p2);
 	ObjectPtr PortalActive(InstructionPtr instruction, Point p1, Point p2);
 	ObjectPtr Zipline(InstructionPtr instruction, Point p1, Point p2);
-	ObjectPtr Stool(InstructionPtr instruction, Point p1, Point p2);
+	ObjectPtr Stool(InstructionPtr instruction, Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr Corpse(InstructionPtr instruction, Point head, Point hip, Point leftHand, Point rightHand);
 	ObjectPtr Water(InstructionPtr instruction, Point p);
 	ObjectPtr Poke(InstructionPtr instruction, Point p1, Point p2);

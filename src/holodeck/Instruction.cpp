@@ -19,7 +19,7 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const st
 
 laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const ObjectPtr object, int instructionId, const std::vector<int> &turkerIds)
 {
-    InstructionPtr group(new Instruction(instructionId, turkerIds));
+	InstructionPtr group(new Instruction(instructionId, turkerIds));
 
     group->self = group;
 	group->add(object);
@@ -31,7 +31,7 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Ob
 laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Json::Value &root)
 {
 	std::vector<int> turkerIds;
-	int id = root.get("id", Json::Value(0)).asInt();
+	int id = root.get("instance", Json::Value(0)).asInt();
 
 	Json::Value turkers = root.get("turkers", Json::Value());
 
