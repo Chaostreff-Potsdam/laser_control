@@ -90,7 +90,7 @@ private:
 	ObjectPtr call(FuncType f, Json::Value& root, const std::vector<Point> &args, indices<I...>){
 
 		InstructionPtr instruction = Instruction::construct(root);
-		instruction->add((*f)(instruction, args[I]...));
+		instruction->add((*f)(instruction, root, args[I]...));
 		return instruction;
 
 	}
