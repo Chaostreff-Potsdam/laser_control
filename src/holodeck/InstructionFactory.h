@@ -24,6 +24,7 @@ namespace InstructionFactory {
 	ObjectPtr Heat(InstructionPtr instruction, Point p);
 	ObjectPtr Elevator(InstructionPtr instruction, Point p1, Point p2, Point p3);
 	ObjectPtr Guardrail(InstructionPtr instruction, Point p1, Point p2);
+	ObjectPtr BlueprintWall(InstructionPtr instruction, Point p1, Point p2);
 }
 
 }} // namespace laser::holodeck

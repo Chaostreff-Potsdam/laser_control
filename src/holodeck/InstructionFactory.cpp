@@ -407,4 +407,17 @@ ObjectPtr InstructionFactory::Guardrail(InstructionPtr instruction, Point p1, Po
 	return group;
 }
 
+ObjectPtr InstructionFactory::BlueprintWall(InstructionPtr instruction, Point p1, Point p2)
+{
+	Point start = p1 + (p2 - p1) / 10;
+	Point end   = p2 + (p1 - p2) / 10;
+
+	CompositeObjectPtr group = CompositeObject::construct();
+
+	group->add(new Line(p1, start));
+	group->add(new Line(end, p2));
+
+	return group;
+}
+
 }} // namespace laser::holodeck
