@@ -60,7 +60,7 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 	if (!m_isVisible)
 		return EtherdreamPoints();
 
-	if (m_dirty)
+//	if (m_dirty)
 		rebuildCache();
 
 	return m_cache;
@@ -79,7 +79,7 @@ const etherdream_point laser::Object::etherdreamPoint(int x, int y, bool visible
 	p.x = clamp(x, INT16_MIN, INT16_MAX);
 	p.y = clamp(y, INT16_MIN, INT16_MAX);
 
-	visible &= (p.x >= INT16_MIN && p.x <= INT16_MAX && p.y >= INT16_MIN && p.y <= INT16_MAX);
+//	visible &= (p.x >= INT16_MIN && p.x <= INT16_MAX && p.y >= INT16_MIN && p.y <= INT16_MAX);
 
 	p.r = visible ? m_color.red() : 0;
 	p.g = visible ? m_color.green() : 0;

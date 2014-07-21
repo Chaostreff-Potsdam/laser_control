@@ -9,6 +9,9 @@
 #define LASERWRAPPER_LINE_POINTS (100)
 #endif
 
+int laser::Line::s_pixelsPerPoint = 100;
+int laser::Line::s_marginPointFraction = 100;
+
 laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
 :	Object(),
 	m_visible(visible),
@@ -16,7 +19,7 @@ laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
 {
 	m_a = Point(xa, ya);
 	m_sAB = Point(xb, yb) - m_a;
-	m_pointCount = m_sAB.abs()/LASERWRAPPER_LINE_POINTS;
+	m_pointCount = m_sAB.abs()/s_pixelsPerPoint;
 }
 
 laser::Line::Line(Point a, Point b, bool visible, bool dashed)
@@ -26,17 +29,18 @@ laser::Line::Line(Point a, Point b, bool visible, bool dashed)
 {
 	m_a = a;
 	m_sAB = b - a;
-	m_pointCount = m_sAB.abs()/LASERWRAPPER_LINE_POINTS;
+	m_pointCount = m_sAB.abs()/s_pixelsPerPoint;
 }
 
 laser::EtherdreamPoints laser::Line::points() const
 {
+	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
 	EtherdreamPoints ps;
 	if (m_visible)
 	{
-		for (int i = 0; i < m_pointCount; i++)
+		for (int i = 0; i < pointCount; i++)
 		{
-			const Point p = m_a + m_sAB * ((float)i)/m_pointCount;
+			const Point p = m_a + m_sAB * ((float)i)/pointCount;
 			const bool visible = !m_dashed || (m_dashed && (i % 4 < 2));
 
 			ps.push_back(etherdreamPoint(p, visible));
@@ -48,13 +52,14 @@ laser::EtherdreamPoints laser::Line::points() const
 
 laser::EtherdreamPoints laser::Line::startPoints() const
 {
+	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
 	EtherdreamPoints ps;
 
 	if (m_visible)
 	{
-		for (int i = - m_pointCount/5; i < 0; i++)
+		for (int i = - pointCount * s_marginPointFraction/100.0; i < 0; i++)
 		{
-			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/LASERWRAPPER_LINE_POINTS, false));
+			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/s_pixelsPerPoint, false));
 		}
 	}
 
@@ -64,13 +69,14 @@ laser::EtherdreamPoints laser::Line::startPoints() const
 
 laser::EtherdreamPoints laser::Line::endPoints() const
 {
+	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
 	EtherdreamPoints ps;
 
 	if (m_visible)
 	{
-		for (int i = LASERWRAPPER_LINE_POINTS; i < LASERWRAPPER_LINE_POINTS + m_pointCount/5; i++)
+		for (int i = s_pixelsPerPoint; i < s_pixelsPerPoint + pointCount * s_marginPointFraction/100.0; i++)
 		{
-			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/LASERWRAPPER_LINE_POINTS, false));
+			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/s_pixelsPerPoint, false));
 		}
 	}
 

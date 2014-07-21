@@ -16,6 +16,8 @@
 
 #include <chrono>
 
+#include <opencv/highgui.h>
+
 using namespace laser;
 
 #ifndef _WIN32
@@ -24,6 +26,7 @@ void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
 {
 	while (true) {
 		onLoop();
+		cv::waitKey(10);
 		p.updatePoints();
 		std::this_thread::sleep_for(std::chrono::milliseconds(wait));
 	}
@@ -31,6 +34,12 @@ void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
 
 int main(int argc, char *argv[])
 {
+	cv::namedWindow("Laser options");
+	cv::createTrackbar("pixel per second", "Laser options", &EtherdreamWrapper::pps, 90000);
+	cv::createTrackbar("pixel per point", "Laser options", &Line::s_pixelsPerPoint, 1000);
+	cv::createTrackbar("margin %", "Laser options", &Line::s_marginPointFraction, 200);
+
+
 	config::readCommandLine(argc, argv);
 	Painter p(false, false, true);
 

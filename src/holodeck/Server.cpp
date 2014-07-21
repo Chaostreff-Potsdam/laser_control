@@ -46,7 +46,8 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Heat, 1),
 	HANDLE_OBJECT(Elevator, 3),
 	HANDLE_OBJECT(Guardrail, 2),
-	HANDLE_OBJECT(BlueprintWall, 2)
+	HANDLE_OBJECT(BlueprintWall, 2),
+	HANDLE_OBJECT(MovingWallWarning, 2)
 };
 
 namespace basioip = boost::asio::ip;
@@ -58,7 +59,7 @@ Server::Server(Painter &painter, bool deferStart)
 	m_localEndpoint(basioip::udp::v4(), 30000),
 	m_senderEndpoint(basioip::address::from_string(laser::config::testServer ?
 													   "127.0.0.1"
-													 : "192.168.1.100"),
+													 : "192.168.1.148"),
 					 30000)
 {
 	std::lock_guard<std::mutex> lock(m_painterMutex);
@@ -92,7 +93,7 @@ void Server::startAccept()
 void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t transferred_bytes)
 {
 	Json::Value root;
-	std::cout << std::string(m_buf, transferred_bytes) << std::endl;
+	//std::cout << std::string(m_buf, transferred_bytes) << std::endl;
 	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))
 	{
 		unsigned int instructionCode = root.get("instruction", Json::Value(0)).asUInt();

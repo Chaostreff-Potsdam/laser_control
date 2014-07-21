@@ -21,7 +21,7 @@ namespace laser {
 	class EtherdreamWrapper: public Canvas
 	{
 	public:
-		static const int pps;
+		static int pps;
 
 		/*!
 		 * \details On construction, this wrapper automatically connects to the

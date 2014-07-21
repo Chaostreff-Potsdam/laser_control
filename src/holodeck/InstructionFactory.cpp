@@ -427,10 +427,14 @@ ObjectPtr InstructionFactory::MovingWallWarning(InstructionPtr instruction, cons
 	int normalX = root.get("direction", Json::Value()).get("x", Json::Value()).asInt();
 	int normalY = root.get("direction", Json::Value()).get("y", Json::Value()).asInt();
 	int countdown = root.get("countdown", Json::Value(5000)).asInt();
+	Point dir = (p1 + p2) / 2 + Point(normalX, normalY) * 100;
+	std::cout << dir << std::endl;
 
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	group->add(new Line(p1, p2));
+	group->add(new Line(p2, dir));
+	group->add(new Line(dir, p1));
 
 	return group;
 }

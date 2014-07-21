@@ -13,6 +13,9 @@ namespace laser {
 		EtherdreamPoints startPoints() const;
 		EtherdreamPoints endPoints() const;
 
+		static int s_pixelsPerPoint;
+		static int s_marginPointFraction;
+
 	private:
 		Point m_a;
 		Point m_sAB;
