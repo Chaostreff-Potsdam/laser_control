@@ -106,7 +106,7 @@ namespace laser {
 		std::thread m_updateLoop;
 		void updateLoop();
 
-		std::mutex m_updateMutex;
+		std::mutex m_objectsMutex;
 
 
 		/*!

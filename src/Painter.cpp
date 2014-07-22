@@ -56,24 +56,36 @@ void laser::Painter::paintOn(const CanvasPtr &e)
 
 void laser::Painter::paint(const ObjectPtrMap & objects)
 {
-	m_objects = objects;
+	{
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
+		m_objects = objects;
+	}
 	updatePoints();
 }
 
 int laser::Painter::add(const ObjectPtr & object, bool update)
 {	
-	while (m_objects.find(m_smallestFreeId++) != m_objects.end())
-		continue;
+	int result = -1;
+	{
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
+		while (m_objects.find(m_smallestFreeId++) != m_objects.end())
+			continue;
 	
-	m_objects[m_smallestFreeId] = object;
+		m_objects[m_smallestFreeId] = object;
+		result = m_smallestFreeId;
+	}
+
 	if (update)
 		updatePoints();
-	return m_smallestFreeId;
+	return result;
 }
 
 int laser::Painter::add(int id, const ObjectPtr &object, bool update)
 {
-	m_objects[id] = object;
+	{
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
+		m_objects[id] = object;
+	}
 	if (update)
 		updatePoints();
 	return id;
@@ -81,20 +93,28 @@ int laser::Painter::add(int id, const ObjectPtr &object, bool update)
 
 void laser::Painter::deleteObject(int id, bool update)
 {
-	m_objects.erase(id);
+	{
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
+		m_objects.erase(id);
+	}
 	if (update)
 		updatePoints();
 }
 
 void laser::Painter::deleteAll(bool update)
 {
-	m_objects.clear();
+	{
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
+		m_objects.clear();
+	}
 	if (update)
 		updatePoints();
 }
 
 laser::ObjectPtr laser::Painter::getObject(int id)
 {
+	std::lock_guard<std::mutex> lock(m_objectsMutex);
+
 	return m_objects[id];
 }
 
@@ -136,7 +156,7 @@ void laser::Painter::updatePoints()
 	EtherdreamPoints ps;
 
 	{
-		std::lock_guard<std::mutex> lock(m_updateMutex);
+		std::lock_guard<std::mutex> lock(m_objectsMutex);
 
 		if (m_expireObjects) {
 			removeExpiredObjects();
