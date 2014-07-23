@@ -36,8 +36,8 @@ int main(int argc, char *argv[])
 {
 	cv::namedWindow("Laser options");
 	cv::createTrackbar("pixel per second", "Laser options", &EtherdreamWrapper::pps, 90000);
-	cv::createTrackbar("pixel per point", "Laser options", &Line::s_pixelsPerPoint, 1000);
-	cv::createTrackbar("margin %", "Laser options", &Line::s_marginPointFraction, 200);
+	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPoint, 1000);
+	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFraction, 200);
 
 
 	config::readCommandLine(argc, argv);
@@ -49,12 +49,16 @@ int main(int argc, char *argv[])
 		p.calibrate();
 
 	if (config::displayTests) {
-		ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
-		p.add(rect);
+		for (int i = 0; i < 20; i++)
+		{
+			p.add(std::make_shared<Circle>(INT16_MIN + 1000 + 1000*i,
+										   INT16_MIN + 1000 + 1000*i,
+										   500));
+			//p.add(std::make_shared<Line>(INT16_MAX - 1000, INT16_MAX - 1000 - 2000*i,
+				//						 INT16_MAX - 5000, INT16_MAX - 1000 - 2000*i));
+		}
+		run(p);
 
-		run(p, [&]{
-			rect->rotate(radians(5));
-		});
 	} else {
 		holodeck::Server s(p);
 		run(p);

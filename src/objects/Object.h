@@ -89,6 +89,8 @@ namespace laser {
 		 */
 		virtual EtherdreamPoints endPoints() const = 0;
 
+		static int s_pixelsPerPoint;
+		static int s_marginPointFraction;
 
 	protected:
 		boost::posix_time::ptime m_started;

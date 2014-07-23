@@ -9,8 +9,6 @@
 #define LASERWRAPPER_LINE_POINTS (100)
 #endif
 
-int laser::Line::s_pixelsPerPoint = 100;
-int laser::Line::s_marginPointFraction = 100;
 
 laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
 :	Object(),

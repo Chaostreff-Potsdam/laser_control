@@ -7,6 +7,9 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <assert.h>
 
+int laser::Object::s_pixelsPerPoint = 100;
+int laser::Object::s_marginPointFraction = 100;
+
 laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
 	  m_isUpdating(false),
