@@ -46,7 +46,9 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Js
 
 void laser::holodeck::Instruction::putTurkerIdsAt(laser::Point p)
 {
-
+	ObjectPtr group = CompositeObject::construct(turkerIdsToPolygons());
+	group->move(p);
+	add(group);
 }
 
 laser::holodeck::Instruction::Instruction(int instructionId, const std::vector<int> &turkerIds)
