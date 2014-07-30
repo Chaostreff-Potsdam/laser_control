@@ -64,7 +64,7 @@ std::vector<laser::ObjectPtr> laser::holodeck::Instruction::turkerIdsToPolygons(
 	std::vector<ObjectPtr> polygons;
 	for (int turkerId : m_turkerIds)
 	{
-		polygons.push_back(std::make_shared<Polygon>(s_numbers[turkerId]));
+		polygons.push_back(std::make_shared<Polygon>(s_numbers[turkerId], false, false, false));
 	}
 
 	return polygons;
