@@ -133,9 +133,14 @@ void laser::Object::resetTransform()
 	nowDirty();
 }
 
-void laser::Object::setAnimation(Animation animation)
+void laser::Object::addAnimation(const Animation::Func &func, const std::chrono::milliseconds & period)
 {
-	m_animation = animation;
+	m_animations.emplace_back(Animation::construct(this, func, true, period));
+}
+
+void laser::Object::removeAllAnimations()
+{
+	m_animations.clear();
 }
 
 void laser::Object::setVisible(bool visible)
@@ -148,15 +153,10 @@ bool laser::Object::visible()
 	return m_isVisible;
 }
 
-void laser::Object::tick()
-{
-	if (m_animation)
-		m_animation();
-}
-
 void laser::Object::setColor(Color color)
 {
 	m_color = color;
+	nowDirty();
 }
 
 laser::Color laser::Object::color()

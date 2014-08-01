@@ -1,4 +1,5 @@
 #include "InstructionFactory.h"
+#include "../Animation.h"
 
 #include "../objects/Line.h"
 #include "../objects/Circle.h"
@@ -298,16 +299,11 @@ ObjectPtr InstructionFactory::Poke(InstructionPtr instruction, Point p1, Point p
 	group->add(new Line(start.x()+3000, start.y() -1000, mid.x()+2000, start.y() -1000));
 	group->rotate(alpha, mid);
 
-	group->setAnimation([group]()
-						{
-							static int ticks = 0;
-							if (ticks > 20) // every second
-							{
-								group->setVisible(!group->visible());
-								ticks = 0;
-							}
-							ticks++;
-						});
+
+	group->addAnimation([](Object *o) {
+							//o->setVisible(!o->visible());
+							o->rotate(radians(5));
+						}, std::chrono::milliseconds(50));
 
 	return group;
 }

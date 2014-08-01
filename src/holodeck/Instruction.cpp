@@ -46,7 +46,7 @@ laser::holodeck::InstructionPtr laser::holodeck::Instruction::construct(const Js
 
 void laser::holodeck::Instruction::putTurkerIdsAt(laser::Point p)
 {
-
+	(void)p;
 }
 
 laser::holodeck::Instruction::Instruction(int instructionId, const std::vector<int> &turkerIds)

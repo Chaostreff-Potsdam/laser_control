@@ -14,8 +14,6 @@
 #include "objects/Circle.h"
 #include "objects/Line.h"
 
-#include <chrono>
-
 using namespace laser;
 
 #ifndef _WIN32
@@ -40,14 +38,20 @@ int main(int argc, char *argv[])
 		p.calibrate();
 
 	if (config::displayTests) {
-		ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
-		p.add(rect);
+		ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
+		p.add(circ);
 
 		run(p, [&]{
-			rect->rotate(radians(5));
+			circ->rotate(radians(5));
 		});
 	} else {
 		holodeck::Server s(p);
+		p.add(std::make_shared<Circle>(0, 0, 2000, 2000));
+
+#if 0
+		ObjectPtr obj = holodeck::InstructionFactory::Poke(holodeck::InstructionPtr(), Point(0, 0), Point(0, 10000)); //std::make_shared<Circle>(-10000, -10000, 20000);
+		p.add(1, obj, false);
+#endif
 		run(p);
 	}
 

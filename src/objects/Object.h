@@ -4,10 +4,10 @@
 #include "../laser_utilities.h"
 #include "../DllExport.h"
 #include "../Color.h"
+#include "../Animation.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <memory>
-#include <functional>
 
 namespace laser {
 
@@ -16,8 +16,6 @@ namespace laser {
 
 	class CompositeObject;
 	typedef std::shared_ptr<CompositeObject> CompositeObjectPtr;
-
-	typedef std::function<void()> Animation;
 
 	/*!
 	 * \brief an abstract object to be painted
@@ -59,12 +57,11 @@ namespace laser {
 
 		void resetTransform();
 
-		void setAnimation(Animation animation);
+		void addAnimation(const Animation::Func & func, const std::chrono::milliseconds &period = Animation::defaultPeriod);
+		void removeAllAnimations();
 
 		void setVisible(bool visible);
 		bool visible();
-
-		void tick();
 
 		void setColor(Color color);
 		Color color();
@@ -112,7 +109,7 @@ namespace laser {
 		cv::Mat m_transform;
 		std::weak_ptr<CompositeObject> m_parent;
 
-		Animation m_animation;
+		std::vector<AnimationPtr> m_animations;
 		bool m_isVisible;
 
 		/*!
