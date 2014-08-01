@@ -15,8 +15,7 @@
 #include "objects/Line.h"
 
 #include <chrono>
-
-#include <opencv/highgui.h>
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace laser;
 
@@ -49,16 +48,12 @@ int main(int argc, char *argv[])
 		p.calibrate();
 
 	if (config::displayTests) {
-		for (int i = 0; i < 20; i++)
-		{
-			p.add(std::make_shared<Circle>(INT16_MIN + 1000 + 1000*i,
-										   INT16_MIN + 1000 + 1000*i,
-										   500));
-			//p.add(std::make_shared<Line>(INT16_MAX - 1000, INT16_MAX - 1000 - 2000*i,
-				//						 INT16_MAX - 5000, INT16_MAX - 1000 - 2000*i));
-		}
-		run(p);
+		ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
+		p.add(rect);
 
+		run(p, [&]{
+			rect->rotate(radians(5));
+		});
 	} else {
 		holodeck::Server s(p);
 		run(p);

@@ -26,6 +26,8 @@ else(UNIX)
 endif(UNIX)
 
 set(MYSOURCES
+	${LASERWRAPPER_SOURCE_DIR}/src/Animation.cpp
+	${LASERWRAPPER_SOURCE_DIR}/src/Animation.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.h
 	${LASERWRAPPER_SOURCE_DIR}/src/Color.cpp
@@ -45,6 +47,7 @@ set(MYSOURCES
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
+	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
 	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.cpp
 	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.h

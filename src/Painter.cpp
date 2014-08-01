@@ -163,7 +163,7 @@ void laser::Painter::updatePoints()
 		}
 
 		for (auto objPair: m_objects) {
-			objPair.second->tick();
+			// objPair.second->tick();
 			appendToVector(ps, objPair.second->pointsToPaint());
 		}
 	}

@@ -36,7 +36,6 @@ namespace laser { namespace holodeck {
 		typedef std::function<void(Server *, Json::Value&)> Handler;
 		static const std::vector<Handler> Handlers;
 
-		int readChar();
 		int readInt32();
 		std::vector<int> readTurkerIds();
 		std::vector<Point> readPoints(Json::Value &root, unsigned int n);

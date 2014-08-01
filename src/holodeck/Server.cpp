@@ -62,8 +62,6 @@ Server::Server(Painter &painter, bool deferStart)
 													 : "192.168.1.148"),
 					 30000)
 {
-	std::lock_guard<std::mutex> lock(m_painterMutex);
-
 	m_socket.open(boost::asio::ip::udp::v4());
 	m_socket.bind(m_localEndpoint);
 	startAccept();
@@ -105,11 +103,6 @@ void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t tra
 		std::cerr << m_jsonreader.getFormatedErrorMessages() << std::endl;
 	}
 	startAccept();
-}
-
-int Server::readChar()
-{
-	return m_buf[m_current++];
 }
 
 int Server::readInt32()

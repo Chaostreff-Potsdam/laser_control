@@ -116,10 +116,4 @@ namespace laser {
 	};
 }
 
-namespace /* this space intentionally left blank */ {
-	std::ostream& operator<< (std::ostream& stream, const laser::Point& point)
-	{
-		stream << "(" << point.x() << "; " << point.y() << ")";
-		return stream;
-	}
-}
+extern std::ostream& operator<< (std::ostream& stream, const laser::Point& point);
