@@ -49,15 +49,14 @@ void calculateRectangleCharacteristics(Point p1, Point p2, float &angle, float &
 
 ////////////////////////////////////////////////////////////
 
-ObjectPtr InstructionFactory::Wall(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 {
 	ObjectPtr w(new Line(p1, p2, true));
 	w->setPermanent(true);
-	instruction->putTurkerIdsAt(p2 + (p2 - p1)/10);
 	return w;
 }
 
-ObjectPtr InstructionFactory::Door(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Door(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr circle = CompositeObject::construct();
 	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
@@ -68,19 +67,19 @@ ObjectPtr InstructionFactory::Door(InstructionPtr instruction, const Json::Value
 	return circle;
 }
 
-ObjectPtr InstructionFactory::Table(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
+ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
 	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 }
 
-ObjectPtr InstructionFactory::Player(InstructionPtr instruction, const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Player(const Json::Value &root, Point p)
 {
 	ObjectPtr c(new Circle(p, 1000));
 	c->setPermanent(true);
 	return c;
 }
 
-ObjectPtr InstructionFactory::Button(InstructionPtr instruction, const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Button(const Json::Value &root, Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -97,7 +96,7 @@ ObjectPtr InstructionFactory::Button(InstructionPtr instruction, const Json::Val
 	return group;
 }
 
-ObjectPtr InstructionFactory::Beam(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -121,7 +120,7 @@ ObjectPtr InstructionFactory::Beam(InstructionPtr instruction, const Json::Value
 	return group;
 }
 
-static ObjectPtr Portal(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2, bool active)
+static ObjectPtr Portal(const Json::Value &root, Point p1, Point p2, bool active)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -150,13 +149,13 @@ static ObjectPtr Portal(InstructionPtr instruction, const Json::Value &root, Poi
 	return group;
 }
 
-ObjectPtr InstructionFactory::PortalInactive(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
-{ return Portal(instruction, root, p1, p2, false); }
+ObjectPtr InstructionFactory::PortalInactive(const Json::Value &root, Point p1, Point p2)
+{ return Portal(root, p1, p2, false); }
 
-ObjectPtr InstructionFactory::PortalActive(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
-{ return Portal(instruction, root, p1, p2, true); }
+ObjectPtr InstructionFactory::PortalActive(const Json::Value &root, Point p1, Point p2)
+{ return Portal(root, p1, p2, true); }
 
-ObjectPtr InstructionFactory::Zipline(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -197,12 +196,12 @@ ObjectPtr InstructionFactory::Zipline(InstructionPtr instruction, const Json::Va
 	return group;
 }
 
-ObjectPtr InstructionFactory::Stool(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
+ObjectPtr InstructionFactory::Stool(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
 	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 }
 
-ObjectPtr InstructionFactory::Corpse(InstructionPtr instruction, const Json::Value &root, Point head, Point hip, Point leftHand, Point rightHand)
+ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point hip, Point leftHand, Point rightHand)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -226,7 +225,7 @@ ObjectPtr InstructionFactory::Corpse(InstructionPtr instruction, const Json::Val
 	return group;
 }
 
-ObjectPtr InstructionFactory::Water(InstructionPtr instruction, const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Water(const Json::Value &root, Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -237,7 +236,7 @@ ObjectPtr InstructionFactory::Water(InstructionPtr instruction, const Json::Valu
 	return group;
 }
 
-ObjectPtr InstructionFactory::Poke(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Poke(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -264,7 +263,7 @@ ObjectPtr InstructionFactory::Poke(InstructionPtr instruction, const Json::Value
 	return group;
 }
 
-ObjectPtr InstructionFactory::Stomper(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Stomper(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -285,7 +284,7 @@ ObjectPtr InstructionFactory::Stomper(InstructionPtr instruction, const Json::Va
 	return group;
 }
 
-ObjectPtr InstructionFactory::Footwear(InstructionPtr instruction, const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Footwear(const Json::Value &root, Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 	CompositeObjectPtr groupA = CompositeObject::construct();
@@ -344,7 +343,7 @@ ObjectPtr InstructionFactory::Footwear(InstructionPtr instruction, const Json::V
 	return group;
 }
 
-ObjectPtr InstructionFactory::Heat(InstructionPtr instruction, const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Heat(const Json::Value &root, Point p)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -367,7 +366,7 @@ ObjectPtr InstructionFactory::Heat(InstructionPtr instruction, const Json::Value
     return group;
 }
 
-ObjectPtr InstructionFactory::Elevator(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2, Point p3)
+ObjectPtr InstructionFactory::Elevator(const Json::Value &root, Point p1, Point p2, Point p3)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
@@ -395,7 +394,7 @@ ObjectPtr InstructionFactory::Elevator(InstructionPtr instruction, const Json::V
 	return group;
 }
 
-ObjectPtr InstructionFactory::Guardrail(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(new Circle(p1, 325));
@@ -404,7 +403,7 @@ ObjectPtr InstructionFactory::Guardrail(InstructionPtr instruction, const Json::
 	return group;
 }
 
-ObjectPtr InstructionFactory::BlueprintWall(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::BlueprintWall(const Json::Value &root, Point p1, Point p2)
 {
 	Point start = p1 + (p2 - p1) / 10;
 	Point end   = p2 + (p1 - p2) / 10;
@@ -417,7 +416,7 @@ ObjectPtr InstructionFactory::BlueprintWall(InstructionPtr instruction, const Js
 	return group;
 }
 
-ObjectPtr InstructionFactory::MovingWallWarning(InstructionPtr instruction, const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p1, Point p2)
 {
 	int normalX = root.get("direction", Json::Value()).get("x", Json::Value()).asInt();
 	int normalY = root.get("direction", Json::Value()).get("y", Json::Value()).asInt();

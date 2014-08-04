@@ -22,6 +22,7 @@ namespace laser {
 	{
 	public:
 		static int pps;
+		static int framesPerSecond;
 
 		/*!
 		 * \details On construction, this wrapper automatically connects to the
