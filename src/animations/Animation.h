@@ -26,14 +26,14 @@ namespace laser {
 		{ return m_period; }
 		void setPeriod(const std::chrono::milliseconds period);
 
+		void start();
+		void stop();
+
 		bool isRunning()
 		{ return m_running; }
 
 	protected:
 		Animation(Object *object, const Func & func, bool running, std::chrono::milliseconds period);
-
-		void start();
-		void stop();
 
 		void wait();
 

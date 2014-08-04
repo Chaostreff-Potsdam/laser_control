@@ -48,6 +48,9 @@ void Animation::start()
 
 void Animation::stop()
 {
+	if (!m_running)
+		return;
+
 	m_running = false;
 	m_thread.join();
 }
