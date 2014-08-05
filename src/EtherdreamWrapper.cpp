@@ -6,7 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
-int laser::EtherdreamWrapper::framesPerSecond = 30;
+int laser::EtherdreamWrapper::framesPerSecond = 2;
 
 laser::EtherdreamWrapper::EtherdreamWrapper() :
 	Canvas()
