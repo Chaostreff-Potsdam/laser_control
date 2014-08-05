@@ -3,8 +3,10 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
+#include <opencv2/highgui/highgui.hpp>
 
 int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
+int laser::EtherdreamWrapper::framesPerSecond = 30;
 
 laser::EtherdreamWrapper::EtherdreamWrapper() :
 	Canvas()
@@ -101,6 +103,11 @@ void laser::EtherdreamWrapper::connect()
 void laser::EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
+
+	pps = framesPerSecond * m_points.size();
+
+	cv::setTrackbarPos("pixel per second", "Laser options", pps);
+
 
 #ifdef _WIN32
 	if(m_points.size() == 0) {
