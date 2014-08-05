@@ -22,11 +22,11 @@ def findHandlers():
 			yield handler
 
 def printEnum():
-	print "enum CommandType"
-	print "{"
-	print ",\n".join("\t%s = %d" % (handler, idx)
-						for idx, handler in enumerate(findHandlers()))
-	print "};"
+	print("enum CommandType")
+	print("{")
+	print(",\n".join("\t%s = %d" % (handler, idx)
+						for idx, handler in enumerate(findHandlers())))
+	print("};")
 
 if __name__ == "__main__":
 	printEnum()
