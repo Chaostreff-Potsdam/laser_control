@@ -29,7 +29,7 @@ class LaserClient(object):
 		
 		if instructionID is not None:
 			packet.update({"id": instructionID})
-		self.socket.sendto(json.dumps(packet), (self.host, self.port))
+		self.socket.sendto(json.dumps(packet).encode(), (self.host, self.port))
 
 	def __packPoints(self, points):
 		return [{"x": x, "y": y} for x, y in points]
@@ -58,11 +58,11 @@ class LaserClient(object):
 
 def interact(host, port):
 	globals()["laser"] = LaserClient(host, port)
-	print """Created a UDP connection to %s:%d with object named \"laser\"
+	print("""Created a UDP connection to %s:%d with object named \"laser\"
 Usage:
 \tlaser.deleteAll()
 \tplayerID = laser.instruction(Player, [(100, 100)])
-\tlaser.instruction(Player, [(1000, 1000)], playerID)""" % (host, port)
+\tlaser.instruction(Player, [(1000, 1000)], playerID)""" % (host, port))
 
 if __name__ == "__main__":
 	import sys
@@ -71,4 +71,4 @@ if __name__ == "__main__":
 		port = int(sys.argv[2]) if len(sys.argv) > 2 else 30000
 		interact(host, port)
 	else:
-		print "Execute with \"python -i %s [host [port]]\"" % sys.argv[0]
+		print("Execute with \"python -i %s [host [port]]\"" % sys.argv[0])
