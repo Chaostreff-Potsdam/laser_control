@@ -157,8 +157,9 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 									  .asUInt(),
 								  Point(0, 0));
 	turkerId->rotate(alpha);
-	turkerId->move(midPoint);
-	turkerId->move(Point(-p1p2.y(), p1p2.x()) / 10);
+	turkerId->move(midPoint - p1p2 / 2);
+	turkerId->move(Point(-p1p2.y(), p1p2.x()) / p1p2.abs() * 100);
+	std::cout << midPoint - p1p2 / 2 << " + " << Point(-p1p2.y(), p1p2.x()) / p1p2.abs() * 100 << std::endl;
 
 	group->add(turkerId);
 
