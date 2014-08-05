@@ -1,5 +1,5 @@
 #include "InstructionFactory.h"
-#include "../Animation.h"
+#include "../animations/Animation.h"
 
 #include "../objects/Line.h"
 #include "../objects/Circle.h"

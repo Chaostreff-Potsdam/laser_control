@@ -4,7 +4,7 @@
 #include "../laser_utilities.h"
 #include "../DllExport.h"
 #include "../Color.h"
-#include "../Animation.h"
+#include "../animations//Animation.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <memory>
@@ -56,6 +56,13 @@ namespace laser {
 		void scale(double factor);
 
 		void resetTransform();
+
+		//! Add an animation, where AnimationFuncT is a class with a operator(Object *)()
+		template<typename AnimationFuncT>
+		void addAnimation(const std::chrono::milliseconds &period = Animation::defaultPeriod)
+		{
+			addAnimation(AnimationFuncT(), period);
+		}
 
 		void addAnimation(const Animation::Func & func, const std::chrono::milliseconds &period = Animation::defaultPeriod);
 		void removeAllAnimations();
