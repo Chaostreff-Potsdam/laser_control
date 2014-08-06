@@ -11,7 +11,7 @@ namespace InstructionFactory {
 	ObjectPtr Door(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Table(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr Player(const Json::Value &root, Point p);
-	ObjectPtr Button(const Json::Value &root, Point p);
+	ObjectPtr Switch(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Beam(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr PortalInactive(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr PortalActive(const Json::Value &root, Point p1, Point p2);

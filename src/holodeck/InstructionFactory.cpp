@@ -158,8 +158,8 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 	ObjectPtr turkerId = getDigit(root, 0);
 	turkerId->rotate(alpha);
 	turkerId->move(midPoint - p1p2 / 2);
-	turkerId->move(Point(-p1p2.y(), p1p2.x()) / p1p2.abs() * 100);
-	std::cout << midPoint - p1p2 / 2 << " + " << Point(-p1p2.y(), p1p2.x()) / p1p2.abs() * 100 << std::endl;
+	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	std::cout << midPoint - p1p2 / 2 << " + " << Point(-p1p2.y(), p1p2.x()).norm() * 100 << std::endl;
 
 	group->add(turkerId);
 
@@ -169,13 +169,11 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 
 ObjectPtr InstructionFactory::Door(const Json::Value &root, Point p1, Point p2)
 {
-	CompositeObjectPtr circle = CompositeObject::construct();
-	int radius = sqrt(sqr(p1.x() - p2.x()) + sqr(p1.y() - p2.y()));
-	float rad = atan2(p2.y() - p1.y(), p2.x() - p1.y());
-	Point middle = p1;
-	circle->add(new Circle(middle, radius, 0, M_PI_4));
-	circle->rotate(rad, p1);
-	return circle;
+	CompositeObjectPtr door = CompositeObject::construct();
+
+	door->add(new Line(p1, p2));
+	door->add(new Circle(p2, 750));
+	return door;
 }
 
 ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
@@ -190,20 +188,17 @@ ObjectPtr InstructionFactory::Player(const Json::Value &root, Point p)
 	return c;
 }
 
-ObjectPtr InstructionFactory::Button(const Json::Value &root, Point p)
+ObjectPtr InstructionFactory::Switch(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 
-	std::vector<Point> ps;
-	ps.emplace_back(-6000, -4000);
-	ps.emplace_back( 6000, -4000);
-	ps.emplace_back(    0,  6000);
-	ShiftPoints(ps, p);
+	static const double handleSize = 1500.0;
+	group->add(new Circle(p2, handleSize));
 
-	group->add(new Polygon(ps, false, true));
+	Point stickDirection(p2 - p1);
+	Point attachmentPoint = stickDirection.norm() * handleSize;
+	group->add(new Line(p1, attachmentPoint));
 
-	group->add(new Rectangle(p.x() - 1000, p.y() - 1000, 2000, 2000, false));
-	group->add(new Circle(p.x(), p.y() + 1000, 500, 0, M_PI));
 	return group;
 }
 
@@ -224,9 +219,8 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 									   2000, // beam is 1000 thick
 									   length, // and as long as requested
 									   false);
+	bigRect->rotate(alpha, midPoint);
 	group->add(bigRect);
-
-	group->rotate(alpha, midPoint);
 
 	return group;
 }
@@ -269,40 +263,16 @@ ObjectPtr InstructionFactory::PortalActive(const Json::Value &root, Point p1, Po
 ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
+	static const double innerCircle = 500.0;
+	static const double outerCircle = 1000.0;
 
-	float alpha;
-	float length;
-	Point mid;
-	Point start;
-	Point end;
+	group->add(new Circle(p1, outerCircle));
+	group->add(new Circle(p1, innerCircle));
 
-	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
+	group->add(new Line(p1, p2));
 
-	group->add(new Line(start.x() + length/6, start.y() - 200,
-						start.x(),            start.y() - 200));
-	group->add(new Line(start.x(),            start.y() - 200,
-						start.x(),            start.y() + 200));
-	group->add(new Line(start.x(),            start.y() + 200,
-						start.x() + length/6, start.y() + 200));
-
-	group->add(new Circle(end, length/3, M_PI-0.1, 5*M_PI_4));
-	std::vector<Point> zipIconPoints;
-	zipIconPoints.push_back(Point(end.x() - length/3, start.y()));
-	zipIconPoints.push_back(Point(mid.x() - length/6, mid.y() - length/6));
-	zipIconPoints.push_back(Point(mid.x() - length/6, mid.y() + length/6));
-	group->add(new Polygon(zipIconPoints, false));
-
-	group->add(new Line(mid.x() - length/10, mid.y() - length/10,
-						mid.x() - length/10, mid.y() + length/10));
-
-	group->add(new Line(end.x() - length/6, end.y() - 200,
-						end.x(),            end.y() - 200));
-	group->add(new Line(end.x(),            end.y() - 200,
-						end.x(),            end.y() + 200));
-	group->add(new Line(end.x(),            end.y() + 200,
-						end.x() - length/6, end.y() + 200));
-
-	group->rotate(alpha, mid);
+	group->add(new Circle(p2, innerCircle));
+	group->add(new Circle(p2, outerCircle));
 
 	return group;
 }
