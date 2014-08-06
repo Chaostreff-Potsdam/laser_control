@@ -32,7 +32,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Wall, 2),
 	HANDLE_OBJECT(Door, 2),
 	HANDLE_OBJECT(Table, 4),
-	HANDLE_OBJECT(Button, 1),
+	HANDLE_OBJECT(Switch, 2),
 	HANDLE_OBJECT(Beam, 2),
 	HANDLE_OBJECT(PortalInactive, 2),
 	HANDLE_OBJECT(PortalActive, 2),
