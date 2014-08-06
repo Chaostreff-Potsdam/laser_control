@@ -29,7 +29,7 @@ laser::EtherdreamPoints laser::Circle::points() const
 {
 	EtherdreamPoints ps;
 	int points = ((float)m_radius) * std::abs(m_startRatio - m_endRatio)
-						  / s_pixelsPerPoint;
+						  / pixelsPerPoint();
 
 	for (float rad = m_startRatio;
 		 rad <= m_endRatio;
@@ -46,11 +46,11 @@ laser::EtherdreamPoints laser::Circle::startPoints() const
 {
 	EtherdreamPoints ps;
 	int points = ((float)m_radius) * std::abs(m_startRatio - m_endRatio)
-						  / s_pixelsPerPoint;
+						  / pixelsPerPoint();
 //	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
 //		return ps;
 
-	for (float rad = m_startRatio - 2 * s_marginPointFraction/100.0 * M_PI;
+	for (float rad = m_startRatio - 2 * marginPointFraction()/100.0 * M_PI;
 		 rad < m_startRatio;
 		 rad += std::abs(m_endRatio - m_startRatio)/points)
 	{
@@ -65,13 +65,13 @@ laser::EtherdreamPoints laser::Circle::endPoints() const
 {
 	EtherdreamPoints ps;
 	int points = ((float)m_radius) * std::abs(m_startRatio - m_endRatio)
-						  / s_pixelsPerPoint;
+						  / pixelsPerPoint();
 
 //	if (std::abs(fmod(m_startRatio, 2*M_PI) - fmod(m_endRatio, 2*M_PI)) < 0.01)
 //		return ps;
 
 	for (float rad = m_endRatio;
-		 rad < m_endRatio + 2 * s_marginPointFraction/100.0 * M_PI;
+		 rad < m_endRatio + 2 * marginPointFraction()/100.0 * M_PI;
 		 rad += std::abs(m_endRatio - m_startRatio)/points)
 	{
 		const Point onCircle(cos(rad) * m_radius, sin(rad) * m_radius);

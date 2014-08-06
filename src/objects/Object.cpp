@@ -7,8 +7,8 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <assert.h>
 
-int laser::Object::s_pixelsPerPoint = 100;
-int laser::Object::s_marginPointFraction = 100;
+int laser::Object::s_pixelsPerPointDefault = 100;
+int laser::Object::s_marginPointFractionDefault = 100;
 
 laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
@@ -156,6 +156,16 @@ bool laser::Object::visible()
 	return m_isVisible;
 }
 
+void laser::Object::setPixelsPerPoint(int pixelsPerPoint)
+{
+	m_pixelsPerPoint = pixelsPerPoint;
+}
+
+void laser::Object::setMarginPointFraction(int marginPointFraction)
+{
+	m_marginPointFraction = marginPointFraction;
+}
+
 void laser::Object::setColor(Color color)
 {
 	m_color = color;
@@ -182,4 +192,14 @@ void laser::Object::setPermanent(bool permanent)
 bool laser::Object::permanent() const
 {
 	return m_permanent;
+}
+
+int laser::Object::pixelsPerPoint() const
+{
+	return m_pixelsPerPoint == -1 ? s_pixelsPerPointDefault : m_pixelsPerPoint;
+}
+
+int laser::Object::marginPointFraction() const
+{
+	return m_marginPointFraction == -1 ? s_marginPointFractionDefault : m_marginPointFraction;
 }
