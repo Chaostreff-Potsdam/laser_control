@@ -17,7 +17,7 @@ laser::Line::Line(int xa, int ya, int xb, int yb, bool visible, bool dashed)
 {
 	m_a = Point(xa, ya);
 	m_sAB = Point(xb, yb) - m_a;
-	m_pointCount = m_sAB.abs()/s_pixelsPerPoint;
+	m_pointCount = m_sAB.abs()/pixelsPerPoint();
 }
 
 laser::Line::Line(Point a, Point b, bool visible, bool dashed)
@@ -27,12 +27,12 @@ laser::Line::Line(Point a, Point b, bool visible, bool dashed)
 {
 	m_a = a;
 	m_sAB = b - a;
-	m_pointCount = m_sAB.abs()/s_pixelsPerPoint;
+	m_pointCount = m_sAB.abs()/pixelsPerPoint();
 }
 
 laser::EtherdreamPoints laser::Line::points() const
 {
-	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
+	int pointCount = m_sAB.abs()/pixelsPerPoint();
 	EtherdreamPoints ps;
 	if (m_visible)
 	{
@@ -50,14 +50,14 @@ laser::EtherdreamPoints laser::Line::points() const
 
 laser::EtherdreamPoints laser::Line::startPoints() const
 {
-	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
+	int pointCount = m_sAB.abs()/pixelsPerPoint();
 	EtherdreamPoints ps;
 
 	if (m_visible)
 	{
-		for (int i = - pointCount * s_marginPointFraction/100.0; i < 0; i++)
+		for (int i = - pointCount * marginPointFraction()/100.0; i < 0; i++)
 		{
-			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/s_pixelsPerPoint, false));
+			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/pixelsPerPoint(), false));
 		}
 	}
 
@@ -67,14 +67,14 @@ laser::EtherdreamPoints laser::Line::startPoints() const
 
 laser::EtherdreamPoints laser::Line::endPoints() const
 {
-	int pointCount = m_sAB.abs()/s_pixelsPerPoint;
+	int pointCount = m_sAB.abs()/pixelsPerPoint();
 	EtherdreamPoints ps;
 
 	if (m_visible)
 	{
-		for (int i = s_pixelsPerPoint; i < s_pixelsPerPoint + pointCount * s_marginPointFraction/100.0; i++)
+		for (int i = pixelsPerPoint(); i < pixelsPerPoint() + pointCount * marginPointFraction()/100.0; i++)
 		{
-			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/s_pixelsPerPoint, false));
+			ps.push_back(etherdreamPoint(m_a + m_sAB * ((float)i)/pixelsPerPoint(), false));
 		}
 	}
 

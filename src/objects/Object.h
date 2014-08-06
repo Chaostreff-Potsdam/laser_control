@@ -70,6 +70,9 @@ namespace laser {
 		void setVisible(bool visible);
 		bool visible();
 
+		void setPixelsPerPoint(int pixelsPerPoint = -1);
+		void setMarginPointFraction(int marginPointFraction = -1);
+
 		void setColor(Color color);
 		Color color();
 
@@ -93,8 +96,8 @@ namespace laser {
 		 */
 		virtual EtherdreamPoints endPoints() const = 0;
 
-		static int s_pixelsPerPoint;
-		static int s_marginPointFraction;
+		static int s_pixelsPerPointDefault;
+		static int s_marginPointFractionDefault;
 
 	protected:
 		boost::posix_time::ptime m_started;
@@ -106,6 +109,11 @@ namespace laser {
 		 */
 		void nowDirty()
 		{ m_dirty = true; }
+
+		int m_pixelsPerPoint;
+		int pixelsPerPoint() const;
+		int m_marginPointFraction;
+		int marginPointFraction() const;
 
 		const etherdream_point etherdreamPoint(int x, int y, bool visible = true) const;
 		const etherdream_point etherdreamPoint(Point p, bool visible = true) const

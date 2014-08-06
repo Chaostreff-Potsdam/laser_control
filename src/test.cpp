@@ -34,10 +34,10 @@ void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
 int main(int argc, char *argv[])
 {
 	cv::namedWindow("Laser options");
-	cv::createTrackbar("fps", "Laser options", &EtherdreamWrapper::framesPerSecond, 1000);
+	cv::createTrackbar("fps", "Laser options", &EtherdreamWrapper::framesPerSecond, 500);
 	cv::createTrackbar("pixel per second", "Laser options", &EtherdreamWrapper::pps, 90000);
-	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPoint, 1000);
-	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFraction, 200);
+	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPointDefault, 1000);
+	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFractionDefault, 200);
 
 
 	config::readCommandLine(argc, argv);

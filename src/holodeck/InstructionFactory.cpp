@@ -126,10 +126,15 @@ static const PointLUT number_points =
 	Point(5755, 4031), Point(6547, 3290), Point(6834, 2338)}
 };
 
-static ObjectPtr getDigit(unsigned int i, Point p)
+static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Point(0, 0))
 {
-	assert(i < number_points.size());
-	ObjectPtr polygon = std::make_shared<Polygon>(number_points[i], false, false, false);
+	unsigned int id = root.get("turkers",
+								Json::Value())
+						  .get(i,
+								Json::Value())
+						  .asUInt();
+	assert(id < number_points.size());
+	ObjectPtr polygon = std::make_shared<Polygon>(number_points[id], false, false, false);
 	polygon->move(p);
 	return polygon;
 }
@@ -150,12 +155,7 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 	calculateRectangleCharacteristics(p1, p2, alpha, length, start, midPoint, end);
 
 	Point p1p2 = p2 - p1;
-	ObjectPtr turkerId = getDigit(root.get("turkers",
-											Json::Value())
-									  .get(0u,		// otherwise ambigious with char*
-											Json::Value())
-									  .asUInt(),
-								  Point(0, 0));
+	ObjectPtr turkerId = getDigit(root, 0);
 	turkerId->rotate(alpha);
 	turkerId->move(midPoint - p1p2 / 2);
 	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
