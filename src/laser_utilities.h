@@ -117,6 +117,7 @@ namespace laser {
 		int m_x;
 		int m_y;
 	};
+
 }
 
 extern std::ostream& operator<< (std::ostream& stream, const laser::Point& point);

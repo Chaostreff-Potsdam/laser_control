@@ -25,71 +25,44 @@ else(UNIX)
 		${LASERWRAPPER_SOURCE_DIR}/src/etherdream/${DRIVER_DIR}/j4cDAC.h)
 endif(UNIX)
 
-set(MYSOURCES
-	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Canvas.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Color.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Color.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Config.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Config.h
-	${LASERWRAPPER_SOURCE_DIR}/src/DllExport.h
-	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/EtherdreamWrapper.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Painter.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Painter.h
-	${LASERWRAPPER_SOURCE_DIR}/src/Transform.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/Transform.h
-	${LASERWRAPPER_SOURCE_DIR}/src/VirtualLaser.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/VirtualLaser.h
-	${LASERWRAPPER_SOURCE_DIR}/src/animations/Animation.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/animations/Animation.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/Calibration.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_calibration/CalibrationRectangle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/laser_utilities.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Circle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/CompositeObject.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/CompositeObject.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Line.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Line.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Object.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Object.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Polygon.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Polygon.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Rectangle.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Rectangle.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Spiral.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Spiral.h
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.cpp
-	${LASERWRAPPER_SOURCE_DIR}/src/objects/Wave.h
-    ${DRIVER_FILES})
+macro(findCppFiles folderNames resultList)
+	set(${resultList} )
+	foreach(FOLDER ${${folderNames}})
+		file(GLOB files_cpp "${FOLDER}/*.cpp")
+		file(GLOB files_cc "${FOLDER}/*.cc")
+		file(GLOB files_hpp "${FOLDER}/*.hpp")
+		file(GLOB files_h "${FOLDER}/*.h")
+
+		list(APPEND ${resultList} ${files_cpp} ${files_cc} ${files_hpp} ${files_h})
+	endforeach(FOLDER)
+endmacro(findCppFiles)
+
+set(LASER_WRAPPER_FOLDERS
+		"."
+		"laser_calibration"
+		"animations"
+		"objects")
+
+findCppFiles(LASER_WRAPPER_FOLDERS laser_wrapper_files)
 
 # Making stand-alone C++ Library
 add_library(laserwrapper SHARED
-	${MYSOURCES})
+	${laser_wrapper_files}
+	${DRIVER_FILES})
 
 if(UNIX)
-        INCLUDE_DIRECTORIES(${Jsoncpp_INCLUDE_DIR})
-	set(HOLODECK_FILES
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.cpp
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Server.h
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Instruction.cpp
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/Instruction.h
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.cpp
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionFactory.h
-		${LASERWRAPPER_SOURCE_DIR}/src/holodeck/InstructionCaller.h
-	)
+	INCLUDE_DIRECTORIES(${Jsoncpp_INCLUDE_DIR})
+	set(HOLODECK_FOLDERS
+			"holodeck")
+
+	findCppFiles(HOLODECK_FOLDERS HOLODECK_FILES)
 else(UNIX)
 	set(HOLODECK_FILES )
 endif(UNIX)
 
 # Making test application
-add_executable(laser_wrapper_test
-			${HOLODECK_FILES}
-			${LASERWRAPPER_SOURCE_DIR}/src/test.cpp)
+add_executable(laser_server
+			${HOLODECK_FILES})
 
 option(NO_ETHERDREAM_TRACE FALSE)
 
@@ -113,7 +86,7 @@ else(UNIX)
 			winmm)
 endif(UNIX)
 
-TARGET_LINK_LIBRARIES(laser_wrapper_test
+TARGET_LINK_LIBRARIES(laser_server
 					laserwrapper
 					${OS_SPECIFIC_LINK_LIBRARIES}
 					${THREAD_LIBRARY}
