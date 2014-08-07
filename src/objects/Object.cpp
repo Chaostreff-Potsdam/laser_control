@@ -16,8 +16,8 @@ laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
 	  m_isUpdating(false),
 	  m_isVisible(true),
-	  m_pixelsPerPoint(-1),
-	  m_marginPointFraction(-1)
+	  m_pixelsPerPoint(useDefaultValue),
+	  m_marginPointFraction(useDefaultValue)
 {
 	m_color = Color();
 	resetTransform();
@@ -200,10 +200,10 @@ bool laser::Object::permanent() const
 
 int laser::Object::pixelsPerPoint() const
 {
-	return m_pixelsPerPoint == -1 ? s_pixelsPerPointDefault : m_pixelsPerPoint;
+	return m_pixelsPerPoint == useDefaultValue ? s_pixelsPerPointDefault : m_pixelsPerPoint;
 }
 
 int laser::Object::marginPointFraction() const
 {
-	return m_marginPointFraction == -1 ? s_marginPointFractionDefault : m_marginPointFraction;
+	return m_marginPointFraction == useDefaultValue ? s_marginPointFractionDefault : m_marginPointFraction;
 }
