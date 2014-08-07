@@ -15,7 +15,9 @@ const int laser::Object::useDefaultValue = -1;
 laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
 	  m_isUpdating(false),
-	  m_isVisible(true)
+	  m_isVisible(true),
+	  m_pixelsPerPoint(-1),
+	  m_marginPointFraction(-1)
 {
 	m_color = Color();
 	resetTransform();
