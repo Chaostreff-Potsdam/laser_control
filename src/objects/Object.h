@@ -24,6 +24,7 @@ namespace laser {
 	{
 	public:
 		typedef CompositeObjectPtr parent_t;
+		static const int useDefaultValue;
 
 		Object();
 

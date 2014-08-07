@@ -4,10 +4,19 @@
 
 namespace laser {
 
+	#define LASER_GROUP_CONSTRUCT(GroupT) \
+	static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>()) \
+	{ \
+		CompositeObjectPtr group(new GroupT()); \
+		group->self = group; \
+		group->add(objects); \
+		return group; \
+	}
+
 	class EXPORT_LASER_CONTROL CompositeObject : public Object
 	{
-	public:		
-		static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>());
+	public:
+		LASER_GROUP_CONSTRUCT(CompositeObject)
 
 		//!< Add this object and take overship
 		void add(Object *object);
@@ -26,8 +35,8 @@ namespace laser {
 		std::weak_ptr<CompositeObject> self;
 
 	private:
-
 		void removeChild(const Object *object);
+
 		friend void Object::setParent(const parent_t &);
 	};
 }

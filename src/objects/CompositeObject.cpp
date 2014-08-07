@@ -1,15 +1,5 @@
 #include "CompositeObject.h"
 
-
-laser::CompositeObjectPtr laser::CompositeObject::construct(const std::vector<ObjectPtr> &objects)
-{
-	CompositeObjectPtr group(new CompositeObject());
-
-	group->self = group;
-	group->add(objects);
-	return group;
-}
-
 laser::CompositeObject::CompositeObject()
 	: Object()
 {

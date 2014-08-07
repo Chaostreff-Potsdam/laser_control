@@ -10,6 +10,8 @@
 int laser::Object::s_pixelsPerPointDefault = 100;
 int laser::Object::s_marginPointFractionDefault = 100;
 
+const int laser::Object::useDefaultValue = -1;
+
 laser::Object::Object()
 	: m_started(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time()),
 	  m_isUpdating(false),
