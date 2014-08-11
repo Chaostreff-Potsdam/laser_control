@@ -7,6 +7,7 @@
 #include "../objects/Spiral.h"
 #include "../objects/CompositeObject.h"
 
+#include <chrono>
 #include <cmath>
 #include <cassert>
 
@@ -502,14 +503,27 @@ ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p
 	int normalX = root.get("direction", Json::Value()).get("x", Json::Value()).asInt();
 	int normalY = root.get("direction", Json::Value()).get("y", Json::Value()).asInt();
 	int countdown = root.get("countdown", Json::Value(5000)).asInt();
-	Point dir = (p1 + p2) / 2 + Point(normalX, normalY) * 100;
-	std::cout << dir << std::endl;
+	Point arrowTop = (p1 + p2) / 2 + Point(normalX, normalY).norm() * 1000;
+	Point arrowEnd = arrowTop
+					 - Point(normalX, normalY).norm() * 500
+					 + (p2 - p1).norm() * 250;
 
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	group->add(new Line(p1, p2));
-	group->add(new Line(p2, dir));
-	group->add(new Line(dir, p1));
+
+	std::vector<Point> arrowPoints {(p1 + p2) / 2, arrowTop, arrowEnd};
+
+	ObjectPtr arrow = std::make_shared<Polygon>(arrowPoints, false, false, false);
+	arrow->addAnimation([] (Object *me) {
+										static bool visible = true;
+										visible != visible;
+										me->setVisible(visible);
+									},
+						std::chrono::milliseconds(500)
+	);
+	group->add(arrow);
+
 
 	return group;
 }
