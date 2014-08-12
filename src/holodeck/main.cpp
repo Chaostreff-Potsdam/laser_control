@@ -39,7 +39,6 @@ int main(int argc, char *argv[])
 	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPointDefault, 1000);
 	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFractionDefault, 200);
 
-
 	config::readCommandLine(argc, argv);
 	Painter p(false, false, true);
 

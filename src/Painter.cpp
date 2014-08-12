@@ -1,6 +1,7 @@
 #include "Painter.h"
 
 #include "laser_calibration/Calibration.h"
+#include "laser_calibration/PointLifter.h"
 #include "Transform.h"
 
 #include <utility>
@@ -40,6 +41,7 @@ void laser::Painter::calibrate()
     calibration.start();
 
     m_calibration = calibration.homography();
+	PointLifter::s_sharedInstance = PointLifter(calibration);
 }
 
 laser::CanvasPtr laser::Painter::canvas()

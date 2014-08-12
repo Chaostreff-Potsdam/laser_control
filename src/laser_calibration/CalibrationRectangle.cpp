@@ -6,17 +6,6 @@
 
 using namespace laser;
 
-std::vector<Point> CalibrationRectangle::undistoredCorners()
-{
-	std::vector<Point> points;
-
-	points.emplace_back(INT16_MIN, INT16_MIN);
-	points.emplace_back(INT16_MIN, INT16_MAX);
-	points.emplace_back(INT16_MAX, INT16_MAX);
-	points.emplace_back(INT16_MAX, INT16_MIN);
-	return points;
-}
-
 CalibrationRectangle::CalibrationRectangle() :
 	Polygon(undistoredCorners())
 
@@ -32,7 +21,7 @@ void CalibrationRectangle::setKeystoneFactor(float keystoneFactor)
 	nowDirty();
 }
 
-std::vector<cv::Point2f> CalibrationRectangle::corners()
+std::vector<cv::Point2f> CalibrationRectangle::corners() const
 {
 	EtherdreamPoints corners;
 	for (const auto & p: m_corners)

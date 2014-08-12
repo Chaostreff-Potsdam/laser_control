@@ -517,7 +517,7 @@ ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p
 	ObjectPtr arrow = std::make_shared<Polygon>(arrowPoints, false, false, false);
 	arrow->addAnimation([] (Object *me) {
 										static bool visible = true;
-										visible != visible;
+										visible = !visible;
 										me->setVisible(visible);
 									},
 						std::chrono::milliseconds(500)

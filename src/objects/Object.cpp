@@ -134,6 +134,20 @@ void laser::Object::scale(double factor)
 	scale(factor, factor);
 }
 
+void laser::Object::flipHorizontally()
+{
+	double m[3][3] = {{-1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
+	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
+	nowDirty();
+}
+
+void laser::Object::flipVertically()
+{
+	double m[3][3] = {{1, 0, 0}, {0, -1, 0}, {0, 0, 1}};
+	m_transform = cv::Mat(3, 3, CV_64FC1, m) * m_transform;
+	nowDirty();
+}
+
 void laser::Object::resetTransform()
 {
 	m_transform = cv::Mat::eye(3, 3, CV_64FC1);

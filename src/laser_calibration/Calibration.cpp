@@ -12,8 +12,11 @@ using namespace laser;
 
 Calibration::Calibration(CanvasPtr wrapper)
 	: m_scale(100),
+	  m_xScale(100),
 	  m_yScale(100),
 	  m_keystoneFactor(100),
+	  m_xFlip(0),
+	  m_yFlip(0),
 	  m_etherdream(wrapper),
 	  m_homography(0, 0, CV_8UC1, nullptr)
 {
@@ -41,8 +44,11 @@ void Calibration::start()
 
 	cv::namedWindow("Calibration");
 	cv::createTrackbar("Scale", "Calibration", &m_scale, 100, callback, (void*)this);
+	cv::createTrackbar("x-Scale", "Calibration", &m_xScale, 100, callback, (void*)this);
 	cv::createTrackbar("y-Scale", "Calibration", &m_yScale, 100, callback, (void*)this);
 	cv::createTrackbar("Keystone", "Calibration", &m_keystoneFactor, 100, callback, (void*)this);
+	cv::createTrackbar("x-Flip", "Calibration", &m_xFlip, 1, callback, (void*)this);
+	cv::createTrackbar("y-Flip", "Calibration", &m_yFlip, 1, callback, (void*)this);
 
 	repaint();
 	cv::waitKey();
@@ -59,8 +65,12 @@ void Calibration::repaint()
 {
 	m_rect.resetTransform();
 	m_rect.scale(m_scale / 100.0);
-	m_rect.scale(1.0, m_yScale / 100.0);
+	m_rect.scale(m_xScale / 100.0, m_yScale / 100.0);
 	m_rect.setKeystoneFactor(m_keystoneFactor / 100.0);
+	if (m_xFlip)
+		m_rect.flipHorizontally();
+	if (m_yFlip)
+		m_rect.flipVertically();
 
 	m_etherdream->setPoints(m_rect.pointsToPaint());
 	m_etherdream->writePoints();
@@ -72,6 +82,15 @@ cv::Mat Calibration::homography()
 		computeHomography();
 
 	return m_homography;
+}
+
+cv::Mat Calibration::inverseHomography()
+{
+	if (m_inverseHomography.empty()) {
+		m_inverseHomography = homography().inv();
+	}
+
+	return m_inverseHomography;
 }
 
 void Calibration::computeHomography()

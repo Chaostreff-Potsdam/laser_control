@@ -56,6 +56,11 @@ namespace laser {
 		void scale(double factorX, double factorY);
 		void scale(double factor);
 
+		//! Negates the x part of all points
+		void flipHorizontally();
+		//! Negates the y part of all points
+		void flipVertically();
+
 		void resetTransform();
 
 		//! Add an animation, where AnimationFuncT is a class with a operator(Object *)()

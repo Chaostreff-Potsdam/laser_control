@@ -13,6 +13,10 @@ public:
 
     void start();
     cv::Mat homography();
+	cv::Mat inverseHomography();
+
+	const CalibrationRectangle & rect() const
+	{ return m_rect; }
 
 private:
 	bool alreadyCalibrated();
@@ -20,12 +24,16 @@ private:
 	void computeHomography();
 
 	int m_scale;
+	int m_xScale;
 	int m_yScale;
 	int m_keystoneFactor;
+	int m_xFlip;
+	int m_yFlip;
 
 	CalibrationRectangle m_rect;
 	CanvasPtr m_etherdream;
 	cv::Mat m_homography;
+	cv::Mat m_inverseHomography;
 };
 
 }
