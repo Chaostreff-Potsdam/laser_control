@@ -30,14 +30,38 @@ bool Calibration::alreadyCalibrated()
 	if (!fs.isOpened())
 		return false;
 
+	if (!fs["scale"].empty()) { // In case this is still an old calibration without these fields
+		fs["scale"] >> m_scale;
+		fs["xScale"] >> m_xScale;
+		fs["yScale"] >> m_yScale;
+		fs["keystoneFactor"] >> m_keystoneFactor;
+		fs["m_xFlip"] >> m_xFlip;
+		fs["m_yFlip"] >> m_yFlip;
+	}
+
+	if (config::forceRecalibration)
+		return false;
+
 	fs["homography"] >> m_homography;
 	std::cout << "Found calibration.yml file. Skipping calibration." << std::endl;
 	return true;
 }
 
+void Calibration::saveCalibration()
+{
+	cv::FileStorage fs("calibration.yml", cv::FileStorage::WRITE);
+	fs << "homography" << m_homography;
+	fs << "scale" << m_scale;
+	fs << "xScale" << m_xScale;
+	fs << "yScale" << m_yScale;
+	fs << "keystoneFactor" << m_keystoneFactor;
+	fs << "m_xFlip" << m_xFlip;
+	fs << "m_yFlip" << m_yFlip;
+}
+
 void Calibration::start()
 {
-	if (!config::forceRecalibration && alreadyCalibrated())
+	if (alreadyCalibrated())
 		return;
 
 	void (*callback)(int, void *) = [](int, void *t){static_cast<Calibration *>(t)->repaint();};
@@ -55,10 +79,7 @@ void Calibration::start()
 	cv::destroyWindow("Calibration");
 
 	computeHomography();
-
-	cv::FileStorage fs1("calibration.yml", cv::FileStorage::WRITE);
-	fs1 << "homography" << m_homography;
-
+	saveCalibration();
 }
 
 void Calibration::repaint()

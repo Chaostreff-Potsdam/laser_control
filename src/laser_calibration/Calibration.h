@@ -20,6 +20,7 @@ public:
 
 private:
 	bool alreadyCalibrated();
+	void saveCalibration();
 	void repaint();
 	void computeHomography();
 
