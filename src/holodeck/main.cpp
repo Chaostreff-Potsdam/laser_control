@@ -13,6 +13,8 @@
 
 #include "objects/Circle.h"
 #include "objects/Line.h"
+#include "objects/Rectangle.h"
+#include "objects/RisenGroup.h"
 
 #include <chrono>
 #include <opencv2/highgui/highgui.hpp>
@@ -21,7 +23,7 @@ using namespace laser;
 
 #ifndef _WIN32
 
-void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
+static void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
 {
 	while (true) {
 		onLoop();
@@ -31,10 +33,36 @@ void run(Painter & p, std::function<void()> onLoop = []{}, unsigned int wait=50)
 	}
 }
 
+
+static void displayTests(Painter & p)
+{
+#if 0
+	ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
+	p.add(rect);
+
+	run(p, [&]{
+		rect->rotate(radians(5));
+	});
+#endif
+
+
+	CompositeObjectPtr risen = RisenGroup::construct();
+
+	ObjectPtr normal(new Rectangle(-20000, -10000, 10000, 20000));
+	risen->add(new Rectangle( 10000, -10000, 10000, 20000));
+
+	p.add(normal);
+	p.add(risen);
+
+	run(p);
+
+	//0.476190476
+}
+
 int main(int argc, char *argv[])
 {
 	cv::namedWindow("Laser options");
-	cv::createTrackbar("fps", "Laser options", &EtherdreamWrapper::framesPerSecond, 500);
+	cv::createTrackbar("fps", "Laser options", &EtherdreamWrapper::framesPerSecond, 60);
 	cv::createTrackbar("pixel per second", "Laser options", &EtherdreamWrapper::pps, 90000);
 	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPointDefault, 1000);
 	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFractionDefault, 200);
@@ -48,12 +76,7 @@ int main(int argc, char *argv[])
 		p.calibrate();
 
 	if (config::displayTests) {
-		ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
-		p.add(rect);
-
-		run(p, [&]{
-			rect->rotate(radians(5));
-		});
+		displayTests(p);
 	} else {
 		holodeck::Server s(p);
 		run(p);
