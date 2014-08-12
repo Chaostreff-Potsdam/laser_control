@@ -104,7 +104,7 @@ void laser::EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
 
-	pps = framesPerSecond * m_points.size();
+	pps = std::max(1, framesPerSecond) * m_points.size();
 
 	cv::setTrackbarPos("pixel per second", "Laser options", pps);
 
