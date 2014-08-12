@@ -49,7 +49,10 @@ static void displayTests(Painter & p)
 
 	ObjectPtr normal(new Rectangle( 10000, -10000, 10000, 20000));
 	risen->add(new Rectangle(-20000, -10000, 10000, 20000));
-	RisenGroup::cast(risen)->setZ(0.5);
+	RisenGroup::cast(risen)->setZ(-0.476);
+
+	normal->setColor(Color::DARKGREEN);
+	risen->setColor(Color::DARKGREEN);
 
 	p.add(normal);
 	p.add(risen);

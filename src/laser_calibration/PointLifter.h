@@ -34,8 +34,8 @@ public:
 
 	void liftPainterPoints(EtherdreamPoints & points, const double heightInMeters);
 
-	void realWorldToCanvas(const std::vector<cv::Point3f> &pointsIn3D, const std::vector<cv::Point2f> &pointsIn2D);
-	std::vector<cv::Point3f> canvasToRealWorld(cv::InputArray pointsIn2D, const double setZ = 0);
+	void realWorldToCanvas(const std::vector<cv::Point3f> & pointsIn3D, std::vector<cv::Point2f> & pointsIn2D);
+	std::vector<cv::Point3f> painterToRealWorld(const std::vector<cv::Point2f> &pointsIn2D, const double height);
 
 private:
 	static PointLifter s_sharedInstance;
