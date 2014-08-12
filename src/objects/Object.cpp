@@ -181,7 +181,7 @@ void laser::Object::setMarginPointFraction(int marginPointFraction)
 	m_marginPointFraction = marginPointFraction;
 }
 
-void laser::Object::setColor(Color color)
+void laser::Object::setColor(const Color & color)
 {
 	m_color = color;
 	nowDirty();

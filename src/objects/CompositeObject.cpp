@@ -41,6 +41,13 @@ void laser::CompositeObject::removeChild(const Object *object)
 	nowDirty();
 }
 
+void laser::CompositeObject::setColor(const Color &color)
+{
+	for (auto & child : m_children)
+		child->setColor(color);
+	Object::setColor(color);
+}
+
 laser::EtherdreamPoints laser::CompositeObject::points() const
 {
 	EtherdreamPoints ps;

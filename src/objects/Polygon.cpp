@@ -39,13 +39,15 @@ laser::EtherdreamPoints laser::Polygon::points() const
 	std::vector<Point>::const_iterator start = m_corners.begin();
 	std::vector<Point>::const_iterator end = m_corners.end();
 
-	Line startLine = Line(*start, *(start + 1), true, m_dashed);
+	Line startLine(*start, *(start + 1), true, m_dashed);
+	startLine.setColor(m_color);
 	append       (startLine.points());
 	appendIfSharp(startLine.endPoints());
 
 	for (auto it = start + 1; it < end - 1; it++)
 	{
-		Line con = Line(*it, *(it + 1), true, m_dashed);
+		Line con(*it, *(it + 1), true, m_dashed);
+		con.setColor(m_color);
 		appendIfSharp(con.startPoints());
 		append       (con.points());
 		appendIfSharp(con.endPoints());
@@ -53,7 +55,8 @@ laser::EtherdreamPoints laser::Polygon::points() const
 
 	if (m_closed)
 	{
-		Line endLine = Line(*(end - 1), *start, true, m_dashed);
+		Line endLine(*(end - 1), *start, true, m_dashed);
+		endLine.setColor(m_color);
 		appendIfSharp(endLine.startPoints());
 		append       (endLine.points());
 	}

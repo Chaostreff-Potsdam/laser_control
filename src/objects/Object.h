@@ -79,7 +79,7 @@ namespace laser {
 		void setPixelsPerPoint(int pixelsPerPoint = -1);
 		void setMarginPointFraction(int marginPointFraction = -1);
 
-		void setColor(Color color);
+		virtual void setColor(const Color &color);
 		Color color();
 
 		/*** Timeout ***/

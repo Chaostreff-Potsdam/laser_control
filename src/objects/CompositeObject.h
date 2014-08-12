@@ -29,6 +29,8 @@ namespace laser {
 		CompositeObjectPtr yourself() const
 		{ return self.lock(); }
 
+		virtual void setColor(const Color & color);
+
 	protected:
 		static CompositeObjectPtr wrap_(CompositeObject* newGroup, const std::vector<ObjectPtr> &objects)
 		{
