@@ -45,11 +45,11 @@ static void displayTests(Painter & p)
 	});
 #endif
 
-
 	CompositeObjectPtr risen = RisenGroup::construct();
 
-	ObjectPtr normal(new Rectangle(-20000, -10000, 10000, 20000));
-	risen->add(new Rectangle( 10000, -10000, 10000, 20000));
+	ObjectPtr normal(new Rectangle( 10000, -10000, 10000, 20000));
+	risen->add(new Rectangle(-20000, -10000, 10000, 20000));
+	RisenGroup::cast(risen)->setZ(0.5);
 
 	p.add(normal);
 	p.add(risen);

@@ -5,8 +5,8 @@
 
 namespace laser {
 
-static double projectorMatrixData[3][3] = {{1 /*fx*/, 0       , 1 /*cx*/},
-										   {0       , 1 /*fy*/, 1 /*cy*/},
+static double projectorMatrixData[3][3] = {{1 /*fx*/, 0       , 0 /*cx*/},
+										   {0       , 1 /*fy*/, 0 /*cy*/},
 										   {0       , 0       , 1       }};
 
 const cv::Mat PointLifter::projectorMatrix(3, 3, CV_64FC1, projectorMatrixData);
@@ -59,28 +59,31 @@ void PointLifter::compute()
 				 projectorMatrix, cv::Mat(),
 				 m_rotationVec, m_translationVec);
 
-	m_canvasToRealWorld = cv::findHomography(realWorldCornersOnGround(), m_canvasRectCorners);
-	m_painterToRealWorld = m_painterToCanvas * m_canvasToRealWorld;
+	m_canvasToRealWorld = cv::findHomography(m_canvasRectCorners, realWorldCornersOnGround());
+	m_painterToRealWorld = m_canvasToRealWorld * m_painterToCanvas;
 	m_canvasToPainter = m_painterToCanvas.inv();
 }
 
-void PointLifter::realWorldToCanvas(cv::InputArray pointsIn3D, cv::OutputArray pointsIn2D)
+void PointLifter::realWorldToCanvas(const std::vector<cv::Point3f> & pointsIn3D, const std::vector<cv::Point2f> & pointsIn2D)
 {
 	cv::projectPoints(pointsIn3D, m_rotationVec, m_translationVec,
 					  projectorMatrix, cv::Mat(),
 					  pointsIn2D);
 }
 
-void PointLifter::canvasToRealWorld(cv::InputArray pointsIn2D, std::vector<cv::Point3f> & points3DOnGround)
+std::vector<cv::Point3f> PointLifter::canvasToRealWorld(cv::InputArray pointsIn2D, const double setZ)
 {
 	std::vector<cv::Point2f> rwCords;
 
 	cv::perspectiveTransform(pointsIn2D, rwCords, m_canvasToRealWorld);
-	points3DOnGround = raiseToHeight(rwCords, 0);
+	return raiseToHeight(rwCords, setZ);
 }
 
 void PointLifter::liftPainterPoints(EtherdreamPoints & points, const double heightInMeters)
 {
+	if (points.empty())
+		return;
+
 	std::vector<cv::Point2f> aux;
 	aux.reserve(points.size());
 
@@ -89,9 +92,12 @@ void PointLifter::liftPainterPoints(EtherdreamPoints & points, const double heig
 	}
 
 	cv::perspectiveTransform(aux, aux, m_painterToRealWorld);
-	std::vector<cv::Point3f> liftedPoints = raiseToHeight(aux, heightInMeters);
-
-	realWorldToCanvas(liftedPoints, aux);
+#if 1
+	std::vector<cv::Point3f> liftedRealPoints = raiseToHeight(aux, heightInMeters);
+	realWorldToCanvas(liftedRealPoints, aux);
+#else
+	cv::perspectiveTransform(aux, aux, m_canvasToRealWorld.inv());
+#endif
 	cv::perspectiveTransform(aux, aux, m_canvasToPainter);
 
 	for (unsigned int i = 0; i < points.size(); i++) {
