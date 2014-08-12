@@ -8,9 +8,9 @@ namespace laser {
 	 */
 	class EXPORT_LASER_CONTROL RisenGroup : public CompositeObject
 	{
-	public:
-		LASER_GROUP_CONSTRUCT(RisenGroup)
+		LASER_OBJECT_GROUP(RisenGroup)
 
+	public:
 		double z() const
 		{ return m_z; }
 

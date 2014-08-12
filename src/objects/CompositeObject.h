@@ -4,21 +4,30 @@
 
 namespace laser {
 
-	#define LASER_GROUP_CONSTRUCT(GroupT) \
-	static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>()) \
-	{ return wrap_(new GroupT, objects); }
+	#define LASER_OBJECT_GROUP(GroupT) \
+	public: \
+		static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>()) \
+		{ return wrap_(new GroupT, objects); } \
+		\
+		static std::shared_ptr<GroupT> cast(const CompositeObjectPtr & p) \
+		{ return std::static_pointer_cast<GroupT>(p); }\
+	private:
+
 
 	class EXPORT_LASER_CONTROL CompositeObject : public Object
 	{
-	public:
-		LASER_GROUP_CONSTRUCT(CompositeObject)
+		LASER_OBJECT_GROUP(CompositeObject)
 
+	public:
 		//!< Add this object and take overship
 		void add(Object *object);
 		void add(const ObjectPtr & object);
 		void add(const std::vector<ObjectPtr> & objects);
 
 		void removeChild(const ObjectPtr & object);
+
+		CompositeObjectPtr yourself() const
+		{ return self.lock(); }
 
 	protected:
 		static CompositeObjectPtr wrap_(CompositeObject* newGroup, const std::vector<ObjectPtr> &objects)

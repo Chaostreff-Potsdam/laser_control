@@ -19,7 +19,6 @@ laser::Object::Object()
 	  m_isUpdating(false),
 	  m_isVisible(true)
 {
-	m_color = Color();
 	resetTransform();
 }
 
@@ -85,8 +84,6 @@ const etherdream_point laser::Object::etherdreamPoint(int x, int y, bool visible
 	//flo: remove all clamping, except directly before sending them to the dac? after all transformations etc.
 	p.x = clamp(x, INT16_MIN, INT16_MAX);
 	p.y = clamp(y, INT16_MIN, INT16_MAX);
-
-//	visible &= (p.x >= INT16_MIN && p.x <= INT16_MAX && p.y >= INT16_MIN && p.y <= INT16_MAX);
 
 	p.r = visible ? m_color.red() : 0;
 	p.g = visible ? m_color.green() : 0;

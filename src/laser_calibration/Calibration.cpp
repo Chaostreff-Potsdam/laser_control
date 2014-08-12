@@ -39,7 +39,7 @@ bool Calibration::alreadyCalibrated()
 		fs["m_yFlip"] >> m_yFlip;
 	}
 
-	if (config::forceRecalibration)
+	if (config::forceRecalibration || fs["homography"].empty())
 		return false;
 
 	fs["homography"] >> m_homography;

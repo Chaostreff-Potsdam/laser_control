@@ -19,8 +19,7 @@ void RisenGroup::setZ(const double newZ)
 EtherdreamPoints RisenGroup::points() const
 {
 	EtherdreamPoints childPoints = CompositeObject::points();
-	if (m_z != 0)
-		PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
+	PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
 
 	return childPoints;
 }
@@ -28,8 +27,7 @@ EtherdreamPoints RisenGroup::points() const
 EtherdreamPoints RisenGroup::startPoints() const
 {
 	EtherdreamPoints childPoints = CompositeObject::startPoints();
-	if (m_z != 0)
-		PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
+	PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
 
 	return childPoints;
 }
@@ -37,8 +35,7 @@ EtherdreamPoints RisenGroup::startPoints() const
 EtherdreamPoints RisenGroup::endPoints() const
 {
 	EtherdreamPoints childPoints = CompositeObject::endPoints();
-	if (m_z != 0)
-		PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
+	PointLifter::sharedInstance().liftPainterPoints(childPoints, m_z);
 
 	return childPoints;
 }
