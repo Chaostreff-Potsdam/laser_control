@@ -483,6 +483,7 @@ ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point
 	turkerId->move(midPoint - p1p2 / 2);
 
 	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	group->add(turkerId);
 	group->add(new Circle(p1, 325));
 	group->add(new Line(p1, p2, true, true));
 	group->add(new Circle(p2, 325));
