@@ -24,7 +24,7 @@ namespace InstructionFactory {
 	ObjectPtr Footwear(const Json::Value &root, Point p);
 	ObjectPtr Heat(const Json::Value &root, Point p);
 	ObjectPtr Elevator(const Json::Value &root, Point p1, Point p2, Point p3);
-	ObjectPtr Guardrail(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr Guardrail(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr BlueprintWall(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MovingWallWarning(const Json::Value &root, Point p1, Point p2);
 }

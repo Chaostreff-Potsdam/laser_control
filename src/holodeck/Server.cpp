@@ -45,7 +45,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Footwear, 1),
 	HANDLE_OBJECT(Heat, 1),
 	HANDLE_OBJECT(Elevator, 3),
-	HANDLE_OBJECT(Guardrail, 2),
+	HANDLE_OBJECT(Guardrail, 4),
 	HANDLE_OBJECT(BlueprintWall, 2),
 	HANDLE_OBJECT(MovingWallWarning, 2)
 };
