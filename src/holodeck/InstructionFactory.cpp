@@ -209,7 +209,7 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 									   2000, // beam is 1000 thick
 									   length, // and as long as requested
 									   false);
-	bigRect->rotate(alpha, midPoint);
+	bigRect->rotate(alpha-M_PI_2, midPoint);
 	group->add(bigRect);
 
 	return group;
