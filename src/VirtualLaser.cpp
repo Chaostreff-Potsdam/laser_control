@@ -42,7 +42,8 @@ void VirtualLaser::writePoints()
 		cv::imshow(windowName, canvas);
 	}
 
-	if (cv::waitKey(1) == 'q') exit(0);
+	auto key = cv::waitKey(1);
+	if (key == 'q' || key == '\e') exit(0);
 }
 
 size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)

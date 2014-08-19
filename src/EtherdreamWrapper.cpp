@@ -121,6 +121,7 @@ void laser::EtherdreamWrapper::writePoints()
 	}
 	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), pps, -1);
 #else
-	etherdream_write(m_etherdream, m_points.data(), m_points.size(), pps, -1);
+	if (!m_points.empty())
+		etherdream_write(m_etherdream, m_points.data(), m_points.size(), pps, -1);
 #endif
 }
