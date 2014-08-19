@@ -5,8 +5,8 @@
 
 namespace laser {
 
-static double projectorMatrixData[3][3] = {{1.0/1500 /*fx*/, 0       , 0 /*cx*/},
-										   {0       , 1.0/1500 /*fy*/, 0 /*cy*/},
+static double projectorMatrixData[3][3] = {{1500 /*fx*/, 0       , 0 /*cx*/},
+										   {0       , 1500 /*fy*/, 0 /*cy*/},
 										   {0       , 0       , 1       }};
 
 const cv::Mat PointLifter::projectorMatrix(3, 3, CV_64FC1, projectorMatrixData);

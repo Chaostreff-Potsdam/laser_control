@@ -41,16 +41,20 @@ void Animation::start()
 		return;
 
 	m_running = true;
-	m_thread = std::thread([&](){
-		if (m_initialDelay != noDelay)
-			std::this_thread::sleep_for(m_initialDelay);
+	m_thread = std::thread(&Animation::updateLoop, this);
+}
 
-		m_expiredLast = std::chrono::system_clock::now();
-		while (m_running) {
-			tick();
-			wait();
-		}
-	});
+
+void Animation::updateLoop()
+{
+	if (m_initialDelay != noDelay)
+	std::this_thread::sleep_for(m_initialDelay);
+
+	m_expiredLast = std::chrono::system_clock::now();
+	while (m_running) {
+		tick();
+		wait();
+	}
 }
 
 void Animation::tick()

@@ -9,7 +9,7 @@ laser::CompositeObject::CompositeObject()
 laser::CompositeObject::~CompositeObject()
 {
 	// Stop all animations first, in case they reference children
-	m_animations.clear();
+	removeAllAnimations();
 }
 
 void laser::CompositeObject::add(Object *object)

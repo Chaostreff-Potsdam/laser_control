@@ -46,6 +46,8 @@ namespace laser {
 		virtual void tick();
 		void wait();
 
+		void updateLoop();
+
 	private:
 		Object *m_object;
 		bool m_running;
