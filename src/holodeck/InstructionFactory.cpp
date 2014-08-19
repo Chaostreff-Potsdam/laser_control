@@ -209,7 +209,7 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 									   2000, // beam is 1000 thick
 									   length, // and as long as requested
 									   false);
-	bigRect->rotate(alpha, midPoint);
+	bigRect->rotate(alpha-M_PI_2, midPoint);
 	group->add(bigRect);
 
 	return group;
@@ -465,12 +465,27 @@ ObjectPtr InstructionFactory::Elevator(const Json::Value &root, Point p1, Point 
 	return group;
 }
 
-ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
-	group->add(new Circle(p1, 325));
-	group->add(new Line(p1, p2, true, true));
-	group->add(new Circle(p2, 325));
+
+	float alpha;
+	float length;
+	Point midPoint;
+	Point start;
+	Point end;
+
+	calculateRectangleCharacteristics(p1, p2, alpha, length, start, midPoint, end);
+
+	Point p1p2 = p2 - p1;
+	ObjectPtr turkerId = getDigit(root, 0);
+
+	turkerId->rotate(alpha);
+	turkerId->move(midPoint - p1p2 / 2);
+
+	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	group->add(turkerId);
+	group->add(new Rectangle(p1, p2, p3, p4, false));
 	return group;
 }
 
