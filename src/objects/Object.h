@@ -105,6 +105,9 @@ namespace laser {
 		static int s_pixelsPerPointDefault;
 		static int s_marginPointFractionDefault;
 
+		virtual void update()
+		{ nowDirty(); }
+
 	protected:
 		boost::posix_time::ptime m_started;
 		bool m_permanent;

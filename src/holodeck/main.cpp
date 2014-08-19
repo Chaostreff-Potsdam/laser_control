@@ -49,10 +49,10 @@ static void displayTests(Painter & p)
 
 	ObjectPtr normal(new Rectangle( 10000, -10000, 10000, 20000));
 	risen->add(new Rectangle(-20000, -10000, 10000, 20000));
-	RisenGroup::cast(risen)->setZ(-0.476);
+	RisenGroup::cast(risen)->setZ(0.75);
 
-	normal->setColor(Color::DARKGREEN);
-	risen->setColor(Color::DARKGREEN);
+	normal->setColor(Color::GREEN);
+	risen->setColor(Color::GREEN);
 
 	p.add(normal);
 	p.add(risen);
@@ -62,16 +62,29 @@ static void displayTests(Painter & p)
 	//0.476190476
 }
 
+static void showLaserOptions(Painter & p)
+{
+	void (*laserOptionsChanged)(int, void *) = [](int, void *t){
+		static_cast<Painter *>(t)->updateAllObjects();
+	};
+
+	auto addOption = [&](const char *name, int * target, int maxValue){
+		cv::createTrackbar(name, "Laser options", target, maxValue, laserOptionsChanged, &p);
+	};
+
+	cv::namedWindow("Laser options");
+	addOption("fps",  &EtherdreamWrapper::framesPerSecond, 60);
+	addOption("pixel per second",  &EtherdreamWrapper::pps, 90000);
+	addOption("pixel per point",  &Object::s_pixelsPerPointDefault, 1000);
+	addOption("margin %",  &Object::s_marginPointFractionDefault, 200);
+}
+
 int main(int argc, char *argv[])
 {
-	cv::namedWindow("Laser options");
-	cv::createTrackbar("fps", "Laser options", &EtherdreamWrapper::framesPerSecond, 60);
-	cv::createTrackbar("pixel per second", "Laser options", &EtherdreamWrapper::pps, 90000);
-	cv::createTrackbar("pixel per point", "Laser options", &Object::s_pixelsPerPointDefault, 1000);
-	cv::createTrackbar("margin %", "Laser options", &Object::s_marginPointFractionDefault, 200);
-
 	config::readCommandLine(argc, argv);
 	Painter p(false, false, true);
+
+	showLaserOptions(p);
 
 	if (config::useVirtualLaser)
 		p.paintOn(std::make_shared<VirtualLaser>());

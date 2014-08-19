@@ -19,6 +19,8 @@ namespace laser {
 		LASER_OBJECT_GROUP(CompositeObject)
 
 	public:
+		virtual ~CompositeObject();
+
 		//!< Add this object and take overship
 		void add(Object *object);
 		void add(const ObjectPtr & object);
@@ -30,6 +32,8 @@ namespace laser {
 		{ return self.lock(); }
 
 		virtual void setColor(const Color & color);
+
+		virtual void update();
 
 	protected:
 		static CompositeObjectPtr wrap_(CompositeObject* newGroup, const std::vector<ObjectPtr> &objects)

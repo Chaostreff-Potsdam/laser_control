@@ -164,7 +164,7 @@ void laser::Painter::updatePoints()
 			removeExpiredObjects();
 		}
 
-		for (auto objPair: m_objects) {
+		for (auto & objPair: m_objects) {
 			// objPair.second->tick();
 			appendToVector(ps, objPair.second->pointsToPaint());
 		}
@@ -183,6 +183,14 @@ void laser::Painter::updatePoints()
 void laser::Painter::setCalibration(cv::Mat homography)
 {
 	m_calibration = homography;
+}
+
+void laser::Painter::updateAllObjects()
+{
+	std::lock_guard<std::mutex> lock(m_objectsMutex);
+	for (auto & objPair: m_objects) {
+		objPair.second->update();
+	}
 }
 
 void laser::Painter::updateLoop()

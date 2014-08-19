@@ -102,6 +102,11 @@ namespace laser {
 		 */
 		void setCalibration(cv::Mat homography);
 
+		/*!
+		 * \brief rebuild all objects cache
+		 */
+		void updateAllObjects();
+
 	protected:
 		std::thread m_updateLoop;
 		void updateLoop();

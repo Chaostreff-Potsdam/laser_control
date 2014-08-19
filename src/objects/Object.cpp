@@ -66,7 +66,7 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 	if (!m_isVisible)
 		return EtherdreamPoints();
 
-//	if (m_dirty)
+	if (m_dirty)
 		rebuildCache();
 
 	return m_cache;

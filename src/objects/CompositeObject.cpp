@@ -6,6 +6,12 @@ laser::CompositeObject::CompositeObject()
 	;;
 }
 
+laser::CompositeObject::~CompositeObject()
+{
+	// Stop all animations first, in case they reference children
+	m_animations.clear();
+}
+
 void laser::CompositeObject::add(Object *object)
 {
 	add(ObjectPtr(object));
@@ -48,14 +54,19 @@ void laser::CompositeObject::setColor(const Color &color)
 	Object::setColor(color);
 }
 
+void laser::CompositeObject::update()
+{
+	for (auto & child: m_children)
+		child->update();
+	Object::update();
+}
+
 laser::EtherdreamPoints laser::CompositeObject::points() const
 {
 	EtherdreamPoints ps;
 
 	for (auto & child : m_children)
-	{
 		appendToVector(ps, child->pointsToPaint());
-	}
 	return ps;
 }
 
