@@ -6,6 +6,8 @@
 
 namespace laser { namespace holodeck {
 
+extern const Color MetaDataColor;
+
 namespace InstructionFactory {
 	ObjectPtr Wall(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Door(const Json::Value &root, Point p1, Point p2);

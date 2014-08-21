@@ -17,6 +17,8 @@
 
 namespace laser { namespace holodeck {
 
+const Color MetaDataColor(Color::LIGHTBLUE);
+
 static void ShiftPoints(std::vector<Point> & points, Point base)
 {
 	for (Point & p: points)
@@ -129,6 +131,41 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 	return polygon;
 }
 
+static ObjectPtr MovingIndicator(const Point & p1, double angle)
+{
+	const double width = 700, height = 750;
+
+	const double right = p1.x() + width * 0.5;
+	const double left = p1.x() - width * 0.5;
+	const double top = p1.y() - height * 0.5;
+	const double bottom = p1.y() + height * 0.5;
+
+	CompositeObjectPtr group = CompositeObject::construct();
+	Line *lA0 = new Line(Point(left, bottom), p1),
+		 *lA1 = new Line(p1, Point(right, bottom)),
+		 *lB0 = new Line(right, p1.y(), p1.x(), top),
+		 *lB1 = new Line(p1.x(), top, left, p1.y());
+
+	group->add(lA0);
+	group->add(lA1);
+	group->add(lB0);
+	group->add(lB1);
+
+	group->setColor(MetaDataColor);
+	group->rotate(angle, p1);
+	group->addAnimation([=](Object *){
+		// What about static's semantic?
+		static int step = 3;
+		lA0->setVisible((bool)(step & 1) != (bool)(step & 2));
+		lA1->setVisible((bool)(step & 1) != (bool)(step & 2));
+
+		lB0->setVisible(step & 2);
+		lB1->setVisible(step & 2);
+		step = (step + 1) & 3;
+	}, Animation::msecs(200));
+	return group;
+}
+
 ////////////////////////////////////////////////////////////
 
 ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
@@ -152,7 +189,6 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 	std::cout << midPoint - p1p2 / 2 << " + " << Point(-p1p2.y(), p1p2.x()).norm() * 100 << std::endl;
 
 	group->add(turkerId);
-
 
 	return group;
 }
