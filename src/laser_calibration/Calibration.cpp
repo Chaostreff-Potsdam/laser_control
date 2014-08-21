@@ -10,6 +10,8 @@
 
 using namespace laser;
 
+static const double shiftScale = 10000.0 /* Shiftable Distance */ / 100.0;
+
 Calibration::Calibration(CanvasPtr wrapper)
 	: m_scale(100),
 	  m_xScale(100),
@@ -17,6 +19,8 @@ Calibration::Calibration(CanvasPtr wrapper)
 	  m_keystoneFactor(100),
 	  m_xFlip(0),
 	  m_yFlip(0),
+	  m_xShift(50),
+	  m_yShift(50),
 	  m_etherdream(wrapper),
 	  m_homography(0, 0, CV_8UC1, nullptr)
 {
@@ -39,6 +43,11 @@ bool Calibration::alreadyCalibrated()
 		fs["m_yFlip"] >> m_yFlip;
 	}
 
+	if (!fs["xShift"].empty()) {
+		fs["xShift"] >> m_xShift;
+		fs["yShift"] >> m_yShift;
+	}
+
 	if (config::forceRecalibration || fs["homography"].empty())
 		return false;
 
@@ -57,6 +66,8 @@ void Calibration::saveCalibration()
 	fs << "keystoneFactor" << m_keystoneFactor;
 	fs << "m_xFlip" << m_xFlip;
 	fs << "m_yFlip" << m_yFlip;
+	fs << "xShift" << m_xShift;
+	fs << "yShift" << m_yShift;
 }
 
 void Calibration::start()
@@ -73,6 +84,8 @@ void Calibration::start()
 	cv::createTrackbar("Keystone", "Calibration", &m_keystoneFactor, 100, callback, (void*)this);
 	cv::createTrackbar("x-Flip", "Calibration", &m_xFlip, 1, callback, (void*)this);
 	cv::createTrackbar("y-Flip", "Calibration", &m_yFlip, 1, callback, (void*)this);
+	cv::createTrackbar("x-Shift", "Calibration", &m_xShift, 100, callback, (void*)this);
+	cv::createTrackbar("y-Shift", "Calibration", &m_yShift, 100, callback, (void*)this);
 
 	repaint();
 	cv::waitKey();
@@ -88,6 +101,7 @@ void Calibration::repaint()
 	m_rect.scale(m_scale / 100.0);
 	m_rect.scale(m_xScale / 100.0, m_yScale / 100.0);
 	m_rect.setKeystoneFactor(m_keystoneFactor / 100.0);
+	m_rect.move(shiftScale * (m_xShift - 50), shiftScale * (m_yShift - 50));
 	if (m_xFlip)
 		m_rect.flipHorizontally();
 	if (m_yFlip)
