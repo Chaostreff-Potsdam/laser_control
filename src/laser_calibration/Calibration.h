@@ -32,6 +32,7 @@ private:
 	int m_yFlip;
 	int m_xShift;
 	int m_yShift;
+	int m_rotation;
 
 	CalibrationRectangle m_rect;
 	CanvasPtr m_etherdream;

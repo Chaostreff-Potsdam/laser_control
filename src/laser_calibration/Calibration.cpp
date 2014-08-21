@@ -10,7 +10,7 @@
 
 using namespace laser;
 
-static const double shiftScale = 10000.0 /* Shiftable Distance */ / 100.0;
+static const double shiftScale = 10000.0 /* Shiftable Distance */ / 1000.0;
 
 Calibration::Calibration(CanvasPtr wrapper)
 	: m_scale(100),
@@ -19,8 +19,9 @@ Calibration::Calibration(CanvasPtr wrapper)
 	  m_keystoneFactor(100),
 	  m_xFlip(0),
 	  m_yFlip(0),
-	  m_xShift(50),
-	  m_yShift(50),
+	  m_xShift(500),
+	  m_yShift(500),
+	  m_rotation(0),
 	  m_etherdream(wrapper),
 	  m_homography(0, 0, CV_8UC1, nullptr)
 {
@@ -46,6 +47,8 @@ bool Calibration::alreadyCalibrated()
 	if (!fs["xShift"].empty()) {
 		fs["xShift"] >> m_xShift;
 		fs["yShift"] >> m_yShift;
+		fs["rotation"] >> m_rotation;
+
 	}
 
 	if (config::forceRecalibration || fs["homography"].empty())
@@ -68,6 +71,7 @@ void Calibration::saveCalibration()
 	fs << "m_yFlip" << m_yFlip;
 	fs << "xShift" << m_xShift;
 	fs << "yShift" << m_yShift;
+	fs << "rotation" << m_rotation;
 }
 
 void Calibration::start()
@@ -76,16 +80,20 @@ void Calibration::start()
 		return;
 
 	void (*callback)(int, void *) = [](int, void *t){static_cast<Calibration *>(t)->repaint();};
+	auto addTrackbar = [&](const char *name, int *target, int maxValue){
+		cv::createTrackbar(name, "Calibration", target, maxValue, callback, (void*)this);
+	};
 
 	cv::namedWindow("Calibration");
-	cv::createTrackbar("Scale", "Calibration", &m_scale, 100, callback, (void*)this);
-	cv::createTrackbar("x-Scale", "Calibration", &m_xScale, 100, callback, (void*)this);
-	cv::createTrackbar("y-Scale", "Calibration", &m_yScale, 100, callback, (void*)this);
-	cv::createTrackbar("Keystone", "Calibration", &m_keystoneFactor, 100, callback, (void*)this);
-	cv::createTrackbar("x-Flip", "Calibration", &m_xFlip, 1, callback, (void*)this);
-	cv::createTrackbar("y-Flip", "Calibration", &m_yFlip, 1, callback, (void*)this);
-	cv::createTrackbar("x-Shift", "Calibration", &m_xShift, 100, callback, (void*)this);
-	cv::createTrackbar("y-Shift", "Calibration", &m_yShift, 100, callback, (void*)this);
+	addTrackbar("Scale", &m_scale, 100);
+	addTrackbar("x-Scale", &m_xScale, 100);
+	addTrackbar("y-Scale", &m_yScale, 100);
+	addTrackbar("Keystone", &m_keystoneFactor, 100);
+	addTrackbar("x-Flip", &m_xFlip, 1);
+	addTrackbar("y-Flip", &m_yFlip, 1);
+	addTrackbar("x-Shift", &m_xShift, 1000);
+	addTrackbar("y-Shift", &m_yShift, 1000);
+	addTrackbar("rotation", &m_rotation, 3600);
 
 	repaint();
 	cv::waitKey();
@@ -106,6 +114,7 @@ void Calibration::repaint()
 		m_rect.flipHorizontally();
 	if (m_yFlip)
 		m_rect.flipVertically();
+	m_rect.rotate(radians(m_rotation * 0.1));
 
 	m_etherdream->setPoints(m_rect.pointsToPaint());
 	m_etherdream->writePoints();
