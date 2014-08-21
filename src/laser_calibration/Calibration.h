@@ -30,6 +30,8 @@ private:
 	int m_keystoneFactor;
 	int m_xFlip;
 	int m_yFlip;
+	int m_xShift;
+	int m_yShift;
 
 	CalibrationRectangle m_rect;
 	CanvasPtr m_etherdream;
