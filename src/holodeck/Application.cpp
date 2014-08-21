@@ -81,7 +81,6 @@ void Application::loop(std::function<void()> onLoop, unsigned int wait)
 {
 	while (true) {
 		onLoop();
-		cv::waitKey(10);
 		m_painter.updatePoints();
 		std::this_thread::sleep_for(std::chrono::milliseconds(wait));
 	}

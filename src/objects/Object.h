@@ -116,8 +116,7 @@ namespace laser {
 		/*!
 		 * \brief call this to trigger a repaint
 		 */
-		void nowDirty()
-		{ m_dirty = true; }
+		void nowDirty();
 
 		int m_pixelsPerPoint;
 		int pixelsPerPoint() const;

@@ -72,14 +72,18 @@ laser::EtherdreamPoints laser::Object::pointsToPaint()
 	return m_cache;
 }
 
+void laser::Object::nowDirty()
+{
+	m_dirty = true;
+	if (parent_t p = parent()) {
+		p->nowDirty();
+	}
+}
+
 const etherdream_point laser::Object::etherdreamPoint(int x, int y, bool visible) const
 {
 	etherdream_point p;
-#ifdef _WIN32 //TODO: should this be used always, not just in windows?
 	memset(&p, 0, sizeof(p));
-#else
-	bzero(&p, sizeof(p));
-#endif
 
 	//flo: remove all clamping, except directly before sending them to the dac? after all transformations etc.
 	p.x = clamp(x, INT16_MIN, INT16_MAX);
@@ -164,6 +168,7 @@ void laser::Object::removeAllAnimations()
 void laser::Object::setVisible(bool visible)
 {
 	m_isVisible = visible;
+	nowDirty();
 }
 
 bool laser::Object::visible()
@@ -174,11 +179,13 @@ bool laser::Object::visible()
 void laser::Object::setPixelsPerPoint(int pixelsPerPoint)
 {
 	m_pixelsPerPoint = pixelsPerPoint;
+	nowDirty();
 }
 
 void laser::Object::setMarginPointFraction(int marginPointFraction)
 {
 	m_marginPointFraction = marginPointFraction;
+	nowDirty();
 }
 
 void laser::Object::setColor(const Color & color)
