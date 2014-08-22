@@ -127,6 +127,7 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 						  .asUInt();
 	assert(id < number_points.size());
 	ObjectPtr polygon = std::make_shared<Polygon>(number_points[id], false, false, false);
+	polygon->setColor(MetaDataColor);
 	polygon->move(p);
 	return polygon;
 }
@@ -186,7 +187,6 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 	turkerId->rotate(alpha);
 	turkerId->move(midPoint - p1p2 / 2);
 	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
-	std::cout << midPoint - p1p2 / 2 << " + " << Point(-p1p2.y(), p1p2.x()).norm() * 100 << std::endl;
 
 	group->add(turkerId);
 
@@ -308,27 +308,33 @@ ObjectPtr InstructionFactory::Stool(const Json::Value &root, Point p1, Point p2,
 	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
 }
 
-ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point hip, Point leftHand, Point rightHand)
+ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point chest)
 {
-	CompositeObjectPtr group = CompositeObject::construct();
+	CompositeObjectPtr corpse = CompositeObject::construct();
 
-	float alpha;
-	float length;
-	Point mid;
-	Point start;
-	Point end;
+	const double spineRot = atan2(head.y() - chest.y(), head.x() - chest.x());
+	const double bodyAspectRatio = 0.702;
+	const double spine = (head - chest).abs(); // bodyHeight
+	const double bodyWidth = bodyAspectRatio * spine * 2;
 
-	calculateRectangleCharacteristics(head, hip, alpha, length, start, mid, end);
+	ObjectPtr body(new Circle(chest, spine, M_PI));
+	body->scale(bodyAspectRatio, 1.0);
 
-	group->add(new Circle(head, 2000));
-	group->add(new Line(head, hip));
+	corpse->add(body);
+	corpse->add(new Circle(chest + Point(0, -spine), 0.4 * spine, radians(158), radians(382)));
 
-	group->add(new Circle(leftHand, 1000));
-	group->add(new Line(leftHand, mid));
+	Point armStart = chest + Point(bodyWidth * (3.0 / 8), -spine * 1.0/3);
+	Point ellbow(chest.x() + bodyWidth * 0.5, head.y());
+	Point upperArm(ellbow - armStart);
 
-	group->add(new Circle(rightHand, 1000));
-	group->add(new Line(rightHand, mid));
+	corpse->add(new Line(armStart, ellbow));
+	corpse->add(new Line(ellbow, ellbow + upperArm.scaled(-1, 1)));
 
+	std::cerr << M_PI_2 + spineRot << std::endl;
+	corpse->rotate(M_PI_2 + spineRot, chest);
+
+	CompositeObjectPtr group = CompositeObject::construct(); // Safely store transform on corpse
+	group->add(corpse);
 	return group;
 }
 

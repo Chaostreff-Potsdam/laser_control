@@ -37,7 +37,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(PortalInactive, 2),
 	HANDLE_OBJECT(PortalActive, 2),
 	HANDLE_OBJECT(Zipline, 2),
-	HANDLE_OBJECT(Corpse, 4),
+	HANDLE_OBJECT(Corpse, 2),
 	HANDLE_OBJECT(Stool, 4),
 	HANDLE_OBJECT(Water, 1),
 	HANDLE_OBJECT(Poke, 2),

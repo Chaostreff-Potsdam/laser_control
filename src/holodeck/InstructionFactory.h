@@ -19,7 +19,7 @@ namespace InstructionFactory {
 	ObjectPtr PortalActive(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Zipline(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Stool(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
-	ObjectPtr Corpse(const Json::Value &root, Point head, Point hip, Point leftHand, Point rightHand);
+	ObjectPtr Corpse(const Json::Value &root, Point head, Point chest);
 	ObjectPtr Water(const Json::Value &root, Point p);
 	ObjectPtr Poke(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Stomper(const Json::Value &root, Point p1, Point p2);

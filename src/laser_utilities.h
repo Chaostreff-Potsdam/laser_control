@@ -83,6 +83,12 @@ namespace laser {
 		void setX(int x) {m_x = x;}
 		void setY(int y) {m_y = y;}
 
+		Point scaled(double scale)
+		{ return scaled(scale, scale); }
+
+		Point scaled(double scaleX, double scaleY)
+		{ return Point(m_x * scaleX, m_y * scaleY); }
+
 		double abs() const
 		{ return std::sqrt(sqr(m_x) + sqr(m_y)); }
 
