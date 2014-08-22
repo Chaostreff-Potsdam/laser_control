@@ -193,6 +193,15 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 	return group;
 }
 
+ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Point p2)
+{
+	CompositeObjectPtr group = std::dynamic_pointer_cast<CompositeObject>(Wall(root, p1, p2));
+	Point mid = p1 + (p2 - p1) * 0.5;
+	group->add(MovingIndicator(mid, 0.0));
+
+	return group;
+}
+
 ObjectPtr InstructionFactory::Door(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr door = CompositeObject::construct();
@@ -303,6 +312,11 @@ ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p
 	return group;
 }
 
+ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
+{
+	return Zipline(root, p1, p2);
+}
+
 ObjectPtr InstructionFactory::Stool(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
 	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
@@ -374,15 +388,6 @@ ObjectPtr InstructionFactory::Poke(const Json::Value &root, Point p1, Point p2)
 	group->addAnimation([](Object *o) {
 							o->setVisible(!o->visible());
 						}, std::chrono::milliseconds(50));
-
-	return group;
-}
-
-ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Point p2)
-{
-	CompositeObjectPtr group = Wall(root, p1, p2);
-	Point mid = p1 + (p2 - p1) * 0.5;
-	group->add(MovingIndicator(mid));
 
 	return group;
 }

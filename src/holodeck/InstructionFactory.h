@@ -29,6 +29,7 @@ namespace InstructionFactory {
 	ObjectPtr Guardrail(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr BlueprintWall(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MovingWallWarning(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr ZiplineWithStep(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
 }
 
 }} // namespace laser::holodeck
