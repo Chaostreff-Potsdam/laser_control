@@ -68,12 +68,11 @@ void Application::startCanvas()
 
 void Application::displayTests()
 {
-	ObjectPtr rect = std::make_shared<Circle>(-10000, -10000, 20000);
-	//m_painter.add(rect);
-	m_painter.add(holodeck::InstructionFactory::Corpse(Json::Value(), Point(0, 0), Point(0, 10000)));
+	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
+	m_painter.add(circ);
 
 	loop([&]{
-		rect->rotate(radians(5));
+		circ->rotate(radians(5));
 	});
 }
 

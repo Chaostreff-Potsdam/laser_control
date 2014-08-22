@@ -312,26 +312,24 @@ ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point 
 {
 	CompositeObjectPtr corpse = CompositeObject::construct();
 
-	const double spineRot = atan2(head.y() - chest.y(), head.x() - chest.x());
 	const double bodyAspectRatio = 0.702;
 	const double spine = (head - chest).abs(); // bodyHeight
 	const double bodyWidth = bodyAspectRatio * spine * 2;
 
-	ObjectPtr body(new Circle(chest, spine, M_PI));
-	body->scale(bodyAspectRatio, 1.0);
-
-	corpse->add(body);
-	corpse->add(new Circle(chest + Point(0, -spine), 0.4 * spine, radians(158), radians(382)));
-
-	Point armStart = chest + Point(bodyWidth * (3.0 / 8), -spine * 1.0/3);
-	Point ellbow(chest.x() + bodyWidth * 0.5, head.y());
+	Point armStart(bodyWidth * (3.0 / 8), -spine * 1.0/3);
+	Point ellbow(bodyWidth * 0.5, -spine);
 	Point upperArm(ellbow - armStart);
 
+	ObjectPtr body(new Circle(0, 0, spine, M_PI));
+	body->scale(bodyAspectRatio, 1.0);
+	corpse->add(body);
+
+	corpse->add(new Circle(Point(0, -spine), 0.4 * spine, radians(158), radians(382)));
 	corpse->add(new Line(armStart, ellbow));
 	corpse->add(new Line(ellbow, ellbow + upperArm.scaled(-1, 1)));
 
-	std::cerr << M_PI_2 + spineRot << std::endl;
-	corpse->rotate(M_PI_2 + spineRot, chest);
+	corpse->rotate(M_PI_2 + atan2(head.y() - chest.y(), head.x() - chest.x()));
+	corpse->move(chest);
 
 	CompositeObjectPtr group = CompositeObject::construct(); // Safely store transform on corpse
 	group->add(corpse);
