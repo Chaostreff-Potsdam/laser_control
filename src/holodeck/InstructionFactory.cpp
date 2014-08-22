@@ -322,6 +322,8 @@ ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point 
 	Point upperArm(ellbow - armStart);
 	Point armShift(armWidth, 0);
 
+	corpse->add(getDigit(root, 0, Point(0, -spine * 0.3)));
+
 	ObjectPtr body(new Circle(0, 0, spine, M_PI));
 	body->scale(bodyAspectRatio, 1.0);
 	corpse->add(body);
