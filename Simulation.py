@@ -28,7 +28,7 @@ class LaserClient(object):
 		packet.update({"instruction": code})
 		
 		if instructionID is not None:
-			packet.update({"id": instructionID})
+			packet.update({"instance": instructionID})
 		self.socket.sendto(json.dumps(packet).encode(), (self.host, self.port))
 
 	def __packPoints(self, points):
