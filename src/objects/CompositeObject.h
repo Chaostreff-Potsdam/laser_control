@@ -9,6 +9,9 @@ namespace laser {
 		static CompositeObjectPtr construct(const std::vector<ObjectPtr> & objects = std::vector<ObjectPtr>()) \
 		{ return wrap_(new GroupT, objects); } \
 		\
+		static CompositeObjectPtr construct(const ObjectPtr & obj) \
+		{ return wrap_(new GroupT, obj); } \
+		\
 		static std::shared_ptr<GroupT> cast(const CompositeObjectPtr & p) \
 		{ return std::static_pointer_cast<GroupT>(p); }\
 	private:
@@ -36,11 +39,12 @@ namespace laser {
 		virtual void update();
 
 	protected:
-		static CompositeObjectPtr wrap_(CompositeObject* newGroup, const std::vector<ObjectPtr> &objects)
+		template<typename AddableT>
+		static CompositeObjectPtr wrap_(CompositeObject* newGroup, AddableT toAdd)
 		{
 			CompositeObjectPtr group(newGroup);
 			group->self = group;
-			group->add(objects);
+			group->add(toAdd);
 			return group;
 		}
 
