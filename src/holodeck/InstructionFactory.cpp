@@ -301,26 +301,46 @@ ObjectPtr InstructionFactory::PortalInactive(const Json::Value &root, Point p1, 
 ObjectPtr InstructionFactory::PortalActive(const Json::Value &root, Point p1, Point p2)
 { return Portal(root, p1, p2, true); }
 
+static const double zipLineInnerCircle = 500.0;
+static const double zipLineOuterCircle = 1000.0;
+
 ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
-	static const double innerCircle = 500.0;
-	static const double outerCircle = 1000.0;
-
-	group->add(new Circle(p1, outerCircle));
-	group->add(new Circle(p1, innerCircle));
+	group->add(new Circle(p1, zipLineOuterCircle));
+	group->add(new Circle(p1, zipLineInnerCircle));
 
 	group->add(new Line(p1, p2));
 
-	group->add(new Circle(p2, innerCircle));
-	group->add(new Circle(p2, outerCircle));
+	group->add(new Circle(p2, zipLineInnerCircle));
+	group->add(new Circle(p2, zipLineOuterCircle));
 
 	return group;
 }
 
 ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
-	return Zipline(root, p1, p2);
+	CompositeObjectPtr group = std::dynamic_pointer_cast<CompositeObject>(Zipline(root, p1, p2));
+
+	const Point direction(p2 - p1);
+	auto fromMidLineTo = [&](const Point & target){
+		// Project p1-target-vector on p1-p2-vector
+		Point b_proj = direction * (direction.dot(target - p1) / sqr(direction.abs()));
+		// find foot point and measure distance
+		return target - (p1 + b_proj);
+	};
+
+	//const double width = direction.abs() - 2 * zipLineOuterCircle;
+	const Point toP3 = fromMidLineTo(p3);
+	const Point toP4 = fromMidLineTo(p4);
+	const Point leftStart = p1 + direction.norm() * zipLineOuterCircle;
+	const Point rightEnd = p2 - direction.norm() * zipLineOuterCircle;
+	ObjectPtr step(new Rectangle(leftStart + toP4, rightEnd + toP4, rightEnd + toP3, leftStart + toP3));
+	// Add indicators somewhere here
+
+	group->add(step);
+
+	return group;
 }
 
 ObjectPtr InstructionFactory::Stool(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)

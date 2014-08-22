@@ -58,6 +58,9 @@ namespace laser {
 		return ((int_least64_t)a)*a;
 	}
 
+	static inline double sqr(double a)
+	{ return a * a; }
+
 	/*!
 	 * \brief a 2D point with valid laser coordinates
 	 *
@@ -83,16 +86,19 @@ namespace laser {
 		void setX(int x) {m_x = x;}
 		void setY(int y) {m_y = y;}
 
-		Point scaled(double scale)
+		Point scaled(double scale) const
 		{ return scaled(scale, scale); }
 
-		Point scaled(double scaleX, double scaleY)
+		Point scaled(double scaleX, double scaleY) const
 		{ return Point(m_x * scaleX, m_y * scaleY); }
+
+		double dot(const Point & other) const
+		{ return (double) other.m_x * m_x + (double) other.m_y * m_y; }
 
 		double abs() const
 		{ return std::sqrt(sqr(m_x) + sqr(m_y)); }
 
-		Point perpendicular()
+		Point perpendicular() const
 		{ return Point(-m_y, m_x); }
 
 		double angle() const
