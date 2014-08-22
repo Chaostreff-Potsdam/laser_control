@@ -378,23 +378,11 @@ ObjectPtr InstructionFactory::Poke(const Json::Value &root, Point p1, Point p2)
 	return group;
 }
 
-ObjectPtr InstructionFactory::Stomper(const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Point p2)
 {
-	CompositeObjectPtr group = CompositeObject::construct();
-
-	float alpha;
-	float length;
-	Point mid;
-	Point start;
-	Point end;
-
-	calculateRectangleCharacteristics(p1, p2, alpha, length, start, mid, end);
-
-	group->add(new Line(start.x(), start.y(), end.x()-2000, end.y()));
-	group->add(new Line(end.x()-2000, end.y(), end.x()-3000, end.y()+1000));
-	group->add(new Line(end.x()-3000, end.y()-1000, end.x()-2000, end.y()));
-	group->add(new Line(end.x()-1000, end.y()-2000, end.x()-1000, end.y()+2000));
-	group->rotate(alpha, mid);
+	CompositeObjectPtr group = Wall(root, p1, p2);
+	Point mid = p1 + (p2 - p1) * 0.5;
+	group->add(MovingIndicator(mid));
 
 	return group;
 }
