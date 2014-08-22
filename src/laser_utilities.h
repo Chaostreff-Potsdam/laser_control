@@ -92,6 +92,12 @@ namespace laser {
 		double abs() const
 		{ return std::sqrt(sqr(m_x) + sqr(m_y)); }
 
+		Point perpendicular()
+		{ return Point(-m_y, m_x); }
+
+		double angle() const
+		{ return atan2(m_y, m_x); }
+
 		Point norm() const
 		{ return *this / abs(); }
 

@@ -142,10 +142,10 @@ static ObjectPtr MovingIndicator(const Point & p1, double angle)
 	const double bottom = p1.y() + height * 0.5;
 
 	CompositeObjectPtr group = CompositeObject::construct();
-	Line *lA0 = new Line(Point(left, bottom), p1),
-		 *lA1 = new Line(p1, Point(right, bottom)),
-		 *lB0 = new Line(right, p1.y(), p1.x(), top),
-		 *lB1 = new Line(p1.x(), top, left, p1.y());
+	Line *lA0 = new Line(Point(left, top), p1),
+		 *lA1 = new Line(p1, Point(right, top)),
+		 *lB0 = new Line(right, p1.y(), p1.x(), bottom),
+		 *lB1 = new Line(p1.x(), bottom, left, p1.y());
 
 	group->add(lA0);
 	group->add(lA1);
@@ -196,8 +196,14 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = std::dynamic_pointer_cast<CompositeObject>(Wall(root, p1, p2));
-	Point mid = p1 + (p2 - p1) * 0.5;
-	group->add(MovingIndicator(mid, 0.0));
+
+	const double indicatorDistance = 850;
+
+	Point direction = p2 - p1;
+	Point mid = p1 + direction * 0.5;
+	Point spacer = direction.perpendicular().norm() * indicatorDistance;
+
+	group->add(MovingIndicator(mid + spacer, direction.angle()));
 
 	return group;
 }
@@ -348,7 +354,7 @@ ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point 
 	corpse->add(new Line(ellbow + upperArm.scaled(-1, 1) + armShift, ellbow + armShift));
 	corpse->add(new Line(ellbow + armShift, armStart + armShift));
 
-	corpse->rotate(M_PI_2 + atan2(head.y() - chest.y(), head.x() - chest.x()));
+	corpse->rotate(M_PI_2 + (head - chest).angle());
 	corpse->move(chest);
 
 	return CompositeObject::construct(corpse);  // Safely store transform on corpse

@@ -70,6 +70,7 @@ void Application::displayTests()
 {
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
+	m_painter.add(holodeck::InstructionFactory::MovingWall(Json::Value(), Point(10000, 10000), Point(0, 0)));
 
 	loop([&]{
 		circ->rotate(radians(5));
