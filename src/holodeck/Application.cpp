@@ -71,13 +71,12 @@ void Application::displayTests()
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
 
-	Point p3(3000, 1000), p4(6000, -3000);
-
-	m_painter.add(holodeck::InstructionFactory::ZiplineWithStep(Json::Value(), Point(0, 0), Point(10000, 0), p3, p4));
+	Point p3(5000, 5000), p4(5000, -1000);
 	ObjectPtr l(new Line(p3, p4));
 	l->setColor(Color::RED);
-
 	m_painter.add(l);
+
+	m_painter.add(holodeck::InstructionFactory::ZiplineWithStep(Json::Value(), Point(0, 0), Point(10000, 6000), p3, p4));
 
 	loop([&]{
 		circ->rotate(radians(5));
