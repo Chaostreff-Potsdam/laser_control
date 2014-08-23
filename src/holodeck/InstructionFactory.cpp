@@ -259,7 +259,6 @@ ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1,
 		return target - (p1 + b_proj);
 	};
 
-	//const double width = direction.abs() - 2 * zipLineOuterCircle;
 	const Point toP3 = fromMidLineTo(p3);
 	const Point toP4 = fromMidLineTo(p4);
 	const Point leftStart = p1 + (direction.norm() * opts::ZipLineOuterCircle);
@@ -267,11 +266,9 @@ ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1,
 	ObjectPtr step(new Rectangle(leftStart + toP4, rightEnd + toP4, rightEnd + toP3, leftStart + toP3));
 	group->add(step);
 
-	const Point indicatorLine = p1 + p3 + p3.norm() * opts::IndicatorDistance;
+	const Point indicatorLine = p1 + toP3 + toP3.norm() * opts::IndicatorDistance;
 	group->add(MovingIndicator(indicatorLine + direction * 0.25, direction.angle()));
 	group->add(MovingIndicator(indicatorLine + direction * 0.75, direction.angle()));
-
-	// FIXME: static is really shared
 
 	return group;
 }
