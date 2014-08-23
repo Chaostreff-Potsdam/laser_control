@@ -86,18 +86,20 @@ static ObjectPtr MovingIndicator(const Point & p1, double angle)
 
 	group->setColor(MetaDataColor);
 	group->rotate(angle, p1);
-#if 0
+
+	std::shared_ptr<int> storedStep(new int);
+	*storedStep = 3;
 	group->addAnimation([=](Object *){
 		// What about static's semantic?
-		static int step = 3;
+		int step = *storedStep;
 		lA0->setVisible((bool)(step & 1) != (bool)(step & 2));
 		lA1->setVisible((bool)(step & 1) != (bool)(step & 2));
 
 		lB0->setVisible(step & 2);
 		lB1->setVisible(step & 2);
-		step = (step + 1) & 3;
+		*storedStep = (step + 1) & 3;
 	}, Animation::msecs(200));
-#endif
+
 	return group;
 }
 
