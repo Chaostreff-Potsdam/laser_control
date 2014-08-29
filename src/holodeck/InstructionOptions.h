@@ -81,7 +81,7 @@ static const double IndicatorWidth = 700;
 static const double IndicatorHeight = 750;
 static const double IndicatorDistance = 850;
 
-static const double SwitchHandleSize = 1500.0;
+static const double SwitchHandleSize = 1000.0;
 
 static const double ZipLineInnerCircle = 500.0;
 static const double ZipLineOuterCircle = 1000.0;

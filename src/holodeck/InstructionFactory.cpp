@@ -163,6 +163,8 @@ ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2,
 
 ObjectPtr InstructionFactory::Player(const Json::Value &root, Point p)
 {
+	// No turkerId needed here
+	(void)root;
 	ObjectPtr c(new Circle(p, 1000));
 	c->setPermanent(true);
 	return c;
@@ -175,8 +177,9 @@ ObjectPtr InstructionFactory::Switch(const Json::Value &root, Point p1, Point p2
 	group->add(new Circle(p2, opts::SwitchHandleSize));
 
 	Point stickDirection(p2 - p1);
-	Point attachmentPoint = stickDirection.norm() * opts::SwitchHandleSize;
+	Point attachmentPoint = p2 - stickDirection.norm() * opts::SwitchHandleSize;
 	group->add(new Line(p1, attachmentPoint));
+	group->add(getDigit(root, 0, p1 + stickDirection / 2, stickDirection.angle()));
 
 	return group;
 }
@@ -190,6 +193,7 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 	Point midPoint;
 	Point start;
 	Point end;
+	Point dir(p2 - p1);
 
 	calculateRectangleCharacteristics(p1, p2, alpha, length, start, midPoint, end);
 
@@ -200,6 +204,8 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 									   false);
 	bigRect->rotate(alpha-M_PI_2, midPoint);
 	group->add(bigRect);
+
+	group->add(getDigit(root, 0, midPoint + dir.norm().perpendicular() * 1000, dir.angle()));
 
 	return group;
 }
