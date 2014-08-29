@@ -144,16 +144,20 @@ ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Poin
 
 ObjectPtr InstructionFactory::Door(const Json::Value &root, Point p1, Point p2)
 {
-	CompositeObjectPtr door = CompositeObject::construct();
-
-	door->add(new Line(p1, p2));
+	CompositeObjectPtr door = std::dynamic_pointer_cast<CompositeObject>(Wall(root, p1, p2));
 	door->add(new Circle(p2, 750));
+
 	return door;
 }
 
 ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
-	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
+	CompositeObjectPtr group = CompositeObject::construct();
+	const Point center = (p1 + p2 + p3 + p4) * 0.25;
+	group->add(new Rectangle(p1, p2, p3, p4, false));
+	group->add(getDigit(root, 0, center));
+
+	return group;
 }
 
 ObjectPtr InstructionFactory::Player(const Json::Value &root, Point p)
@@ -277,7 +281,10 @@ ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1,
 
 ObjectPtr InstructionFactory::Stool(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
-	return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
+	//return std::make_shared<Rectangle>(p1, p2, p3, p4, false);
+
+	// They just look the same
+	return Table(root, p1, p2, p3, p4);
 }
 
 ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point chest)
@@ -445,9 +452,9 @@ ObjectPtr InstructionFactory::Elevator(const Json::Value &root, Point p1, Point 
 	Point arrowTwoTop    = p1 + s12 * 0.8 + s23 * 0.8;
 
 	Point arrowOneTopTipRight = arrowOneTop - s13 * 0.1;
-	Point arrowOneTopTipLeft  = arrowOneTop + Point(s13.x(), -s13.y()) * 0.1;
+	Point arrowOneTopTipLeft  = arrowOneTop + s13.scaled(0.1, -0.1);
 	Point arrowTwoBottomTipRight = arrowTwoBottom + s13 * 0.1;
-	Point arrowTwoBottomTipLeft = arrowTwoBottom + Point(-s13.x(), s13.y()) * 0.1;
+	Point arrowTwoBottomTipLeft = arrowTwoBottom + s13.scaled(-0.1, 0.1);
 
 	group->add(new Rectangle(p1, p2, p3, p3 - s12, false));
 	group->add(new Line(arrowOneBottom, arrowOneTop));
