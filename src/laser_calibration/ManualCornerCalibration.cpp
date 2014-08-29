@@ -71,6 +71,7 @@ void ManualCornerCalibration::loadOptions(cv::FileStorage &fs)
 			if (!fs[idY].empty())
 				fs[idY] >> m_corners[corner].yVals[level];
 		}
+		m_rect.setCorner(corner, m_corners[corner]);
 	}
 	memcpy(m_currentXVals, m_corners[0].xVals, sizeof(m_currentXVals));
 	memcpy(m_currentYVals, m_corners[0].yVals, sizeof(m_currentYVals));

@@ -11,7 +11,7 @@ public:
 
 protected:
 	virtual const char *configFileName()
-	{ return "manualcornercalib.yml"; }
+	{ return "calibration.yml"; }
 
 	virtual void repaint();
 
