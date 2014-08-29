@@ -8,7 +8,7 @@ namespace laser {
 class EXPORT_LASER_CONTROL AbstractCalibration
 {
 public:
-	typedef void (*RepaintCallback)(int, void *);
+	typedef void (*UpdateCallback)(int, void *);
 
 	AbstractCalibration(const CanvasPtr & canvas);
 
@@ -26,13 +26,13 @@ protected:
 	virtual void saveOptions(cv::FileStorage & fs) = 0;
 	virtual void repaint();
 
-
-	void addTrackbar(const char *name, int *target, int maxValue);
+	void addTrackbar(const char *name, int *target, int maxValue, UpdateCallback callback = repaintCallback);
+	void setTrackbarPos(const char *name, int pos);
 
 	CalibrationRectangle m_rect;
 
 private:
-	static const RepaintCallback repaintCallback;
+	static const UpdateCallback repaintCallback;
 
 	bool alreadyCalibrated();
 	void saveCalibration();

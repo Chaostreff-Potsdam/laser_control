@@ -7,7 +7,7 @@
 
 namespace laser {
 
-const AbstractCalibration::RepaintCallback AbstractCalibration::repaintCallback
+const AbstractCalibration::UpdateCallback AbstractCalibration::repaintCallback
 	= [](int, void *t){static_cast<AbstractCalibration *>(t)->repaint();};
 
 AbstractCalibration::AbstractCalibration(const CanvasPtr &canvas) :
@@ -89,9 +89,14 @@ void AbstractCalibration::start()
 	saveCalibration();
 }
 
-void AbstractCalibration::addTrackbar(const char *name, int *target, int maxValue)
+void AbstractCalibration::addTrackbar(const char *name, int *target, int maxValue, UpdateCallback callback)
 {
-	cv::createTrackbar(name, "Calibration", target, maxValue, repaintCallback, (void*)this);
+	cv::createTrackbar(name, "Calibration", target, maxValue, callback, (void*)this);
+}
+
+void AbstractCalibration::setTrackbarPos(const char *name, int pos)
+{
+	cv::setTrackbarPos(name, "Calibration", pos);
 }
 
 }

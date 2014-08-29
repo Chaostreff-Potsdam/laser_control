@@ -13,22 +13,26 @@ namespace laser {
 class EXPORT_LASER_CONTROL ManualCornerCalibration: public AbstractCalibration
 {
 public:
+	typedef int Levels[LASER_MAN_CORNER_CALIB_COUNT];
 	static const int levelDim;   // 32
+	static const int levelMax;   // levelDim - 1
 	static const int levelCount; // LASER_MAN_CORNER_CALIB_COUNT
 
+	static void levelsSet(Levels levels, int value = levelMax);
+
 	struct PointStorage {
-		int xVals[LASER_MAN_CORNER_CALIB_COUNT];
-		int yVals[LASER_MAN_CORNER_CALIB_COUNT];
+		Levels xVals;
+		Levels yVals;
 
 		int signX;
 		int signY;
 
-		PointStorage():
+		PointStorage() :
 			signX(1),
 			signY(1)
 		{
-			memset(xVals, levelDim / 2, sizeof(xVals));
-			memset(xVals, levelDim / 2, sizeof(xVals));
+			levelsSet(xVals);
+			levelsSet(yVals);
 		}
 
 		operator Point() const;
@@ -41,18 +45,18 @@ protected:
 	{ return "manualcornercalib.yml"; }
 
 	virtual void showOptions();
-	virtual void loadOptions(cv::FileStorage & fs) {}
-	virtual void saveOptions(cv::FileStorage & fs) {}
+	virtual void loadOptions(cv::FileStorage & fs);
+	virtual void saveOptions(cv::FileStorage & fs);
 	virtual void repaint();
 
 private:
 	int m_currentCorner;
-	int m_currentXVals[LASER_MAN_CORNER_CALIB_COUNT];
-	int m_currentYVals[LASER_MAN_CORNER_CALIB_COUNT];
+	Levels m_currentXVals;
+	Levels m_currentYVals;
 
-	PointStorage points[4];
+	PointStorage m_corners[4];
 
-	void updateCurrentCorner();
+	void cornerChanged();
 };
 
 }
