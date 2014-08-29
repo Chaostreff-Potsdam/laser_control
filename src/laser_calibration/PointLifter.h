@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Calibration.h"
+#include "AbstractCalibration.h"
 
 namespace laser {
 
@@ -28,7 +28,7 @@ public:
 	static PointLifter & sharedInstance()
 	{ return s_sharedInstance; }
 
-	PointLifter(Calibration & calibration);
+	PointLifter(AbstractCalibration & calibration);
 	PointLifter(const cv::Mat & painterToCanvas = cv::Mat::eye(3, 3, CV_64FC1),
 				const std::vector<cv::Point2f> canvasRectCorners = CalibrationRectangle::undistoredCorners_<cv::Point2f>());
 

@@ -9,5 +9,6 @@ EXPORT_LASER_CONTROL extern bool forceRecalibration;
 EXPORT_LASER_CONTROL extern bool useVirtualLaser;
 EXPORT_LASER_CONTROL extern bool displayTests;
 EXPORT_LASER_CONTROL extern bool testServer;
+EXPORT_LASER_CONTROL extern bool oldCalib;
 
 }} // namespace laser::config

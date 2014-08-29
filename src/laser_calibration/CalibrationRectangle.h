@@ -27,6 +27,7 @@ public:
 	void setKeystoneFactor(float keystoneFactor);
 
 	std::vector<cv::Point2f> corners() const;
+	void setCorner(int index, const Point & p);
 };
 
 }

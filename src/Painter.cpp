@@ -1,6 +1,8 @@
 #include "Painter.h"
+#include "Config.h"
 
 #include "laser_calibration/Calibration.h"
+#include "laser_calibration/ManualCornerCalibration.h"
 #include "laser_calibration/PointLifter.h"
 #include "Transform.h"
 
@@ -37,11 +39,19 @@ void laser::Painter::aquireEtherdreamWrapper()
 
 void laser::Painter::calibrate()
 {
-	Calibration calibration(canvas());
-    calibration.start();
+	auto transparentCalib = [&](AbstractCalibration *calibration){
+		calibration->start();
+		m_calibration = calibration->homography();
+		PointLifter::s_sharedInstance = PointLifter(*calibration);
+	};
 
-    m_calibration = calibration.homography();
-	PointLifter::s_sharedInstance = PointLifter(calibration);
+	if (config::oldCalib) {
+		Calibration calibration(canvas());
+		transparentCalib(&calibration);
+	} else {
+		ManualCornerCalibration calibration(canvas());
+		transparentCalib(&calibration);
+	}
 }
 
 laser::CanvasPtr laser::Painter::canvas()

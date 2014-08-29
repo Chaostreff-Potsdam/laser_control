@@ -7,6 +7,7 @@ bool forceRecalibration = false;
 bool useVirtualLaser = false;
 bool displayTests = false;
 bool testServer = false;
+bool oldCalib = false;
 
 void readCommandLine(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ void readCommandLine(int argc, char *argv[])
 		useVirtualLaser    |= !strncmp("--virtual", argv[i], 9);
 		displayTests       |= !strncmp("--tests", argv[i], 7);
 		testServer         |= !strncmp("--test-server", argv[i], 13);
+		oldCalib           |= !strncmp("--old-calib", argv[i], 11);
 	}
 }
 

@@ -34,3 +34,8 @@ std::vector<cv::Point2f> CalibrationRectangle::corners() const
 		result.emplace_back(p.x, p.y);
 	return result;
 }
+
+void CalibrationRectangle::setCorner(int index, const Point &p)
+{
+	m_corners[index] = p;
+}
