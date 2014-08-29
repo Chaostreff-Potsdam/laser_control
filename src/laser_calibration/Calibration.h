@@ -1,29 +1,25 @@
 #pragma once
 
-#include <memory>
-
-#include "CalibrationRectangle.h"
+#include "AbstractCalibration.h"
 
 namespace laser {
 
-class EXPORT_LASER_CONTROL Calibration
+class EXPORT_LASER_CONTROL Calibration: public AbstractCalibration
 {
 public:
-	Calibration(CanvasPtr wrapper);
+	Calibration(const CanvasPtr & canvas);
 
-    void start();
-    cv::Mat homography();
-	cv::Mat inverseHomography();
+protected:
+	virtual const char *configFileName()
+	{ return "manualcornercalib.yml"; }
 
-	const CalibrationRectangle & rect() const
-	{ return m_rect; }
+	virtual void repaint();
+
+	void showOptions();
+	void loadOptions(cv::FileStorage &fs);
+	void saveOptions(cv::FileStorage &fs);
 
 private:
-	bool alreadyCalibrated();
-	void saveCalibration();
-	void repaint();
-	void computeHomography();
-
 	int m_scale;
 	int m_xScale;
 	int m_yScale;
@@ -33,11 +29,6 @@ private:
 	int m_xShift;
 	int m_yShift;
 	int m_rotation;
-
-	CalibrationRectangle m_rect;
-	CanvasPtr m_etherdream;
-	cv::Mat m_homography;
-	cv::Mat m_inverseHomography;
 };
 
 }
