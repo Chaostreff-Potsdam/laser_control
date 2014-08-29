@@ -52,7 +52,7 @@ static void calculateRectangleCharacteristics(Point p1, Point p2, float &angle, 
 	end   = mid + Point(0, length / 2);
 }
 
-static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Point(0, 0))
+static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Point(0, 0), double rotation = 0.0)
 {
 	unsigned int id = root.get("turkers",
 								Json::Value())
@@ -62,6 +62,7 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 	assert(id < opts::number_points.size());
 	ObjectPtr polygon = std::make_shared<Polygon>(opts::number_points[id], false, false, false);
 	polygon->setColor(MetaDataColor);
+	polygon->rotate(rotation);
 	polygon->move(p);
 	return polygon;
 }
@@ -241,6 +242,18 @@ ObjectPtr InstructionFactory::PortalActive(const Json::Value &root, Point p1, Po
 ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
+	const Point midaxis(p2 - p1);
+	const Point direction = midaxis.norm();
+	const Point perpendic = direction.perpendicular();
+
+	// Need 5 turkers
+	auto addTurkerDigit = [&](const int index, const Point & pos) {
+		group->add(getDigit(root, index, pos, direction.angle()));
+	};
+
+	addTurkerDigit(0, p1 - direction.norm() * (opts::ZipLineOuterCircle + opts::Number0Right) - perpendic * opts::Number0Bottom);
+	addTurkerDigit(1, p1 - direction.norm() * (opts::ZipLineOuterCircle + opts::Number0Right));
+
 	group->add(new Circle(p1, opts::ZipLineOuterCircle));
 	group->add(new Circle(p1, opts::ZipLineInnerCircle));
 
@@ -248,6 +261,11 @@ ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p
 
 	group->add(new Circle(p2, opts::ZipLineInnerCircle));
 	group->add(new Circle(p2, opts::ZipLineOuterCircle));
+
+	addTurkerDigit(2, p2 + direction.norm() * opts::ZipLineOuterCircle - perpendic * opts::Number0Bottom);
+	addTurkerDigit(3, p2 + direction.norm() * opts::ZipLineOuterCircle);
+
+	addTurkerDigit(4, p1 + midaxis * 0.5);
 
 	return group;
 }
@@ -275,6 +293,8 @@ ObjectPtr InstructionFactory::ZiplineWithStep(const Json::Value &root, Point p1,
 	const Point indicatorLine = p1 + toP3 + toP3.norm() * opts::IndicatorDistance;
 	group->add(MovingIndicator(indicatorLine + direction * 0.25, direction.angle()));
 	group->add(MovingIndicator(indicatorLine + direction * 0.75, direction.angle()));
+
+	// No digit here. Let the guy with the horizontal stick think he is in charge
 
 	return group;
 }
@@ -493,6 +513,9 @@ ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point
 
 ObjectPtr InstructionFactory::BlueprintWall(const Json::Value &root, Point p1, Point p2)
 {
+	// No turker for this one
+	(void)root;
+
 	Point start = p1 + (p2 - p1) / 10;
 	Point end   = p2 + (p1 - p2) / 10;
 
@@ -508,7 +531,7 @@ ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p
 {
 	int normalX = root.get("direction", Json::Value()).get("x", Json::Value()).asInt();
 	int normalY = root.get("direction", Json::Value()).get("y", Json::Value()).asInt();
-	int countdown = root.get("countdown", Json::Value(5000)).asInt();
+//	int countdown = root.get("countdown", Json::Value(5000)).asInt();
 	Point arrowTop = (p1 + p2) / 2 + Point(normalX, normalY).norm() * 1000;
 	Point arrowEnd = arrowTop
 					 - Point(normalX, normalY).norm() * 500

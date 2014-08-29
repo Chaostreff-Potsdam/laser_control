@@ -71,6 +71,12 @@ static const PointLUT number_points =
 	Point(1320, 1355), Point(1542, 1247), Point(1670, 1037), Point(1708, 893)}
 };
 
+static const double assumedNumberWidth = 933.0;
+static const double assumedNumberHeight = 1709.0;
+
+static const double Number0Right = 1716;
+static const double Number0Bottom = 2103;
+
 static const double IndicatorWidth = 700;
 static const double IndicatorHeight = 750;
 static const double IndicatorDistance = 850;
