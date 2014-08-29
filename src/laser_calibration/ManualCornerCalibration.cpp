@@ -95,7 +95,6 @@ void ManualCornerCalibration::repaint()
 	memcpy(m_corners[m_currentCorner].xVals, m_currentXVals, sizeof(m_currentXVals));
 	memcpy(m_corners[m_currentCorner].yVals, m_currentYVals, sizeof(m_currentYVals));
 
-	std::cerr << "repaint " << m_corners[m_currentCorner] << std::endl;
 	m_rect.setCorner(m_currentCorner, m_corners[m_currentCorner]);
 
 	AbstractCalibration::repaint();
