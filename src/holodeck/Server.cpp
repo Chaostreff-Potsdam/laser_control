@@ -57,11 +57,11 @@ Server::Server(Painter &painter, bool deferStart)
 :	m_painter(painter),
 	m_jsonreader(),
 	m_socket(m_ioService),
-	m_localEndpoint(basioip::udp::v4(), 30000),
+	m_localEndpoint(basioip::udp::v4(), 30001),
 	m_senderEndpoint(basioip::address::from_string(laser::config::testServer ?
 													   "127.0.0.1"
 													 : "192.168.1.148"),
-					 30000)
+					 30001)
 {
 	m_socket.open(boost::asio::ip::udp::v4());
 	m_socket.bind(m_localEndpoint);
