@@ -39,7 +39,7 @@ void sortObjects(std::vector<ObjectPtr> & objects)
 	for (int i = 1; i < sz - 1; ++i) {
 		ObjIter targetSlot = objects.begin() + i;
 
-		ObjIter nextObject = std::min(targetSlot, objects.end(),
+		ObjIter nextObject = std::min(targetSlot, objects.end() - 1,
 				 [&](const ObjIter a, const ObjIter b) {
 					return distanceBetween(lastPoint, *a) <	distanceBetween(lastPoint, *b);
 				});

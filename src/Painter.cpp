@@ -5,6 +5,7 @@
 #include "laser_calibration/ManualCornerCalibration.h"
 #include "laser_calibration/PointLifter.h"
 #include "Transform.h"
+#include "ObjectSorting.h"
 
 #include <utility>
 #include <algorithm>
@@ -165,13 +166,23 @@ void laser::Painter::updatePoints()
 	{
 		std::lock_guard<std::mutex> lock(m_objectsMutex);
 
+
 		if (m_expireObjects) {
 			removeExpiredObjects();
 		}
 
-		for (auto & objPair: m_objects) {
-			// objPair.second->tick();
-			appendToVector(ps, objPair.second->pointsToPaint());
+		std::vector<ObjectPtr> objects;
+
+		for (auto &objPair : m_objects)
+		{
+			objects.push_back(objPair.second);
+		}
+
+		sortObjects(objects);
+
+		for (auto & obj: objects) {
+			// obj->tick();
+			appendToVector(ps, obj->pointsToPaint());
 		}
 	}
 
