@@ -41,6 +41,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 
 	Line startLine(*start, *(start + 1), true, m_dashed);
 	startLine.setColor(m_color);
+	startLine.setPixelsPerPoint(pixelsPerPoint());
 	append       (startLine.points());
 	appendIfSharp(startLine.endPoints());
 
@@ -48,6 +49,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 	{
 		Line con(*it, *(it + 1), true, m_dashed);
 		con.setColor(m_color);
+		con.setPixelsPerPoint(pixelsPerPoint());
 		appendIfSharp(con.startPoints());
 		append       (con.points());
 		appendIfSharp(con.endPoints());
@@ -57,6 +59,7 @@ laser::EtherdreamPoints laser::Polygon::points() const
 	{
 		Line endLine(*(end - 1), *start, true, m_dashed);
 		endLine.setColor(m_color);
+		endLine.setPixelsPerPoint(pixelsPerPoint());
 		appendIfSharp(endLine.startPoints());
 		append       (endLine.points());
 	}
@@ -66,13 +69,23 @@ laser::EtherdreamPoints laser::Polygon::points() const
 
 laser::EtherdreamPoints laser::Polygon::startPoints() const
 {
-	return Line(m_corners[0], m_corners[1]).startPoints();
+	Line startLine(m_corners[0], m_corners[1]);
+	startLine.setPixelsPerPoint(pixelsPerPoint());
+	return startLine;
 }
 
 laser::EtherdreamPoints laser::Polygon::endPoints() const
 {
 	if (m_closed)
-		return Line(m_corners.back(), m_corners.front()).endPoints();
+	{
+		Line endLine(m_corners.back(), m_corners.front());
+		endLine.setPixelsPerPoint(pixelsPerPoint());
+		return endLine;
+	}
 	else
-		return Line(*(m_corners.end() - 2), *(m_corners.end() - 1)).endPoints();
+	{
+		Line endLine(*(m_corners.end() - 2), *(m_corners.end() - 1));
+		endLine.setPixelsPerPoint(pixelsPerPoint());
+		return endLine;
+	}
 }
