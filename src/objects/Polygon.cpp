@@ -71,7 +71,7 @@ laser::EtherdreamPoints laser::Polygon::startPoints() const
 {
 	Line startLine(m_corners[0], m_corners[1]);
 	startLine.setPixelsPerPoint(pixelsPerPoint());
-	return startLine;
+	return startLine.startPoints();
 }
 
 laser::EtherdreamPoints laser::Polygon::endPoints() const
@@ -80,12 +80,12 @@ laser::EtherdreamPoints laser::Polygon::endPoints() const
 	{
 		Line endLine(m_corners.back(), m_corners.front());
 		endLine.setPixelsPerPoint(pixelsPerPoint());
-		return endLine;
+		return endLine.endPoints();
 	}
 	else
 	{
 		Line endLine(*(m_corners.end() - 2), *(m_corners.end() - 1));
 		endLine.setPixelsPerPoint(pixelsPerPoint());
-		return endLine;
+		return endLine.endPoints();
 	}
 }
