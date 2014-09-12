@@ -64,6 +64,7 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 	polygon->setColor(MetaDataColor);
 	polygon->rotate(rotation);
 	polygon->move(p);
+	polygon->setPixelsPerPoint(50);
 	return polygon;
 }
 
