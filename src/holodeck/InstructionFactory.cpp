@@ -59,13 +59,13 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 						  .get(i,
 								Json::Value())
 						  .asUInt();
-	assert(id < opts::number_points.size());
-	ObjectPtr polygon = std::make_shared<Polygon>(opts::number_points[id], false, false, false);
-	polygon->setColor(MetaDataColor);
-	polygon->rotate(rotation);
-	polygon->move(p);
-	polygon->setPixelsPerPoint(50);
-	return polygon;
+	CompositeObjectPtr digit = opts::getDigit(id);
+	digit->rotate(rotation, Point(250, 500));
+	digit->scale(-1, 1);
+	digit->move(1000, 0);
+	digit->move(p);
+	digit->setColor(MetaDataColor);
+	return digit;
 }
 
 static ObjectPtr MovingIndicator(const Point & p1, double angle)
