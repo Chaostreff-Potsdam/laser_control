@@ -68,7 +68,7 @@ if __name__ == "__main__":
 	import sys
 	if sys.flags.inspect:
 		host = sys.argv[1] if len(sys.argv) > 1 else "localhost"
-		port = int(sys.argv[2]) if len(sys.argv) > 2 else 30000
+		port = int(sys.argv[2]) if len(sys.argv) > 2 else 30001
 		interact(host, port)
 	else:
 		print("Execute with \"python -i %s [host [port]]\"" % sys.argv[0])

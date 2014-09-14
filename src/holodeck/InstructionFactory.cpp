@@ -122,11 +122,13 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 
 	Point p1p2 = p2 - p1;
 	ObjectPtr turkerId = getDigit(root, 0);
-	turkerId->rotate(alpha);
-	turkerId->move(midPoint - p1p2 / 2);
-	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	if(turkerId){
+		turkerId->rotate(alpha);
+		turkerId->move(midPoint - p1p2 / 2);
+		turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
 
-	group->add(turkerId);
+		group->add(turkerId);
+	}
 
 	return group;
 }
@@ -157,7 +159,9 @@ ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2,
 	CompositeObjectPtr group = CompositeObject::construct();
 	const Point center = (p1 + p2 + p3 + p4) * 0.25;
 	group->add(new Rectangle(p1, p2, p3, p4, false));
-	group->add(getDigit(root, 0, center));
+
+	ObjectPtr turkerId = getDigit(root, 0, center);
+	if(turkerId) group->add(turkerId);
 
 	return group;
 }
@@ -180,7 +184,8 @@ ObjectPtr InstructionFactory::Switch(const Json::Value &root, Point p1, Point p2
 	Point stickDirection(p2 - p1);
 	Point attachmentPoint = p2 - stickDirection.norm() * opts::SwitchHandleSize;
 	group->add(new Line(p1, attachmentPoint));
-	group->add(getDigit(root, 0, p1 + stickDirection / 2, stickDirection.angle()));
+	ObjectPtr turkerId = getDigit(root, 0, p1 + stickDirection / 2, stickDirection.angle());
+	if(turkerId)group->add(turkerId);
 
 	return group;
 }
@@ -206,7 +211,9 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 	bigRect->rotate(alpha-M_PI_2, midPoint);
 	group->add(bigRect);
 
-	group->add(getDigit(root, 0, midPoint + dir.norm().perpendicular() * 1000, dir.angle()));
+
+	ObjectPtr turkerId = getDigit(root, 0, midPoint + dir.norm().perpendicular() * 1000, dir.angle());
+	if(turkerId) group->add(turkerId);
 
 	return group;
 }
@@ -255,7 +262,8 @@ ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p
 
 	// Need 5 turkers
 	auto addTurkerDigit = [&](const int index, const Point & pos) {
-		group->add(getDigit(root, index, pos, direction.angle()));
+		ObjectPtr turkerId = getDigit(root, index, pos, direction.angle());
+		if(turkerId) group->add(turkerId);
 	};
 
 	addTurkerDigit(0, p1 - direction.norm() * (opts::ZipLineOuterCircle + opts::Number0Right) - perpendic * opts::Number0Bottom);
@@ -328,7 +336,9 @@ ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point 
 	Point upperArm(ellbow - armStart);
 	Point armShift(armWidth, 0);
 
-	corpse->add(getDigit(root, 0, Point(0, -spine * 0.3)));
+
+	ObjectPtr turkerId = getDigit(root, 0, Point(0, -spine * 0.3));
+	if(turkerId) corpse->add(turkerId);
 
 	ObjectPtr body(new Circle(0, 0, spine, M_PI));
 	body->scale(bodyAspectRatio, 1.0);
@@ -508,11 +518,11 @@ ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point
 
 	Point p1p2 = p2 - p1;
 	ObjectPtr turkerId = getDigit(root, 0);
-
-	turkerId->rotate(alpha);
-	turkerId->move(midPoint - p1p2 / 2);
-
-	turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	if(turkerId){
+		turkerId->rotate(alpha);
+		turkerId->move(midPoint - p1p2 / 2);
+		turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+	}
 	group->add(turkerId);
 	group->add(new Rectangle(p1, p2, p3, p4, false));
 	return group;
@@ -568,7 +578,7 @@ ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(new /*long*/ Line(p1, p2));
-	Point end = p2 + (p1 - p2).norm() * 1000;
+	Point end = p2 + (p1 - p2)/3;
 	Line* shortLine = new Line(p2, end);
 	shortLine->rotate(30.0f/180.0f*M_PI, p2);
 	group->add(shortLine);
