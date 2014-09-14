@@ -567,14 +567,16 @@ ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p
 ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
-	Point tip = p1 + (p2 - p1).norm() * 1000;
-	group->add(new /*long*/ Line(p1, tip));
-	Point end = tip + (p1 - tip).norm() * 500;
-	Line* shortLine = new Line(tip, end);
-	shortLine->rotate(30.0f/180.0f*M_PI, tip);
+	group->add(new /*long*/ Line(p1, p2));
+	Point end = p2 + (p1 - p2).norm() * 1000;
+	Line* shortLine = new Line(p2, end);
+	shortLine->rotate(30.0f/180.0f*M_PI, p2);
 	group->add(shortLine);
 	std::chrono::milliseconds blinkfrequency;
 	switch (freq) {
+	case NO:
+		blinkfrequency = std::chrono::hours(24);
+		break;
 	case LOW:
 		blinkfrequency = std::chrono::milliseconds(1000);
 		break;
@@ -610,6 +612,11 @@ ObjectPtr InstructionFactory::MoveTurkerMidFreq(const Json::Value &root, Point p
 ObjectPtr InstructionFactory::MoveTurkerHighFreq(const Json::Value &root, Point p1, Point p2)
 {
 	return MoveTurker(HIGH, p1, p2);
+}
+
+ObjectPtr InstructionFactory::MoveTurkerNoFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveTurker(NO, p1, p2);
 }
 
 }} // namespace laser::holodeck

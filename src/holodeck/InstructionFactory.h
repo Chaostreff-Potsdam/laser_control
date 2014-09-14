@@ -11,6 +11,7 @@ extern const Color MetaDataColor;
 namespace InstructionFactory {
 	enum BlinkFrequency
 	{
+		NO,
 		LOW,
 		MEDIUM,
 		HIGH
@@ -38,6 +39,7 @@ namespace InstructionFactory {
 	ObjectPtr MovingWallWarning(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr ZiplineWithStep(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
 	ObjectPtr MoveTurker(BlinkFrequency freq, Point p1, Point p2);
+	ObjectPtr MoveTurkerNoFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveTurkerLowFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveTurkerMidFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveTurkerHighFreq(const Json::Value &root, Point p1, Point p2);
