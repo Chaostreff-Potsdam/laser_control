@@ -619,4 +619,143 @@ ObjectPtr InstructionFactory::MoveTurkerNoFreq(const Json::Value &root, Point p1
 	return MoveTurker(NO, p1, p2);
 }
 
+ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, Point p2)
+{
+	Point p1p2 = p2 - p1;
+	double distance = p1p2.abs();
+	double radius = distance / M_SQRT2;
+	//std::cout << radius << std::endl;
+	Point halfway = (p1 + p2) / 2.0f;
+	//std:std::cout << halfway << std::endl;
+	Point center = halfway + p1p2.perpendicular().norm() * sqrt(sqr(radius) - sqr(distance/2));
+	//std:std::cout << center << std::endl;
+	double startAngle = (p1 - center).angle();
+	//std:std::cout << startAngle << std::endl;
+	double endAngle = (p2 - center).angle() + 2*M_PI;
+	//std:std::cout << endAngle << std::endl;
+	Point arrowEnd = p2 + (p2 - center) / 3.0f;
+
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(new Circle(center, radius, startAngle, endAngle));
+	Line* shortLine = new Line(p2, arrowEnd);
+	shortLine->rotate(-60.0f/180.0f*M_PI, p2);
+	group->add(shortLine);
+	std::chrono::milliseconds blinkfrequency;
+	switch (freq) {
+	case NO:
+		blinkfrequency = std::chrono::hours(24);
+		break;
+	case LOW:
+		blinkfrequency = std::chrono::milliseconds(1000);
+		break;
+	case MEDIUM:
+		blinkfrequency = std::chrono::milliseconds(500);
+		break;
+	case HIGH:
+		blinkfrequency = std::chrono::milliseconds(100);
+		break;
+	default:
+		break;
+	}
+	group->addAnimation([] (Object* me)
+	{
+		static bool visible = false;
+		visible = !visible;
+		me->setVisible(visible);
+	}, blinkfrequency);
+
+	return group;
+}
+
+ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Point p1, Point p2)
+{
+	Point p1p2 = p2 - p1;
+	double distance = p1p2.abs();
+	double radius = distance / M_SQRT2;
+	//std::cout << radius << std::endl;
+	Point halfway = (p1 + p2) / 2.0f;
+	//std:std::cout << halfway << std::endl;
+	Point center = halfway - p1p2.perpendicular().norm() * sqrt(sqr(radius) - sqr(distance/2));
+	//std:std::cout << center << std::endl;
+	double startAngle = (p1 - center).angle();
+	//std:std::cout << startAngle << std::endl;
+	double endAngle = (p2 - center).angle();
+	//std:std::cout << endAngle << std::endl;
+	Point arrowEnd = p2 + (p2 - center) / 3.0f;
+
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(new Circle(center, radius, endAngle, startAngle));
+	Line* shortLine = new Line(p2, arrowEnd);
+	shortLine->rotate(60.0f/180.0f*M_PI, p2);
+	group->add(shortLine);
+	std::chrono::milliseconds blinkfrequency;
+	switch (freq) {
+	case NO:
+		blinkfrequency = std::chrono::hours(24);
+		break;
+	case LOW:
+		blinkfrequency = std::chrono::milliseconds(1000);
+		break;
+	case MEDIUM:
+		blinkfrequency = std::chrono::milliseconds(500);
+		break;
+	case HIGH:
+		blinkfrequency = std::chrono::milliseconds(100);
+		break;
+	default:
+		break;
+	}
+	group->addAnimation([] (Object* me)
+	{
+		static bool visible = false;
+		visible = !visible;
+		me->setVisible(visible);
+	}, blinkfrequency);
+
+	return group;
+}
+
+ObjectPtr InstructionFactory::MoveDoorClockwiseNoFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorClockwise(NO, p1, p2);
+}
+
+ObjectPtr InstructionFactory::MoveDoorClockwiseLowFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorClockwise(LOW, p1, p2);
+}
+
+ObjectPtr InstructionFactory::MoveDoorClockwiseMidFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorClockwise(MEDIUM, p1, p2);
+}
+
+ObjectPtr InstructionFactory::MoveDoorClockwiseHighFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorClockwise(HIGH, p1, p2);
+}
+
+ObjectPtr InstructionFactory::MoveDoorCounterClockwiseNoFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorCounterClockwise(NO, p1, p2);
+
+}
+
+ObjectPtr InstructionFactory::MoveDoorCounterClockwiseLowFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorCounterClockwise(LOW, p1, p2);
+
+}
+
+ObjectPtr InstructionFactory::MoveDoorCounterClockwiseMidFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorCounterClockwise(MEDIUM, p1, p2);
+
+}
+
+ObjectPtr InstructionFactory::MoveDoorCounterClockwiseHighFreq(const Json::Value &root, Point p1, Point p2)
+{
+	return MoveDoorCounterClockwise(HIGH, p1, p2);
+}
+
 }} // namespace laser::holodeck

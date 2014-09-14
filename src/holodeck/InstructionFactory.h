@@ -43,7 +43,16 @@ namespace InstructionFactory {
 	ObjectPtr MoveTurkerLowFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveTurkerMidFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveTurkerHighFreq(const Json::Value &root, Point p1, Point p2);
-
+	ObjectPtr MoveDoorClockwiseNoFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorClockwiseLowFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorClockwiseMidFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorClockwiseHighFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorCounterClockwiseNoFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorCounterClockwiseLowFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorCounterClockwiseMidFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorCounterClockwiseHighFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveDoorClockwise(BlinkFrequency freq, Point p1, Point p2);
+	ObjectPtr MoveDoorCounterClockwise(BlinkFrequency freq, Point p1, Point p2);
 }
 
 }} // namespace laser::holodeck
