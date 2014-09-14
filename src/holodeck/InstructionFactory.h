@@ -9,6 +9,13 @@ namespace laser { namespace holodeck {
 extern const Color MetaDataColor;
 
 namespace InstructionFactory {
+	enum BlinkFrequency
+	{
+		LOW,
+		MEDIUM,
+		HIGH
+	};
+
 	ObjectPtr Wall(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Door(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr Table(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
@@ -30,6 +37,11 @@ namespace InstructionFactory {
 	ObjectPtr BlueprintWall(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MovingWallWarning(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr ZiplineWithStep(const Json::Value &root, Point p1, Point p2, Point p3, Point p4);
+	ObjectPtr MoveTurker(BlinkFrequency freq, Point p1, Point p2);
+	ObjectPtr MoveTurkerLowFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveTurkerMidFreq(const Json::Value &root, Point p1, Point p2);
+	ObjectPtr MoveTurkerHighFreq(const Json::Value &root, Point p1, Point p2);
+
 }
 
 }} // namespace laser::holodeck

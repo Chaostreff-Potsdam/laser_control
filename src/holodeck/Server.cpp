@@ -48,7 +48,10 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(Guardrail, 4),
 	HANDLE_OBJECT(BlueprintWall, 2),
 	HANDLE_OBJECT(MovingWallWarning, 2),
-	HANDLE_OBJECT(ZiplineWithStep, 4)
+	HANDLE_OBJECT(ZiplineWithStep, 4),
+	HANDLE_OBJECT(MoveTurkerLowFreq, 2),
+	HANDLE_OBJECT(MoveTurkerMidFreq, 2),
+	HANDLE_OBJECT(MoveTurkerHighFreq, 2),
 };
 
 namespace basioip = boost::asio::ip;
