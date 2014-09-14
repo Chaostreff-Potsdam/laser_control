@@ -54,7 +54,7 @@ void Application::showLaserOptions()
 	cv::namedWindow("Laser options");
 	addOption("fps",  &EtherdreamWrapper::framesPerSecond, 60);
 	addOption("pixel per second",  &EtherdreamWrapper::pps, 90000);
-	addOption("pixel per point",  &Object::s_pixelsPerPointDefault, 1000);
+	addOption("pixel per point",  &Object::s_pixelsPerPointDefault, 2000);
 	addOption("margin %",  &Object::s_marginPointFractionDefault, 200);
 }
 

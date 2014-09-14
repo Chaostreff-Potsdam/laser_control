@@ -4,8 +4,8 @@
 
 namespace laser { namespace holodeck { namespace opts {
 
-#define LASER_HOLODECK_OPTS_FULL (1000)
-#define LASER_HOLODECK_OPTS_HALF (500)
+#define LASER_HOLODECK_OPTS_FULL (3000)
+#define LASER_HOLODECK_OPTS_HALF (1500)
 
 static CompositeObjectPtr getZero()
 {
@@ -187,7 +187,7 @@ CompositeObjectPtr getDigit(unsigned int digit)
 		return getNine();
 		break;
 	default:
-		return getZero();
+		return 0;
 		break;
 	}
 }
