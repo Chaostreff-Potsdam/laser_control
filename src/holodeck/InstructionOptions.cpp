@@ -1,7 +1,6 @@
 #include "InstructionOptions.h"
 #include "../objects/CompositeObject.h"
 #include "../objects/Line.h"
-#include "../objects/Polygon.h"
 
 namespace laser { namespace holodeck { namespace opts {
 
@@ -19,14 +18,12 @@ static CompositeObjectPtr getZero()
 	 * |=====|
 	 * L-----J
 	 */
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(0, 0)
-	};
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false));
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
+	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, 0)));
+	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(0, 0)));
+	group->add(std::make_shared<Line>(Point(0, 0), Point(0, LASER_HOLODECK_OPTS_FULL)));
+	return group;
 }
 
 static CompositeObjectPtr getOne()
@@ -40,12 +37,9 @@ static CompositeObjectPtr getOne()
 	 * |    I|
 	 * L-----J
 	 */
-	std::vector<Point> points
-	{
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-	};
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
+	return group;
 }
 
 static CompositeObjectPtr getTwo()
@@ -59,16 +53,13 @@ static CompositeObjectPtr getTwo()
 	 * |=====|
 	 * L-----J
 	 */
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(0, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, 0)
-	};
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	CompositeObjectPtr group = CompositeObject::construct();
+	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
+	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
+	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF), Point(0, LASER_HOLODECK_OPTS_HALF)));
+	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(0, 0)));
+	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
+	return group;
 }
 
 static CompositeObjectPtr getThree()
@@ -82,22 +73,12 @@ static CompositeObjectPtr getThree()
 	 * |=====|
 	 * L-----J
 	 */
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(0, 0)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getFour()
@@ -111,88 +92,45 @@ static CompositeObjectPtr getFour()
 	 * |    I|
 	 * L-----J
 	 */
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, 0)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, 0)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getFive()
 {
-	std::vector<Point> points
-	{
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(0, 0)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(0, 0)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getSix()
 {
-	std::vector<Point> points
-	{
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(0, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(0, LASER_HOLODECK_OPTS_HALF)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(0, 0)));
 	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF), Point(0, LASER_HOLODECK_OPTS_HALF)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getSeven()
 {
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, 0)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, 0)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getEight()
 {
-	std::vector<Point> points
-	{
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(0, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(0, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
@@ -201,27 +139,18 @@ static CompositeObjectPtr getEight()
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(0, 0)));
 	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 static CompositeObjectPtr getNine()
 {
-	std::vector<Point> points
-	{
-		Point(0, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, 0),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_FULL),
-		Point(0, LASER_HOLODECK_OPTS_HALF),
-		Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)
-	};
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(0, LASER_HOLODECK_OPTS_HALF)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
-	return CompositeObject::construct(std::make_shared<Polygon>(points, false, false, false));
+	return group;
 }
 
 CompositeObjectPtr getDigit(unsigned int digit)
