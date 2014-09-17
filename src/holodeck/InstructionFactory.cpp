@@ -637,13 +637,17 @@ ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, P
 	double radius = distance / M_SQRT2;
 	//std::cout << radius << std::endl;
 	Point halfway = (p1 + p2) / 2.0f;
-	//std:std::cout << halfway << std::endl;
+	//ststd::cout << halfway << std::endl;
 	Point center = halfway + p1p2.perpendicular().norm() * sqrt(sqr(radius) - sqr(distance/2));
-	//std:std::cout << center << std::endl;
+	//ststd::cout << center << std::endl;
 	double startAngle = (p1 - center).angle();
-	//std:std::cout << startAngle << std::endl;
-	double endAngle = (p2 - center).angle() + 2*M_PI;
-	//std:std::cout << endAngle << std::endl;
+	//ststd::cout << startAngle << std::endl;
+	double endAngle = (p2 - center).angle();
+	if (endAngle < startAngle)
+	{
+		endAngle += 2*M_PI;
+	}
+	//ststd::cout << endAngle << std::endl;
 	Point arrowEnd = p2 + (p2 - center) / 3.0f;
 
 	CompositeObjectPtr group = CompositeObject::construct();
@@ -653,9 +657,6 @@ ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, P
 	group->add(shortLine);
 	std::chrono::milliseconds blinkfrequency;
 	switch (freq) {
-	case NO:
-		blinkfrequency = std::chrono::hours(24);
-		break;
 	case LOW:
 		blinkfrequency = std::chrono::milliseconds(1000);
 		break;
@@ -695,6 +696,10 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Poin
 	double startAngle = (p1 - center).angle();
 	//std:std::cout << startAngle << std::endl;
 	double endAngle = (p2 - center).angle();
+	if (endAngle < startAngle)
+	{
+		endAngle += 2*M_PI;
+	}
 	//std:std::cout << endAngle << std::endl;
 	Point arrowEnd = p2 + (p2 - center) / 3.0f;
 
@@ -705,9 +710,6 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Poin
 	group->add(shortLine);
 	std::chrono::milliseconds blinkfrequency;
 	switch (freq) {
-	case NO:
-		blinkfrequency = std::chrono::hours(24);
-		break;
 	case LOW:
 		blinkfrequency = std::chrono::milliseconds(1000);
 		break;
