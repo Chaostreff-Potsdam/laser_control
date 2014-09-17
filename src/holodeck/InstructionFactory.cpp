@@ -584,9 +584,6 @@ ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2
 	group->add(shortLine);
 	std::chrono::milliseconds blinkfrequency;
 	switch (freq) {
-	case NO:
-		blinkfrequency = std::chrono::hours(24);
-		break;
 	case LOW:
 		blinkfrequency = std::chrono::milliseconds(1000);
 		break;
@@ -599,12 +596,16 @@ ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2
 	default:
 		break;
 	}
-	group->addAnimation([] (Object* me)
+
+	if (freq != NO)
 	{
-		static bool visible = false;
-		visible = !visible;
-		me->setVisible(visible);
-	}, blinkfrequency);
+			group->addAnimation([] (Object* me)
+			{
+				static bool visible = false;
+				visible = !visible;
+				me->setVisible(visible);
+			}, blinkfrequency);
+	}
 
 	return group;
 }
@@ -667,12 +668,16 @@ ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, P
 	default:
 		break;
 	}
-	group->addAnimation([] (Object* me)
+
+	if (freq != NO)
 	{
-		static bool visible = false;
-		visible = !visible;
-		me->setVisible(visible);
-	}, blinkfrequency);
+			group->addAnimation([] (Object* me)
+			{
+				static bool visible = false;
+				visible = !visible;
+				me->setVisible(visible);
+			}, blinkfrequency);
+	}
 
 	return group;
 }
@@ -715,12 +720,16 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Poin
 	default:
 		break;
 	}
-	group->addAnimation([] (Object* me)
+
+	if (freq != NO)
 	{
-		static bool visible = false;
-		visible = !visible;
-		me->setVisible(visible);
-	}, blinkfrequency);
+			group->addAnimation([] (Object* me)
+			{
+				static bool visible = false;
+				visible = !visible;
+				me->setVisible(visible);
+			}, blinkfrequency);
+	}
 
 	return group;
 }
