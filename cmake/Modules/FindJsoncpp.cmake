@@ -10,12 +10,17 @@ include(LibFindMacros)
 # Use pkg-config to get hints about paths
 libfind_pkg_check_modules(Jsoncpp_PKGCONF jsoncpp)
 
+IF(APPLE)
+# Screw it, pkg config gives the right path, but find_path destroys it.
+SET(Jsoncpp_INCLUDE_DIR ${Jsoncpp_PKGCONF_INCLUDE_DIRS})
+ELSE(APPLE)
 # Include dir
 find_path(Jsoncpp_INCLUDE_DIR
   NAMES json/features.h
   PATH_SUFFIXES jsoncpp
   PATHS ${Jsoncpp_PKGCONF_INCLUDE_DIRS} # /usr/include/jsoncpp/json
 )
+ENDIF(APPLE)
 
 # Finally the library itself
 find_library(Jsoncpp_LIBRARY
