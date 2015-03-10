@@ -1,10 +1,10 @@
 #pragma once
 
-#include "AbstractCalibration.h"
+#include "PlanarCalibration.h"
 
 namespace laser {
 
-class EXPORT_LASER_CONTROL Calibration: public AbstractCalibration
+class EXPORT_LASER_CONTROL Calibration: public PlanarCalibration
 {
 public:
 	Calibration(const CanvasPtr & canvas);

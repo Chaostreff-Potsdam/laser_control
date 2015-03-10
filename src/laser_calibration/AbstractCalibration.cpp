@@ -1,8 +1,6 @@
 #include "AbstractCalibration.h"
 #include "../Config.h"
 
-#include <vector>
-#include <opencv2/calib3d/calib3d.hpp>
 #include <opencv/highgui.h>
 
 namespace laser {
@@ -11,42 +9,14 @@ const AbstractCalibration::UpdateCallback AbstractCalibration::repaintCallback
 	= [](int, void *t){static_cast<AbstractCalibration *>(t)->repaint();};
 
 AbstractCalibration::AbstractCalibration(const CanvasPtr &canvas) :
-	m_canvas(canvas),
-	m_homography(0, 0, CV_8UC1, nullptr)
+	m_canvas(canvas)
 {
 	;;
 }
 
-cv::Mat AbstractCalibration::homography()
-{
-	if (m_homography.empty())
-		computeHomography();
-
-	return m_homography;
-}
-
-cv::Mat AbstractCalibration::inverseHomography()
-{
-	if (m_inverseHomography.empty()) {
-		m_inverseHomography = homography().inv();
-	}
-
-	return m_inverseHomography;
-}
-
-void AbstractCalibration::computeHomography()
-{
-	std::vector<cv::Point2f> dst = m_rect.corners();
-	std::vector<cv::Point2f> src;
-	for (const auto & p: m_rect.undistoredCorners())
-		src.emplace_back(p.x(), p.y());
-
-	m_homography = cv::findHomography(src, dst);
-}
-
 void AbstractCalibration::repaint()
 {
-	m_canvas->setPoints(m_rect.pointsToPaint());
+	m_canvas->setPoints(pointsToPaint());
 	m_canvas->writePoints();
 }
 
@@ -59,10 +29,10 @@ bool AbstractCalibration::alreadyCalibrated()
 
 	loadOptions(fs);
 
-	if (config::forceRecalibration || fs["homography"].empty())
+	if (config::forceRecalibration || fs[configKeyName()].empty())
 		return false;
 
-	fs["homography"] >> m_homography;
+	readCalibFrom(fs);
 	std::cout << "Found " << configFileName() << " file. Skipping calibration." << std::endl;
 	return true;
 }
@@ -70,7 +40,7 @@ bool AbstractCalibration::alreadyCalibrated()
 void AbstractCalibration::saveCalibration()
 {
 	cv::FileStorage fs(configFileName(), cv::FileStorage::WRITE);
-	fs << "homography" << m_homography;
+	writeCalibTo(fs);
 	saveOptions(fs);
 }
 
@@ -85,7 +55,7 @@ void AbstractCalibration::start()
 	cv::waitKey();
 	cv::destroyWindow("Calibration");
 
-	computeHomography();
+	compute();
 	saveCalibration();
 }
 

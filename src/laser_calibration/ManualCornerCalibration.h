@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AbstractCalibration.h"
+#include "PlanarCalibration.h"
 
 #define LASER_MAN_CORNER_CALIB_COUNT 3
 
@@ -10,7 +10,7 @@ namespace laser {
  * Pick one corner point, shift it around by 3 0-31 pixel positions, since 32**3 = INT16_MAX
  */
 
-class EXPORT_LASER_CONTROL ManualCornerCalibration: public AbstractCalibration
+class EXPORT_LASER_CONTROL ManualCornerCalibration: public PlanarCalibration
 {
 public:
 	typedef int Levels[LASER_MAN_CORNER_CALIB_COUNT];

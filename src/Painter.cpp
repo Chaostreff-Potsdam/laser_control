@@ -40,7 +40,7 @@ void laser::Painter::aquireEtherdreamWrapper()
 
 void laser::Painter::calibrate()
 {
-	auto transparentCalib = [&](AbstractCalibration *calibration){
+	auto transparentCalib = [&](PlanarCalibration *calibration){
 		calibration->start();
 		m_calibration = calibration->homography();
 		PointLifter::s_sharedInstance = PointLifter(*calibration);

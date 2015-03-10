@@ -4,6 +4,9 @@ namespace laser {
 
 static double distanceBetween(const etherdream_point & point, const ObjectPtr & target)
 {
+	if (!target)
+		return 0;
+
 	const auto targetPoints = target->pointsToPaint();
 	if (targetPoints.empty())
 		return 0;

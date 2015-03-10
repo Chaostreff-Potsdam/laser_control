@@ -5,7 +5,7 @@ using namespace laser;
 static const double shiftScale = 10000.0 /* Shiftable Distance */ / 1000.0;
 
 Calibration::Calibration(const CanvasPtr & canvas) :
-	AbstractCalibration(canvas),
+	PlanarCalibration(canvas),
 	m_scale(100),
 	m_xScale(100),
 	m_yScale(100),
@@ -77,7 +77,7 @@ void Calibration::repaint()
 		m_rect.flipVertically();
 	m_rect.rotate(radians(m_rotation * 0.1));
 
-	AbstractCalibration::repaint();
+	PlanarCalibration::repaint();
 }
 
 

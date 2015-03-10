@@ -26,7 +26,7 @@ void ManualCornerCalibration::levelsSet(Levels levels, int value)
 }
 
 ManualCornerCalibration::ManualCornerCalibration(const CanvasPtr &canvas) :
-	AbstractCalibration(canvas),
+	PlanarCalibration(canvas),
 	m_currentCorner(0)
 {
 	m_corners[0].signX = -1;
@@ -98,7 +98,7 @@ void ManualCornerCalibration::repaint()
 
 	m_rect.setCorner(m_currentCorner, m_corners[m_currentCorner]);
 
-	AbstractCalibration::repaint();
+	PlanarCalibration::repaint();
 }
 
 void ManualCornerCalibration::cornerChanged()

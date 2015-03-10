@@ -40,7 +40,7 @@ std::vector<cv::Point2f> PointLifter::realWorldCornersOnGround()
 
 /////////////////////////////////////////////
 
-PointLifter::PointLifter(AbstractCalibration &calibration) :
+PointLifter::PointLifter(PlanarCalibration &calibration) :
 	m_painterToCanvas(calibration.homography()),
 	m_canvasRectCorners(calibration.rect().corners())
 {
