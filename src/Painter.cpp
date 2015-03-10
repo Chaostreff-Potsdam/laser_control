@@ -47,9 +47,6 @@ void laser::Painter::calibrate()
 		PointLifter::s_sharedInstance = PointLifter(*calibration);
 	};
 
-	DistorionCalibration dcalib(canvas());
-	dcalib.start();
-
 	if (config::oldCalib) {
 		Calibration calibration(canvas());
 		transparentCalib(&calibration);
@@ -57,6 +54,10 @@ void laser::Painter::calibrate()
 		ManualCornerCalibration calibration(canvas());
 		transparentCalib(&calibration);
 	}
+
+	// TODO: Apply to painter
+	DistorionCalibration dcalib(canvas());
+	dcalib.start();
 }
 
 laser::CanvasPtr laser::Painter::canvas()

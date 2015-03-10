@@ -62,7 +62,7 @@ void Application::startCanvas()
 {
 	if (config::useVirtualLaser)
 		m_painter.paintOn(std::make_shared<VirtualLaser>());
-	//else
+	else
 		m_painter.calibrate();
 }
 

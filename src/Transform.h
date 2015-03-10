@@ -27,7 +27,7 @@ namespace laser {
 		/*!
 		 * \brief undistorts a laser distortion (horizontal pincussion, vertical linear expansion from center)
 		 */
-		extern EtherdreamPoints undistort(EtherdreamPoints &points, cv::InputArray distCoeff);
+		extern EtherdreamPoints undistort(EtherdreamPoints &points, const cv::Mat &distCoeff);
 	}
 
 }
