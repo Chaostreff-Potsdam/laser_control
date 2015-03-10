@@ -5,7 +5,7 @@
 
 namespace laser {
 
-PlanarCalibration::PlanarCalibration(const CanvasPtr &canvas):
+PlanarCalibration::PlanarCalibration(const CanvasPtr &canvas) :
 	AbstractCalibration(canvas),
 	m_homography(0, 0, CV_8UC1, nullptr)
 {

@@ -23,6 +23,11 @@ namespace laser {
 		 * \brief apply transformation on points. moves all points that afterwards are outside of the canvas to its border and makes them black. points that are far away from the canvas are deleted
 		 */
 		extern EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform opencvFunc, cv::InputArray transform);
+
+		/*!
+		 * \brief undistorts a laser distortion (horizontal pincussion, vertical linear expansion from center)
+		 */
+		extern EtherdreamPoints undistort(EtherdreamPoints &points, cv::InputArray distCoeff);
 	}
 
 }

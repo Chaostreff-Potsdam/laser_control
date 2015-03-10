@@ -3,6 +3,7 @@
 
 #include "laser_calibration/Calibration.h"
 #include "laser_calibration/ManualCornerCalibration.h"
+#include "laser_calibration/DistortionCalibration.h"
 #include "laser_calibration/PointLifter.h"
 #include "Transform.h"
 #include "ObjectSorting.h"
@@ -45,6 +46,9 @@ void laser::Painter::calibrate()
 		m_calibration = calibration->homography();
 		PointLifter::s_sharedInstance = PointLifter(*calibration);
 	};
+
+	DistorionCalibration dcalib(canvas());
+	dcalib.start();
 
 	if (config::oldCalib) {
 		Calibration calibration(canvas());

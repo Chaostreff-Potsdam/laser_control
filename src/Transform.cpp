@@ -1,6 +1,9 @@
 #include "Transform.h"
 #include "laser_utilities.h"
 
+#include <opencv2/imgproc/imgproc.hpp>
+
+
 namespace laser { namespace Transform {
 
 typedef std::vector<cv::Point2f> TransformPoints;
@@ -88,6 +91,27 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 		}
 	}
 	return returnPoints;
+}
+
+EtherdreamPoints undistort(EtherdreamPoints &points, cv::InputArray distCoeff)
+{
+	static const cv::Mat camMat = cv::Mat::eye(3, 3, CV_64FC1);
+
+	int count = points.size();
+
+	std::vector<cv::Point2d> in, out;
+	in.reserve(count);
+	for (const auto & p: points) {
+		in.emplace_back(p.x, p.y);
+	}
+
+	cv::undistortPoints(in, out, camMat, distCoeff);
+	for (int i = 0; i < count; i++) {
+		// FIXME: Make hidden stuff black
+		points[i].x = (int16_t) clamp(out[i].x, INT16_MIN, INT16_MAX);
+	}
+
+	return points;
 }
 
 }} // namespace Laser::Transform
