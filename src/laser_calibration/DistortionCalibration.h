@@ -1,6 +1,7 @@
 #pragma once
 
 #include "AbstractCalibration.h"
+#include "Transform.h"
 
 namespace laser {
 
@@ -13,7 +14,7 @@ class EXPORT_LASER_CONTROL DistorionCalibration: public AbstractCalibration
 public:
 	DistorionCalibration(const CanvasPtr & canvas);
 
-	cv::Mat distCoeffs();
+	Transform::DistortionInfo distortion();
 
 protected:
 	CompositeObjectPtr m_vlines;
@@ -31,12 +32,13 @@ protected:
 	virtual void saveOptions(cv::FileStorage & fs);
 
 	virtual const char *configKeyName()
-	{ return "distCoeffs"; }
+	{ return "distortion"; }
 
 	CompositeObjectPtr currentLines() const;
 
 private:
-	cv::Mat m_distCoeffs;
+	Transform::DistortionInfo m_distortion;
+
 	int m_currentDirection;
 	int m_k1;
 	int m_h1;

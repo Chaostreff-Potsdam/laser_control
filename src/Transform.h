@@ -9,6 +9,22 @@ namespace laser {
 
 	namespace Transform {
 
+		struct DistortionInfo {
+			double k1;
+			double h1;
+
+			DistortionInfo() :
+				k1(0.0), h1(0.0)
+			{}
+
+			DistortionInfo(double _k1, double _h1) :
+				k1(_k1), h1(_h1)
+			{}
+
+			cv::Mat distCoeff() const;
+			operator bool() const;
+		};
+
 		typedef std::function<void(cv::InputArray src, cv::OutputArray dst, cv::InputArray m)>
 			OpenCVTransform;
 
@@ -27,7 +43,7 @@ namespace laser {
 		/*!
 		 * \brief undistorts a laser distortion (horizontal pincussion, vertical linear expansion from center)
 		 */
-		extern EtherdreamPoints undistort(EtherdreamPoints &points, const cv::Mat &distCoeff);
+		extern EtherdreamPoints undistort(EtherdreamPoints &points, const DistortionInfo & distInfo);
 	}
 
 }

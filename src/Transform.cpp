@@ -8,6 +8,23 @@ namespace laser { namespace Transform {
 
 typedef std::vector<cv::Point2f> TransformPoints;
 
+/////////////////////////////////////////////////
+
+DistortionInfo::operator bool() const
+{
+	return k1 != 0.0 || h1 != 0.0;
+}
+
+cv::Mat DistortionInfo::distCoeff() const
+{
+	cv::Mat m(5, 1, CV_64FC1);
+	m = 0.;
+	m.at<double>(0, 0) = k1;
+	return m;
+}
+
+/////////////////////////////////////////////////
+
 static void opaqueApply(EtherdreamPoints & points, TransformPoints & aux_in, TransformPoints & aux_out, OpenCVTransform opencvFunc, cv::InputArray transform)
 {
 	for (auto & p: points)	{
@@ -93,9 +110,12 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	return returnPoints;
 }
 
-EtherdreamPoints undistort(EtherdreamPoints &points, const cv::Mat &distCoeff)
+EtherdreamPoints undistort(EtherdreamPoints &points, const DistortionInfo &distInfo)
 {
 	static const cv::Mat camMat = cv::Mat::eye(3, 3, CV_64FC1);
+	if (!distInfo) // Nothing to do
+		return points;
+
 	int count = points.size();
 
 	std::vector<cv::Point2d> in, out;
@@ -106,7 +126,9 @@ EtherdreamPoints undistort(EtherdreamPoints &points, const cv::Mat &distCoeff)
 		in.emplace_back(p.x, p.y);
 	}
 
-	cv::undistortPoints(in, out, camMat, distCoeff);
+	std::cerr << distInfo.distCoeff() << std::endl;
+
+	cv::undistortPoints(in, out, camMat, distInfo.distCoeff());
 
 
 	for (int i = 0; i < count; i++) {

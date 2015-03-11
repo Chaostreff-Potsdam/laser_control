@@ -58,6 +58,7 @@ void laser::Painter::calibrate()
 	// TODO: Apply to painter
 	DistorionCalibration dcalib(canvas());
 	dcalib.start();
+	m_distortion = dcalib.distortion();
 }
 
 laser::CanvasPtr laser::Painter::canvas()

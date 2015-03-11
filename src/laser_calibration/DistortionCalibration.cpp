@@ -23,7 +23,6 @@ double valFrom(int value)
 
 DistorionCalibration::DistorionCalibration(const CanvasPtr &canvas) :
 	AbstractCalibration(canvas),
-	m_distCoeffs(0, 0, CV_64FC1, nullptr),
 	m_currentDirection(HORIZONTAL),
 	m_k1(trackZero),
 	m_h1(trackZero)
@@ -40,22 +39,35 @@ DistorionCalibration::DistorionCalibration(const CanvasPtr &canvas) :
 	}
 }
 
-cv::Mat DistorionCalibration::distCoeffs()
+Transform::DistortionInfo DistorionCalibration::distortion()
 {
-	if (m_distCoeffs.empty())
+	if (!m_distortion)
 		compute();
 
-	return m_distCoeffs;
+	return m_distortion;
 }
 
 void DistorionCalibration::readCalibFrom(cv::FileStorage &fs)
 {
-	fs[configKeyName()] >> m_distCoeffs;
+	// Turns out the computed k1, h1 get rounded to zero when
+	// written to file. Instead I will directly store my options here.
+	cv::Mat m;
+	fs[configKeyName()] >> m;
+	assert(m.type() == CV_32S);
+	assert(m.channels() == 1);
+	assert(m.rows == 2);
+	assert(m.cols == 1);
+
+	m_k1 = m.at<int32_t>(0, 0);
+	m_h1 = m.at<int32_t>(0,	1);
+	compute();
 }
 
 void DistorionCalibration::writeCalibTo(cv::FileStorage &fs)
 {
-	fs << configKeyName() << m_distCoeffs;
+	int32_t data[2] = {m_k1, m_h1};
+	cv::Mat m(2, 1, CV_32SC1, data);
+	fs << configKeyName() << m;
 }
 
 void DistorionCalibration::loadOptions(cv::FileStorage &fs)
@@ -94,14 +106,13 @@ EtherdreamPoints DistorionCalibration::pointsToPaint()
 {
 	auto points = currentLines()->pointsToPaint();
 	compute();
-	return Transform::undistort(points, m_distCoeffs);
+	return Transform::undistort(points, m_distortion);
 }
 
 void DistorionCalibration::compute()
 {
-	// Filled dummy, making sure we loaded something
-	m_distCoeffs = cv::Mat::zeros(5, 1, CV_64FC1);
-	m_distCoeffs.at<double>(0, 0) = valFrom(m_k1);
+	m_distortion.k1 = valFrom(m_k1);
+	m_distortion.h1 = valFrom(m_h1);
 }
 
 }

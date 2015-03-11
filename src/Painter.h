@@ -2,6 +2,7 @@
 
 #include "EtherdreamWrapper.h"
 #include "objects/Object.h"
+#include "Transform.h"
 
 #include <thread>
 #include <mutex>
@@ -126,6 +127,7 @@ namespace laser {
         bool m_expireObjects;
 
 		cv::Mat m_calibration;
+		Transform::DistortionInfo m_distortion;
 
 	private:
 		void removeExpiredObjects();
