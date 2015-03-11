@@ -192,12 +192,17 @@ void laser::Painter::updatePoints()
 		}
 	}
 
+	auto undistortAndSet = [&](EtherdreamPoints & ps){
+		Transform::undistortInPlace(ps, m_distortion);
+		canvas()->setPoints(ps);
+	};
+
 	if (m_cropObjects) {
 		EtherdreamPoints transformedPoints = Transform::applyReturning(ps, cv::perspectiveTransform, m_calibration);
-		canvas()->setPoints(transformedPoints);
+		undistortAndSet(transformedPoints);
 	} else {
 		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
-		canvas()->setPoints(ps);
+		undistortAndSet(ps);
 	}
 	canvas()->writePoints();
 }

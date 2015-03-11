@@ -106,7 +106,8 @@ EtherdreamPoints DistorionCalibration::pointsToPaint()
 {
 	auto points = currentLines()->pointsToPaint();
 	compute();
-	return Transform::undistort(points, m_distortion);
+	Transform::undistortInPlace(points, m_distortion);
+	return points;
 }
 
 void DistorionCalibration::compute()

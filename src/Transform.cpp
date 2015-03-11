@@ -110,11 +110,11 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	return returnPoints;
 }
 
-EtherdreamPoints undistort(EtherdreamPoints &points, const DistortionInfo &distInfo)
+void undistortInPlace(EtherdreamPoints & points, const DistortionInfo &distInfo)
 {
 	static const cv::Mat camMat = cv::Mat::eye(3, 3, CV_64FC1);
-	if (!distInfo) // Nothing to do
-		return points;
+	if (points.empty() || !distInfo) // Nothing to do
+		return;
 
 	int count = points.size();
 
@@ -126,17 +126,12 @@ EtherdreamPoints undistort(EtherdreamPoints &points, const DistortionInfo &distI
 		in.emplace_back(p.x, p.y);
 	}
 
-	std::cerr << distInfo.distCoeff() << std::endl;
-
 	cv::undistortPoints(in, out, camMat, distInfo.distCoeff());
-
 
 	for (int i = 0; i < count; i++) {
 		// FIXME: Make hidden stuff black
 		points[i].x = (int16_t) clamp(out[i].x, INT16_MIN, INT16_MAX);
 	}
-
-	return points;
 }
 
 }} // namespace Laser::Transform

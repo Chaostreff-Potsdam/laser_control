@@ -43,7 +43,7 @@ namespace laser {
 		/*!
 		 * \brief undistorts a laser distortion (horizontal pincussion, vertical linear expansion from center)
 		 */
-		extern EtherdreamPoints undistort(EtherdreamPoints &points, const DistortionInfo & distInfo);
+		extern void undistortInPlace(EtherdreamPoints &points, const DistortionInfo & distInfo);
 	}
 
 }
