@@ -12,14 +12,20 @@ typedef std::vector<cv::Point2f> TransformPoints;
 
 DistortionInfo::operator bool() const
 {
-	return k1 != 0.0 || h1 != 0.0;
+	return m_v != 0.0 || m_h != 0.0;
 }
 
-cv::Mat DistortionInfo::makeDistCoeff(double v) const
+void DistortionInfo::compute()
+{
+	m_vdC = makeDistCoeff(m_v);
+	m_hdC = makeDistCoeff(m_h);
+}
+
+cv::Mat DistortionInfo::makeDistCoeff(double val) const
 {
 	cv::Mat m(5, 1, CV_64FC1);
 	m = 0.;
-	m.at<double>(0, 0) = v;
+	m.at<double>(0, 0) = val;
 	return m;
 }
 

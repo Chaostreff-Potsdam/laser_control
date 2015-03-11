@@ -49,11 +49,11 @@ void AbstractCalibration::start()
 	if (alreadyCalibrated())
 		return;
 
-	cv::namedWindow("Calibration");
+	cv::namedWindow(windowName());
 	showOptions();
 	repaint();
 	cv::waitKey();
-	cv::destroyWindow("Calibration");
+	cv::destroyWindow(windowName());
 
 	compute();
 	saveCalibration();
@@ -61,12 +61,12 @@ void AbstractCalibration::start()
 
 void AbstractCalibration::addTrackbar(const char *name, int *target, int maxValue, UpdateCallback callback)
 {
-	cv::createTrackbar(name, "Calibration", target, maxValue, callback, (void*)this);
+	cv::createTrackbar(name, windowName(), target, maxValue, callback, (void*)this);
 }
 
 void AbstractCalibration::setTrackbarPos(const char *name, int pos)
 {
-	cv::setTrackbarPos(name, "Calibration", pos);
+	cv::setTrackbarPos(name, windowName(), pos);
 }
 
 }

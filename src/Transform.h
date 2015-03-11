@@ -9,28 +9,32 @@ namespace laser {
 
 	namespace Transform {
 
-		struct DistortionInfo {
-			double k1;
-			double h1;
+		class DistortionInfo {
 
+		public:
 			DistortionInfo() :
-				k1(0.0), h1(0.0)
-			{}
+				m_h(0.0), m_v(0.0)
+			{ }
 
-			DistortionInfo(double _k1, double _h1) :
-				k1(_k1), h1(_h1)
-			{}
+			DistortionInfo(double horizonal, double vertical) :
+				m_h(horizonal), m_v(vertical)
+			{ compute(); }
 
 			cv::Mat verticalDistCoeff() const
-			{ return makeDistCoeff(h1); }
+			{ return m_vdC; }
 
 			cv::Mat horizontalDistCoeff() const
-			{ return makeDistCoeff(k1); }
+			{ return m_hdC; }
 
 			operator bool() const;
 
 		private:
-			cv::Mat makeDistCoeff(double v) const;
+			double m_h;
+			double m_v;
+			cv::Mat m_vdC, m_hdC;
+
+			cv::Mat makeDistCoeff(double val) const;
+			void compute();
 		};
 
 		typedef std::function<void(cv::InputArray src, cv::OutputArray dst, cv::InputArray m)>

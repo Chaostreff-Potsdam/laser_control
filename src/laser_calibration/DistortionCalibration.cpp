@@ -20,8 +20,8 @@ double valFrom(int value)
 DistorionCalibration::DistorionCalibration(const CanvasPtr &canvas) :
 	AbstractCalibration(canvas),
 	m_currentDirection(HORIZONTAL),
-	m_k1(trackZero),
-	m_h1(trackZero)
+	m_h(trackZero),
+	m_v(trackZero)
 {
 	const double line_gap = (UINT16_MAX - 1) / (LINE_COUNT - 1);
 	m_vlines = CompositeObject::construct();
@@ -54,36 +54,36 @@ void DistorionCalibration::readCalibFrom(cv::FileStorage &fs)
 	assert(m.rows == 2);
 	assert(m.cols == 1);
 
-	m_k1 = m.at<int32_t>(0, 0);
-	m_h1 = m.at<int32_t>(0,	1);
+	m_h = m.at<int32_t>(0, 0);
+	m_v = m.at<int32_t>(0,	1);
 	compute();
 }
 
 void DistorionCalibration::writeCalibTo(cv::FileStorage &fs)
 {
-	int32_t data[2] = {m_k1, m_h1};
+	int32_t data[2] = {m_h, m_v};
 	cv::Mat m(2, 1, CV_32SC1, data);
 	fs << configKeyName() << m;
 }
 
 void DistorionCalibration::loadOptions(cv::FileStorage &fs)
 {
-	fs["k1"] >> m_k1;
-	fs["h1"] >> m_h1;
+	fs["horizontalSlider"] >> m_h;
+	fs["verticalSlider"] >> m_v;
 }
 
 void DistorionCalibration::saveOptions(cv::FileStorage &fs)
 {
-	fs << "k1" << m_k1;
-	fs << "h1" << m_h1;
+	fs << "horizontalSlider" << m_h;
+	fs << "verticalSlider" << m_v;
 }
 
 void DistorionCalibration::showOptions()
 {
-	addTrackbar("direction", &m_currentDirection, 1);
+	addTrackbar("line direction", &m_currentDirection, 1);
 
-	addTrackbar("k1", &m_k1, trackLen);
-	addTrackbar("h1", &m_h1, trackLen);
+	addTrackbar("horizontal", &m_h, trackLen);
+	addTrackbar("vertical", &m_v, trackLen);
 }
 
 CompositeObjectPtr DistorionCalibration::currentLines() const
@@ -108,8 +108,7 @@ EtherdreamPoints DistorionCalibration::pointsToPaint()
 
 void DistorionCalibration::compute()
 {
-	m_distortion.k1 = valFrom(m_k1);
-	m_distortion.h1 = valFrom(m_h1);
+	m_distortion = Transform::DistortionInfo(valFrom(m_h), valFrom(m_v));
 }
 
 }

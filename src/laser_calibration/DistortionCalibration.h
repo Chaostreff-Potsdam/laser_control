@@ -20,6 +20,8 @@ protected:
 	CompositeObjectPtr m_vlines;
 	CompositeObjectPtr m_hlines;
 
+	virtual const char *windowName()
+	{ return "Distorton"; }
 	virtual const char *configFileName()
 	{ return "distortion.yml"; }
 
@@ -40,8 +42,8 @@ private:
 	Transform::DistortionInfo m_distortion;
 
 	int m_currentDirection;
-	int m_k1;
-	int m_h1;
+	int m_h;
+	int m_v;
 
 	virtual void compute();
 };

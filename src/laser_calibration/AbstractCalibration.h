@@ -20,6 +20,8 @@ protected:
 
 	virtual const char *configFileName() = 0;
 	virtual const char *configKeyName() = 0;
+	virtual const char *windowName()
+	{ return "Calibration"; }
 
 	// fs << configKeyName() << my_storage;
 	virtual void writeCalibTo(cv::FileStorage & fs) = 0;
