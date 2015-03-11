@@ -21,8 +21,16 @@ namespace laser {
 				k1(_k1), h1(_h1)
 			{}
 
-			cv::Mat distCoeff() const;
+			cv::Mat verticalDistCoeff() const
+			{ return makeDistCoeff(h1); }
+
+			cv::Mat horizontalDistCoeff() const
+			{ return makeDistCoeff(k1); }
+
 			operator bool() const;
+
+		private:
+			cv::Mat makeDistCoeff(double v) const;
 		};
 
 		typedef std::function<void(cv::InputArray src, cv::OutputArray dst, cv::InputArray m)>

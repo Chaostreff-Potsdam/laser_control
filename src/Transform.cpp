@@ -15,11 +15,11 @@ DistortionInfo::operator bool() const
 	return k1 != 0.0 || h1 != 0.0;
 }
 
-cv::Mat DistortionInfo::distCoeff() const
+cv::Mat DistortionInfo::makeDistCoeff(double v) const
 {
 	cv::Mat m(5, 1, CV_64FC1);
 	m = 0.;
-	m.at<double>(0, 0) = k1;
+	m.at<double>(0, 0) = v;
 	return m;
 }
 
@@ -110,27 +110,32 @@ EtherdreamPoints applyReturning(EtherdreamPoints & points, OpenCVTransform openc
 	return returnPoints;
 }
 
-void undistortInPlace(EtherdreamPoints & points, const DistortionInfo &distInfo)
+void undistortInPlace(EtherdreamPoints & points, const DistortionInfo & distInfo)
 {
 	static const cv::Mat camMat = cv::Mat::eye(3, 3, CV_64FC1);
+	static const auto flipOnQuadrant = [](double v)
+	{ return (INT16_MAX - abs(v)) * sgn(v); };
+
 	if (points.empty() || !distInfo) // Nothing to do
 		return;
 
+	std::vector<cv::Point2d> h_in, h_out, v_in, v_out;
 	int count = points.size();
-
-	std::vector<cv::Point2d> in, out;
-	in.reserve(count);
-	out.reserve(count);
+	h_in.reserve(count); h_out.reserve(count);
+	v_in.reserve(count); v_out.reserve(count);
 
 	for (const auto & p: points) {
-		in.emplace_back(p.x, p.y);
+		h_in.emplace_back(p.x, p.y);
+		v_in.emplace_back(0, flipOnQuadrant(p.y));
 	}
 
-	cv::undistortPoints(in, out, camMat, distInfo.distCoeff());
+	cv::undistortPoints(h_in, h_out, camMat, distInfo.horizontalDistCoeff());
+	cv::undistortPoints(v_in, v_out, camMat, distInfo.verticalDistCoeff());
 
 	for (int i = 0; i < count; i++) {
 		// FIXME: Make hidden stuff black
-		points[i].x = (int16_t) clamp(out[i].x, INT16_MIN, INT16_MAX);
+		points[i].x = (int16_t) clamp(h_out[i].x, INT16_MIN, INT16_MAX);
+		points[i].y = (int16_t) clamp(flipOnQuadrant(v_out[i].y), INT16_MIN, INT16_MAX);
 	}
 }
 

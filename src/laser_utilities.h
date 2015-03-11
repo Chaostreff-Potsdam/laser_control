@@ -58,6 +58,11 @@ namespace laser {
 		return ((int_least64_t)a)*a;
 	}
 
+	template <typename T>
+	int sgn(T val) {
+		return (T(0) < val) - (val < T(0));
+	}
+
 	static inline double sqr(double a)
 	{ return a * a; }
 

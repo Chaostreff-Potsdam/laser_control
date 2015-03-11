@@ -11,10 +11,6 @@ namespace laser {
 static const int trackLen = 50;
 static const int trackZero = trackLen / 2;
 
-template <typename T> int sgn(T val) {
-	return (T(0) < val) - (val < T(0));
-}
-
 double valFrom(int value)
 {
 	value -= trackZero;
