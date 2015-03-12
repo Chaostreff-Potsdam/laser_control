@@ -42,7 +42,7 @@ def generateClass(points):
 
 def main(filename):
 	doc = ILDA(open(filename).read())
-	print generateClass(doc)
+	print generateClass(doc.chunks[0])
 
 if __name__ == "__main__":
 	import sys
