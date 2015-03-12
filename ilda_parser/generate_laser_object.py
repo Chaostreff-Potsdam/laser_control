@@ -28,10 +28,13 @@ namespace laser {
 }
 """
 
+
+
 def generateConstructor(pointsList):
 	lines = ["m_ps.reserve(%d);" % len(pointsList)]
-	lines.extend(("m_ps.push_back(etherdreamPoint(%d, %d));" % (p.x, p.y)
-				  for p in pointsList if p.state))
+	lines.extend(("m_ps.push_back(etherdreamPoint(%d, %d, %s));"
+						% (p.x, p.y, str(p.visible).lower())
+						  for p in pointsList))
 	return "\n\t\t\t".join(lines)
 
 def generateClass(points):

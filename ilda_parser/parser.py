@@ -10,6 +10,10 @@ class LaserPoint(object):
 		self.state = state
 		self.color = color
 
+		self.blank = bool(state & 0x40)
+		self.visible = not self.blank
+		self.lastpoint = bool(state & 0x80)
+
 	def __repr__(self):
 		return "LaserPoint(%d, %d, %d, %d)" % (self.x, self.y, self.state, self.color)
 
