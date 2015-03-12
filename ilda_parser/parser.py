@@ -58,15 +58,14 @@ class ILDA(object):
 	def hasDataLeft(self):
 		return bool(leftData)
 
-def main(filename):
-	doc = ILDA(open(filename).read())
-	for p in doc:
+def test(filename):
+	for p in ILDA(open(filename).read()):
 		print p
 
 if __name__ == "__main__":
 	import sys
 	if len(sys.argv) > 1:
-		main(sys.argv[1])
+		test(sys.argv[1])
 	else:
-		print "Usage: %s" % sys.argv[0]
+		print "Usage: %s FILE" % sys.argv[0]
 

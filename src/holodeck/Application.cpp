@@ -14,6 +14,12 @@
 #include "../objects/Rectangle.h"
 #include "../objects/RisenGroup.h"
 
+#define USE_ILDA_PARSER 0
+
+#if USE_ILDA_PARSER
+#include "../../ilda_parser/FileObject.h"
+#endif
+
 namespace laser { namespace holodeck {
 
 bool Application::forceReadOptions(int argc, char *argv[])
@@ -68,6 +74,11 @@ void Application::startCanvas()
 
 void Application::displayTests()
 {
+#if USE_ILDA_PARSER
+	ObjectPtr obj(new FileObject());
+	m_painter.add(obj);
+	loop([]{});
+#else
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
 
@@ -81,6 +92,7 @@ void Application::displayTests()
 	loop([&]{
 		circ->rotate(radians(5));
 	});
+#endif
 }
 
 void Application::loop(std::function<void()> onLoop, unsigned int wait)
