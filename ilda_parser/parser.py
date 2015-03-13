@@ -111,6 +111,7 @@ class ILDA(object):
 		self.chunks = [ILDAChunk(data)]
 		while self.chunks[-1].rest:
 			self.chunks.append(ILDAChunk(self.chunks[-1].rest))
+			self.chunks[-2].rest = None
 
 	def __len__(self):
 		return len(self.chunks)
