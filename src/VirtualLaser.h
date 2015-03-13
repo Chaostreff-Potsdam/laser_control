@@ -20,7 +20,6 @@ private:
 	 * \return the starting index of the next line
 	 */
 	size_t drawNextPolyline(size_t currentIndex, cv::Mat & canvas);
-
 };
 
 }

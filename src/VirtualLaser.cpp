@@ -1,5 +1,6 @@
 #include "VirtualLaser.h"
 #include "laser_utilities.h"
+#include "Config.h"
 
 #include <opencv2/highgui/highgui.hpp>
 
@@ -64,13 +65,13 @@ size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)
 	const cv::Point *pts = currentPoints.data();
 	const int nums = (int) currentPoints.size();
 	if (currentColor != cv::Scalar(0,0,0)) {
-#if 1
-		cv::polylines(canvas, &pts, &nums, 1, false, currentColor);
-#else
-		for (const auto & p: currentPoints) {
-			cv::circle(canvas, p, 3, currentColor, -1);
+		if (config::drawCircs) {
+			for (const auto & p: currentPoints) {
+				cv::circle(canvas, p, 3, currentColor, -1);
+			}
+		} else {
+			cv::polylines(canvas, &pts, &nums, 1, false, currentColor);
 		}
-#endif
 	}
 
 	return currentIndex;

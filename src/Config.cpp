@@ -8,6 +8,7 @@ bool useVirtualLaser = false;
 bool displayTests = false;
 bool testServer = false;
 bool oldCalib = false;
+bool drawCircs = false;
 
 void readCommandLine(int argc, char *argv[])
 {
@@ -17,6 +18,7 @@ void readCommandLine(int argc, char *argv[])
 		displayTests       |= !strncmp("--tests", argv[i], 7);
 		testServer         |= !strncmp("--test-server", argv[i], 13);
 		oldCalib           |= !strncmp("--old-calib", argv[i], 11);
+		drawCircs          |= !strncmp("--circs", argv[i], 7);
 	}
 }
 
