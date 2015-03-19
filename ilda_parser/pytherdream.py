@@ -29,9 +29,16 @@ class etherdream_point(ctypes.Structure):
 			(self.x, self.y, self.r, self.g, self.b, self.i, self.u1, self.u2)
 
 	@classmethod
-	def make(cls, pos):
+	def fromPos(cls, pos):
+		"""New green etherdream_point from a (x, y)-tuple"""
 		x, y = pos
-		return cls(x, y, INT16_MAX, 0, 0, 0, 0, 0)
+		return cls(x, y, 0, INT16_MAX, 0, 0, 0, 0)
+
+	@classmethod
+	def fromLaserPoint(cls, point):
+		"""New etherdream_point from a parser.LaserPoint (ignoring color tables)"""
+		g = INT16_MAX if point.visible else 0
+		return cls.fromPos(point.x, point.y, 0, g, 0, 0, 0)
 
 etherdream_p = ctypes.c_void_p
 etherdream_point_p = ctypes.POINTER(etherdream_point)
@@ -63,6 +70,11 @@ class EtherdreamWrapper(object):
 
 		self.lib.etherdream_write.argtypes = [etherdream_p, etherdream_point_p, ctypes.c_int, ctypes.c_int, ctypes.c_int]
 
+	def __toEtherDreamPointArray(self, points):
+		"""Non-empty list of points to ctypes-Array"""
+		func = etherdream_point.fromPos if type(points[0]) == tuple else etherdream_point.fromLaserPoint
+		return (etherdream_point * len(points))(*imap(func, points))
+
 	def connect(self):
 		self.lib.etherdream_lib_start()
 		time.sleep(1.2)
@@ -73,11 +85,11 @@ class EtherdreamWrapper(object):
 		self.lib.etherdream_connect(self.etherdream)
 
 	def writePoints(self, points, pps=20000, reps=-1):
-		""" Sends a list of (x, y)-tuples to etherdream """
-		if points:
-			count = len(points)
-			ps = (etherdream_point * count)(*imap(etherdream_point.make, points))
-			self.lib.etherdream_write(self.etherdream, ctypes.cast(ps, etherdream_point_p), count, pps, reps)
+		"""Sends a list of parser.LaserPoint or (x, y)-tuples to etherdream"""
+		if not points:
+			return
+		ps = ctypes.cast(self.__toEtherDreamPointArray(points), etherdream_point_p)
+		self.lib.etherdream_write(self.etherdream, ps, len(points), pps, reps)
 
 if __name__ == "__main__":
 	ed = EtherdreamWrapper()
