@@ -32,13 +32,13 @@ class etherdream_point(ctypes.Structure):
 	def fromPos(cls, pos):
 		"""New green etherdream_point from a (x, y)-tuple"""
 		x, y = pos
-		return cls(x, y, 0, INT16_MAX, 0, 0, 0, 0)
+		return cls(x, y, 0, INT16_MAX, 0, 0, 0, 0, 0)
 
 	@classmethod
 	def fromLaserPoint(cls, point):
 		"""New etherdream_point from a parser.LaserPoint (ignoring color tables)"""
 		g = INT16_MAX if point.visible else 0
-		return cls.fromPos(point.x, point.y, 0, g, 0, 0, 0)
+		return cls(point.x, point.y, 0, g, 0, 0, 0, 0)
 
 etherdream_p = ctypes.c_void_p
 etherdream_point_p = ctypes.POINTER(etherdream_point)
@@ -48,7 +48,7 @@ class NoEtherdreamFound(Exception):
 
 class EtherdreamWrapper(object):
 
-	libname = "etherdream.so"
+	libname = "/Users/sven/Master/HCIPS13/laser_control/ilda_parser/etherdream.so"
 	
 	def __init__(self):
 		self.__initlib()
@@ -56,8 +56,9 @@ class EtherdreamWrapper(object):
 		self.connect()
 
 	def __del__(self):
-		if self.etherdream:
-			self.lib.etherdream_disconnect(self.etherdream)
+		pass
+		#if self.etherdream:
+		#	self.lib.etherdream_disconnect(self.etherdream)
 	
 	def __initlib(self):
 		self.lib = ctypes.cdll.LoadLibrary(self.libname)
@@ -73,7 +74,7 @@ class EtherdreamWrapper(object):
 	def __toEtherDreamPointArray(self, points):
 		"""Non-empty list of points to ctypes-Array"""
 		func = etherdream_point.fromPos if type(points[0]) == tuple else etherdream_point.fromLaserPoint
-		return (etherdream_point * len(points))(*imap(func, points))
+		return (etherdream_point * len(points))(*map(func, points))
 
 	def connect(self):
 		self.lib.etherdream_lib_start()
@@ -91,5 +92,18 @@ class EtherdreamWrapper(object):
 		ps = ctypes.cast(self.__toEtherDreamPointArray(points), etherdream_point_p)
 		self.lib.etherdream_write(self.etherdream, ps, len(points), pps, reps)
 
+def openAndDisplay(filename):
+	import parser
+	edw = EtherdreamWrapper()
+	doc = parser.ILDA(open(filename).read())
+	while True:
+		for chunk in doc:
+			edw.writePoints(chunk.data)
+			time.sleep(1.0 / 15)
+
 if __name__ == "__main__":
-	ed = EtherdreamWrapper()
+	if len(sys.argv) > 1:
+		openAndDisplay(sys.argv[1])
+	else:
+		edw = EtherdreamWrapper()
+	
