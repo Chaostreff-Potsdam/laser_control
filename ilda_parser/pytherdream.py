@@ -12,7 +12,7 @@ if sys.version_info[0] == 2:
 else:
 	imap = map
 
-INT16_MAX = 2 ** 16 - 1
+UINT16_MAX = 2 ** 16 - 1
 
 class etherdream_point(ctypes.Structure):
 	_fields_ = [("x", ctypes.c_int16),
@@ -32,12 +32,12 @@ class etherdream_point(ctypes.Structure):
 	def fromPos(cls, pos):
 		"""New green etherdream_point from a (x, y)-tuple"""
 		x, y = pos
-		return cls(x, y, 0, INT16_MAX, 0, 0, 0, 0, 0)
+		return cls(x, y, 0, UINT16_MAX, 0, 0, 0, 0, 0)
 
 	@classmethod
 	def fromLaserPoint(cls, point):
 		"""New etherdream_point from a parser.LaserPoint (ignoring color tables)"""
-		g = INT16_MAX if point.visible else 0
+		g = UINT16_MAX if point.visible else 0
 		return cls(point.x, point.y, 0, g, 0, 0, 0, 0)
 
 etherdream_p = ctypes.c_void_p
