@@ -74,7 +74,7 @@ class EtherdreamWrapper(object):
 	def __toEtherDreamPointArray(self, points):
 		"""Non-empty list of points to ctypes-Array"""
 		func = etherdream_point.fromPos if type(points[0]) == tuple else etherdream_point.fromLaserPoint
-		return (etherdream_point * len(points))(*map(func, points))
+		return (etherdream_point * len(points))(*imap(func, points))
 
 	def connect(self):
 		self.lib.etherdream_lib_start()
