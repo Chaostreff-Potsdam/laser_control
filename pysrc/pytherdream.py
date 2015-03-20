@@ -3,7 +3,7 @@
 __all__ = ["EtherdreamWrapper", "NoEtherdreamFound"]
 __doc__ = "Python bindings for unix etherdream lib"
 
-import sys
+import sys, os
 import time
 import ctypes
 
@@ -48,7 +48,7 @@ class NoEtherdreamFound(Exception):
 
 class EtherdreamWrapper(object):
 
-	libname = "/Users/sven/Master/HCIPS13/laser_control/ilda_parser/etherdream.so"
+	libname = os.path.join(os.path.dirname(__file__), "etherdream.so")
 	
 	def __init__(self):
 		self.__initlib()
