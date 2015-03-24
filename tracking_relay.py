@@ -7,7 +7,8 @@ A relay directly replaying a tracked position to the laserserver
 
 import struct
 import socket
-from Simulation import LaserClient, Player
+import math
+from Simulation import LaserClient, Player, Table
 
 TRACKING_PLAYER_ID = 1
 
@@ -33,14 +34,22 @@ class Relay(object):
 	def _t(self, val):
 		return self.scale * (val - 2.5)
 
-	def mapPoint(self, *args):
-		return map(self._t, args)
+	def mapPoint(self, point):
+		x, y = point
+		return self._t(x), -self._t(y)
+
+	def corner(self, midX, midY, angle):
+		diag_2 = 0.1767
+		return midX + diag_2 * math.cos(angle), midY + diag_2 * math.sin(angle)
 
 	def parsePoint(self, data):
-		_, _, idx, x, y, _ = struct.unpack(self.trackingMsg, data)
+		_, _, idx, x, y, angle = struct.unpack(self.trackingMsg, data)
 		if idx == TRACKING_PLAYER_ID:
-			laserPoints = [self.mapPoint(x, y)]
-			self.playerId = self.laser.instruction(Player, laserPoints, self.playerId)
+			#laserPoints = [self.mapPoint((x, y))]
+			#self.playerId = self.laser.instruction(Player, laserPoints, self.playerId)
+
+			laserPoints = map(self.mapPoint, (self.corner(x, y, math.pi * (i / 2.0 - 1 / 4.0) + angle) for i in range(4)))
+			self.playerId = self.laser.instruction(Table, laserPoints, self.playerId, turkerIds=[-1])
 
 	def run(self):
 		while True:
