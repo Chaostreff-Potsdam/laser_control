@@ -5,7 +5,7 @@
 
 namespace laser { namespace holodeck { namespace opts {
 
-CompositeObjectPtr getDigit(unsigned int digit);
+CompositeObjectPtr getDigit(int digit);
 
 static const double assumedNumberWidth = 933.0;
 static const double assumedNumberHeight = 1709.0;

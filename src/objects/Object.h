@@ -27,6 +27,7 @@ namespace laser {
 		static const int useDefaultValue;
 
 		Object();
+		virtual ~Object() {}
 
 		parent_t parent() const;
 		void setParent(const parent_t & newParent);

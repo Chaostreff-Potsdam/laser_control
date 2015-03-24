@@ -153,7 +153,7 @@ static CompositeObjectPtr getNine()
 	return group;
 }
 
-CompositeObjectPtr getDigit(unsigned int digit)
+CompositeObjectPtr getDigit(int digit)
 {
 	switch (digit) {
 	case 0:
@@ -187,7 +187,7 @@ CompositeObjectPtr getDigit(unsigned int digit)
 		return getNine();
 		break;
 	default:
-		return 0;
+		return CompositeObject::construct();
 		break;
 	}
 }

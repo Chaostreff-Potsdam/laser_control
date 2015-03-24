@@ -54,11 +54,11 @@ static void calculateRectangleCharacteristics(Point p1, Point p2, float &angle, 
 
 static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Point(0, 0), double rotation = 0.0)
 {
-	unsigned int id = root.get("turkers",
+	int id = root.get("turkers",
 								Json::Value())
 						  .get(i,
 								Json::Value())
-						  .asUInt();
+						  .asInt();
 	CompositeObjectPtr digit = opts::getDigit(id);
 	digit->rotate(rotation, Point(250, 500));
 	digit->scale(-1, 1);
