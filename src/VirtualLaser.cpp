@@ -14,7 +14,7 @@ static const float windowCenter = windowSize * 0.5;
 static std::pair<cv::Point, cv::Scalar> parsePoint(const etherdream_point & p)
 {
 	return std::make_pair(
-					cv::Point(p.x * windowScale + windowCenter, p.y * windowScale + windowCenter),
+					cv::Point(p.x * windowScale + windowCenter, -p.y * windowScale + windowCenter),
 					cv::Scalar(p.b, p.g, p.r)
 				);
 }

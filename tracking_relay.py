@@ -40,7 +40,7 @@ class Relay(object):
 
 	def corner(self, midX, midY, angle):
 		diag_2 = 0.1767
-		return midX + diag_2 * math.cos(angle), midY + diag_2 * math.sin(angle)
+		return midX + diag_2 * math.cos(-angle), midY + diag_2 * math.sin(-angle)
 
 	def parsePoint(self, data):
 		_, _, idx, x, y, angle = struct.unpack(self.trackingMsg, data)
