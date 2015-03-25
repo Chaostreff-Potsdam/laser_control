@@ -7,7 +7,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <assert.h>
 
-int laser::Object::s_pixelsPerPointDefault = 100;
+int laser::Object::s_pixelsPerPointDefault = 1000;
 int laser::Object::s_marginPointFractionDefault = 5;
 
 const int laser::Object::useDefaultValue = -1;

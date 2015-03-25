@@ -147,6 +147,7 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 
 laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &start, const etherdream_point &end) const
 {
+#if 1
 	static const auto make_point = [](double x, double y) {
 		etherdream_point p;
 		memset(&p, 0, sizeof(p));
@@ -155,7 +156,7 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 		return p;
 	};
 
-	const int numPoints = 20;
+	const int numPoints = 9;
 
 	const double dx = ((double) end.x - start.x) / numPoints;
 	const double dy = ((double) end.y - start.y) / numPoints;
@@ -165,6 +166,9 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 		ps.push_back(make_point(dx * i + start.x, dy * i + start.y));
 	}
 	return ps;
+#else
+	return EtherdreamPoints();
+#endif
 }
 
 void laser::Painter::removeExpiredObjects()

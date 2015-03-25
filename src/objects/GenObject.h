@@ -11,8 +11,11 @@ namespace laser {
 	class EXPORT_LASER_CONTROL GenObject: public Object
 	{
 	public:
-		GenObject() : Object() {}
-		GenObject(std::initializer_list<Point> ps);
+		enum { default_sharpness = 9 };
+		GenObject(int _sharpness = default_sharpness) : Object(), sharpness(_sharpness) {}
+		GenObject(std::initializer_list<Point> ps, int _sharpness = default_sharpness);
+
+		int sharpness;
 
 		void clear();
 		void addPoints(std::initializer_list<Point> ps);
@@ -23,16 +26,15 @@ namespace laser {
 		virtual EtherdreamPoints points() const
 		{ return m_ps; }
 
-		virtual EtherdreamPoints startPoints() const
-		{ return EtherdreamPoints(); }
-
-		virtual EtherdreamPoints endPoints() const
-		{ return EtherdreamPoints(); }
+		virtual EtherdreamPoints startPoints() const;
+		virtual EtherdreamPoints endPoints() const;
 
 		virtual void setColor(const Color & color);
 
 	private:
 		EtherdreamPoints m_ps;
+
+		void duplicatePointAsBlack(etherdream_point p, EtherdreamPoints & dst) const;
 	};
 
 }

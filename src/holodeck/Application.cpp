@@ -82,8 +82,9 @@ void Application::displayTests()
 	loop([]{});
 #else
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
-	//m_painter.add(circ);
+	m_painter.add(circ);
 
+#if 1
 	int total_p = 0;
 	const double width = 3000.0;
 	const double left = - 10 * width / 2;
@@ -97,9 +98,10 @@ void Application::displayTests()
 	}
 
 	std::cerr << "# A total of " << total_p << " visible points painted" << std::endl;
+#endif
 
 	loop([&]{
-	//	circ->rotate(radians(5));
+		circ->rotate(radians(5));
 	});
 #endif
 }

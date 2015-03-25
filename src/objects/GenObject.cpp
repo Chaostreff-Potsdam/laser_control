@@ -2,8 +2,9 @@
 
 namespace laser {
 
-GenObject::GenObject(std::initializer_list<Point> ps) :
-	Object()
+GenObject::GenObject(std::initializer_list<Point> ps, int _sharpness) :
+	Object(),
+	sharpness(_sharpness)
 {
 	addPoints(ps);
 }
@@ -33,6 +34,32 @@ void GenObject::setColor(const Color & color)
 		p.b = color.blue();
 	}
 	Object::setColor(color);
+}
+
+void GenObject::duplicatePointAsBlack(etherdream_point p, EtherdreamPoints &dst) const
+{
+	dst.reserve(sharpness);
+	p.r = p.g = p.b = 0;
+	for (int i = 0; i < sharpness; i++)
+		dst.push_back(p);
+}
+
+EtherdreamPoints GenObject::startPoints() const
+{
+	EtherdreamPoints ps;
+	if (!m_ps.empty() && sharpness) {
+		duplicatePointAsBlack(m_ps.front(), ps);
+	}
+	return ps;
+}
+
+EtherdreamPoints GenObject::endPoints() const
+{
+	EtherdreamPoints ps;
+	if (!m_ps.empty() && sharpness) {
+		duplicatePointAsBlack(m_ps.back(), ps);
+	}
+	return ps;
 }
 
 }
