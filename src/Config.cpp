@@ -9,6 +9,7 @@ bool displayTests = false;
 bool testServer = false;
 bool oldCalib = false;
 bool drawCircs = false;
+bool log = false;
 
 void readCommandLine(int argc, char *argv[])
 {
@@ -19,6 +20,7 @@ void readCommandLine(int argc, char *argv[])
 		testServer         |= !strncmp("--test-server", argv[i], 13);
 		oldCalib           |= !strncmp("--old-calib", argv[i], 11);
 		drawCircs          |= !strncmp("--circs", argv[i], 7);
+		log                |= !strncmp("--log", argv[i], 5);
 	}
 }
 

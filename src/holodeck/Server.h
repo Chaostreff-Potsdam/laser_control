@@ -6,6 +6,8 @@
 #include <boost/asio.hpp>
 #include <json/reader.h>
 
+#include <boost/timer/timer.hpp>
+#include <fstream>
 #include <mutex>
 #include <memory>
 
@@ -60,6 +62,9 @@ namespace laser { namespace holodeck {
 
 		int m_current;
 		char m_buf[LASERWRAPPER_SERVER_BUFFER_SIZE];
+
+		std::fstream m_logfile;
+		boost::timer::cpu_timer m_logtimer;
 	};
 
 }} // namespace laser::holodeck

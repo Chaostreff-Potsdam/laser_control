@@ -3,18 +3,24 @@ import struct
 import socket
 import itertools
 import json
-import getHolodeckEnum
 
 """
 A point is a (int, int)-tuple
 """
 
-globals().update(dict(
-	(handler, idx) for idx, handler in enumerate(getHolodeckEnum.findHandlers())))
+try:
+	import getHolodeckEnum
+	globals().update(dict(
+		(handler, idx) for idx, handler in enumerate(getHolodeckEnum.findHandlers())))
+except ImportError:
+	Delete = 1
+	DeleteAll = 2
+
+defaultPort = 30001
 
 class LaserClient(object):
 
-	def __init__(self, host="localhost", port=30000):
+	def __init__(self, host="localhost", port=30001):
 		self.lastSendID = 0
 		self.host = host
 		self.port = port
@@ -29,10 +35,13 @@ class LaserClient(object):
 		
 		if instructionID is not None:
 			packet.update({"instance": instructionID})
-		self.socket.sendto(json.dumps(packet).encode(), (self.host, self.port))
+		self.sendBytes(json.dumps(packet).encode())
 
 	def __packPoints(self, points):
 		return [{"x": x, "y": y} for x, y in points]
+
+	def sendBytes(self, s):
+		self.socket.sendto(s, (self.host, self.port))
 
 	def delete(self, instructionID):
 		self.__sendPacket(Delete, instructionID)
@@ -68,7 +77,7 @@ if __name__ == "__main__":
 	import sys
 	if sys.flags.inspect:
 		host = sys.argv[1] if len(sys.argv) > 1 else "localhost"
-		port = int(sys.argv[2]) if len(sys.argv) > 2 else 30001
+		port = int(sys.argv[2]) if len(sys.argv) > 2 else defaultPort
 		interact(host, port)
 	else:
 		print("Execute with \"python -i %s [host [port]]\"" % sys.argv[0])

@@ -75,6 +75,14 @@ Server::Server(Painter &painter, bool deferStart)
 													 : "192.168.1.148"),
 					 30001)
 {
+	if (config::log) {
+		char filename[100];
+		time_t t = time(nullptr);
+		struct tm *tm = localtime(&t);
+		strftime(filename, sizeof(filename), "server_%Y-%m-%d_%H-%M-%S.log", tm);
+		m_logfile.open(filename, std::fstream::out);
+		m_logtimer.start();
+	}
 	m_socket.open(boost::asio::ip::udp::v4());
 	m_socket.bind(m_localEndpoint);
 	startAccept();
@@ -104,7 +112,9 @@ void Server::startAccept()
 void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t transferred_bytes)
 {
 	Json::Value root;
-	//std::cout << std::string(m_buf, transferred_bytes) << std::endl;
+	if (config::log) {
+		m_logfile << m_logtimer.elapsed().wall / (1000.0 * 1000.0) << " " << std::string(m_buf, transferred_bytes) << std::endl;
+	}
 	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))
 	{
 		unsigned int instructionCode = root.get("instruction", Json::Value(0)).asUInt();
