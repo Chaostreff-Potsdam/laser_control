@@ -84,7 +84,7 @@ void Application::displayTests()
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
 
-	const int d = 0;
+	const int d = 8;
 	CompositeObjectPtr digit = opts::getDigit(d);
 	std::cerr << digit->pointsToPaint().size() << " points for digit " << d << std::endl;
 	digit->setColor(Color::LIGHTBLUE);

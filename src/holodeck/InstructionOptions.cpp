@@ -6,8 +6,9 @@
 
 namespace laser { namespace holodeck { namespace opts {
 
-#define LASER_HOLODECK_OPTS_FULL (3000)
-#define LASER_HOLODECK_OPTS_HALF (1500)
+#define LASER_HOLODECK_OPTS_FULL (3000.0)
+#define LASER_HOLODECK_OPTS_HALF (LASER_HOLODECK_OPTS_FULL / 2)
+#define LASER_HOLODECK_OPTS_QURT (LASER_HOLODECK_OPTS_FULL / 4)
 
 #define HANDCRAFTED 1
 
@@ -143,6 +144,17 @@ static CompositeObjectPtr getSeven()
 static CompositeObjectPtr getEight()
 {
 	CompositeObjectPtr group = CompositeObject::construct();
+#if HANDCRAFTED
+	ObjectPtr top(new Circle(0, 0, LASER_HOLODECK_OPTS_QURT * 0.9, -M_PI / 2, M_PI * 1.5));
+	ObjectPtr bottom(new Circle(0, 0, LASER_HOLODECK_OPTS_QURT, -M_PI / 2, M_PI * 1.5));
+
+	top->move(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_QURT);
+	bottom->flipVertically();
+	bottom->move(LASER_HOLODECK_OPTS_HALF, -LASER_HOLODECK_OPTS_QURT);
+
+	group->add(top);
+	group->add(bottom);
+#else
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(0, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
@@ -150,6 +162,7 @@ static CompositeObjectPtr getEight()
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_HALF), Point(0, 0)));
 	group->add(std::make_shared<Line>(Point(0, 0), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF)));
+#endif
 	return group;
 }
 
