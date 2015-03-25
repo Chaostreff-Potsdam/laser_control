@@ -4,6 +4,8 @@
 
 #include <opencv2/highgui/highgui.hpp>
 
+#define DRAW_ON_WHITE 1
+
 namespace laser {
 
 static const char *windowName = "Virtual Laser Canvas";
@@ -32,7 +34,12 @@ VirtualLaser::~VirtualLaser()
 
 void VirtualLaser::writePoints()
 {
-	cv::Mat canvas = cv::Mat::zeros(windowSize, windowSize, CV_16UC3);
+	cv::Mat canvas(windowSize, windowSize, CV_16UC3);
+#if DRAW_ON_WHITE
+	canvas = cv::Scalar(UINT16_MAX, UINT16_MAX, UINT16_MAX);
+#else
+	canvas = cv::Scalar(0, 0, 0);
+#endif
 
 	{
 		std::lock_guard<std::mutex> guard(m_pointsMutex);
@@ -64,7 +71,9 @@ size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)
 
 	const cv::Point *pts = currentPoints.data();
 	const int nums = (int) currentPoints.size();
+#if !DRAW_ON_WHITE
 	if (currentColor != cv::Scalar(0,0,0)) {
+#endif
 		if (config::drawCircs) {
 			for (const auto & p: currentPoints) {
 				cv::circle(canvas, p, 3, currentColor, -1);
@@ -72,7 +81,9 @@ size_t VirtualLaser::drawNextPolyline(size_t currentIndex, cv::Mat &canvas)
 		} else {
 			cv::polylines(canvas, &pts, &nums, 1, false, currentColor);
 		}
+#if !DRAW_ON_WHITE
 	}
+#endif
 
 	return currentIndex;
 }

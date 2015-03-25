@@ -108,6 +108,9 @@ namespace laser {
 		 */
 		void updateAllObjects();
 
+		EtherdreamPoints invisibleLine(const etherdream_point & start, const ObjectPtr & end) const;
+		EtherdreamPoints invisibleLine(const etherdream_point & start, const etherdream_point & end) const;
+
 	protected:
 		std::thread m_updateLoop;
 		void updateLoop();

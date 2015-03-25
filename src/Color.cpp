@@ -37,6 +37,10 @@ laser::Color::Color(laser::Color::ColorName colorName) {
 		m_green = 0;
 		m_blue = INT16_MAX;
 		break;
+	case laser::Color::BLACK:
+		m_red = 0;
+		m_green = 0;
+		m_blue = 0;
 	default:
 		m_red = 0;
 		m_green = INT16_MAX;

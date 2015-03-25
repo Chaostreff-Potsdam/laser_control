@@ -61,6 +61,11 @@ void laser::Object::rebuildCache()
 	m_isUpdating = false;
 }
 
+bool laser::Object::empty() const
+{
+	return startPoints().empty() && endPoints().empty() && points().empty();
+}
+
 laser::EtherdreamPoints laser::Object::pointsToPaint()
 {
 	if (!m_isVisible)

@@ -137,6 +137,36 @@ laser::ObjectPtr laser::Painter::getObject(int id)
 	return m_objects[id];
 }
 
+laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &start, const laser::ObjectPtr & end) const
+{
+	if (end->empty())
+		return EtherdreamPoints();
+
+	return invisibleLine(start, end->pointsToPaint().front());
+}
+
+laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &start, const etherdream_point &end) const
+{
+	static const auto make_point = [](double x, double y) {
+		etherdream_point p;
+		memset(&p, 0, sizeof(p));
+		p.x = clamp(x, INT16_MIN, INT16_MAX);
+		p.y = clamp(y, INT16_MIN, INT16_MAX);
+		return p;
+	};
+
+	const int numPoints = 5;
+
+	const double dx = ((double) end.x - start.x) / numPoints;
+	const double dy = ((double) end.y - start.y) / numPoints;
+
+	EtherdreamPoints ps;
+	for (int i = 0; i < numPoints; i++) {
+		ps.push_back(make_point(dx * i + start.x, dy * i + start.y));
+	}
+	return ps;
+}
+
 void laser::Painter::removeExpiredObjects()
 {
 	boost::posix_time::ptime now(boost::date_time::microsec_clock<boost::posix_time::ptime>::universal_time());
@@ -184,11 +214,20 @@ void laser::Painter::updatePoints()
 			objects.push_back(objPair.second);
 		}
 
-		sortObjects(objects);
+		if (!objects.empty()) {
+			sortObjects(objects);
 
-		for (auto & obj: objects) {
-			// obj->tick();
-			appendToVector(ps, obj->pointsToPaint());
+			for (auto & obj: objects) {
+				// obj->tick();
+				if (!ps.empty())
+					appendToVector(ps, invisibleLine(ps.back(), obj));
+
+				appendToVector(ps, obj->pointsToPaint());
+			}
+
+			if (!ps.empty()) {
+				appendToVector(ps, invisibleLine(ps.back(), ps.front()));
+			}
 		}
 	}
 

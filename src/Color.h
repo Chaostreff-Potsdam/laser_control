@@ -13,7 +13,8 @@ namespace laser {
 			LIGHTBLUE,
 			BLUE,
 			RED,
-			PURPLE
+			PURPLE,
+			BLACK
 		};
 
 		Color(ColorName colorName = ColorName::GREEN);

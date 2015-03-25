@@ -33,6 +33,7 @@ namespace laser {
 		void setParent(const parent_t & newParent);
 
 		EtherdreamPoints pointsToPaint();
+		bool empty() const;
 
 		/*** Transforms ***/
 
