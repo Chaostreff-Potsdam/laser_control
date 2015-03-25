@@ -3,6 +3,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "InstructionFactory.h"
+#include "InstructionOptions.h"
 #include "Server.h"
 #include "../laser_calibration/Calibration.h"
 
@@ -13,6 +14,7 @@
 #include "../objects/Line.h"
 #include "../objects/Rectangle.h"
 #include "../objects/RisenGroup.h"
+#include "../objects/GenObject.h"
 
 #define USE_ILDA_PARSER 0
 
@@ -82,12 +84,11 @@ void Application::displayTests()
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
 
-	Point p3(5000, 5000), p4(5000, -1000);
-	ObjectPtr l(new Line(p3, p4));
-	l->setColor(Color::RED);
-	m_painter.add(l);
-
-	m_painter.add(holodeck::InstructionFactory::ZiplineWithStep(Json::Value(), Point(0, 0), Point(10000, 6000), p3, p4));
+	const int d = 0;
+	CompositeObjectPtr digit = opts::getDigit(d);
+	std::cerr << digit->pointsToPaint().size() << " points for digit " << d << std::endl;
+	digit->setColor(Color::LIGHTBLUE);
+	m_painter.add(digit);
 
 	loop([&]{
 		circ->rotate(radians(5));

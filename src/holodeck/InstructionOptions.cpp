@@ -1,11 +1,15 @@
 #include "InstructionOptions.h"
 #include "../objects/CompositeObject.h"
 #include "../objects/Line.h"
+#include "../objects/GenObject.h"
+#include "../objects/Circle.h"
 
 namespace laser { namespace holodeck { namespace opts {
 
 #define LASER_HOLODECK_OPTS_FULL (3000)
 #define LASER_HOLODECK_OPTS_HALF (1500)
+
+#define HANDCRAFTED 1
 
 static CompositeObjectPtr getZero()
 {
@@ -19,10 +23,17 @@ static CompositeObjectPtr getZero()
 	 * L-----J
 	 */
 	CompositeObjectPtr group = CompositeObject::construct();
+#if HANDCRAFTED
+	ObjectPtr circ(new Circle(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF * 0.5));
+	circ->scale(1, 2);
+
+	group->add(circ);
+#else
 	group->add(std::make_shared<Line>(Point(0, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_FULL), Point(LASER_HOLODECK_OPTS_HALF, 0)));
 	group->add(std::make_shared<Line>(Point(LASER_HOLODECK_OPTS_HALF, 0), Point(0, 0)));
 	group->add(std::make_shared<Line>(Point(0, 0), Point(0, LASER_HOLODECK_OPTS_FULL)));
+#endif
 	return group;
 }
 
