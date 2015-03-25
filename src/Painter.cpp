@@ -155,7 +155,7 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 		return p;
 	};
 
-	const int numPoints = 5;
+	const int numPoints = 20;
 
 	const double dx = ((double) end.x - start.x) / numPoints;
 	const double dy = ((double) end.y - start.y) / numPoints;

@@ -82,16 +82,24 @@ void Application::displayTests()
 	loop([]{});
 #else
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
-	m_painter.add(circ);
+	//m_painter.add(circ);
 
-	const int d = 8;
-	CompositeObjectPtr digit = opts::getDigit(d);
-	std::cerr << digit->pointsToPaint().size() << " points for digit " << d << std::endl;
-	digit->setColor(Color::LIGHTBLUE);
-	m_painter.add(digit);
+	int total_p = 0;
+	const double width = 3000.0;
+	const double left = - 10 * width / 2;
+	for (int d = 0; d <= 9; d++) {
+		CompositeObjectPtr digit = opts::getDigit(d);
+		std::cerr << digit->pointsToPaint().size() << " points for digit " << d << std::endl;
+		total_p += digit->pointsToPaint().size();
+		digit->setColor(Color::LIGHTBLUE);
+		digit->move(left + width * d, 0);
+		m_painter.add(digit);
+	}
+
+	std::cerr << "# A total of " << total_p << " visible points painted" << std::endl;
 
 	loop([&]{
-		circ->rotate(radians(5));
+	//	circ->rotate(radians(5));
 	});
 #endif
 }

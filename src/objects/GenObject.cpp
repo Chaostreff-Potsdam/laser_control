@@ -25,4 +25,14 @@ void GenObject::addPoint(double x, double y)
 	m_ps.push_back(etherdreamPoint(x, y));
 }
 
+void GenObject::setColor(const Color & color)
+{
+	for (auto & p: m_ps) {
+		p.r = color.red();
+		p.g = color.green();
+		p.b = color.blue();
+	}
+	Object::setColor(color);
+}
+
 }

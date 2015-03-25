@@ -29,6 +29,8 @@ namespace laser {
 		virtual EtherdreamPoints endPoints() const
 		{ return EtherdreamPoints(); }
 
+		virtual void setColor(const Color & color);
+
 	private:
 		EtherdreamPoints m_ps;
 	};
