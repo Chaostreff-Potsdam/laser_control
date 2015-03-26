@@ -17,8 +17,9 @@ double valFrom(int value)
 	return 0.000000000001 * value;
 }
 
-DistorionCalibration::DistorionCalibration(const CanvasPtr &canvas) :
+DistorionCalibration::DistorionCalibration(const CanvasPtr &canvas, const cv::Mat &homography) :
 	AbstractCalibration(canvas),
+	m_homography(homography.clone()),
 	m_currentDirection(HORIZONTAL),
 	m_h(trackZero),
 	m_v(trackZero)
@@ -102,6 +103,7 @@ EtherdreamPoints DistorionCalibration::pointsToPaint()
 {
 	auto points = currentLines()->pointsToPaint();
 	compute();
+	Transform::applyInPlace(points, cv::perspectiveTransform, m_homography);
 	Transform::undistortInPlace(points, m_distortion);
 	return points;
 }

@@ -56,7 +56,7 @@ void laser::Painter::calibrate()
 	}
 
 	// TODO: Apply to painter
-	DistorionCalibration dcalib(canvas());
+	DistorionCalibration dcalib(canvas(), m_calibration);
 	dcalib.start();
 	m_distortion = dcalib.distortion();
 }

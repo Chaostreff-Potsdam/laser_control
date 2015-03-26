@@ -12,7 +12,7 @@ class EXPORT_LASER_CONTROL DistorionCalibration: public AbstractCalibration
 	enum { LINE_COUNT = 6 };
 
 public:
-	DistorionCalibration(const CanvasPtr & canvas);
+	DistorionCalibration(const CanvasPtr & canvas, const cv::Mat & homography);
 
 	Transform::DistortionInfo distortion();
 
@@ -40,6 +40,7 @@ protected:
 
 private:
 	Transform::DistortionInfo m_distortion;
+	cv::Mat m_homography;
 
 	int m_currentDirection;
 	int m_h;
