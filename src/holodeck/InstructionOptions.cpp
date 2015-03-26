@@ -253,12 +253,12 @@ static CompositeObjectPtr getNine()
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 #if HANDCRAFTED
-	ObjectPtr obj(new GenObject({Point(891, 2102), Point(1125, 2072), Point(1336, 1964), Point(1503, 1797),
-								 Point(1618, 1590), Point(1683, 1362), Point(1710, 1126), Point(1708, 889),
-								 Point(1667, 656), Point(1526, 470), Point(1301, 399), Point(1068, 428),
-								 Point(887, 576), Point(798, 794), Point(801, 1030), Point(905, 1240),
-								 Point(1109, 1352), Point(1345, 1350), Point(1552, 1238), Point(1680, 1041),
-								 Point(1708, 893)}));
+	// Nine becomes an U for distinguishing from 6
+	ObjectPtr obj(new GenObject({Point(605, 396), Point(603, 659), Point(602, 921), Point(601, 1184),
+								 Point(600, 1446), Point(619, 1707), Point(732, 1941), Point(960, 2058),
+								 Point(1219, 2102), Point(1480, 2081), Point(1715, 1972), Point(1845, 1752),
+								 Point(1899, 1495), Point(1900, 1233), Point(1900, 970), Point(1900, 708),
+								 Point(1901, 445), Point(1901, 396)}));
 	moveObjectFromNSpaceToOptsSpace(obj);
 	group->add(obj);
 #else
