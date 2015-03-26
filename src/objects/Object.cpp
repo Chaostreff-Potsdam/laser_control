@@ -8,7 +8,7 @@
 #include <assert.h>
 
 int laser::Object::s_pixelsPerPointDefault = 1000;
-int laser::Object::s_marginPointFractionDefault = 5;
+int laser::Object::s_marginPointFractionDefault = 8;
 
 const int laser::Object::useDefaultValue = -1;
 

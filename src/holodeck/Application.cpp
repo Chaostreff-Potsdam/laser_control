@@ -84,6 +84,8 @@ void Application::displayTests()
 	ObjectPtr circ = std::make_shared<Circle>(-10000, -10000, 20000);
 	m_painter.add(circ);
 
+	m_painter.add(InstructionFactory::Player(Json::Value(), Point(-10000, -10000)));
+
 #if 1
 	int total_p = 0;
 	const double width = 3000.0;
