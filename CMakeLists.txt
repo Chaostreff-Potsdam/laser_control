@@ -15,7 +15,7 @@ endif(WIN32)
 find_package(OpenCV REQUIRED)
 find_package(Boost ${BOOST_VERSION}
 			REQUIRED
-                        COMPONENTS system regex date_time)
+                        COMPONENTS system regex date_time timer)
 
 if(UNIX)
         find_package(Jsoncpp REQUIRED)
