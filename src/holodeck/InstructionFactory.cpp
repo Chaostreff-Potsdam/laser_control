@@ -61,8 +61,6 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 						  .asInt();
 	CompositeObjectPtr digit = opts::getDigit(id);
 	digit->rotate(rotation, Point(250, 500));
-	digit->scale(-1, 1);
-	digit->move(1000, 0);
 	digit->move(p);
 	digit->setColor(MetaDataColor);
 	return digit;
