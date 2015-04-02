@@ -777,4 +777,11 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwiseHighFreq(const Json::Value
 	return MoveDoorCounterClockwise(HIGH, p1, p2);
 }
 
+ObjectPtr InstructionFactory::TurkerLabel(const Json::Value &root, Point p1, Point p2)
+{
+	ObjectPtr digit = getDigit(root, 0, p1);
+	digit->rotate((p2 - p1).angle(), p1);
+	return digit;
+}
+
 }} // namespace laser::holodeck

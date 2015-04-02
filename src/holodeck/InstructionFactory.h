@@ -53,6 +53,7 @@ namespace InstructionFactory {
 	ObjectPtr MoveDoorCounterClockwiseHighFreq(const Json::Value &root, Point p1, Point p2);
 	ObjectPtr MoveDoorClockwise(BlinkFrequency freq, Point p1, Point p2);
 	ObjectPtr MoveDoorCounterClockwise(BlinkFrequency freq, Point p1, Point p2);
+	ObjectPtr TurkerLabel(const Json::Value &root, Point p1, Point p2);
 }
 
 }} // namespace laser::holodeck

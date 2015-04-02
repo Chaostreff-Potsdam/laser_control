@@ -61,6 +61,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLE_OBJECT(MoveDoorCounterClockwiseLowFreq, 2),
 	HANDLE_OBJECT(MoveDoorCounterClockwiseMidFreq, 2),
 	HANDLE_OBJECT(MoveDoorCounterClockwiseHighFreq, 2),
+	HANDLE_OBJECT(TurkerLabel, 2)
 };
 
 namespace basioip = boost::asio::ip;
