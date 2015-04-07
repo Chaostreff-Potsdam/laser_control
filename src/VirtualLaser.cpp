@@ -1,5 +1,5 @@
 #include "VirtualLaser.h"
-#include "laser_utilities.h"
+#include "utils.h"
 #include "Config.h"
 
 #include <opencv2/highgui/highgui.hpp>

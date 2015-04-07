@@ -1,5 +1,4 @@
-#include "laser_utilities.h"
-
+#include "Point.h"
 
 std::ostream& operator<< (std::ostream& stream, const laser::Point& point)
 {

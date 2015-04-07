@@ -79,4 +79,3 @@ laser::EtherdreamPoints laser::CompositeObject::endPoints() const
 {
 	return EtherdreamPoints();
 }
-

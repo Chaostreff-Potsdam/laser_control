@@ -58,6 +58,8 @@ namespace laser {
 
 	private:
 		void removeChild(const Object *object);
+		const std::vector<ObjectPtr> childrend() const
+		{ return m_children; }
 
 		friend void Object::setParent(const parent_t &);
 	};

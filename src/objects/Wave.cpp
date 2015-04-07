@@ -4,8 +4,6 @@
 #define LASERWRAPPER_WAVE_POINTS (100)
 #endif
 
-#include "laser_utilities.h"
-
 laser::Wave::Wave(Point p1, Point p2, int amplitude, int frequency)
 	: Object(),
 	  m_amplitude(amplitude),

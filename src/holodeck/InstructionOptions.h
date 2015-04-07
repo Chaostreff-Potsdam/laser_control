@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../laser_utilities.h"
 #include "../objects/CompositeObject.h"
 
 namespace laser { namespace holodeck { namespace opts {

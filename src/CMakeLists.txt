@@ -40,6 +40,7 @@ endmacro(findCppFiles)
 set(LASER_WRAPPER_FOLDERS
 		"."
 		"laser_calibration"
+		"utils"
 		"animations"
 		"objects")
 

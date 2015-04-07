@@ -1,6 +1,6 @@
 #include "Canvas.h"
 
-#include "laser_utilities.h"
+#include "utils.h"
 
 namespace laser {
 

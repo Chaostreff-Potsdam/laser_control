@@ -1,9 +1,7 @@
 #include "Polygon.h"
+#include "Line.h"
 
 #include <vector>
-
-#include "Line.h"
-#include "laser_utilities.h"
 
 laser::Polygon::Polygon(bool sharp, bool dashed, bool closed)
 :	Object(),

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../EtherdreamWrapper.h"
-#include "../laser_utilities.h"
+#include "../utils.h"
 #include "../DllExport.h"
 #include "../Color.h"
 #include "../animations//Animation.h"

@@ -3,7 +3,7 @@
 #include <vector>
 #include <cmath>
 
-#include "laser_utilities.h"
+#include "utils.h"
 
 #ifndef LASERWRAPPER_LINE_POINTS
 #define LASERWRAPPER_LINE_POINTS (100)

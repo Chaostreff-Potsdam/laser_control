@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-#include "laser_utilities.h"
+#include "utils.h"
 
 #define C_MAX UINT16_MAX
 
