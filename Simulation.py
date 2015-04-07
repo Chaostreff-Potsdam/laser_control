@@ -3,6 +3,7 @@ import struct
 import socket
 import itertools
 import json
+import collections
 
 """
 A point is a (int, int)-tuple
@@ -59,6 +60,8 @@ class LaserClient(object):
 			instructionID = self.lastSendID
 		if turkerIds is None:
 			turkerIds = []
+		if not isinstance(turkerIds, collections.Iterable):
+			turkerIds = [turkerIds]
 
 		self.__sendPacket(code, instructionID, 
 				{"points": self.__packPoints(points),
