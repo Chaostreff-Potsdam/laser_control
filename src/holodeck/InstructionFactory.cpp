@@ -57,12 +57,14 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 	int id = root.get("turkers",
 								Json::Value())
 						  .get(i,
-								Json::Value())
+								Json::Value(-1))
 						  .asInt();
 	CompositeObjectPtr digit = opts::getDigit(id);
-	digit->rotate(rotation, Point(250, 500));
-	digit->move(p);
-	digit->setColor(MetaDataColor);
+	if (digit) {
+		digit->rotate(rotation, Point(250, 500));
+		digit->move(p);
+		digit->setColor(MetaDataColor);
+	}
 	return digit;
 }
 
@@ -157,9 +159,7 @@ ObjectPtr InstructionFactory::Table(const Json::Value &root, Point p1, Point p2,
 	CompositeObjectPtr group = CompositeObject::construct();
 	const Point center = (p1 + p2 + p3 + p4) * 0.25;
 	group->add(new Rectangle(p1, p2, p3, p4, false));
-
-	ObjectPtr turkerId = getDigit(root, 0, center);
-	if(turkerId) group->add(turkerId);
+	group->add(getDigit(root, 0, center));
 
 	return group;
 }
@@ -182,8 +182,7 @@ ObjectPtr InstructionFactory::Switch(const Json::Value &root, Point p1, Point p2
 	Point stickDirection(p2 - p1);
 	Point attachmentPoint = p2 - stickDirection.norm() * opts::SwitchHandleSize;
 	group->add(new Line(p1, attachmentPoint));
-	ObjectPtr turkerId = getDigit(root, 0, p1 + stickDirection / 2, stickDirection.angle());
-	if(turkerId)group->add(turkerId);
+	group->add(getDigit(root, 0, p1 + stickDirection / 2, stickDirection.angle()));
 
 	return group;
 }
@@ -208,10 +207,7 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 									   false);
 	bigRect->rotate(alpha-M_PI_2, midPoint);
 	group->add(bigRect);
-
-
-	ObjectPtr turkerId = getDigit(root, 0, midPoint + dir.norm().perpendicular() * 1000, dir.angle());
-	if(turkerId) group->add(turkerId);
+	group->add(getDigit(root, 0, midPoint + dir.norm().perpendicular() * 1000, dir.angle()));
 
 	return group;
 }
@@ -260,8 +256,7 @@ ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p
 
 	// Need 5 turkers
 	auto addTurkerDigit = [&](const int index, const Point & pos) {
-		ObjectPtr turkerId = getDigit(root, index, pos, direction.angle());
-		if(turkerId >= 0) group->add(turkerId);
+		group->add(getDigit(root, index, pos, direction.angle()));
 	};
 
 	addTurkerDigit(0, p1 - direction.norm() * (opts::ZipLineOuterCircle + opts::Number0Right) - perpendic * opts::Number0Bottom);
@@ -520,8 +515,8 @@ ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point
 		turkerId->rotate(alpha);
 		turkerId->move(midPoint - p1p2 / 2);
 		turkerId->move(Point(-p1p2.y(), p1p2.x()).norm() * 100);
+		group->add(turkerId);
 	}
-	group->add(turkerId);
 	group->add(new Rectangle(p1, p2, p3, p4, false));
 	return group;
 }
@@ -780,7 +775,8 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwiseHighFreq(const Json::Value
 ObjectPtr InstructionFactory::TurkerLabel(const Json::Value &root, Point p1, Point p2)
 {
 	ObjectPtr digit = getDigit(root, 0, p1);
-	digit->rotate((p2 - p1).angle(), p1);
+	if (digit)
+		digit->rotate((p2 - p1).angle(), p1);
 	return digit;
 }
 
