@@ -23,6 +23,10 @@ namespace laser {
 	class EXPORT_LASER_CONTROL Object
 	{
 	public:
+		enum Flags {
+			none = 0,
+			dont_add_black_line = 0x0001
+		};
 		typedef CompositeObjectPtr parent_t;
 		static const int useDefaultValue;
 
@@ -110,6 +114,10 @@ namespace laser {
 		virtual void update()
 		{ nowDirty(); }
 
+		Flags flags() const
+		{ return m_flags; }
+		void setFlags(const Flags flags);
+
 	protected:
 		boost::posix_time::ptime m_started;
 		bool m_permanent;
@@ -133,6 +141,7 @@ namespace laser {
 		bool m_dirty, m_isUpdating;
 		EtherdreamPoints m_cache;
 
+		Flags m_flags;
 		cv::Mat m_transform;
 		std::weak_ptr<CompositeObject> m_parent;
 

@@ -35,8 +35,9 @@ namespace laser {
 		{ return self.lock(); }
 
 		virtual void setColor(const Color & color);
-
 		virtual void update();
+		const std::vector<ObjectPtr> children() const
+		{ return m_children; }
 
 	protected:
 		template<typename AddableT>
@@ -58,8 +59,6 @@ namespace laser {
 
 	private:
 		void removeChild(const Object *object);
-		const std::vector<ObjectPtr> childrend() const
-		{ return m_children; }
 
 		friend void Object::setParent(const parent_t &);
 	};

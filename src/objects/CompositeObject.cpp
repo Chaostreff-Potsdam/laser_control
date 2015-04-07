@@ -19,6 +19,8 @@ void laser::CompositeObject::add(Object *object)
 
 void laser::CompositeObject::add(const ObjectPtr & object)
 {
+	if (!object)
+		return;
 	object->setParent(self.lock());
 	m_children.emplace_back(object);
 	nowDirty();

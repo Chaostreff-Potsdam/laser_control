@@ -261,7 +261,7 @@ ObjectPtr InstructionFactory::Zipline(const Json::Value &root, Point p1, Point p
 	// Need 5 turkers
 	auto addTurkerDigit = [&](const int index, const Point & pos) {
 		ObjectPtr turkerId = getDigit(root, index, pos, direction.angle());
-		if(turkerId) group->add(turkerId);
+		if(turkerId >= 0) group->add(turkerId);
 	};
 
 	addTurkerDigit(0, p1 - direction.norm() * (opts::ZipLineOuterCircle + opts::Number0Right) - perpendic * opts::Number0Bottom);

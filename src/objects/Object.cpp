@@ -17,6 +17,7 @@ laser::Object::Object()
 	  m_pixelsPerPoint(useDefaultValue),
 	  m_marginPointFraction(useDefaultValue),
 	  m_isUpdating(false),
+	  m_flags(none),
 	  m_isVisible(true)
 {
 	resetTransform();
@@ -64,6 +65,12 @@ void laser::Object::rebuildCache()
 bool laser::Object::empty() const
 {
 	return startPoints().empty() && endPoints().empty() && points().empty();
+}
+
+void laser::Object::setFlags(const Flags flags)
+{
+	m_flags = flags;
+	nowDirty();
 }
 
 laser::EtherdreamPoints laser::Object::pointsToPaint()
