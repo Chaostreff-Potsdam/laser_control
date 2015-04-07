@@ -17,6 +17,9 @@ static void moveObjectFromNSpaceToOptsSpace(ObjectPtr & obj)
 	obj->move(-nSpace * 0.5, -nSpace * 0.5);
 	obj->flipVertically();
 	obj->scale(1.5 * LASER_HOLODECK_OPTS_FULL / nSpace);
+#if NOT_NEW_NUMBERS
+	obj->move(LASER_HOLODECK_OPTS_HALF, LASER_HOLODECK_OPTS_HALF);
+#endif
 }
 
 static CompositeObjectPtr getZero()
