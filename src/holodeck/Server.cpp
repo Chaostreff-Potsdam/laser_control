@@ -29,7 +29,7 @@ const std::vector<Server::Handler> Server::Handlers = {
 	HANDLER(Delete),
 	HANDLER(DeleteAll),
 	HANDLE_OBJECT(Player, 1),
-	HANDLE_OBJECT(Wall, 2),
+	HANDLE_OBJECT(Wall, 4),
 	HANDLE_OBJECT(Door, 2),
 	HANDLE_OBJECT(Table, 4),
 	HANDLE_OBJECT(Switch, 2),
@@ -176,6 +176,7 @@ void Server::handleDelete(const Json::Value &root)
 
 void Server::handleDeleteAll(const Json::Value &root)
 {
+	(void)root;
 	std::cerr << "delete all" << std::endl;
 	std::lock_guard<std::mutex> lock(m_painterMutex);
 	m_painter.deleteAll();
