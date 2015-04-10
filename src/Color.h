@@ -14,6 +14,7 @@ namespace laser {
 			BLUE,
 			RED,
 			PURPLE,
+			WHITE,
 			BLACK
 		};
 

@@ -107,7 +107,13 @@ static ObjectPtr MovingIndicator(const Point & p1, double angle)
 
 ////////////////////////////////////////////////////////////
 
-ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
+ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
+{
+	return Table(root, p1, p2, p3, p4);
+}
+
+// Hannes asked to define walls by four points. I keep that one for MovingWalls, Door, etc.
+static ObjectPtr TwoPointWall(const Json::Value & root, Point p1, Point p2)
 {
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(new Line(p1, p2, true));
@@ -135,7 +141,7 @@ ObjectPtr InstructionFactory::Wall(const Json::Value &root, Point p1, Point p2)
 
 ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Point p2)
 {
-	CompositeObjectPtr group = std::dynamic_pointer_cast<CompositeObject>(Wall(root, p1, p2));
+	CompositeObjectPtr group = std::dynamic_pointer_cast<CompositeObject>(TwoPointWall(root, p1, p2));
 
 	Point direction = p2 - p1;
 	Point mid = p1 + direction * 0.5;
@@ -148,7 +154,7 @@ ObjectPtr InstructionFactory::MovingWall(const Json::Value &root, Point p1, Poin
 
 ObjectPtr InstructionFactory::Door(const Json::Value &root, Point p1, Point p2)
 {
-	CompositeObjectPtr door = std::dynamic_pointer_cast<CompositeObject>(Wall(root, p1, p2));
+	CompositeObjectPtr door = std::dynamic_pointer_cast<CompositeObject>(TwoPointWall(root, p1, p2));
 	door->add(new Circle(p2, 750));
 
 	return door;
@@ -214,6 +220,7 @@ ObjectPtr InstructionFactory::Beam(const Json::Value &root, Point p1, Point p2)
 
 static ObjectPtr Portal(const Json::Value &root, Point p1, Point p2, bool active)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	float alpha;
@@ -351,6 +358,7 @@ ObjectPtr InstructionFactory::Corpse(const Json::Value &root, Point head, Point 
 
 ObjectPtr InstructionFactory::Water(const Json::Value &root, Point p)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	group->add(new Circle(p, 2000, 3.8*M_PI_4, 9*M_PI_4));
@@ -362,6 +370,7 @@ ObjectPtr InstructionFactory::Water(const Json::Value &root, Point p)
 
 ObjectPtr InstructionFactory::Poke(const Json::Value &root, Point p1, Point p2)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	float alpha;
@@ -389,6 +398,7 @@ ObjectPtr InstructionFactory::Poke(const Json::Value &root, Point p1, Point p2)
 
 ObjectPtr InstructionFactory::Footwear(const Json::Value &root, Point p)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 	CompositeObjectPtr groupA = CompositeObject::construct();
 	CompositeObjectPtr groupB = CompositeObject::construct();
@@ -448,6 +458,7 @@ ObjectPtr InstructionFactory::Footwear(const Json::Value &root, Point p)
 
 ObjectPtr InstructionFactory::Heat(const Json::Value &root, Point p)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	group->add(new Circle(p, 2000, 3.8*M_PI_4, 9*M_PI_4));
@@ -471,6 +482,7 @@ ObjectPtr InstructionFactory::Heat(const Json::Value &root, Point p)
 
 ObjectPtr InstructionFactory::Elevator(const Json::Value &root, Point p1, Point p2, Point p3)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	Point s12 = p2 - p1;
@@ -499,6 +511,7 @@ ObjectPtr InstructionFactory::Elevator(const Json::Value &root, Point p1, Point 
 
 ObjectPtr InstructionFactory::Guardrail(const Json::Value &root, Point p1, Point p2, Point p3, Point p4)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 
 	float alpha;
@@ -567,8 +580,9 @@ ObjectPtr InstructionFactory::MovingWallWarning(const Json::Value &root, Point p
 	return group;
 }
 
-ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2)
+ObjectPtr InstructionFactory::MoveTurker(const Json::Value &root, BlinkFrequency freq, Point p1, Point p2)
 {
+	(void)root;
 	CompositeObjectPtr group = CompositeObject::construct();
 	group->add(new /*long*/ Line(p1, p2));
 	Point end = p2 + (p1 - p2)/3;
@@ -605,26 +619,27 @@ ObjectPtr InstructionFactory::MoveTurker(BlinkFrequency freq, Point p1, Point p2
 
 ObjectPtr InstructionFactory::MoveTurkerLowFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveTurker(LOW, p1, p2);
+	return MoveTurker(root, LOW, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveTurkerMidFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveTurker(MEDIUM, p1, p2);
+	return MoveTurker(root, MEDIUM, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveTurkerHighFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveTurker(HIGH, p1, p2);
+	return MoveTurker(root, HIGH, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveTurkerNoFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveTurker(NO, p1, p2);
+	return MoveTurker(root, NO, p1, p2);
 }
 
-ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, Point p2)
+ObjectPtr InstructionFactory::MoveDoorClockwise(const Json::Value &root, BlinkFrequency freq, Point p1, Point p2)
 {
+	(void)root;
 	Point p1p2 = p2 - p1;
 	double distance = p1p2.abs();
 	double radius = distance / M_SQRT2;
@@ -676,8 +691,9 @@ ObjectPtr InstructionFactory::MoveDoorClockwise(BlinkFrequency freq, Point p1, P
 	return group;
 }
 
-ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Point p1, Point p2)
+ObjectPtr InstructionFactory::MoveDoorCounterClockwise(const Json::Value &root, BlinkFrequency freq, Point p1, Point p2)
 {
+	(void)root;
 	Point p1p2 = p2 - p1;
 	double distance = p1p2.abs();
 	double radius = distance / M_SQRT2;
@@ -731,45 +747,45 @@ ObjectPtr InstructionFactory::MoveDoorCounterClockwise(BlinkFrequency freq, Poin
 
 ObjectPtr InstructionFactory::MoveDoorClockwiseNoFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorClockwise(NO, p1, p2);
+	return MoveDoorClockwise(root, NO, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveDoorClockwiseLowFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorClockwise(LOW, p1, p2);
+	return MoveDoorClockwise(root, LOW, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveDoorClockwiseMidFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorClockwise(MEDIUM, p1, p2);
+	return MoveDoorClockwise(root, MEDIUM, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveDoorClockwiseHighFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorClockwise(HIGH, p1, p2);
+	return MoveDoorClockwise(root, HIGH, p1, p2);
 }
 
 ObjectPtr InstructionFactory::MoveDoorCounterClockwiseNoFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorCounterClockwise(NO, p1, p2);
+	return MoveDoorCounterClockwise(root, NO, p1, p2);
 
 }
 
 ObjectPtr InstructionFactory::MoveDoorCounterClockwiseLowFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorCounterClockwise(LOW, p1, p2);
+	return MoveDoorCounterClockwise(root, LOW, p1, p2);
 
 }
 
 ObjectPtr InstructionFactory::MoveDoorCounterClockwiseMidFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorCounterClockwise(MEDIUM, p1, p2);
+	return MoveDoorCounterClockwise(root, MEDIUM, p1, p2);
 
 }
 
 ObjectPtr InstructionFactory::MoveDoorCounterClockwiseHighFreq(const Json::Value &root, Point p1, Point p2)
 {
-	return MoveDoorCounterClockwise(HIGH, p1, p2);
+	return MoveDoorCounterClockwise(root, HIGH, p1, p2);
 }
 
 ObjectPtr InstructionFactory::TurkerLabel(const Json::Value &root, Point p1, Point p2)

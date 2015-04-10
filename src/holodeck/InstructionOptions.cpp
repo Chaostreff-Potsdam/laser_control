@@ -64,10 +64,9 @@ static CompositeObjectPtr getOne()
 	 */
 	CompositeObjectPtr group = CompositeObject::construct();
 #if HANDCRAFTED
-	ObjectPtr obj(new GenObject({Point(975, 581), Point(1202, 513), Point(1428, 440), Point(1511, 411),
-								 Point(1523, 407), Point(1525, 416), Point(1525, 541), Point(1524, 778),
-								 Point(1524, 1016), Point(1524, 1253), Point(1523, 1491), Point(1523, 1728),
-								 Point(1522, 1966), Point(1522, 2094)}));
+	ObjectPtr obj(new GenObject({Point(1442, 436), Point(1514, 410), Point(1525, 407), Point(1525, 419),
+								 Point(1525, 532), Point(1525, 757), Point(1524, 982), Point(1524, 1207),
+								 Point(1523, 1432), Point(1523, 1657), Point(1522, 1882), Point(1522, 2094)}));
 	moveObjectFromNSpaceToOptsSpace(obj);
 	group->add(obj);
 #else
@@ -89,11 +88,12 @@ static CompositeObjectPtr getTwo()
 	 */
 	CompositeObjectPtr group = CompositeObject::construct();
 #if HANDCRAFTED
-	ObjectPtr obj(new GenObject({Point(1765, 2095), Point(1527, 2094), Point(1290, 2094), Point(1052, 2093),
-								 Point(815, 2093), Point(752, 2093), Point(740, 2093), Point(741, 2087),
-								 Point(845, 1979), Point(1009, 1807), Point(1168, 1631), Point(1319, 1447),
-								 Point(1453, 1252), Point(1553, 1037), Point(1588, 803), Point(1526, 577),
-								 Point(1344, 431), Point(1110, 412), Point(887, 492), Point(788, 567)}));
+	ObjectPtr obj(new GenObject({Point(1765, 2095), Point(1540, 2094), Point(1315, 2094), Point(1090, 2093),
+								 Point(865, 2093), Point(752, 2093), Point(740, 2093), Point(741, 2087),
+								 Point(802, 2024), Point(958, 1862), Point(1110, 1696), Point(1257, 1526),
+								 Point(1392, 1346), Point(1507, 1153), Point(1577, 940), Point(1579, 716),
+								 Point(1480, 518), Point(1284, 414), Point(1061, 422), Point(871, 538),
+								 Point(705, 691), Point(597, 802)}));
 	moveObjectFromNSpaceToOptsSpace(obj);
 	group->add(obj);
 #else
