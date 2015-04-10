@@ -216,13 +216,13 @@ void laser::Painter::updatePoints()
 		for (auto &objPair : m_objects)
 		{
 			objects.push_back(objPair.second);
+			objPair.second->tick();
 		}
 
 		if (!objects.empty()) {
 			sortObjects(objects);
 
 			for (auto & obj: objects) {
-				// obj->tick();
 				if (!ps.empty())
 					appendToVector(ps, invisibleLine(ps.back(), obj));
 

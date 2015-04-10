@@ -59,7 +59,7 @@ static ObjectPtr getDigit(const Json::Value &root, unsigned int i, Point p = Poi
 						  .get(i,
 								Json::Value(-1))
 						  .asInt();
-	CompositeObjectPtr digit = opts::getDigit(id);
+	CompositeObjectPtr digit = opts::Digit::get(id);
 	if (digit) {
 		digit->rotate(rotation, Point(250, 500));
 		digit->move(p);

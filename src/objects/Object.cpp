@@ -64,7 +64,7 @@ void laser::Object::rebuildCache()
 
 bool laser::Object::empty() const
 {
-	return startPoints().empty() && endPoints().empty() && points().empty();
+	return !m_isVisible || (startPoints().empty() && endPoints().empty() && points().empty());
 }
 
 void laser::Object::setFlags(const Flags flags)

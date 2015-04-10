@@ -91,7 +91,7 @@ void Application::displayTests()
 	const double width = 3000.0;
 	const double left = - 10 * width / 2;
 	for (int d = 0; d <= 9; d++) {
-		CompositeObjectPtr digit = opts::getDigit(d);
+		CompositeObjectPtr digit = opts::Digit::get(d);
 		std::cerr << digit->pointsToPaint().size() << " points for digit " << d << std::endl;
 		total_p += digit->pointsToPaint().size();
 		digit->setColor(Color::LIGHTBLUE);

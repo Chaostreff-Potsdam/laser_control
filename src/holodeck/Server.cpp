@@ -156,7 +156,8 @@ std::vector<Point> Server::readPoints(Json::Value &root, unsigned int n)
 
 	Json::Value points = root.get("points", Json::Value());
 
-	assert(n == points.size());
+	assert(n <= points.size());
+	ps.reserve(points.size());
 
 	for (Json::Value::iterator it = points.begin(); points.end() != it; ++it) {
 		const int x = (*it).get("x", Json::Value()).asInt();

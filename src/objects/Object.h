@@ -11,6 +11,8 @@
 
 namespace laser {
 
+	class Painter;
+
 	class Object;
 	typedef std::shared_ptr<Object> ObjectPtr;
 
@@ -152,6 +154,12 @@ namespace laser {
 		 * \brief update the point cache, so you'll not need to acces points() etc.
 		 */
 		void rebuildCache();
+
+		/*! Called once for every frame.
+		 *  No guarantee of any timing.
+		 */
+		virtual void tick() {}
+		friend class Painter;
 	};
 
 }
