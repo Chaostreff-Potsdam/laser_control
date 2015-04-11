@@ -11,6 +11,7 @@ public:
 
 private:
 	int m_digit;
+	Color m_orgCol;
 
 	Digit(int digit);
 	virtual void tick();

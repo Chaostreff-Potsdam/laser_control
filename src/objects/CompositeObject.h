@@ -56,6 +56,7 @@ namespace laser {
 		EtherdreamPoints endPoints() const;
 		std::vector<ObjectPtr> m_children;
 		std::weak_ptr<CompositeObject> self;
+		virtual void tick();
 
 	private:
 		void removeChild(const Object *object);

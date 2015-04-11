@@ -114,7 +114,14 @@ Digit::Digit(int digit) :
 
 void Digit::tick()
 {
-	;;
+	// setVisible(!visible());
+	/*if (m_round == 0) {
+		m_orgCol = color();
+		setColor(Color::BLACK);
+	} else if (m_round == 1) {
+		setColor(Color::LIGHTBLUE);
+	}
+	m_round = (m_round + 1) % 5;*/
 }
 
 }}}

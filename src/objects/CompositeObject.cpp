@@ -51,9 +51,16 @@ void laser::CompositeObject::removeChild(const Object *object)
 
 void laser::CompositeObject::setColor(const Color &color)
 {
-	for (auto & child : m_children)
+	for (auto & child: m_children)
 		child->setColor(color);
 	Object::setColor(color);
+}
+
+void laser::CompositeObject::tick()
+{
+	for (auto & child: m_children)
+		child->tick();
+	Object::tick();
 }
 
 void laser::CompositeObject::update()

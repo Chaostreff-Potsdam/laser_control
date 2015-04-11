@@ -139,6 +139,10 @@ namespace laser {
 		const etherdream_point etherdreamPoint(Point p, bool visible = true) const
 		{ return etherdreamPoint(p.x(), p.y(), visible); }
 
+		/*! Called once for every frame.
+		 *  No guarantee of any timing.
+		 */
+		virtual void tick() {}
 	private:
 		bool m_dirty, m_isUpdating;
 		EtherdreamPoints m_cache;
@@ -154,12 +158,8 @@ namespace laser {
 		 * \brief update the point cache, so you'll not need to acces points() etc.
 		 */
 		void rebuildCache();
-
-		/*! Called once for every frame.
-		 *  No guarantee of any timing.
-		 */
-		virtual void tick() {}
 		friend class Painter;
+		friend class CompositeObject;
 	};
 
 }
