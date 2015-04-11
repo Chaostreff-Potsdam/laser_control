@@ -23,6 +23,7 @@ namespace laser {
 	public:
 		static int pps;
 		static int framesPerSecond;
+		static int offset;
 
 		/*!
 		 * \details On construction, this wrapper automatically connects to the
@@ -49,6 +50,7 @@ namespace laser {
 		 * the etherdream DAC advertises itself only once per second.
 		 */
 		void connect();
+		void shiftPoints();
 
 #ifdef _WIN32
 		/*!

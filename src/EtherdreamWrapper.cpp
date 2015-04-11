@@ -5,8 +5,9 @@
 #include <iostream>
 #include <opencv2/highgui/highgui.hpp>
 
-int laser::EtherdreamWrapper::pps = 40000; // Our laser operates at 30kpps
+int laser::EtherdreamWrapper::pps = 20000; // Our laser operates at 30kpps
 int laser::EtherdreamWrapper::framesPerSecond = 10;
+int laser::EtherdreamWrapper::offset = 3;
 
 laser::EtherdreamWrapper::EtherdreamWrapper() :
 	Canvas()
@@ -100,14 +101,38 @@ void laser::EtherdreamWrapper::connect()
 #endif
 }
 
+void laser::EtherdreamWrapper::shiftPoints()
+{
+	if (offset == 0)
+		return;
+
+	int sz = m_points.size();
+	EtherdreamPoints backup;
+	backup.reserve(offset);
+
+	for (int i = 0; i < offset; i++) {
+		backup.emplace_back(m_points[i]);
+	}
+
+	for (int i = 0; i < sz - offset; i++) {
+		m_points[i].x = m_points[i + offset].x;
+		m_points[i].y = m_points[i + offset].y;
+	}
+
+	for (int i = 0; i < offset; i++) {
+		m_points[sz - offset + i].x = backup[i].x;
+		m_points[sz - offset + i].y = backup[i].y;
+	}
+}
+
 void laser::EtherdreamWrapper::writePoints()
 {
 	std::lock_guard<std::mutex> guard(m_pointsMutex);
-
 	pps = std::max(1, framesPerSecond) * m_points.size();
-
 	cv::setTrackbarPos("pixel per second", "Laser options", pps);
-
+#ifdef __APPLE__
+	cv::waitKey(1);
+#endif
 
 #ifdef _WIN32
 	if(m_points.size() == 0) {
@@ -121,7 +146,9 @@ void laser::EtherdreamWrapper::writePoints()
 	}
 	EtherDreamWriteFrame(&m_cardNum, (EAD_Pnt_s*)m_points.data(), m_points.size()*sizeof(EAD_Pnt_s), pps, -1);
 #else
-	if (!m_points.empty())
+	if (!m_points.empty()) {
+		shiftPoints();
 		etherdream_write(m_etherdream, m_points.data(), m_points.size(), 20000, -1);
+	}
 #endif
 }
