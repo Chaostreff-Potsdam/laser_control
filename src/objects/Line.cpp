@@ -32,11 +32,13 @@ laser::Line::Line(Point a, Point b, bool visible, bool dashed)
 
 laser::EtherdreamPoints laser::Line::points() const
 {
-	int pointCount = m_sAB.abs()/pixelsPerPoint();
+	// if Line is too short to have any points at this resolution
+	// just draw start and end.
+	int pointCount = std::max(m_sAB.abs() / pixelsPerPoint(), 1.0);
 	EtherdreamPoints ps;
 	if (m_visible)
 	{
-		for (int i = 0; i < pointCount; i++)
+		for (int i = 0; i <= pointCount; i++)
 		{
 			const Point p = m_a + m_sAB * ((float)i)/pointCount;
 			const bool visible = !m_dashed || (m_dashed && (i % 4 < 2));

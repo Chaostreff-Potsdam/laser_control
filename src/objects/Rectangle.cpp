@@ -2,8 +2,6 @@
 
 #include <vector>
 
-#include "Polygon.h"
-
 laser::Rectangle::Rectangle(int x, int y, int width, int height, bool sharp, double rotation)
 :	Polygon(sharp)
 {
