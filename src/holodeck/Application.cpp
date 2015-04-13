@@ -65,6 +65,7 @@ void Application::showLaserOptions()
 	addOption("pixel per point",  &Object::s_pixelsPerPointDefault, 2000);
 	addOption("margin %",  &Object::s_marginPointFractionDefault, 200);
 	addOption("color offset", &EtherdreamWrapper::offset, 30);
+	addOption("black line length", &Painter::blackLinePoints, 15);
 }
 
 void Application::startCanvas()

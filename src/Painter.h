@@ -22,6 +22,7 @@ namespace laser {
 		typedef std::map<int, ObjectPtr> ObjectPtrMap;
 
 	public:
+		static int blackLinePoints;
 		Painter(bool expireObjects = false, bool cropObjects = false, bool runUpdateLoop = false);
 		~Painter();
 

@@ -13,6 +13,8 @@
 
 #include <boost/date_time.hpp>
 
+int laser::Painter::blackLinePoints = 9;
+
 laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop)
 :	m_smallestFreeId(0),
 	m_expireObjects(expireObjects),
@@ -148,6 +150,9 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &start, const etherdream_point &end) const
 {
 #if 1
+	if (!blackLinePoints)
+		return EtherdreamPoints();
+
 	static const auto make_point = [](double x, double y) {
 		etherdream_point p;
 		memset(&p, 0, sizeof(p));
@@ -156,13 +161,11 @@ laser::EtherdreamPoints laser::Painter::invisibleLine(const etherdream_point &st
 		return p;
 	};
 
-	const int numPoints = 9;
-
-	const double dx = ((double) end.x - start.x) / numPoints;
-	const double dy = ((double) end.y - start.y) / numPoints;
+	const double dx = ((double) end.x - start.x) / blackLinePoints;
+	const double dy = ((double) end.y - start.y) / blackLinePoints;
 
 	EtherdreamPoints ps;
-	for (int i = 0; i < numPoints; i++) {
+	for (int i = 0; i < blackLinePoints; i++) {
 		ps.push_back(make_point(dx * i + start.x, dy * i + start.y));
 	}
 	return ps;

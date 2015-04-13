@@ -11,7 +11,7 @@ namespace laser {
 	class EXPORT_LASER_CONTROL GenObject: public Object
 	{
 	public:
-		enum { default_sharpness = 9 };
+		enum { default_sharpness = 7 };
 		GenObject(int _sharpness = default_sharpness) : Object(), sharpness(_sharpness) {}
 		GenObject(std::initializer_list<Point> ps, int _sharpness = default_sharpness);
 
