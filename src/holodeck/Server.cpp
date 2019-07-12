@@ -5,7 +5,8 @@
 #include <iostream>
 #include <assert.h>
 #include <boost/bind.hpp>
-#include <json/value.h>
+
+#include <json/reader.h>
 
 namespace laser { namespace holodeck {
 
@@ -68,7 +69,6 @@ namespace basioip = boost::asio::ip;
 
 Server::Server(Painter &painter, bool deferStart)
 :	m_painter(painter),
-	m_jsonreader(),
 	m_socket(m_ioService),
 	m_localEndpoint(basioip::udp::v4(), 30001),
 	m_senderEndpoint(basioip::address::from_string(laser::config::testServer ?
@@ -112,11 +112,16 @@ void Server::startAccept()
 
 void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t transferred_bytes)
 {
+	Json::CharReaderBuilder builder;
 	Json::Value root;
+	std::string formattedErrorMessages;
+
+	std::unique_ptr<Json::CharReader> reader(builder.newCharReader());
+
 	if (config::log) {
 		m_logfile << m_logtimer.elapsed().wall / (1000.0 * 1000.0) << " " << std::string(m_buf, transferred_bytes) << std::endl;
 	}
-	if (m_jsonreader.parse(m_buf, m_buf + transferred_bytes, root))
+	if (reader->parse(m_buf, m_buf + transferred_bytes, &root, &formattedErrorMessages))
 	{
 		unsigned int instructionCode = root.get("instruction", Json::Value(0)).asUInt();
 		if (0 < instructionCode && instructionCode < Handlers.size())
@@ -124,7 +129,7 @@ void Server::handleRead(const boost::system::error_code &/*ec*/, std::size_t tra
 	}
 	else
 	{
-		std::cerr << m_jsonreader.getFormatedErrorMessages() << std::endl;
+		std::cerr << formattedErrorMessages << std::endl;
 	}
 	startAccept();
 }

@@ -4,12 +4,13 @@
 #include "InstructionCaller.h"
 
 #include <boost/asio.hpp>
-#include <json/reader.h>
 
 #include <boost/timer/timer.hpp>
 #include <fstream>
 #include <mutex>
 #include <memory>
+
+#include <json/value.h>
 
 #define LASERWRAPPER_SERVER_BUFFER_SIZE 2048
 
@@ -47,8 +48,6 @@ namespace laser { namespace holodeck {
 		void addObjectToPainter(const int id, const char *name, const ObjectPtr & object);
 
 		Painter& m_painter;
-
-		Json::Reader m_jsonreader;
 
 		boost::asio::io_service m_ioService;
 		std::vector<boost::asio::ip::tcp::socket*> m_connections;
