@@ -2,6 +2,13 @@
 
 This component provides a simple wrapper to the [Etherdream DAC][ed].
 
+It was originally written as graphical instruction output for the TurkDeck VR experience:
+
+> Cheng, L. P., Roumen, T., Rantzsch, H., Köhler, S., Schmidt, P., Kovacs, R., Jasper, J., Kemper, J., & Baudisch, P. (2015, November). Turkdeck: Physical virtual reality based on people. In *Proceedings of the 28th Annual ACM Symposium on User Interface Software & Technology* (pp. 417-426). ACM.
+> [doi:10.1145/2807442.2807463](https://doi.org/10.1145/2807442.2807463)
+
+
+
 ## 0. Requirements
 
 ### A compiler that understands C++11
