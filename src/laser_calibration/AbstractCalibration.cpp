@@ -1,7 +1,7 @@
 #include "AbstractCalibration.h"
 #include "../Config.h"
 
-#include <opencv/highgui.h>
+#include <opencv2/highgui.hpp>
 
 namespace laser {
 

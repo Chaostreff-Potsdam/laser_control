@@ -7,7 +7,7 @@
 #include <thread>
 #include <mutex>
 #include <map>
-#include <opencv/cv.h>
+#include <opencv2/core.hpp>
 
 namespace laser {
 
