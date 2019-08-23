@@ -1,15 +1,15 @@
-max_scale = 6159.
+import point
+import obj
+
+#max_scale = 6159.
+max_scale = 12000
 offset = 0 #max_scale / 2
 
 c = lambda v: -int((v - offset) * (2**15 / max_scale))
-#c = lambda v: v
-Point = lambda x, y: (x, y)
-
-UINT16_MAX = 2**16 - 1
-col_c = lambda col: int((col / 255.) * UINT16_MAX)
+Point = point.PosPoint
 
 def points(ps, r=0, g=255, b=0):
-	return [(c(x), c(y), col_c(r), col_c(g), col_c(b), 0, 0, 0) for x, y in ps]
+	return [point.LaserPoint(c(x), c(y), point.col_c(r), point.col_c(g), point.col_c(b), 0, 0, 0) for x, y in ps]
 
 rakete_cccp = points([(2035, 394), (1948, 398), (1861, 406), (1774, 418), 
 (1688, 433), (1602, 451), (1519, 479), (1436, 507), 
@@ -158,7 +158,7 @@ rakete_cccp = points([(2035, 394), (1948, 398), (1861, 406), (1774, 418),
 
 
 
-
+"""
 head = points([Point(-2972, 6096), Point(-3007, 6159), Point(-3075, 6148), Point(-3093, 6078), 
 	Point(-3045, 6027), Point(-2982, 6059), Point(-2972, 6096)],
 	0xe9, 0xe1, 0xd9)
@@ -194,3 +194,165 @@ hatch = points([Point(-3031, 5484), Point(-3102, 5507), Point(-3166, 5546), Poin
 	0x5d, 0x31, 0x20)
 
 logo = head + body + rocket + hatch
+"""
+
+fairydustb = points([
+	Point(1483, 1706), Point(1505, 1634), Point(1525, 1562), Point(1543, 1489), 
+	Point(1559, 1416), Point(1574, 1342), Point(1586, 1269), Point(1596, 1194), 
+	Point(1604, 1120), Point(1609, 1045), Point(1612, 970), Point(1611, 895), 
+	Point(1606, 820), Point(1597, 746), Point(1583, 672), Point(1563, 600), 
+	Point(1536, 530), Point(1501, 463), Point(1458, 402), Point(1407, 346), 
+	Point(1356, 292), Point(1306, 236), Point(1272, 170), Point(1256, 96), 
+	Point(1247, 22), Point(1247, 22), Point(1246, 10), Point(1245, 10), 
+	Point(1238, 59), Point(1223, 133), Point(1194, 202), Point(1146, 259), 
+	Point(1094, 313), Point(1102, 382), Point(1161, 426), Point(1232, 451), 
+	Point(1304, 472), Point(1370, 506), Point(1422, 560), Point(1449, 629), 
+	Point(1445, 704), Point(1410, 769), Point(1348, 810), Point(1276, 828), 
+	Point(1201, 830), Point(1128, 812), Point(1068, 768), Point(1038, 701), 
+	Point(1052, 628), Point(1075, 557), Point(1058, 487), Point(990, 496), 
+	Point(945, 556), Point(914, 624), Point(894, 696), Point(880, 770), 
+	Point(873, 845), Point(869, 920), Point(869, 995), Point(872, 1070), 
+	Point(878, 1144), Point(886, 1219), Point(896, 1293), Point(909, 1367), 
+	Point(925, 1440), Point(945, 1513), Point(974, 1582), Point(1018, 1643), 
+	Point(1075, 1690), Point(1143, 1721), Point(1217, 1732), Point(1292, 1724), 
+	Point(1358, 1691), Point(1366, 1624), Point(1299, 1595), Point(1224, 1594), 
+	Point(1151, 1609), Point(1083, 1640), Point(1027, 1689), Point(983, 1750), 
+	Point(946, 1815), Point(920, 1886), Point(903, 1959), Point(891, 2033), 
+	Point(883, 2107), Point(878, 2182), Point(874, 2257), Point(871, 2332), 
+	Point(869, 2407), Point(868, 2481), Point(869, 2470), Point(868, 2481), 
+	Point(864, 2469), Point(841, 2411), Point(816, 2340), Point(794, 2269), 
+	Point(776, 2196), Point(763, 2122), Point(753, 2048), Point(750, 1973), 
+	Point(753, 1898), Point(763, 1824), Point(783, 1751), Point(812, 1682), 
+	Point(851, 1618), Point(901, 1563), Point(960, 1517), Point(1026, 1482), 
+	Point(1097, 1458), Point(1171, 1444), Point(1246, 1440), Point(1321, 1445), 
+	Point(1394, 1461), Point(1464, 1487), Point(1529, 1525), Point(1587, 1573), 
+	Point(1636, 1629), Point(1677, 1692), Point(1709, 1760), Point(1731, 1831), 
+	Point(1745, 1905), Point(1750, 1980), Point(1748, 2054), Point(1738, 2129), 
+	Point(1722, 2202), Point(1700, 2274), Point(1673, 2343), Point(1640, 2411), 
+	Point(1603, 2476), Point(1610, 2466), Point(1603, 2476), Point(1604, 2467), 
+	Point(1611, 2405), Point(1617, 2330), Point(1620, 2255), Point(1618, 2180), 
+	Point(1612, 2106), Point(1600, 2032), Point(1580, 1959), Point(1548, 1892), 
+	Point(1498, 1837), Point(1429, 1809), Point(1356, 1818), Point(1312, 1878), 
+	Point(1291, 1950), Point(1278, 2023), Point(1269, 2098), Point(1263, 2173), 
+	Point(1259, 2248), Point(1255, 2322), Point(1251, 2397), Point(1247, 2472), 
+	Point(1247, 2472), Point(1247, 2485), Point(1246, 2478), Point(1241, 2428), 
+	Point(1234, 2354), Point(1225, 2279), Point(1214, 2205), Point(1202, 2131), 
+	Point(1187, 2057), Point(1170, 1985), Point(1148, 1913), Point(1119, 1844), 
+	Point(1101, 1817)
+	],
+	0x00, 0x76, 0xf2)
+
+fairydust = fairydustb
+
+
+fairydusty = points([
+	Point(1785, 1700), Point(1771, 1812), Point(1757, 1924), Point(1743, 2035), 
+	Point(1729, 2147), Point(1715, 2259), Point(1701, 2370), Point(1687, 2474), 
+	Point(1688, 2469), Point(1687, 2474), Point(1684, 2461), Point(1665, 2363), 
+	Point(1643, 2253), Point(1621, 2143), Point(1600, 2032), Point(1650, 1934), 
+	Point(1707, 1836), Point(1763, 1739), Point(1775, 1717), Point(1782, 1706), 
+	Point(900, 2030), Point(887, 2091), Point(863, 2201), Point(839, 2311), 
+	Point(815, 2421), Point(805, 2470), Point(802, 2473), Point(801, 2461), 
+	Point(797, 2424), Point(784, 2312), Point(771, 2200), Point(759, 2088), 
+	Point(746, 1977), Point(733, 1865), Point(721, 1753), Point(716, 1716), 
+	Point(715, 1703), Point(720, 1709), Point(744, 1752), Point(801, 1850), 
+	Point(857, 1947), Point(900, 2023), Point(1248, 2468), Point(1245, 2455), 
+	Point(1222, 2345), Point(1200, 2235), Point(1177, 2125), Point(1155, 2014), 
+	Point(1132, 1904), Point(1109, 1794), Point(1110, 1686), Point(1150, 1581), 
+	Point(1190, 1475), Point(1230, 1370), Point(1243, 1335), Point(1247, 1323), 
+	Point(1248, 1332), Point(1248, 1382), Point(1248, 1495), Point(1248, 1607), 
+	Point(1249, 1720), Point(1249, 1832), Point(1249, 1945), Point(1249, 2057), 
+	Point(1249, 2170), Point(1249, 2282), Point(1250, 2395), Point(1250, 2457), 
+	Point(1250, 2470), Point(1647, 480), Point(1624, 489), Point(1521, 528), 
+	Point(1529, 521), Point(1521, 528), Point(1521, 540), Point(1524, 640), 
+	Point(1528, 753), Point(1531, 865), Point(1535, 978), Point(1539, 1090), 
+	Point(1542, 1202), Point(1546, 1315), Point(1547, 1340), Point(1547, 1352), 
+	Point(1548, 1353), Point(1555, 1291), Point(1568, 1179), Point(1582, 1067), 
+	Point(1595, 956), Point(1608, 844), Point(1621, 732), Point(1635, 620), 
+	Point(1648, 509), Point(1649, 496), Point(1651, 484), Point(853, 474), 
+	Point(903, 417), Point(977, 333), Point(1051, 248), Point(1125, 164), 
+	Point(1200, 79), Point(1241, 32), Point(1249, 23), Point(1250, 34), 
+	Point(1250, 59), Point(1250, 171), Point(1250, 284), Point(1250, 309), 
+	Point(1249, 321), Point(1238, 326), Point(1180, 349), Point(1075, 390), 
+	Point(970, 431), Point(866, 472), Point(866, 472), Point(854, 477), 
+	Point(849, 485), Point(859, 572), Point(872, 684), Point(886, 795), 
+	Point(899, 907), Point(912, 1019), Point(925, 1131), Point(938, 1242), 
+	Point(952, 1354), Point(950, 1342), Point(952, 1354), Point(953, 1352), 
+	Point(956, 1252), Point(959, 1140), Point(963, 1027), Point(966, 915), 
+	Point(970, 802), Point(974, 690), Point(977, 578), Point(978, 540), 
+	Point(979, 528), Point(969, 522), Point(922, 505), Point(863, 484), 
+	Point(851, 480), Point(1250, 31), Point(1250, 56), Point(1250, 169), 
+	Point(1250, 281), Point(1250, 306), Point(1250, 319), Point(1260, 325), 
+	Point(1318, 348), Point(1422, 389), Point(1527, 430), Point(1631, 472), 
+	Point(1643, 476), Point(1649, 477), Point(1641, 468), Point(1591, 411), 
+	Point(1517, 327), Point(1443, 242), Point(1369, 158), Point(1294, 73), 
+	Point(1261, 36), Point(1253, 26), Point(1541, 1358), Point(1503, 1354), 
+	Point(1392, 1340), Point(1280, 1326), Point(1268, 1324), Point(1255, 1323), 
+	Point(1250, 1316), Point(1275, 1245), Point(1311, 1139), Point(1348, 1033), 
+	Point(1384, 926), Point(1420, 820), Point(1457, 713), Point(1493, 607), 
+	Point(1517, 536), Point(1521, 526), Point(1522, 539), Point(1522, 551), 
+	Point(1526, 663), Point(1529, 776), Point(1533, 888), Point(1536, 1001), 
+	Point(1540, 1113), Point(1543, 1226), Point(1547, 1338), Point(1547, 1338), 
+	Point(1547, 1351), Point(1244, 1322), Point(1157, 1333), Point(1046, 1347), 
+	Point(971, 1357), Point(959, 1358), Point(952, 1354), Point(953, 1341), 
+	Point(956, 1229), Point(960, 1116), Point(963, 1004), Point(967, 891), 
+	Point(971, 779), Point(974, 666), Point(978, 554), Point(978, 541), 
+	Point(979, 529), Point(982, 534), Point(1006, 605), Point(1042, 711), 
+	Point(1078, 818), Point(1114, 924), Point(1150, 1031), Point(1186, 1137), 
+	Point(1222, 1244), Point(1246, 1315), Point(1251, 2472), Point(1253, 2460), 
+	Point(1256, 2448), Point(1279, 2337), Point(1301, 2227), Point(1324, 2117), 
+	Point(1346, 2007), Point(1369, 1897), Point(1392, 1786), Point(1402, 1737), 
+	Point(1404, 1725), Point(1400, 1714), Point(1386, 1679), Point(1346, 1574), 
+	Point(1305, 1469), Point(1264, 1364), Point(1251, 1329), Point(1248, 1326), 
+	Point(1248, 1339), Point(1248, 1389), Point(1248, 1501), Point(1248, 1614), 
+	Point(1249, 1726), Point(1249, 1839), Point(1249, 1951), Point(1249, 2064), 
+	Point(1249, 2176), Point(1249, 2289), Point(1250, 2401), Point(1250, 2464), 
+	Point(1250, 2476), Point(1604, 2015), Point(1616, 1994), Point(1673, 1896), 
+	Point(1729, 1799), Point(1785, 1701), Point(1778, 1712), Point(1785, 1701), 
+	Point(1779, 1691), Point(1722, 1609), Point(1658, 1516), Point(1593, 1424), 
+	Point(1558, 1372), Point(1551, 1362), Point(1549, 1367), Point(1551, 1392), 
+	Point(1559, 1504), Point(1568, 1616), Point(1576, 1729), Point(1585, 1841), 
+	Point(1593, 1953), Point(1597, 2003), Point(1598, 2015), Point(902, 2022), 
+	Point(905, 1984), Point(913, 1872), Point(922, 1760), Point(930, 1648), 
+	Point(939, 1536), Point(947, 1424), Point(951, 1374), Point(952, 1361), 
+	Point(947, 1367), Point(925, 1398), Point(861, 1490), Point(797, 1583), 
+	Point(733, 1675), Point(726, 1685), Point(718, 1696), Point(719, 1706), 
+	Point(756, 1771), Point(812, 1869), Point(868, 1966), Point(901, 2025)
+	],
+	0xff, 0x86, 0x00)
+
+fairydustg = points([
+	Point(1400, 2052), Point(1446, 2127), Point(1494, 2200), Point(1545, 2271), 
+	Point(1600, 2339), Point(1659, 2404), Point(1723, 2463), Point(1743, 2479), 
+	Point(1752, 2487), Point(1756, 2477), Point(1762, 2440), Point(1773, 2353), 
+	Point(1777, 2266), Point(1776, 2179), Point(1768, 2091), Point(1753, 2005), 
+	Point(1732, 1920), Point(1704, 1837), Point(1670, 1757), Point(1630, 1679), 
+	Point(1585, 1604), Point(1557, 1562), Point(1550, 1552), Point(1093, 2094), 
+	Point(1087, 2105), Point(1040, 2179), Point(989, 2250), Point(933, 2317), 
+	Point(873, 2381), Point(809, 2440), Point(760, 2480), Point(750, 2487), 
+	Point(747, 2477), Point(734, 2391), Point(725, 2304), Point(722, 2216), 
+	Point(726, 2129), Point(735, 2042), Point(752, 1956), Point(775, 1872), 
+	Point(805, 1790), Point(841, 1710), Point(884, 1633), Point(932, 1560), 
+	Point(939, 1550), Point(1250, 298), Point(1240, 305), Point(1199, 334), 
+	Point(1132, 391), Point(1073, 455), Point(1023, 527), Point(981, 603), 
+	Point(948, 685), Point(924, 768), Point(906, 854), Point(895, 941), 
+	Point(890, 1028), Point(890, 1116), Point(894, 1203), Point(902, 1290), 
+	Point(913, 1377), Point(926, 1464), Point(943, 1549), Point(962, 1635), 
+	Point(982, 1720), Point(1005, 1804), Point(1030, 1888), Point(1055, 1972), 
+	Point(1083, 2055), Point(1111, 2138), Point(1141, 2220), Point(1172, 2302), 
+	Point(1204, 2384), Point(1236, 2465), Point(1241, 2476), Point(1246, 2488), 
+	Point(1250, 2476), Point(1267, 2429), Point(1297, 2347), Point(1327, 2264), 
+	Point(1356, 2182), Point(1384, 2099), Point(1412, 2016), Point(1439, 1933), 
+	Point(1465, 1849), Point(1489, 1765), Point(1512, 1681), Point(1533, 1596), 
+	Point(1552, 1511), Point(1569, 1425), Point(1583, 1338), Point(1593, 1251), 
+	Point(1600, 1164), Point(1602, 1077), Point(1599, 989), Point(1591, 902), 
+	Point(1576, 816), Point(1554, 731), Point(1524, 649), Point(1487, 570), 
+	Point(1442, 495), Point(1389, 425), Point(1330, 361), Point(1265, 302), 
+	Point(1275, 310), Point(1265, 302), Point(1170, 13), Point(1201, 81), 
+	Point(1229, 164), Point(1250, 249), Point(1263, 335), Point(1269, 423), 
+	Point(1269, 510), Point(1264, 597), Point(1253, 684), Point(1238, 770), 
+	Point(1220, 856), Point(1199, 941), Point(1185, 1027), Point(1178, 1114), 
+	Point(1177, 1202), Point(1183, 1289), Point(1195, 1376), Point(1212, 1462), 
+	Point(1234, 1546), Point(1262, 1629), Point(1284, 1684)
+	],
+	0x99, 0xba, 0x00)

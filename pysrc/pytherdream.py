@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
-__all__ = ["EtherdreamWrapper", "NoEtherdreamFound"]
+__all__ = ["EtherdreamWrapper", "NoEtherdreamFound", "Scene"]
 __doc__ = "Python bindings for unix etherdream lib"
 
-import sys, os
-import time
 import ctypes
+import itertools
+import os
+import sys
+import time
 
+import obj
+import motive
 import parser
 
 if sys.version_info[0] == 2:
@@ -118,9 +122,47 @@ def openAndDisplay(filename):
 			edw.writePoints(chunk.data)
 			time.sleep(1.0 / 15)
 
+class Scene(object):
+
+	def __init__(self):
+		self.objects = []
+		self.edw = EtherdreamWrapper()
+
+	def add(self, obj):
+		self.objects.append(obj)
+
+	def update(self):
+		self.edw.writePoints(list(itertools.chain(*(o.render() for o in self.objects))))
+
+
+def main():
+	scene = Scene()
+	fairydustb = obj.LaserObject(motive.fairydustb)
+	fairydusty = obj.LaserObject(motive.fairydusty)
+	fairydustg = obj.LaserObject(motive.fairydustg)
+	
+	fairydustb.move(dy=28000)
+	scene.add(fairydustb)
+	fairydusty.move(dy=14000)
+	scene.add(fairydusty)
+	scene.add(fairydustg)
+
+	speed = 160
+	delay = 0.04
+
+	while True:
+		# print(fairydust.render()[0])
+		fairydustb.move(dy=speed)
+		fairydusty.move(dy=speed)
+		fairydustg.move(dy=speed)
+		scene.update()
+		time.sleep(delay)
+	
+
 if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		openAndDisplay(sys.argv[1])
 	else:
-		edw = EtherdreamWrapper()
+		#scene = Scene()
+		main()
 

@@ -121,12 +121,12 @@ class ILDA(object):
 
 def test(filename):
 	for chunk in ILDA(open(filename).read()):
-		print chunk
+		print(chunk)
 
 if __name__ == "__main__":
 	import sys
 	if len(sys.argv) > 1:
 		test(sys.argv[1])
 	else:
-		print "Usage: %s FILE" % sys.argv[0]
+		print("Usage: %s FILE" % sys.argv[0])
 
