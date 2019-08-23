@@ -137,24 +137,29 @@ class Scene(object):
 
 def main():
 	scene = Scene()
-	fairydustb = obj.LaserObject(motive.fairydustb)
-	fairydusty = obj.LaserObject(motive.fairydusty)
-	fairydustg = obj.LaserObject(motive.fairydustg)
+	fairydusts = [
+			obj.LaserObject(motive.fairydustb),
+			obj.LaserObject(motive.fairydusty),
+			obj.LaserObject(motive.fairydustg)]
 	
-	fairydustb.move(dy=28000)
-	scene.add(fairydustb)
-	fairydusty.move(dy=14000)
-	scene.add(fairydusty)
-	scene.add(fairydustg)
 
-	speed = 160
+	fairydusts[1].visible = False
+	fairydusts[2].visible = False
+	
+	[scene.add(fd) for fd in fairydusts]
+
+	speed = 320
 	delay = 0.04
+	current = 0
 
 	while True:
-		# print(fairydust.render()[0])
-		fairydustb.move(dy=speed)
-		fairydusty.move(dy=speed)
-		fairydustg.move(dy=speed)
+		fairydusts[current].move(dy=speed)
+		if fairydusts[current].outofrange():
+			fairydusts[current].visible = False
+			current = (current + 1) % len(fairydusts)
+			fairydusts[current].visible = True
+			while fairydusts[current].outofrange():
+				fairydusts[current].move(dy=speed)
 		scene.update()
 		time.sleep(delay)
 	
