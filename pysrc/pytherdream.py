@@ -147,8 +147,9 @@ def main():
 	fairydusts[2].visible = False
 	
 	[scene.add(fd) for fd in fairydusts]
+	[fd.move(dx=200) for fd in fairydusts]
 
-	acc = 3
+	acc = 4
 	maxspeed = 360
 	speed0 = 0
 	delay = 0.04
@@ -156,10 +157,15 @@ def main():
 
 	speed = speed0
 
+	start = time.time()
+
 	while True:
 		fairydusts[current].move(dy=speed)
 		speed = min(maxspeed, speed + acc)
 		if fairydusts[current].outofrange():
+			if time.time() - start > 600:
+				print("Vorbei", time.time())
+				sys.exit(0)
 			fairydusts[current].visible = False
 			current = (current + 1) % len(fairydusts)
 			fairydusts[current].reset()
