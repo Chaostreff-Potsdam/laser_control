@@ -148,18 +148,25 @@ def main():
 	
 	[scene.add(fd) for fd in fairydusts]
 
-	speed = 320
+	acc = 3
+	maxspeed = 360
+	speed0 = 0
 	delay = 0.04
 	current = 0
 
+	speed = speed0
+
 	while True:
 		fairydusts[current].move(dy=speed)
+		speed = min(maxspeed, speed + acc)
 		if fairydusts[current].outofrange():
 			fairydusts[current].visible = False
 			current = (current + 1) % len(fairydusts)
+			fairydusts[current].reset()
 			fairydusts[current].visible = True
-			while fairydusts[current].outofrange():
-				fairydusts[current].move(dy=speed)
+			scene.update()
+			speed = speed0
+			time.sleep(0.25)
 		scene.update()
 		time.sleep(delay)
 	

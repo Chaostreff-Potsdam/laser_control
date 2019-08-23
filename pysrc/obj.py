@@ -1,7 +1,7 @@
 import point
 
 TOP     =  2 ** 15 - 1
-VIS_BOTTOM  = -9000 # -2 ** 15
+VIS_BOTTOM  = -8000 # -2 ** 15
 
 BOTTOM  = - 2 ** 15
 
@@ -14,16 +14,21 @@ def clamp(v):
 		return v - FRAME
 	return v
 
-def mask(p):
-	if p.y < VIS_BOTTOM:
-		return tuple(p._replace(y=TOP))
-	return tuple(p)
 
 class LaserObject(object):
 
 	def __init__(self, points):
 		self._points = list(points)
+		self._org = points[:]
 		self.visible = True
+
+	def _mask(self, p):
+		if p.y < VIS_BOTTOM and self.visible:
+			return tuple(p._replace(y=TOP))
+		return tuple(p)
+
+	def reset(self):
+		self._points = self._org
 
 	def _replace(self, **kwargs):
 		self._points = [p._replace(**kwargs) for p in self._points]
@@ -37,7 +42,10 @@ class LaserObject(object):
 	def render(self):
 		if not self.visible or self.outofrange():
 			return []
-		return list(map(mask, self._points))
+		return list(map(lambda p: self._mask(p), self._points))
+
+	def anyinrange(self):
+		return any(p.y >= VIS_BOTTOM for p in self._points)
 
 	def outofrange(self):
 		return all(p.y < VIS_BOTTOM for p in self._points)
