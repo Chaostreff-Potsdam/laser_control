@@ -74,7 +74,7 @@ namespace laser {
 		int add(int id, const ObjectPtr & object, bool update = true);
 
 		/*!
-		 * \brief send a new array to #m_canvas
+		 * \brief prepares to send a new array to #m_canvas
 		 *
 		 * This constructs a new array out of #m_objects. This takes
 		 * LaserObject::points() as well as LaserObject::startPoints()
@@ -83,6 +83,14 @@ namespace laser {
 		 * connected with ugly lines.
 		 */
 		void updatePoints();
+
+		/*!
+		 * \brief actually sends array to #m_canvas
+		 *
+		 * This actually sends the point buffer to the target.
+		 * Required if canvas can only be operated from main thread
+		 */
+		void writePoints();
 
 		/*!
 		 * \brief deletes an object from #m_objects with ID \a id

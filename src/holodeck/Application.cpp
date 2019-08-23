@@ -116,6 +116,8 @@ void Application::loop(std::function<void()> onLoop, unsigned int wait)
 		onLoop();
 		cv::waitKey(5);
 		m_painter.updatePoints();
+		if (config::useVirtualLaser)
+			m_painter.writePoints();
 		std::this_thread::sleep_for(std::chrono::milliseconds(wait));
 	}
 }

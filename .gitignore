@@ -8,3 +8,4 @@ doc/
 .*.swo
 *.pyc
 *.autosave
+build-*/

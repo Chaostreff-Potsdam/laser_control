@@ -23,7 +23,7 @@ laser::Painter::Painter(bool expireObjects, bool cropObjects, bool runUpdateLoop
 {
 	m_calibration = (cv::Mat_<double>(3,3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
 
-	if (runUpdateLoop || expireObjects)
+	if (!config::useVirtualLaser && (runUpdateLoop || expireObjects))
 	{
 		m_updateLoop = std::thread(&Painter::updateLoop, this);
 	}
@@ -250,6 +250,13 @@ void laser::Painter::updatePoints()
 		Transform::applyInPlace(ps, cv::perspectiveTransform, m_calibration);
 		undistortAndSet(ps);
 	}
+
+	if (!config::useVirtualLaser)
+		writePoints();
+}
+
+void laser::Painter::writePoints()
+{
 	canvas()->writePoints();
 }
 
