@@ -48,7 +48,7 @@ class Renderer(object):
 				lastCol = newColor
 				polyLine = []
 			polyLine.append(self._t(point.x))
-			polyLine.append(self._t(point.y))
+			polyLine.append(self._t(-point.y))
 		if len(polyLine) > 4:
 			self.w.create_line(polyLine, fill=lastCol)
 
@@ -62,7 +62,7 @@ class Renderer(object):
 			return False
 
 		for point in chunk:
-			self.w.create_circle(self._t(point.x), self._t(point.y), 4, fill=self.colorFor(point))
+			self.w.create_circle(self._t(point.x), self._t(-point.y), 4, fill=self.colorFor(point))
 
 		self.master.update()
 		Tkinter.mainloop(1)

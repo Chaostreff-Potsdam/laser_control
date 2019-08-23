@@ -7,12 +7,16 @@ import sys, os
 import time
 import ctypes
 
+import parser
+
 if sys.version_info[0] == 2:
 	from itertools import imap
 else:
 	imap = map
 
 UINT16_MAX = 2 ** 16 - 1
+
+import random
 
 class etherdream_point(ctypes.Structure):
 	_fields_ = [("x", ctypes.c_int16),
@@ -32,13 +36,19 @@ class etherdream_point(ctypes.Structure):
 	def fromPos(cls, pos):
 		"""New green etherdream_point from a (x, y)-tuple"""
 		x, y = pos
-		return cls(x, y, 0, UINT16_MAX, 0, 0, 0, 0, 0)
+		return cls(x, y, int(random.random * UINT16_MAX), int(random.random * UINT16_MAX), int(random.random * UINT16_MAX), 0, 0, 0)
 
 	@classmethod
 	def fromLaserPoint(cls, point):
 		"""New etherdream_point from a parser.LaserPoint (ignoring color tables)"""
+		"""
+		r = int(random.random() * UINT16_MAX) if point.visible else 0
+		g = int(random.random() * UINT16_MAX) if point.visible else 0
+		b = int(random.random() * UINT16_MAX) if point.visible else 0
+		"""
+		r = b = 0
 		g = UINT16_MAX if point.visible else 0
-		return cls(point.x, point.y, 0, g, 0, 0, 0, 0)
+		return cls(point.x, point.y, r, g, b, 0, 0, 0)
 
 etherdream_p = ctypes.c_void_p
 etherdream_point_p = ctypes.POINTER(etherdream_point)
@@ -73,8 +83,15 @@ class EtherdreamWrapper(object):
 
 	def __toEtherDreamPointArray(self, points):
 		"""Non-empty list of points to ctypes-Array"""
-		func = etherdream_point.fromPos if type(points[0]) == tuple else etherdream_point.fromLaserPoint
-		return (etherdream_point * len(points))(*imap(func, points))
+		if type(points[0]) == etherdream_point:
+			return points
+		if type(points[0]) == tuple and len(points[0]) == 2:
+			func = etherdream_point.fromPos
+		elif type(points[0]) == parser.LaserPoint:
+			func = etherdream_point.fromLaserPoint
+		else:
+			func = lambda t: etherdream_point(*t)
+		return (etherdream_point * len(points))(*list(imap(func, points)))
 
 	def connect(self):
 		self.lib.etherdream_lib_start()
@@ -85,7 +102,7 @@ class EtherdreamWrapper(object):
 		self.etherdream = self.lib.etherdream_get(0)
 		self.lib.etherdream_connect(self.etherdream)
 
-	def writePoints(self, points, pps=20000, reps=-1):
+	def writePoints(self, points, pps=20000, reps=-1, noconv=False):
 		"""Sends a list of parser.LaserPoint or (x, y)-tuples to etherdream"""
 		if not points:
 			return
@@ -106,4 +123,4 @@ if __name__ == "__main__":
 		openAndDisplay(sys.argv[1])
 	else:
 		edw = EtherdreamWrapper()
-	
+
