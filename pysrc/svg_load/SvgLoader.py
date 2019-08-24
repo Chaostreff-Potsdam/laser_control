@@ -11,12 +11,12 @@ def load_svg(filename):
 
     hex_color = re.search("stroke:#(([0-9]|[A-F]|[a-f]){6});?", attributes[0]["style"])[1]
     rgb_color = tuple(bytearray.fromhex(hex_color))
-    return paths[0].d(), rgb_color
+    return paths[0], rgb_color
 
 
 if __name__ == "__main__":
-    file_name = "fairydustb.svg"
-    from pysrc.path2polygon import path2polygonPoints, print_samples
+    file_name = "../fairydustb.svg_load"
+    from pysrc.svg_load.path2polygon import path2polygonPoints, print_samples
     path, (r, g, b) = load_svg(file_name)
     # print(f"r:{r}, g:{g}, b:{b}, path: {path}")
     points = path2polygonPoints(path, 16)
