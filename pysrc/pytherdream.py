@@ -209,12 +209,9 @@ if __name__ == "__main__":
 	else:
 		#run(canvas)
 		scene = Scene(canvas)
-		fb = obj.LaserObject(motive.fairydustb)
-		fy = obj.LaserObject(motive.fairydusty)
-		fb.move(dy=7000)
-
-		co = obj.CompositeObject(fb, fy)
-		scene.add(co)
+		fb = obj.SvgObject("assets/fairydustb.svg", 7)
+		
+		scene.add(fb)
 
 		scene.update()
 
