@@ -1,4 +1,3 @@
-import svg.path
 from svg.path import parse_path
 import numpy as np
 from numpy.linalg import norm
@@ -87,3 +86,4 @@ if __name__ == "__main__":
 	Point(1245, 1007), Point(1083, 1020), Point(1070, 1020)};
 	addToPointLibrary("charP", charP, (sizeof(charP)/sizeof(*charP)), 3450, 6585); //27 points"""
     #assert result.strip() == expected.strip(), "result does not match expected output"
+
