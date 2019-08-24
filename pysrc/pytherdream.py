@@ -139,14 +139,14 @@ def openAndDisplay(filename, canvas):
 class Scene(object):
 
 	def __init__(self, canvas):
-		self.objects = []
+		self.root = obj.CompositeObject()
 		self.canvas = canvas
 
-	def add(self, obj):
-		self.objects.append(obj)
+	def add(self, *objs):
+		self.root.add(*objs)
 
 	def update(self):
-		self.canvas.writePoints(list(itertools.chain(*(o.render() for o in self.objects))))
+		self.canvas.writePoints(self.root.render())
 
 
 def run(canvas):

@@ -98,23 +98,24 @@ class CompositeObject(LaserObject):
 
 	def __init__(self, *objects):
 		super(CompositeObject, self).__init__([])
-		self.objects = objects
+		self.objects = list(objects)
 
 	def add(self, *objects):
 		self.objects.extend(objects)
 
+	@property
 	def bbox(self):
-		pts = itertools.flatten((b.bottomleft, b.topright) for b in (o.bbox for o in self.objects))
+		pts = itertools.chain.from_iterable((b.bottomleft, b.topright) for b in (o.bbox for o in self.objects))
 		xs, ys = zip(*((p.x, p.y) for p in pts))
 		base_bbox = [(min(xs), min(ys)), (max(xs), max(ys))]
-		return point.BBox(*(point.PosPoint(x, y) for x, y, _ in self._updimAndTransform(self._bbox)))
+		return point.BBox(*(point.PosPoint(x, y) for x, y, _ in self._updimAndTransform(base_bbox)))
 
-	def render(self):
+	def render(self, conv=int):
 		if not self.visible:
 			return []
 	
 		pts = list(itertools.chain(*([point.LaserPoint(*p) for p in o.render(conv=float)] for o in self.objects)))
-		return self._transformedPts(pts, conv=int)
+		return self._transformedPts(pts, conv=conv)
 
 
 		
