@@ -207,5 +207,15 @@ if __name__ == "__main__":
 		# Just that you know: For virtual rendering use ./render.py. No time atm (Camp Day 4)
 		openAndDisplay(args.filename, canvas)
 	else:
-		run(canvas)
+		#run(canvas)
+		scene = Scene(canvas)
+		fb = obj.LaserObject(motive.fairydustb)
+		fy = obj.LaserObject(motive.fairydusty)
+		fb.move(dy=7000)
+
+		co = obj.CompositeObject(fb, fy)
+		scene.add(co)
+
+		scene.update()
+
 

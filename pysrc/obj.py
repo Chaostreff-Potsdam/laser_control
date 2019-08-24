@@ -3,6 +3,8 @@ import point
 import math
 import numpy as np
 
+import itertools
+
 TOP     =  2 ** 15 - 2000
 VIS_BOTTOM  = -8000 # -2 ** 15
 
@@ -25,8 +27,11 @@ class LaserObject(object):
 		self._org = points[:]
 		self._transform = np.identity(3)
 
-		xs, ys = zip(*((p.x, p.y) for p in self._points))
-		self._bbox = [(min(xs), min(ys)), (max(xs), max(ys))]
+		if not points:
+			self._bbox = [(0,0), (0,0)]
+		else:
+			xs, ys = zip(*((p.x, p.y) for p in self._points))
+			self._bbox = [(min(xs), min(ys)), (max(xs), max(ys))]
 
 		self.visible = True
 
@@ -59,6 +64,12 @@ class LaserObject(object):
 	def _replace(self, **kwargs):
 		self._points = [p._replace(**kwargs) for p in self._points]
 
+	def _transformedPts(self, pts, conv=int):
+		transformed = self._updimAndTransform((p.x, p.y) for p in pts)
+
+		return [self._mask(p._replace(x=conv(x), y=conv(y)))
+				for (x, y, _), p in zip(transformed, pts)]
+
 	def setColor(self, r, g, b):
 		self._replace(r=point.col_c(r), g=point.col_c(g), b=point.col_c(b))
 
@@ -71,17 +82,40 @@ class LaserObject(object):
 		self.transform([[ math.cos(theta), math.sin(theta), 0],
 		                [-math.sin(theta), math.cos(theta), 0],
 						[               0,               0, 1]])
-
-	def render(self):
+	
+	def render(self, conv=int):
 		if not self.visible or self.outofrange():
 			return []
 
-		transformed = self._updimAndTransform((p.x, p.y) for p in self._points)
-
-		return [self._mask(p._replace(x=int(x), y=int(y)))
-				for (x, y, _), p in zip(transformed, self._points)]
+		return self._transformedPts(self._points)
 
 	def outofrange(self):
 		bbox = self.bbox
 		return bbox.bottomleft.y > TOP or self.bbox.topright.y < VIS_BOTTOM
+
+
+class CompositeObject(LaserObject):
+
+	def __init__(self, *objects):
+		super(CompositeObject, self).__init__([])
+		self.objects = objects
+
+	def add(self, *objects):
+		self.objects.extend(objects)
+
+	def bbox(self):
+		pts = itertools.flatten((b.bottomleft, b.topright) for b in (o.bbox for o in self.objects))
+		xs, ys = zip(*((p.x, p.y) for p in pts))
+		base_bbox = [(min(xs), min(ys)), (max(xs), max(ys))]
+		return point.BBox(*(point.PosPoint(x, y) for x, y, _ in self._updimAndTransform(self._bbox)))
+
+	def render(self):
+		if not self.visible:
+			return []
+	
+		pts = list(itertools.chain(*([point.LaserPoint(*p) for p in o.render(conv=float)] for o in self.objects)))
+		return self._transformedPts(pts, conv=int)
+
+
+		
 
