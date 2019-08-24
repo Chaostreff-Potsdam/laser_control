@@ -10,3 +10,4 @@ doc/
 *.autosave
 build-*/
 etherdream.so
+.gitignore
