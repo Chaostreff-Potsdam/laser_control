@@ -1,13 +1,20 @@
 #!/usr/bin/env python2
 
-import Tkinter
+
 import parser
+
 import time
 import sys
 
+if sys.version_info[0] == 2:
+	import Tkinter as tkinter
+else:
+	import tkinter
+
+
 def _create_circle(self, x, y, r, **kwargs):
     return self.create_oval(x-r, y-r, x+r, y+r, **kwargs)
-Tkinter.Canvas.create_circle = _create_circle
+tkinter.Canvas.create_circle = _create_circle
 
 class VirtualChunk(parser.ILDAChunk):
 
@@ -30,8 +37,8 @@ class Renderer(object):
 		self.dim = dim
 		self.scale = float(dim) / 2**16
 
-		self.master = Tkinter.Tk()
-		self.w = Tkinter.Canvas(self.master, width=dim, height=dim)
+		self.master = tkinter.Tk()
+		self.w = tkinter.Canvas(self.master, width=dim, height=dim)
 		self.w.pack()
 		self.reset()
 
@@ -70,7 +77,7 @@ class Renderer(object):
 			self.w.create_line(polyLine, fill=lastCol)
 
 		self.master.update()
-		Tkinter.mainloop(1)
+		tkinter.mainloop(1)
 		return True
 
 	def writePoints(self, points):
@@ -85,7 +92,7 @@ class Renderer(object):
 			self.w.create_circle(self._t(point.x), self._t(-point.y), 4, fill=self.colorFor(point))
 
 		self.master.update()
-		Tkinter.mainloop(1)
+		tkinter.mainloop(1)
 		return True
 
 def openAndDisplay(filename, showCircs):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 __all__ = ["EtherdreamWrapper", "NoEtherdreamFound", "Scene"]
 __doc__ = "Python bindings for unix etherdream lib"
