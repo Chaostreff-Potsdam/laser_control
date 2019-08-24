@@ -1,6 +1,6 @@
 import point
 
-TOP     =  2 ** 15 - 1
+TOP     =  2 ** 15 - 2000
 VIS_BOTTOM  = -8000 # -2 ** 15
 
 BOTTOM  = - 2 ** 15
