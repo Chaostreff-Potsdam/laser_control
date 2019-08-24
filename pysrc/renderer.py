@@ -9,6 +9,21 @@ def _create_circle(self, x, y, r, **kwargs):
     return self.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 Tkinter.Canvas.create_circle = _create_circle
 
+class VirtualChunk(parser.ILDAChunk):
+
+	formatT = parser.TYPE_2D
+
+	UINT16_MAX = 2 ** 16 - 1
+
+	def _c(self, v):
+		return int((v / float(self.UINT16_MAX)) * 255)
+	
+
+	def __init__(self, etherdata):
+		self.data = [parser.LaserPoint2D(x, y, 0, parser.LaserColor(self._c(r), self._c(g), self._c(b)))
+				for x, y, r, g, b, _, _, _  in etherdata]
+
+
 class Renderer(object):
 
 	def __init__(self, dim=512):
@@ -26,6 +41,8 @@ class Renderer(object):
 	def colorFor(self, point):
 		if point.blank:
 			return "#000000"
+		elif type(point.color) == parser.LaserColor:
+			return "#%02x%02x%02x" % (point.color.r, point.color.g, point.color.b)
 		else:
 			return "#00ff00"
 
@@ -55,6 +72,9 @@ class Renderer(object):
 		self.master.update()
 		Tkinter.mainloop(1)
 		return True
+
+	def writePoints(self, points):
+		self.drawChunk(VirtualChunk(points))
 
 	def drawChunkCircs(self, chunk):
 		self.reset("#ffffff")
@@ -87,6 +107,6 @@ def findArg(name):
 if __name__ == "__main__":
 	circs = findArg("--circs")
 	if len(sys.argv) > 1:
-		openAndDisplay(sys.argv[1], circs )
+		openAndDisplay(sys.argv[1], circs)
 	else:
 		print "Usage: %s FILE" % sys.argv[0]

@@ -3,15 +3,17 @@
 __all__ = ["EtherdreamWrapper", "NoEtherdreamFound", "Scene"]
 __doc__ = "Python bindings for unix etherdream lib"
 
+import argparse
 import ctypes
 import itertools
 import os
 import sys
 import time
 
-import obj
 import motive
+import obj
 import parser
+import renderer
 
 if sys.version_info[0] == 2:
 	from itertools import imap
@@ -53,6 +55,19 @@ class etherdream_point(ctypes.Structure):
 		r = b = 0
 		g = UINT16_MAX if point.visible else 0
 		return cls(point.x, point.y, r, g, b, 0, 0, 0)
+
+def toEtherDreamPointArray(self, points):
+	"""Non-empty list of points to ctypes-Array"""
+	if type(points[0]) == etherdream_point:
+		return points
+	if type(points[0]) == tuple and len(points[0]) == 2:
+		func = etherdream_point.fromPos
+	elif type(points[0]) == parser.LaserPoint:
+		func = etherdream_point.fromLaserPoint
+	else:
+		func = lambda t: etherdream_point(*t)
+	return (etherdream_point * len(points))(*list(imap(func, points)))
+
 
 etherdream_p = ctypes.c_void_p
 etherdream_point_p = ctypes.POINTER(etherdream_point)
@@ -110,33 +125,31 @@ class EtherdreamWrapper(object):
 		"""Sends a list of parser.LaserPoint or (x, y)-tuples to etherdream"""
 		if not points:
 			return
-		ps = ctypes.cast(self.__toEtherDreamPointArray(points), etherdream_point_p)
+		ps = ctypes.cast(toEtherDreamPointArray(points), etherdream_point_p)
 		self.lib.etherdream_write(self.etherdream, ps, len(points), pps, reps)
 
-def openAndDisplay(filename):
-	import parser
-	edw = EtherdreamWrapper()
+def openAndDisplay(filename, canvas):
 	doc = parser.ILDA(open(filename).read())
 	while True:
 		for chunk in doc:
-			edw.writePoints(chunk.data)
+			canvas.writePoints(chunk.data)
 			time.sleep(1.0 / 15)
 
 class Scene(object):
 
-	def __init__(self):
+	def __init__(self, canvas):
 		self.objects = []
-		self.edw = EtherdreamWrapper()
+		self.canvas = canvas
 
 	def add(self, obj):
 		self.objects.append(obj)
 
 	def update(self):
-		self.edw.writePoints(list(itertools.chain(*(o.render() for o in self.objects))))
+		self.canvas.writePoints(list(itertools.chain(*(o.render() for o in self.objects))))
 
 
-def main():
-	scene = Scene()
+def run(canvas):
+	scene = Scene(canvas)
 	fairydusts = [
 			obj.LaserObject(motive.fairydustb),
 			obj.LaserObject(motive.fairydusty),
@@ -177,10 +190,19 @@ def main():
 		time.sleep(delay)
 	
 
+def parseArgs():
+	parser = argparse.ArgumentParser(description='Laser scene and file renderer')
+	parser.add_argument('filename', type=str, nargs='?', help='display file instead of scene')
+	parser.add_argument('--virtual', action='store_true', help='simulation laser')
+
+	return parser.parse_args()
+
 if __name__ == "__main__":
-	if len(sys.argv) > 1:
-		openAndDisplay(sys.argv[1])
+	args = parseArgs()
+	canvas = renderer.Renderer(600) if args.virtual else EtherdreamWrapper()
+	if args.filename is not None:
+		# Just that you know: For virtual rendering use ./render.py. No time atm (Camp Day 4)
+		openAndDisplay(args.filename, canvas)
 	else:
-		#scene = Scene()
-		main()
+		run(canvas)
 
