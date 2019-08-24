@@ -151,10 +151,12 @@ class Scene(object):
 
 def run(canvas):
 	scene = Scene(canvas)
-	fairydusts = [
-			obj.LaserObject(motive.fairydustb),
-			obj.LaserObject(motive.fairydusty),
-			obj.LaserObject(motive.fairydustg)]
+	fairydusts_base = [
+			obj.SvgObject("assets/fairydustb.svg", 4),
+			obj.SvgObject("assets/fairydusty.svg", 5),
+			obj.SvgObject("assets/fairydustg.svg", 7)]
+
+	fairydusts = [obj.CompositeObject(f) for f in fairydusts_base]
 	
 
 	fairydusts[1].visible = False
@@ -172,8 +174,22 @@ def run(canvas):
 
 	start = time.time()
 
+	wa = 2
+	whiggle = 0
+
 	while True:
 		fairydusts[current].move(dy=speed)
+		
+		if wa < 5:
+			wa += 0.2
+
+		whiggle += wa
+		whiggle %= 360
+
+		roll = math.sin(math.radians(whiggle))
+		fairydusts_base[current].reset()
+		fairydusts_base[current].rotate(math.radians(3) * roll)
+
 		speed = min(maxspeed, speed + acc)
 		if fairydusts[current].outofrange():
 			if time.time() - start > 600:
@@ -182,6 +198,9 @@ def run(canvas):
 			fairydusts[current].hide()
 			fairydusts[current].reset()
 			speed = speed0
+			wa = 0
+			whiggle = 0
+
 	
 			current = (current + 1) % len(fairydusts)
 			fairydusts[current].show()
@@ -207,12 +226,5 @@ if __name__ == "__main__":
 		# Just that you know: For virtual rendering use ./render.py. No time atm (Camp Day 4)
 		openAndDisplay(args.filename, canvas)
 	else:
-		#run(canvas)
-		scene = Scene(canvas)
-		fb = obj.SvgObject("assets/fairydustb.svg", 7)
-		
-		scene.add(fb)
-
-		scene.update()
-
+		run(canvas)
 
