@@ -57,7 +57,7 @@ class etherdream_point(ctypes.Structure):
 		g = UINT16_MAX if point.visible else 0
 		return cls(point.x, point.y, r, g, b, 0, 0, 0)
 
-def toEtherDreamPointArray(self, points):
+def toEtherDreamPointArray(points):
 	"""Non-empty list of points to ctypes-Array"""
 	if type(points[0]) == etherdream_point:
 		return points
@@ -152,20 +152,23 @@ class Scene(object):
 def run(canvas):
 	scene = Scene(canvas)
 	fairydusts_base = [
-			obj.SvgObject("assets/fairydustb.svg", 4),
-			obj.SvgObject("assets/fairydusty.svg", 5),
-			obj.SvgObject("assets/fairydustg.svg", 7)]
+			obj.SvgObject("assets/fairydustb.svg", 4, 0x00, 0x86, 0xf2),
+			obj.SvgObject("assets/fairydusty.svg", 5, 0xff, 0x76, 0x00),
+			obj.SvgObject("assets/fairydustg.svg", 7, 0x99, 0xba, 0x00)]
 
 	fairydusts = [obj.CompositeObject(f) for f in fairydusts_base]
-	
+	print("Go")
+
+	start_corr = -5000
 
 	fairydusts[1].visible = False
 	fairydusts[2].visible = False
 	
 	[scene.add(fd) for fd in fairydusts]
+	[fd.move(dy=start_corr) for fd in fairydusts]
 
-	acc = 4
-	maxspeed = 360
+	acc = 5
+	maxspeed = 480
 	speed0 = 0
 	delay = 0.04
 	current = 0
@@ -192,11 +195,12 @@ def run(canvas):
 
 		speed = min(maxspeed, speed + acc)
 		if fairydusts[current].outofrange():
-			if time.time() - start > 600:
+			if time.time() - start > 900:
 				print("Vorbei", time.time())
 				sys.exit(0)
 			fairydusts[current].hide()
 			fairydusts[current].reset()
+			fairydusts[current].move(dy=start_corr)
 			speed = speed0
 			wa = 0
 			whiggle = 0

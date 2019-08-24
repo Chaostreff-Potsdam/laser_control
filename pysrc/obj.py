@@ -9,7 +9,7 @@ import numpy as np
 
 import itertools
 
-TOP     =  2 ** 15 - 2000
+TOP     =  2 ** 15 - 1200
 VIS_BOTTOM  = -8000 # -2 ** 15
 
 BOTTOM  = - 2 ** 15
@@ -53,7 +53,7 @@ class LaserObject(object):
 		return np.array([(x, y, 1) for x, y in pts]).dot(self._transform.T)
 
 	def _mask(self, p):
-		if p.y < VIS_BOTTOM and self.visible:
+		if (p.y < VIS_BOTTOM or p.y > TOP) and self.visible:
 			return tuple(p._replace(y=TOP, r=0, g=0, b=0))
 		return tuple(p)
 
@@ -144,7 +144,7 @@ class SvgObject(LaserObject):
 	def c(self, v):
 		return (0.5 - v / self.basewidth) * self._destwidth
 
-	def __init__(self, fileName, steps, r=None, g=None, b=None, destwidth=6800):
+	def __init__(self, fileName, steps, r=None, g=None, b=None, destwidth=5200):
 		self._destwidth = destwidth
 		path, (rs, gs, bs) = svg_load.SvgLoader.load_svg(fileName)
 		points = (point.LaserPoint(self.c(x), self.c(y), 
