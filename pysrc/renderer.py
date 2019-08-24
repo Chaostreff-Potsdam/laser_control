@@ -109,4 +109,4 @@ if __name__ == "__main__":
 	if len(sys.argv) > 1:
 		openAndDisplay(sys.argv[1], circs)
 	else:
-		print "Usage: %s FILE" % sys.argv[0]
+		print("Usage: %s FILE" % sys.argv[0])

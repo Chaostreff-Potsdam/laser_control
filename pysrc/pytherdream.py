@@ -6,6 +6,7 @@ __doc__ = "Python bindings for unix etherdream lib"
 import argparse
 import ctypes
 import itertools
+import math
 import os
 import sys
 import time
@@ -160,7 +161,6 @@ def run(canvas):
 	fairydusts[2].visible = False
 	
 	[scene.add(fd) for fd in fairydusts]
-	[fd.move(dx=200) for fd in fairydusts]
 
 	acc = 4
 	maxspeed = 360
@@ -179,13 +179,16 @@ def run(canvas):
 			if time.time() - start > 600:
 				print("Vorbei", time.time())
 				sys.exit(0)
-			fairydusts[current].visible = False
-			current = (current + 1) % len(fairydusts)
+			fairydusts[current].hide()
 			fairydusts[current].reset()
-			fairydusts[current].visible = True
-			scene.update()
 			speed = speed0
+	
+			current = (current + 1) % len(fairydusts)
+			fairydusts[current].show()
+
+			scene.update()
 			time.sleep(0.25)
+
 		scene.update()
 		time.sleep(delay)
 	
