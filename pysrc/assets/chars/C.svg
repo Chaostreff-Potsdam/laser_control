@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="100"
+   width="100"
+   viewBox="0 0 100 100"
+   y="0px"
+   x="0px"
+   id="Ebene_1"
+   version="1.1">
+  <metadata
+     id="metadata9">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7" />
+  <g
+     id="text2"
+     style="font-size:130px"
+     aria-label="C">
+    <path
+       id="path11"
+       style="font-size:130px"
+       d="m 90.225586,11.529297 v 13.520508 q -6.474609,-6.030274 -13.837891,-9.013672 -7.299804,-2.983399 -15.551758,-2.983399 -16.25,0 -24.882812,9.965821 -8.632813,9.902343 -8.632813,28.691406 0,18.725586 8.632813,28.691406 8.632812,9.902344 24.882812,9.902344 8.251954,0 15.551758,-2.983399 7.363282,-2.983398 13.837891,-9.013671 v 13.393554 q -6.728516,4.570313 -14.282227,6.855469 -7.490234,2.285156 -15.86914,2.285156 -21.518555,0 -33.896485,-13.139648 -12.377929,-13.203125 -12.377929,-35.991211 0,-22.851563 12.377929,-35.991211 12.37793,-13.203125 33.896485,-13.203125 8.505859,0 15.996093,2.2851562 7.553711,2.2216797 14.155274,6.7285158 z" />
+  </g>
+</svg>

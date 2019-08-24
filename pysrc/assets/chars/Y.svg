@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   height="100"
+   width="100"
+   viewBox="0 0 100 100"
+   y="0px"
+   x="0px"
+   id="Ebene_1"
+   version="1.1">
+  <metadata
+     id="metadata9">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs7" />
+  <g
+     id="text2"
+     style="font-size:130px"
+     aria-label="Y">
+    <path
+       id="path11"
+       style="font-size:130px"
+       d="M 6.2460937,4.2294922 H 20.020508 L 46.299805,43.204102 72.388672,4.2294922 H 86.163086 L 52.647461,53.868164 V 99 H 39.761719 V 53.868164 Z" />
+  </g>
+</svg>
