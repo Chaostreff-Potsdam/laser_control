@@ -25,15 +25,17 @@ UINT16_MAX = 2 ** 16 - 1
 
 import random
 
+randomize_col = False
+
 class etherdream_point(ctypes.Structure):
 	_fields_ = [("x", ctypes.c_int16),
-	            ("y", ctypes.c_int16),
-	            ("r", ctypes.c_uint16),
-	            ("g", ctypes.c_uint16),
-	            ("b", ctypes.c_uint16),
-	            ("i", ctypes.c_uint16),
-	            ("u1", ctypes.c_uint16),
-	            ("u2", ctypes.c_uint16)]
+				("y", ctypes.c_int16),
+				("r", ctypes.c_uint16),
+				("g", ctypes.c_uint16),
+				("b", ctypes.c_uint16),
+				("i", ctypes.c_uint16),
+				("u1", ctypes.c_uint16),
+				("u2", ctypes.c_uint16)]
 
 	def __repr__(self):
 		return "etherdream_point(%d, %d, %d, %d, %d, %d, %d, %d)" % \
@@ -57,6 +59,15 @@ class etherdream_point(ctypes.Structure):
 		g = UINT16_MAX if point.visible else 0
 		return cls(point.x, point.y, r, g, b, 0, 0, 0)
 
+def mayrand(t):
+	point = etherdream_point(*t)
+	if randomize_col:
+		point.r = int(random.random() * UINT16_MAX)
+		point.g = int(random.random() * UINT16_MAX)
+		point.b = int(random.random() * UINT16_MAX)
+	return point
+
+
 def toEtherDreamPointArray(points):
 	"""Non-empty list of points to ctypes-Array"""
 	if type(points[0]) == etherdream_point:
@@ -66,7 +77,7 @@ def toEtherDreamPointArray(points):
 	elif type(points[0]) == parser.LaserPoint:
 		func = etherdream_point.fromLaserPoint
 	else:
-		func = lambda t: etherdream_point(*t)
+		func = mayrand
 	return (etherdream_point * len(points))(*list(imap(func, points)))
 
 
@@ -79,7 +90,7 @@ class NoEtherdreamFound(Exception):
 class EtherdreamWrapper(object):
 
 	libname = os.path.join(os.path.dirname(__file__), "etherdream.so")
-	
+
 	def __init__(self):
 		self.__initlib()
 		self.etherdream = None
@@ -89,7 +100,7 @@ class EtherdreamWrapper(object):
 		pass
 		#if self.etherdream:
 		#	self.lib.etherdream_disconnect(self.etherdream)
-	
+
 	def __initlib(self):
 		self.lib = ctypes.cdll.LoadLibrary(self.libname)
 
@@ -163,7 +174,7 @@ def run(canvas):
 
 	fairydusts[1].visible = False
 	fairydusts[2].visible = False
-	
+
 	[scene.add(fd) for fd in fairydusts]
 	[fd.move(dy=start_corr) for fd in fairydusts]
 
@@ -182,7 +193,7 @@ def run(canvas):
 
 	while True:
 		fairydusts[current].move(dy=speed)
-		
+
 		if wa < 5:
 			wa += 0.2
 
@@ -195,7 +206,7 @@ def run(canvas):
 
 		speed = min(maxspeed, speed + acc)
 		if fairydusts[current].outofrange():
-			if time.time() - start > 900:
+			if time.time() - start > 600:
 				print("Vorbei", time.time())
 				sys.exit(0)
 			fairydusts[current].hide()
@@ -205,7 +216,7 @@ def run(canvas):
 			wa = 0
 			whiggle = 0
 
-	
+
 			current = (current + 1) % len(fairydusts)
 			fairydusts[current].show()
 
@@ -214,14 +225,47 @@ def run(canvas):
 
 		scene.update()
 		time.sleep(delay)
-	
+
+def run_text(canvas, lx):
+	scene = Scene(canvas)
+	words = []
+	for w in lx:
+		letters = []
+		for c in w:
+			print(c)
+			letters.append(obj.SvgObject("assets/chars/%s.svg" % c, 10, r=0, g=255, b=0, destwidth=3000))
+		for i, l in enumerate(reversed(letters)):
+			l.move(dy = i * 1.1 * 3000)
+		o = obj.CompositeObject(*letters)
+		o.move(dy=-3000)
+		o.hide()
+		words.append(o)
+		scene.add(o)
+
+	print("Go")
+
+	for x in range(3):
+		for i in range(len(words)):
+			words[i].show()
+			scene.update()
+			time.sleep(2)
+			words[i].hide()
+
+
+
 
 def parseArgs():
+	global randomize_col
 	parser = argparse.ArgumentParser(description='Laser scene and file renderer')
 	parser.add_argument('filename', type=str, nargs='?', help='display file instead of scene')
 	parser.add_argument('--virtual', action='store_true', help='simulation laser')
+	parser.add_argument('--sparkle', action='store_true', help='sparkling')
+	parser.add_argument('--text', type=str, nargs='?', help='write text')
 
-	return parser.parse_args()
+	args = parser.parse_args()
+	if args.sparkle:
+		randomize_col = True
+	return args
 
 if __name__ == "__main__":
 	args = parseArgs()
@@ -230,5 +274,8 @@ if __name__ == "__main__":
 		# Just that you know: For virtual rendering use ./render.py. No time atm (Camp Day 4)
 		openAndDisplay(args.filename, canvas)
 	else:
-		run(canvas)
+		if args.text is not None:
+			run_text(canvas, args.text.upper().split())
+		else:
+			run(canvas)
 
