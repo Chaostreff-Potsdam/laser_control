@@ -71,7 +71,7 @@ class Renderer(object):
 					self.w.create_line(polyLine, fill=lastCol)
 				lastCol = newColor
 				polyLine = []
-			polyLine.append(self._t(point.x))
+			polyLine.append(self._t(-point.x))
 			polyLine.append(self._t(-point.y))
 		if len(polyLine) > 4:
 			self.w.create_line(polyLine, fill=lastCol)
