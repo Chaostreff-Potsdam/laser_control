@@ -15,7 +15,7 @@
    id="Ebene_1"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="N.svg">
+   sodipodi:docname="dot.svg">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -25,17 +25,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1206"
-     inkscape:window-height="705"
+     inkscape:window-width="1381"
+     inkscape:window-height="837"
      id="namedview7"
      showgrid="false"
      inkscape:zoom="2.36"
-     inkscape:cx="-6.779661"
+     inkscape:cx="-11.864407"
      inkscape:cy="50"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
-     inkscape:current-layer="Ebene_1" />
+     inkscape:current-layer="text2" />
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -44,6 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -52,12 +53,19 @@
   <g
      id="text2"
      style="font-size:130px;stroke:#000000;stroke-opacity:1"
-     aria-label="N"
-     transform="translate(-5.123047,0)">
-    <path
-       id="path11"
-       style="font-size:130px;stroke:#000000;stroke-opacity:1"
-       d="m 19.258789,4.2294922 17.265625,0 42.021484,79.2822268 0,-79.2822268 12.441407,0 0,94.7705078 -17.265625,0 -42.021485,-79.282227 0,79.282227 -12.441406,0 z"
-       inkscape:connector-curvature="0" />
+     aria-label="F"
+     transform="translate(3.5097655,0)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:229.12895203px;line-height:125%;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.27239144px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="46.658054"
+       y="95.626518"
+       id="text4134"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4136"
+         x="46.658054"
+         y="95.626518"
+         style="stroke-width:1.27239144px">.</tspan></text>
   </g>
 </svg>

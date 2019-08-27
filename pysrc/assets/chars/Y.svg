@@ -5,13 +5,37 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="100"
    width="100"
    viewBox="0 0 100 100"
    y="0px"
    x="0px"
    id="Ebene_1"
-   version="1.1">
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="Y.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="971"
+     inkscape:window-height="666"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="2.36"
+     inkscape:cx="49.576271"
+     inkscape:cy="50"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Ebene_1" />
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -27,11 +51,13 @@
      id="defs7" />
   <g
      id="text2"
-     style="font-size:130px"
-     aria-label="Y">
+     style="font-size:130px;stroke:#000000;stroke-opacity:1"
+     aria-label="Y"
+     transform="translate(3.7954102,0)">
     <path
        id="path11"
-       style="font-size:130px"
-       d="M 6.2460937,4.2294922 H 20.020508 L 46.299805,43.204102 72.388672,4.2294922 H 86.163086 L 52.647461,53.868164 V 99 H 39.761719 V 53.868164 Z" />
+       style="font-size:130px;stroke:#000000;stroke-opacity:1"
+       d="m 6.2460937,4.2294922 13.7744143,0 26.279297,38.9746098 26.088867,-38.9746098 13.774414,0 -33.515625,49.6386718 0,45.131836 -12.885742,0 0,-45.131836 z"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

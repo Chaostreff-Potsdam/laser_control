@@ -5,13 +5,37 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="100"
    width="100"
    viewBox="0 0 100 100"
    y="0px"
    x="0px"
    id="Ebene_1"
-   version="1.1">
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="M.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1061"
+     inkscape:window-height="736"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="2.36"
+     inkscape:cx="-12.288136"
+     inkscape:cy="50"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Ebene_1" />
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -27,11 +51,13 @@
      id="defs7" />
   <g
      id="text2"
-     style="font-size:130px"
-     aria-label="M">
+     style="font-size:130px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1"
+     aria-label="M"
+     transform="translate(-12.61328,0)">
     <path
        id="path11"
-       style="font-size:130px"
-       d="M 19.258789,4.2294922 H 38.365234 L 62.549805,68.72168 86.861328,4.2294922 H 105.96777 V 99 H 93.462891 V 15.782227 l -24.438477,65 H 56.138672 l -24.438477,-65 V 99 H 19.258789 Z" />
+       style="font-size:130px;fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1"
+       d="m 19.258789,4.2294922 19.106445,0 24.184571,64.4921878 24.311523,-64.4921878 19.106442,0 0,94.7705078 -12.504879,0 0,-83.217773 -24.438477,65 -12.885742,0 -24.438477,-65 0,83.217773 -12.441406,0 z"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

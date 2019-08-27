@@ -5,13 +5,37 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="100"
    width="100"
    viewBox="0 0 100 100"
    y="0px"
    x="0px"
    id="Ebene_1"
-   version="1.1">
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="D.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="666"
+     inkscape:window-height="480"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="2.36"
+     inkscape:cx="50"
+     inkscape:cy="50"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Ebene_1" />
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -27,11 +51,13 @@
      id="defs7" />
   <g
      id="text2"
-     style="font-size:130px"
-     aria-label="D">
+     style="font-size:130px;stroke:#000000;stroke-opacity:1"
+     aria-label="D"
+     transform="translate(-9.090332,0)">
     <path
        id="path11"
-       style="font-size:130px"
-       d="m 32.081055,14.766602 v 73.696289 h 15.488281 q 19.614258,0 28.691406,-8.886719 9.140625,-8.886719 9.140625,-28.056641 0,-19.042969 -9.140625,-27.866211 -9.077148,-8.886718 -28.691406,-8.886718 z M 19.258789,4.2294922 h 26.342773 q 27.548829,0 40.434571,11.4892578 12.885742,11.425781 12.885742,35.800781 0,24.501953 -12.949219,35.991211 Q 73.023437,99 45.601562,99 H 19.258789 Z" />
+       style="font-size:130px;stroke:#000000;stroke-opacity:1"
+       d="m 32.081055,14.766602 0,73.696289 15.488281,0 q 19.614258,0 28.691406,-8.886719 9.140625,-8.886719 9.140625,-28.056641 0,-19.042969 -9.140625,-27.866211 -9.077148,-8.886718 -28.691406,-8.886718 z M 19.258789,4.2294922 l 26.342773,0 q 27.548829,0 40.434571,11.4892578 12.885742,11.425781 12.885742,35.800781 0,24.501953 -12.949219,35.991211 Q 73.023437,99 45.601562,99 l -26.342773,0 z"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>

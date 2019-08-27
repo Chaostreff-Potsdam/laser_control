@@ -5,13 +5,37 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    height="100"
    width="100"
    viewBox="0 0 100 100"
    y="0px"
    x="0px"
    id="Ebene_1"
-   version="1.1">
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="B.svg">
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="666"
+     inkscape:window-height="480"
+     id="namedview7"
+     showgrid="false"
+     inkscape:zoom="2.36"
+     inkscape:cx="-5.9322034"
+     inkscape:cy="50"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="Ebene_1" />
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -27,11 +51,11 @@
      id="defs7" />
   <g
      id="text2"
-     style="font-size:130px"
+     style="font-size:130px;stroke:#000000;stroke-opacity:1"
      aria-label="B">
     <path
        id="path11"
-       style="font-size:130px"
+       style="font-size:130px;stroke:#000000;stroke-opacity:1"
        d="m 32.081055,53.741211 v 34.72168 h 20.566406 q 10.34668,0 15.297851,-4.25293 5.014649,-4.316406 5.014649,-13.139649 0,-8.886718 -5.014649,-13.076171 -4.951171,-4.25293 -15.297851,-4.25293 z m 0,-38.974609 v 28.564453 h 18.979492 q 9.394531,0 13.964844,-3.491211 4.633789,-3.554688 4.633789,-10.791016 0,-7.172851 -4.633789,-10.727539 -4.570313,-3.554687 -13.964844,-3.554687 z M 19.258789,4.2294922 h 32.753906 q 14.663086,0 22.597657,6.0937498 7.93457,6.09375 7.93457,17.329102 0,8.696289 -4.0625,13.83789 -4.0625,5.141602 -11.933594,6.411133 9.458008,2.03125 14.663086,8.50586 5.268555,6.411132 5.268555,16.05957 0,12.695312 -8.632813,19.614258 Q 69.214844,99 53.282227,99 H 19.258789 Z" />
   </g>
 </svg>
