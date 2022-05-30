@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 
 import parser
@@ -6,9 +6,9 @@ import parser
 import time
 import sys
 
-if sys.version_info[0] == 2:
+try:
 	import Tkinter as tkinter
-else:
+except ImportError:
 	import tkinter
 
 
@@ -98,7 +98,7 @@ class Renderer(object):
 def openAndDisplay(filename, showCircs):
 	r = Renderer(600)
 	f = r.drawChunkCircs if showCircs else r.drawChunk
-	doc = parser.ILDA(open(filename).read())
+	doc = parser.ILDA(open(filename, "rb").read())
 	while True:
 		for chunk in doc:
 			if f(chunk):

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 # Based on http://paulbourke.net/dataformats/ilda/
 
@@ -71,18 +71,18 @@ class ILDAChunk(object):
 		self.frameId, self.frameCount, self.scannerHead \
 				= struct.unpack(self.headerFmt, headerData)
 
-		assert self.signature == "ILDA"
+		assert self.signature == b"ILDA"
 		self.name = self.correctString(self.name)
 		self.company_name = self.correctString(self.company_name)
 
 	def readData(self, dataStr):
 		assert self.dataCount * self.fmtSz <= len(dataStr)
-		for i in xrange(self.dataCount):
+		for i in range(self.dataCount):
 			entry = dataStr[i * self.fmtSz:(i + 1) * self.fmtSz]
 			yield self.func(*struct.unpack(self.fmtStr, entry))
 
 	def correctString(self, s):
-		return s.partition("\s")[0]
+		return s.partition(b"\s")[0]
 
 	def isColorPalette(self):
 		return self.formatT == TYPE_COLOR_PALETTE
