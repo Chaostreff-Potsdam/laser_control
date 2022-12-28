@@ -170,13 +170,16 @@ def run(canvas):
 	fairydusts = [obj.CompositeObject(f) for f in fairydusts_base]
 	print("Go")
 
-	start_corr = -5000
+	start_corr = -1000
 
 	fairydusts[1].visible = False
 	fairydusts[2].visible = False
+	
+	sc = 2.5
 
 	[scene.add(fd) for fd in fairydusts]
 	[fd.move(dy=start_corr) for fd in fairydusts]
+	[fd.scale(sc, sc) for fd in fairydusts]
 
 	acc = 5
 	maxspeed = 480
@@ -212,6 +215,7 @@ def run(canvas):
 			fairydusts[current].hide()
 			fairydusts[current].reset()
 			fairydusts[current].move(dy=start_corr)
+			fairydusts[current].scale(sc, sc)
 			speed = speed0
 			wa = 0
 			whiggle = 0
