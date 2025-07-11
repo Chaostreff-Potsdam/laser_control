@@ -161,16 +161,20 @@ class Scene(object):
 		self.canvas.writePoints(self.root.render())
 
 
-def SineGenerator(steps_per_cycle=100, scale=1.0):
+def StepGenerator(steps_per_cycle=100, scale=1.0):
 	step = 0
 	while True:
-		angle = (step / steps_per_cycle) * 2 * math.pi
-		sin_x = math.sin(angle)
-		yield sin_x * scale
+		yield step * scale
 		step += 1
 		step %= steps_per_cycle
 
 
+def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin):
+	for step in StepGenerator(steps_per_cycle, scale=1):
+		angle = (step / steps_per_cycle) * 2 * math.pi
+		sin_x = func(angle)
+		yield sin_x * scale
+		
 
 def run(canvas):
 	scene = Scene(canvas)
@@ -201,7 +205,10 @@ def run(canvas):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_rot = SineGenerator(scale=whale_whiggle_max_angle, steps_per_cycle=85)
+	whale_steps = 100
+	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200)
+	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
+	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
 
 	while True:
 		waves.reset()
@@ -209,7 +216,8 @@ def run(canvas):
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
 
 		whale.reset()
-		whale.move(dx=x_shift, dy=y_shift)
+		whale.move(dx=x_shift - waves_b.bwidth*0.5, dy=y_shift)
+		whale.move(dx=next(whale_x_pos), dy=next(whale_y_pos))
 		whale.move(dx=-whale_center[0], dy=-whale_center[1])
 		whale.rotate(math.sin(math.radians(next(whale_rot))))
 		whale.move(dx=whale_center[0],  dy=whale_center[1])
