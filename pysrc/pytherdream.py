@@ -10,6 +10,7 @@ import math
 import os
 import sys
 import time
+import random
 
 import motive
 import obj
@@ -160,23 +161,31 @@ class Scene(object):
 		self.canvas.writePoints(self.root.render())
 
 
+def SineGenerator(steps_per_cycle=100, scale=1.0):
+	step = 0
+	while True:
+		angle = (step / steps_per_cycle) * 2 * math.pi
+		sin_x = math.sin(angle)
+		yield sin_x * scale
+		step += 1
+		step %= steps_per_cycle
+
+
+
 def run(canvas):
 	scene = Scene(canvas)
-	fairydusts_base = [
-			obj.SvgObject("assets/fairydustb.svg", 4, 0x00, 0x86, 0xf2),
-			obj.SvgObject("assets/fairydusty.svg", 5, 0xff, 0x76, 0x00),
-			obj.SvgObject("assets/fairydustg.svg", 7, 0x99, 0xba, 0x00)]
+	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_blacks=20)
+	waves_b.scale(5, 5)
 
-	fairydusts = [obj.CompositeObject(f) for f in fairydusts_base]
+	waves = obj.CompositeObject(waves_b)
+	
+	scene.add(waves)
 	print("Go")
 
-	start_corr = -5000
+	#[scene.add(o) for o in scene_objects]
 
-	fairydusts[1].visible = False
-	fairydusts[2].visible = False
 
-	[scene.add(fd) for fd in fairydusts]
-	[fd.move(dy=start_corr) for fd in fairydusts]
+	wave_speed = 2000
 
 	acc = 5
 	maxspeed = 480
@@ -190,10 +199,12 @@ def run(canvas):
 
 	wa = 2
 	whiggle = 0
+	wave_pos = SineGenerator(scale=wave_speed)
 
 	while True:
-		fairydusts[current].move(dy=speed)
-
+		waves.reset()
+		waves.move(dx=next(wave_pos))
+		"""
 		if wa < 5:
 			wa += 0.2
 
@@ -222,6 +233,7 @@ def run(canvas):
 
 			scene.update()
 			time.sleep(0.25)
+		"""
 
 		scene.update()
 		time.sleep(delay)

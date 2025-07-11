@@ -144,11 +144,19 @@ class SvgObject(LaserObject):
 	def c(self, v):
 		return (0.5 - v / self.basewidth) * self._destwidth
 
-	def __init__(self, fileName, steps, r=None, g=None, b=None, destwidth=5200):
+	def __init__(self, fileName, steps, r=None, g=None, b=None, destwidth=5200, add_blacks=0):
 		self._destwidth = destwidth
 		path, (rs, gs, bs) = svg_load.SvgLoader.load_svg(fileName)
 		points = (point.LaserPoint(self.c(x), self.c(y), 
 					point.col_c(r or rs), point.col_c(g or gs), point.col_c(b or bs), 0, 0, 0) 
 					for x, y in	svg_load.path2polygon.path2polygonPoints(path, steps))
+		
+		if add_blacks > 0:
+			points = list(points)
+			first_point = points[0]
+			last_point = points[-1]
+			points.extend([point.LaserPoint(x=last_point.x, y=last_point.y, r=0, g=0, b=0, i=0, u1=0, u2=0) for _ in range(add_blacks//2)])
+			points.extend([point.LaserPoint(x=first_point.x, y=first_point.y, r=0, g=0, b=0, i=0, u1=0, u2=0) for _ in range(add_blacks - add_blacks//2)])
+
 		super(SvgObject, self).__init__(points)
 
