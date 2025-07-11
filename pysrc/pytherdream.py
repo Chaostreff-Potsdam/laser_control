@@ -174,7 +174,7 @@ def SineGenerator(steps_per_cycle=100, scale=1.0):
 
 def run(canvas):
 	scene = Scene(canvas)
-	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_blacks=20)
+	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_blacks=10)
 	waves_b.scale(5, 5)
 
 	waves = obj.CompositeObject(waves_b)
@@ -185,7 +185,7 @@ def run(canvas):
 	#[scene.add(o) for o in scene_objects]
 
 
-	wave_speed = 2000
+	wave_speed = 1000
 
 	acc = 5
 	maxspeed = 480
@@ -199,11 +199,12 @@ def run(canvas):
 
 	wa = 2
 	whiggle = 0
-	wave_pos = SineGenerator(scale=wave_speed)
+	wave_pos_x = SineGenerator(scale=wave_speed)
+	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
 	while True:
 		waves.reset()
-		waves.move(dx=next(wave_pos))
+		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
 		"""
 		if wa < 5:
 			wa += 0.2
