@@ -3,15 +3,15 @@ import re
 
 
 def load_svg(filename):
-    paths, attributes = svg2paths(filename)
+    paths, all_attributes = svg2paths(filename)
 
-    assert len(paths) == 1, "File must contain exactly one path."
-    assert "style" in attributes[0].keys(), "Path must have inline style."
-    assert "stroke" in attributes[0]["style"], "Path must have stroke style attribute"
+    for path, attributes in zip(paths, all_attributes):
+        assert "style" in attributes.keys(), "Path must have inline style."
+        assert "stroke" in attributes["style"], "Path must have stroke style attribute"
 
-    hex_color = re.search("stroke:#(([0-9]|[A-F]|[a-f]){6});?", attributes[0]["style"])[1]
-    rgb_color = tuple(bytearray.fromhex(hex_color))
-    return paths[0], rgb_color
+        hex_color = re.search("stroke:#(([0-9]|[A-F]|[a-f]){6});?", attributes["style"])[1]
+        rgb_color = tuple(bytearray.fromhex(hex_color))
+        return path, rgb_color
 
 
 if __name__ == "__main__":

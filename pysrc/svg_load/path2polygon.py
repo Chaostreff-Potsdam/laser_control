@@ -23,7 +23,6 @@ def c2a(c: complex):
 
 def path2polygonPoints(path, step):
 	corner_count = 0
-	points = []
 	path_length = path.length()
 	last_point = None
 	last_last_point = None

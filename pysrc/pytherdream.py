@@ -174,12 +174,12 @@ def SineGenerator(steps_per_cycle=100, scale=1.0):
 
 def run(canvas):
 	scene = Scene(canvas)
-	scene_scale = 2.0
-	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_blacks=10)
+	scene_scale = 2.5
+	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_back_blacks=10)
 	waves_b.scale(scene_scale, scene_scale)
 	waves = obj.CompositeObject(waves_b)
 
-	whale_b = obj.SvgObject("assets/whale.svg", 4, 0x00, 0xff, 0x00)
+	whale_b = obj.SvgObject("assets/whale.svg", 4, 0xff, 0xff, 0x00)
 	whale_b.scale(scene_scale, scene_scale)
 	whale = obj.CompositeObject(whale_b)
 	whale_center = whale.bwidth * 0.66, whale.bheight / 2
@@ -189,20 +189,15 @@ def run(canvas):
 	scene.add(whale)
 	print("Go")
 
-	#[scene.add(o) for o in scene_objects]
-
-
 	wave_speed = 1000
-	whale_whiggle_max_angle = 30
+	whale_whiggle_max_angle = 15
 
-	delay = 0.04
-
-	start = time.time()
+	refresh_freq = 0.04
 
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_rot = SineGenerator(scale=0.5, steps_per_cycle=98)
+	whale_rot = SineGenerator(scale=whale_whiggle_max_angle, steps_per_cycle=85)
 
 	while True:
 		waves.reset()
@@ -210,41 +205,12 @@ def run(canvas):
 
 		whale.reset()
 		whale.move(dx=-whale_center[0], dy=-whale_center[1])
-		whale.rotate(next(whale_rot))
+		whale.rotate(math.sin(math.radians(next(whale_rot))))
 		whale.move(dx=whale_center[0],  dy=whale_center[1])
-		"""
-		if wa < 5:
-			wa += 0.2
-
-		whiggle += wa
-		whiggle %= 360
-
-		roll = math.sin(math.radians(whiggle))
-		fairydusts_base[current].reset()
-		fairydusts_base[current].rotate(math.radians(3) * roll)
-
-		speed = min(maxspeed, speed + acc)
-		if fairydusts[current].outofrange():
-			if time.time() - start > 600:
-				print("Vorbei", time.time())
-				sys.exit(0)
-			fairydusts[current].hide()
-			fairydusts[current].reset()
-			fairydusts[current].move(dy=start_corr)
-			speed = speed0
-			wa = 0
-			whiggle = 0
-
-
-			current = (current + 1) % len(fairydusts)
-			fairydusts[current].show()
-
-			scene.update()
-			time.sleep(0.25)
-		"""
 
 		scene.update()
-		time.sleep(delay)
+		time.sleep(refresh_freq)
+
 
 def run_text(canvas, lx):
 	scene = Scene(canvas)
