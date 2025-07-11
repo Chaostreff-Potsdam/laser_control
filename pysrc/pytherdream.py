@@ -179,7 +179,7 @@ def run(canvas):
 	waves_b.scale(scene_scale, scene_scale)
 	waves = obj.CompositeObject(waves_b)
 
-	whale_b = obj.SvgObject("assets/whale.svg", 4, 0xff, 0xff, 0x00)
+	whale_b = obj.SvgObject("assets/whale.svg", 4, add_back_blacks=5)
 	whale_b.scale(scene_scale, scene_scale)
 	whale = obj.CompositeObject(whale_b)
 	whale_center = whale.bwidth * 0.66, whale.bheight / 2

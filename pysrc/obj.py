@@ -157,13 +157,17 @@ class SvgObject(LaserObject):
 			
 
 		self._destwidth = destwidth
-		path, (rs, gs, bs) = svg_load.SvgLoader.load_svg(fileName)
-		points = (point.LaserPoint(self.c(x), self.c(y), 
-					point.col_c(r or rs), point.col_c(g or gs), point.col_c(b or bs), 0, 0, 0) 
-					for x, y in	svg_load.path2polygon.path2polygonPoints(path, steps))
-		
-		points = dup_index_black(points, -1, add_back_blacks)
-		points = dup_index_black(points,  0, add_front_blacks)
+		all_points = []
 
-		super(SvgObject, self).__init__(points)
+		for path, attrib_color in svg_load.SvgLoader.load_svg(fileName):
+			(rs, gs, bs) = attrib_color
+			points = (point.LaserPoint(self.c(x), self.c(y), 
+						point.col_c(rs if r is None else r), point.col_c(gs if g is None else g), point.col_c(bs if b is None else b), 0, 0, 0) 
+						for x, y in	svg_load.path2polygon.path2polygonPoints(path, steps))
+			
+			points = dup_index_black(points, -1, add_back_blacks)
+			points = dup_index_black(points,  0, add_front_blacks)
+			all_points.extend(points)
+
+		super(SvgObject, self).__init__(all_points)
 

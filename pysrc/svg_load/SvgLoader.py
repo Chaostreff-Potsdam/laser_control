@@ -11,7 +11,7 @@ def load_svg(filename):
 
         hex_color = re.search("stroke:#(([0-9]|[A-F]|[a-f]){6});?", attributes["style"])[1]
         rgb_color = tuple(bytearray.fromhex(hex_color))
-        return path, rgb_color
+        yield path, rgb_color
 
 
 if __name__ == "__main__":
