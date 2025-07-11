@@ -11,3 +11,4 @@ doc/
 build-*/
 etherdream.so
 .gitignore
+pysrc/venv/

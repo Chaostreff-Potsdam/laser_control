@@ -174,7 +174,11 @@ def SineGenerator(steps_per_cycle=100, scale=1.0):
 
 def run(canvas):
 	scene = Scene(canvas)
-	scene_scale = 2.5
+	scene_scale = 1.8 
+	x_shift = 6000
+	y_shift = -800
+
+
 	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_back_blacks=10)
 	waves_b.scale(scene_scale, scene_scale)
 	waves = obj.CompositeObject(waves_b)
@@ -201,9 +205,11 @@ def run(canvas):
 
 	while True:
 		waves.reset()
+		waves.move(dx=x_shift, dy=y_shift)
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
 
 		whale.reset()
+		whale.move(dx=x_shift, dy=y_shift)
 		whale.move(dx=-whale_center[0], dy=-whale_center[1])
 		whale.rotate(math.sin(math.radians(next(whale_rot))))
 		whale.move(dx=whale_center[0],  dy=whale_center[1])

@@ -33,14 +33,14 @@ void fill_circle(float phase, int mode) {
 		default:
 		case 0: {
 			float cmult = .05 * sin(30 * (ip - phase/3));
-			pt->x = sin(ip) * 20000 * (1 + cmult);
-			pt->y = cos(ip) * 20000 * (1 + cmult);
+			pt->x = sin(ip) * 2000 * (1 + cmult);
+			pt->y = cos(ip) * 2000 * (1 + cmult);
 			break;
 		}
 		case 1: {
 			float cmult = .10 * sin(10 * (ip - phase/3));
-			pt->x = sin(ip) * 20000 * (1 + cmult);
-			pt->y = cos(ip) * 20000 * (1 + cmult);
+			pt->x = sin(ip) * 2000 * (1 + cmult);
+			pt->y = cos(ip) * 2000 * (1 + cmult);
 			break;
 			/* XXX broken */
 /*
@@ -57,21 +57,21 @@ void fill_circle(float phase, int mode) {
 			float r = 3;
 			float D = 5;
 
-			pt->x = 2500 * ((R-r)*cos(ip + phase) + D*cos((R-r)*ip/r));
-			pt->y = 2500 * ((R-r)*sin(ip + phase) - D*sin((R-r)*ip/r));
+			pt->x = 250 * ((R-r)*cos(ip + phase) + D*cos((R-r)*ip/r));
+			pt->y = 250 * ((R-r)*sin(ip + phase) - D*sin((R-r)*ip/r));
 			break;
 		}
 		case 3: {
 			int n = 5;
 			float R = 5 * cos(M_PI/n) / cos(fmod(ip, (2*M_PI/n)) - (M_PI/n));
-			pt->x = 3500 * R*cos(ip+phase);
-			pt->y = 3500 * R*sin(ip+phase);
+			pt->x = 350 * R*cos(ip+phase);
+			pt->y = 350 * R*sin(ip+phase);
 			break;
 		}
 		case 4: {
 			float Xo = sin(ip);
-			pt->x = 20000 * Xo * cos(phase/4);
-			pt->y = 20000 * Xo * -sin(phase/4);
+			pt->x = 2000 * Xo * cos(phase/4);
+			pt->y = 2000 * Xo * -sin(phase/4);
 			ipf = fmod(((Xo + 1) / 2.0) + phase / 3, 1.0) * 2 * M_PI;
 		}
 		}
