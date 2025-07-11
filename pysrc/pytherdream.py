@@ -174,37 +174,41 @@ def SineGenerator(steps_per_cycle=100, scale=1.0):
 
 def run(canvas):
 	scene = Scene(canvas)
+	scene_scale = 2.0
 	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_blacks=10)
-	waves_b.scale(5, 5)
-
+	waves_b.scale(scene_scale, scene_scale)
 	waves = obj.CompositeObject(waves_b)
+
+	whale_b = obj.SvgObject("assets/whale.svg", 4, 0x00, 0xff, 0x00)
+	whale_b.scale(scene_scale, scene_scale)
+	whale = obj.CompositeObject(whale_b)
+
 	
 	scene.add(waves)
+	scene.add(whale)
 	print("Go")
 
 	#[scene.add(o) for o in scene_objects]
 
 
 	wave_speed = 1000
+	whale_whiggle_max_angle = 30
 
-	acc = 5
-	maxspeed = 480
-	speed0 = 0
 	delay = 0.04
-	current = 0
-
-	speed = speed0
 
 	start = time.time()
 
-	wa = 2
-	whiggle = 0
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
+
+	whale_rot = SineGenerator()
 
 	while True:
 		waves.reset()
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
+
+		whale.reset()
+		whale.rotate(next(whale_rot))
 		"""
 		if wa < 5:
 			wa += 0.2
