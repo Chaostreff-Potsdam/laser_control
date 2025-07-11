@@ -182,6 +182,7 @@ def run(canvas):
 	whale_b = obj.SvgObject("assets/whale.svg", 4, 0x00, 0xff, 0x00)
 	whale_b.scale(scene_scale, scene_scale)
 	whale = obj.CompositeObject(whale_b)
+	whale_center = whale.bwidth * 0.66, whale.bheight / 2
 
 	
 	scene.add(waves)
@@ -201,14 +202,16 @@ def run(canvas):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_rot = SineGenerator()
+	whale_rot = SineGenerator(scale=0.5, steps_per_cycle=98)
 
 	while True:
 		waves.reset()
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
 
 		whale.reset()
+		whale.move(dx=-whale_center[0], dy=-whale_center[1])
 		whale.rotate(next(whale_rot))
+		whale.move(dx=whale_center[0],  dy=whale_center[1])
 		"""
 		if wa < 5:
 			wa += 0.2
