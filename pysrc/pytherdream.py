@@ -223,6 +223,17 @@ def run(canvas):
 	refresh_freq = 25 # Hz
 
 	dice = DiceRoll()
+	vis_props = [
+		(heart_b, 0.1),
+		(blow, 0.15),
+	]
+
+	def set_vis_by_prop():
+		current_prop = 0.0
+		for o, prop in vis_props:
+			o.visible = current_prop < dice.last_roll < (current_prop + prop)
+			current_prop += prop
+
 
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
@@ -253,8 +264,7 @@ def run(canvas):
 		whale.rotate(math.sin(math.radians(next(whale_rot))))
 		whale.move(dx=whale_center[0],  dy=whale_center[1])
 
-		heart_b.visible = 0.0 < dice.last_roll < 0.1 # hearth: 10%
-		blow.visible    = 0.1 < dice.last_roll < 0.3 # blow: 20%
+		set_vis_by_prop()
 
 		scene.update()
 		time.sleep(1.0 / refresh_freq)
