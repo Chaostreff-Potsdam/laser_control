@@ -176,6 +176,34 @@ def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin):
 		yield sin_x * scale
 		
 
+def StepGenerator(steps_per_cycle=100, scale=1.0, callback=lambda: None):
+	step = 0
+	while True:
+		yield step * scale
+		step += 1
+		if step >= steps_per_cycle:
+			step = 0
+			callback()
+
+
+def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin):
+	for step in StepGenerator(steps_per_cycle, scale=1):
+		angle = (step / steps_per_cycle) * 2 * math.pi
+		sin_x = func(angle)
+		yield sin_x * scale
+
+
+class InThisRunVisible(object):
+
+	def __init__(self, probability):
+		self.visible = False
+		self.probability = probability
+
+	def __call__(self):
+		self.visible = random.random() <= self.probability
+
+
+
 def run(canvas):
 	scene = Scene(canvas)
 	scene_scale = 1.8 
@@ -200,7 +228,7 @@ def run(canvas):
 	wave_speed = 1000
 	whale_whiggle_max_angle = 15
 
-	refresh_freq = 0.04
+	refresh_freq = 25 # Hz
 
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
@@ -223,21 +251,25 @@ def run(canvas):
 		whale.move(dx=whale_center[0],  dy=whale_center[1])
 
 		scene.update()
-		time.sleep(refresh_freq)
+		time.sleep(1.0 / refresh_freq)
 
+	
 
 def run_text(canvas, lx):
 	scene = Scene(canvas)
 	words = []
+	exceptions = {'.': 'dot', "'": 'dash'}
 	for w in lx:
 		letters = []
 		for c in w:
 			print(c)
-			letters.append(obj.SvgObject("assets/chars/%s.svg" % c, 10, r=0, g=255, b=0, destwidth=3000))
+			letters.append(obj.SvgObject("assets/chars/%s.svg" % exceptions.get(c,c), 10, r=0, g=255, b=0, destwidth=3000))
+		current_left = 0
 		for i, l in enumerate(reversed(letters)):
-			l.move(dy = i * 1.1 * 3000)
+			current_left += l.bwidth * 1.2
+			l.move(dx = current_left)
 		o = obj.CompositeObject(*letters)
-		o.move(dy=-3000)
+		o.move(dx=-o.bwidth*0.5)
 		o.hide()
 		words.append(o)
 		scene.add(o)
