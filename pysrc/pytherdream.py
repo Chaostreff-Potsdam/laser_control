@@ -5,7 +5,6 @@ __doc__ = "Python bindings for unix etherdream lib"
 
 import argparse
 import ctypes
-import itertools
 import math
 import os
 import sys
@@ -13,6 +12,7 @@ import time
 import random
 
 import motive
+import pickle_cache
 import obj
 import parser
 import renderer
@@ -191,6 +191,13 @@ class DiceRoll(object):
 		self.last_roll = random.random()
 
 
+cache = pickle_cache.PickleCache()
+
+@cache.cached
+def load_svg(*args, **kwargs):
+	return obj.SvgObject(*args, **kwargs)
+
+
 def run(canvas, duration=None):
 	scene = Scene(canvas)
 	scene_scale = 1.8 
@@ -199,10 +206,10 @@ def run(canvas, duration=None):
 
 
 	objs = [
-		obj.SvgObject("assets/waves.svg", 1, 0x00, 0xff, 0xff, add_back_blacks=10),
-		obj.SvgObject("assets/blow.svg", 2, add_front_blacks=5, add_back_blacks=5),
-		obj.SvgObject("assets/heart.svg", 1, add_front_blacks=3, add_back_blacks=3),
-		obj.SvgObject("assets/whale.svg", 4, add_back_blacks=5),
+		load_svg("assets/waves.svg", 1, 0x00, 0xff, 0xff, add_back_blacks=10),
+		load_svg("assets/blow.svg", 2, add_front_blacks=5, add_back_blacks=5),
+		load_svg("assets/heart.svg", 1, add_front_blacks=3, add_back_blacks=3),
+		load_svg("assets/whale.svg", 4, add_back_blacks=5),
 	]
 	[o.scale(scene_scale, scene_scale) for o in objs]
 	waves_b, blow_b, heart_b, whale_b = objs
@@ -246,8 +253,8 @@ def run(canvas, duration=None):
 	blow_out = 400
 	blow_pos = SineGenerator(steps_per_cycle=whale_steps, scale=blow_out, step_start=whale_steps/2)
 
-	heart_b.scale(0.4, 0.4) # I have no idea why it doesn't match SVG style
-	heart_b.move(dy=heart_b.bheight * 0.7)
+	heart_b.scale(0.3, 0.3) # I have no idea why it doesn't match SVG style
+	heart_b.move(dy=heart_b.bheight)
 
 	start_time = time.time()
 	while (duration is None) or (time.time() - start_time < duration):
