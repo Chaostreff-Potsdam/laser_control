@@ -201,7 +201,7 @@ def load_svg(*args, **kwargs):
 def run(canvas, duration=None):
 	scene = Scene(canvas)
 	scene_scale = 1.8 
-	x_shift = -1000
+	x_shift = 5000
 	y_shift = -1000
 
 
@@ -251,13 +251,13 @@ def run(canvas, duration=None):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_steps = 60
+	whale_steps = 35
 	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
 	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
 	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
 
 	ball_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
-	ball_y_pos = SineGenerator(steps_per_cycle=whale_steps*8, scale=1000, shift=500)
+	ball_y_pos = SineGenerator(steps_per_cycle=whale_steps*2, scale=1500, shift=-750)
 
 	blow_out = 400
 	blow_pos = SineGenerator(steps_per_cycle=whale_steps, scale=blow_out, step_start=whale_steps/2)
