@@ -245,7 +245,7 @@ def run(canvas, duration=None):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_steps = 90
+	whale_steps = 80
 	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
 	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
 	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
