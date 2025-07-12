@@ -159,25 +159,10 @@ class Scene(object):
 
 	def update(self):
 		self.canvas.writePoints(self.root.render())
-
-
-def StepGenerator(steps_per_cycle=100, scale=1.0):
-	step = 0
-	while True:
-		yield step * scale
-		step += 1
-		step %= steps_per_cycle
-
-
-def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin):
-	for step in StepGenerator(steps_per_cycle, scale=1):
-		angle = (step / steps_per_cycle) * 2 * math.pi
-		sin_x = func(angle)
-		yield sin_x * scale
 		
 
-def StepGenerator(steps_per_cycle=100, scale=1.0, callback=lambda: None):
-	step = 0
+def StepGenerator(steps_per_cycle=100, scale=1.0, callback=lambda: None, step_start=0):
+	step = step_start
 	while True:
 		yield step * scale
 		step += 1
@@ -186,22 +171,24 @@ def StepGenerator(steps_per_cycle=100, scale=1.0, callback=lambda: None):
 			callback()
 
 
-def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin):
-	for step in StepGenerator(steps_per_cycle, scale=1):
+def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin, step_start=0):
+	for step in StepGenerator(steps_per_cycle, scale=1, step_start=0):
 		angle = (step / steps_per_cycle) * 2 * math.pi
 		sin_x = func(angle)
 		yield sin_x * scale
 
 
-class InThisRunVisible(object):
+def AbsGeneratorWrapper(iterable):
+	return map(abs, iterable)
 
-	def __init__(self, probability):
-		self.visible = False
-		self.probability = probability
+
+class DiceRoll(object):
+
+	def __init__(self):
+		self()
 
 	def __call__(self):
-		self.visible = random.random() <= self.probability
-
+		self.last_roll = random.random()
 
 
 def run(canvas):
@@ -211,16 +198,21 @@ def run(canvas):
 	y_shift = -800
 
 
-	waves_b = obj.SvgObject("assets/waves.svg", 4, 0x00, 0xff, 0xff, add_back_blacks=10)
-	waves_b.scale(scene_scale, scene_scale)
+	objs = [
+		obj.SvgObject("assets/waves.svg", 1, 0x00, 0xff, 0xff, add_back_blacks=10),
+		obj.SvgObject("assets/blow.svg", 2, add_front_blacks=5, add_back_blacks=5),
+		obj.SvgObject("assets/heart.svg", 1, add_front_blacks=3, add_back_blacks=3),
+		obj.SvgObject("assets/whale.svg", 4, add_back_blacks=5),
+	]
+	[o.scale(scene_scale, scene_scale) for o in objs]
+	waves_b, blow_b, heart_b, whale_b = objs
+
 	waves = obj.CompositeObject(waves_b)
 
-	whale_b = obj.SvgObject("assets/whale.svg", 4, add_back_blacks=5)
-	whale_b.scale(scene_scale, scene_scale)
-	whale = obj.CompositeObject(whale_b)
-	whale_center = whale.bwidth * 0.66, whale.bheight / 2
+	blow = obj.CompositeObject(blow_b)
+	whale_center = whale_b.bwidth * 0.66, whale_b.bheight / 2
+	whale = obj.CompositeObject(whale_b, blow, heart_b)
 
-	
 	scene.add(waves)
 	scene.add(whale)
 	print("Go")
@@ -230,18 +222,29 @@ def run(canvas):
 
 	refresh_freq = 25 # Hz
 
+	dice = DiceRoll()
+
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
 	whale_steps = 100
-	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200)
+	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
 	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
 	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
+
+	blow_out = 400
+	blow_pos = SineGenerator(steps_per_cycle=whale_steps, scale=blow_out, step_start=whale_steps/2)
+
+	heart_b.scale(0.4, 0.4) # I have no idea why it doesn't match SVG style
+	heart_b.move(dy=heart_b.bheight * 0.7)
 
 	while True:
 		waves.reset()
 		waves.move(dx=x_shift, dy=y_shift)
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
+
+		blow.reset()
+		blow.move(dy=next(blow_pos))
 
 		whale.reset()
 		whale.move(dx=x_shift - waves_b.bwidth*0.5, dy=y_shift)
@@ -249,6 +252,9 @@ def run(canvas):
 		whale.move(dx=-whale_center[0], dy=-whale_center[1])
 		whale.rotate(math.sin(math.radians(next(whale_rot))))
 		whale.move(dx=whale_center[0],  dy=whale_center[1])
+
+		heart_b.visible = 0.0 < dice.last_roll < 0.1 # hearth: 10%
+		blow.visible    = 0.1 < dice.last_roll < 0.3 # blow: 20%
 
 		scene.update()
 		time.sleep(1.0 / refresh_freq)
