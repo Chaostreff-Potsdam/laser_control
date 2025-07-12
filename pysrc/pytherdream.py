@@ -201,8 +201,8 @@ def load_svg(*args, **kwargs):
 def run(canvas, duration=None):
 	scene = Scene(canvas)
 	scene_scale = 1.8 
-	x_shift = 6000
-	y_shift = -800
+	x_shift = -1000
+	y_shift = -1000
 
 
 	objs = [
@@ -245,7 +245,7 @@ def run(canvas, duration=None):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_steps = 100
+	whale_steps = 90
 	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
 	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
 	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
@@ -293,7 +293,8 @@ def run_text(canvas, lx, reps):
 			current_left += l.bwidth * 1.2
 			l.move(dx = current_left)
 		o = obj.CompositeObject(*letters)
-		o.move(dx=-o.bwidth*0.5)
+		o.move(dx=-o.bwidth*0.5, dy=-2000)
+		o.scale(1.2, 1.2)
 		o.hide()
 		words.append(o)
 		scene.add(o)
