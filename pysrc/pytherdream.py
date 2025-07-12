@@ -191,7 +191,7 @@ class DiceRoll(object):
 		self.last_roll = random.random()
 
 
-def run(canvas):
+def run(canvas, duration=None):
 	scene = Scene(canvas)
 	scene_scale = 1.8 
 	x_shift = 6000
@@ -249,7 +249,8 @@ def run(canvas):
 	heart_b.scale(0.4, 0.4) # I have no idea why it doesn't match SVG style
 	heart_b.move(dy=heart_b.bheight * 0.7)
 
-	while True:
+	start_time = time.time()
+	while (duration is None) or (time.time() - start_time < duration):
 		waves.reset()
 		waves.move(dx=x_shift, dy=y_shift)
 		waves.move(dx=next(wave_pos_x), dy=next(wave_pos_y))
@@ -271,7 +272,7 @@ def run(canvas):
 
 	
 
-def run_text(canvas, lx):
+def run_text(canvas, lx, reps):
 	scene = Scene(canvas)
 	words = []
 	exceptions = {'.': 'dot', "'": 'dash'}
@@ -292,12 +293,13 @@ def run_text(canvas, lx):
 
 	print("Go")
 
-	for x in range(3):
-		for i in range(len(words)):
-			words[i].show()
+	for _ in range(reps):
+		for w in words:
+			w.show()
+			time.sleep(0.01)
 			scene.update()
 			time.sleep(2)
-			words[i].hide()
+			w.hide()
 
 
 
@@ -307,8 +309,10 @@ def parseArgs():
 	parser = argparse.ArgumentParser(description='Laser scene and file renderer')
 	parser.add_argument('filename', type=str, nargs='?', help='display file instead of scene')
 	parser.add_argument('--virtual', action='store_true', help='simulation laser')
+	parser.add_argument('--duration', type=int, help='how many seconds for this scene?', default=None)
 	parser.add_argument('--sparkle', action='store_true', help='sparkling')
 	parser.add_argument('--text', type=str, nargs='?', help='write text')
+	parser.add_argument('--text-reps', type=int, nargs='?', help='how often to repeat text', default=3)
 
 	args = parser.parse_args()
 	if args.sparkle:
@@ -323,7 +327,7 @@ if __name__ == "__main__":
 		openAndDisplay(args.filename, canvas)
 	else:
 		if args.text is not None:
-			run_text(canvas, args.text.upper().split())
+			run_text(canvas, args.text.upper().split(), reps=args.text_reps)
 		else:
-			run(canvas)
+			run(canvas, duration=args.duration)
 
