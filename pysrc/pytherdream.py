@@ -171,11 +171,11 @@ def StepGenerator(steps_per_cycle=100, scale=1.0, callback=lambda: None, step_st
 			callback()
 
 
-def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin, step_start=0):
-	for step in StepGenerator(steps_per_cycle, scale=1, step_start=0):
+def SineGenerator(steps_per_cycle=100, scale=1.0, func=math.sin, step_start=0, shift=0):
+	for step in StepGenerator(steps_per_cycle, scale=1, step_start=step_start):
 		angle = (step / steps_per_cycle) * 2 * math.pi
 		sin_x = func(angle)
-		yield sin_x * scale
+		yield sin_x * scale + shift
 
 
 def AbsGeneratorWrapper(iterable):
@@ -209,19 +209,23 @@ def run(canvas, duration=None):
 		load_svg("assets/waves.svg", 1, 0x00, 0xff, 0xff, add_back_blacks=10),
 		load_svg("assets/blow.svg", 2, add_front_blacks=5, add_back_blacks=5),
 		load_svg("assets/heart.svg", 1, add_front_blacks=3, add_back_blacks=3),
+		load_svg("assets/cap.svg", 1, add_front_blacks=2, add_back_blacks=2),
+		load_svg("assets/ball.svg", 1, add_front_blacks=2, add_back_blacks=2),
 		load_svg("assets/whale.svg", 4, add_back_blacks=5),
 	]
 	[o.scale(scene_scale, scene_scale) for o in objs]
-	waves_b, blow_b, heart_b, whale_b = objs
+	waves_b, blow_b, heart_b, cap_b, ball_b, whale_b = objs
 
 	waves = obj.CompositeObject(waves_b)
 
 	blow = obj.CompositeObject(blow_b)
+	ball = obj.CompositeObject(ball_b)
 	whale_center = whale_b.bwidth * 0.66, whale_b.bheight / 2
-	whale = obj.CompositeObject(whale_b, blow, heart_b)
+	whale = obj.CompositeObject(whale_b, blow, cap_b, heart_b)
 
 	scene.add(waves)
 	scene.add(whale)
+	scene.add(ball)
 	print("Go")
 
 	wave_speed = 1000
@@ -231,6 +235,8 @@ def run(canvas, duration=None):
 
 	dice = DiceRoll()
 	vis_props = [
+		(cap_b, 0.05),
+		(ball, 0.1),
 		(heart_b, 0.1),
 		(blow, 0.15),
 	]
@@ -245,10 +251,13 @@ def run(canvas, duration=None):
 	wave_pos_x = SineGenerator(scale=wave_speed)
 	wave_pos_y = SineGenerator(scale=wave_speed * 0.33, steps_per_cycle=33)
 
-	whale_steps = 80
+	whale_steps = 60
 	whale_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
 	whale_y_pos = SineGenerator(steps_per_cycle=whale_steps, scale=100)
 	whale_rot = SineGenerator(steps_per_cycle=whale_steps, scale=whale_whiggle_max_angle, func=math.cos)
+
+	ball_x_pos = StepGenerator(steps_per_cycle=whale_steps*2, scale=200, callback=dice)
+	ball_y_pos = SineGenerator(steps_per_cycle=whale_steps*8, scale=1000, shift=500)
 
 	blow_out = 400
 	blow_pos = SineGenerator(steps_per_cycle=whale_steps, scale=blow_out, step_start=whale_steps/2)
@@ -264,6 +273,11 @@ def run(canvas, duration=None):
 
 		blow.reset()
 		blow.move(dy=next(blow_pos))
+
+		ball.reset()
+		ball.move(dx=x_shift - waves_b.bwidth*0.5, dy=y_shift)
+		ball.move(dx=next(ball_x_pos), dy=next(ball_y_pos))
+
 
 		whale.reset()
 		whale.move(dx=x_shift - waves_b.bwidth*0.5, dy=y_shift)
